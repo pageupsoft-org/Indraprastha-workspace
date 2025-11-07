@@ -1,0 +1,66 @@
+<div class="p-8 !pt-0">
+  <h2 class="text-lg font-bold uppercase mb-4 tracking-widest">Sign In</h2>
+  <p class="text-sm text-gray-700 mb-8">If you have an account, sign in with your email address.</p>
+
+  <form [formGroup]="loginForm" (submit)="login()">
+    <div class="mb-5">
+      <label class="block text-sm font-bold text-gray-700 uppercase tracking-widest mb-2"
+        >Username</label
+      >
+      <input
+        type="text"
+        [formControl]="loginForm.controls.userName"
+        appErrorHandler
+        [control]="loginForm.controls.userName"
+        class="w-full rounded-[5px] p-2 border border-gray-400 focus:outline-none focus:border-red-800 transition-colors duration-200"
+      />
+    </div>
+
+    <div class="mb-6">
+      <label class="block text-sm font-bold text-gray-700 uppercase tracking-widest mb-2"
+        >Password</label
+      >
+      <input
+        type="password"
+        [formControl]="loginForm.controls.password"
+        appErrorHandler
+        [control]="loginForm.controls.password"
+        class="w-full rounded-[5px] p-2 border border-gray-400 focus:outline-none focus:border-red-800 transition-colors duration-200"
+      />
+    </div>
+
+    <div class="flex items-center justify-between">
+      @if(isShowloader()){
+      <app-button-loader></app-button-loader>
+      } @else {
+      <button
+        type="submit"
+        (submit)="login()"
+        class="bg-red-800 rounded-[5px] text-white font-semibold py-3 px-6 hover:bg-red-900 transition-colors duration-300 uppercase cursor-pointer"
+      >
+        Sign In
+      </button>
+      }
+      <a
+        class="text-sm font-medium text-gray-600 hover:text-red-800 transition-colors duration-300 uppercase tracking-widest"
+      >
+        Forgot your password
+      </a>
+    </div>
+  </form>
+</div>
+
+<!-- Sign Up section -->
+<div class="p-8 border-t border-gray-300 text-center">
+  <h2 class="text-sm font-bold uppercase mb-4 tracking-widest">Don't Have an Account Yet?</h2>
+  <p class="text-xs text-gray-700 mb-6 max-w-sm mx-auto">
+    creating an account has many benefits: receive early access to new products, promotions, and
+    exclusive sales.
+  </p>
+  <button
+    (click)="openRegisterForm()"
+    class="cursor-pointer bg-red-800 rounded-[5px] text-white font-bold py-3 px-8 hover:bg-red-900 transition-colors duration-300 uppercase"
+  >
+    Sign Up
+  </button>
+</div>

@@ -1,0 +1,60 @@
+<div id="cartBox" class="fixed z-1000">
+  <!-- Transparent White Overlay -->
+  <div
+    #cartOverlay
+    class="hidden fixed inset-0 bg-white opacity-50 transition-opacity duration-500 z-40"
+  ></div>
+
+  <!-- Shopping Cart Drawer -->
+  <div
+    #shoppingCart
+    class="fixed top-0 right-0 w-full md:w-[40%] h-full bg-white shadow-2xl transform translate-x-full transition-transform duration-500 flex flex-col z-50"
+  >
+    <!-- Header -->
+    <div class="flex justify-between items-center p-6 border-b border-gray-200">
+      <h2 class="text-lg font-bold uppercase tracking-widest">Shopping Cart</h2>
+      <button (click)="hideCart()" class="text-gray-500 hover:text-gray-800 text-2xl cursor-pointer">&times;</button>
+    </div>
+
+    <!-- Cart Content -->
+    <div class="flex-1 overflow-y-auto p-6 space-y-6">
+      <!-- Cart Item -->
+      <div class="flex gap-4 items-start border-b pb-4">
+        <img
+          src="assets/images/mens-wear-2.png"
+          alt="Product"
+          class="w-20 h-28 object-cover rounded-md border"
+        />
+
+        <div class="flex-1">
+          <h3 class="text-sm font-semibold text-gray-800">Black all fours tunic set</h3>
+          <p class="text-xs text-gray-500">S</p>
+          <p class="text-xs text-gray-500">Ready to ship</p>
+          <p class="text-sm font-semibold text-gray-800 mt-1">Rs. 20,000</p>
+
+          <!-- Quantity Controls -->
+          <div
+            class="flex items-center gap-2 mt-2 border border-gray-300 rounded hover:bg-gray-100 w-[15%]"
+          >
+            <button class="w-6 h-6 flex items-center justify-center">−</button>
+            <span class="text-sm">1</span>
+            <button class="w-6 h-6 flex items-center justify-center">+</button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Footer -->
+    <div class="p-6 border-t border-gray-200">
+      <div class="flex justify-between items-center mb-4">
+        <p class="text-sm font-medium">Subtotal</p>
+        <p class="text-sm font-semibold">Rs. 20,000</p>
+      </div>
+      <button
+        class="w-full bg-red-800 text-white font-bold py-3 px-6 rounded hover:bg-red-900 transition-colors duration-300 uppercase"
+      >
+        Check Out
+      </button>
+    </div>
+  </div>
+</div>

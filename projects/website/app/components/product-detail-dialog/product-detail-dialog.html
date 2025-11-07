@@ -1,0 +1,134 @@
+<div class="flex items-center justify-center">
+  <div class="relative bg-white rounded-2xl shadow-2xl p-3 md:p-12 w-full">
+    <button
+      (click)="close()"
+      class="md:absolute top-4 right-4 p-2 text-gray-600 hover:text-gray-800 transition-colors duration-200 sticky z-1000 btn-close cursor-pointer"
+    >
+      <svg
+        class="md:w-8 md:h-8 h-4 w-4"
+        fill="none"
+        stroke="currentColor"
+        viewBox="0 0 24 24"
+        xmlns="http://www.w3.org/2000/svg"
+      >
+        <path
+          stroke-linecap="round"
+          stroke-linejoin="round"
+          stroke-width="2"
+          d="M6 18L18 6M6 6l12 12"
+        ></path>
+      </svg>
+    </button>
+
+    <div class="grid grid-cols-1 lg:grid-cols-2 gap-4 lg:gap-8 md:w-auto w-full">
+      <div class="flex-shrink-0 md:h-auto h-[200px]">
+        <img
+          id="modal-product-image"
+          src="assets/images/new-arrival-1.png"
+          alt="Product Image"
+          class="w-full h-full object-cover md:h-auto rounded-xl shadow-lg sticky top-[50px]"
+        />
+      </div>
+
+      <div class="flex flex-col space-y-4">
+        <h2 class="text-xl md:text-4xl font-bold text-gray-900 leading-[1] mb-1">
+          Verdant Sunpetal Gown
+        </h2>
+        <p class="text-sm md:text-xl text-[#0000008C] mb-1">
+          Rs. <span class="font-semibold"></span>
+        </p>
+        <p class="text-sm text-[#0000008C] mb-1">(MRP inclusive of all Taxes)</p>
+
+        <div class="space-y-2 mt-2">
+          <div>
+            <p class="font-semibold text-[#0000008C] mb-1 md:text-md text-sm">SIZE</p>
+            <div class="flex flex-wrap gap-2">
+              <button
+                [ngClass]="true ? ['bg-gray-200', 'border-2', 'border-[#737373]'] : []"
+                class="md:px-4 md:py-2 px-2 py-1 border border-gray-300 rounded-[5px] text-sm text-[#0000008C] hover:bg-gray-200 transition-colors duration-200 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-gray-500"
+              >
+                S
+              </button>
+              <button
+                class="md:px-4 md:py-2 px-2 py-1 border border-gray-300 rounded-[5px] text-sm text-[#0000008C] hover:bg-gray-200 transition-colors duration-200 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-gray-500"
+              >
+                M
+              </button>
+              <button
+                class="md:px-4 md:py-2 px-2 py-1 border border-gray-300 rounded-[5px] text-sm text-[#0000008C] hover:bg-gray-200 transition-colors duration-200 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-gray-500"
+              >
+                L
+              </button>
+              <button
+                class="md:px-4 md:py-2 px-2 py-1 border border-gray-300 rounded-[5px] text-sm text-[#0000008C] hover:bg-gray-200 transition-colors duration-200 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-gray-500"
+              >
+                XL
+              </button>
+              <button
+                class="md:px-4 md:py-2 px-2 py-1 border border-gray-300 rounded-[5px] text-sm text-[#0000008C] hover:bg-gray-200 transition-colors duration-200 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-gray-500"
+              >
+                XXL
+              </button>
+            </div>
+          </div>
+
+          <div>
+            <p class="font-semibold text-[#0000008C] mb-1 md:text-md text-sm">COLOR</p>
+            <div class="flex flex-wrap gap-2">
+              <button
+                class="px-4 py-2 border border-gray-300 rounded-[0px] text-sm text-[#0000008C] hover:bg-gray-200 transition-colors duration-200 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-gray-500 rounded-[5px]"
+              >
+                Ruby Red
+              </button>
+            </div>
+          </div>
+
+          <div>
+            <p class="font-semibold text-[#0000008C] mb-1 md:text-md text-sm">Blouse Piece</p>
+            <div class="flex flex-wrap gap-2">
+              <button
+                class="md:px-4 md:py-2 py-1 px-2 border border-gray-300 rounded-[5px] text-sm text-[#0000008C] hover:bg-gray-200 transition-colors duration-200 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-gray-500"
+              >
+                Blouse Piece
+              </button>
+              <button
+                class="md:px-4 md:py-2 py-1 px-2 border border-gray-300 rounded-[5px] text-sm text-[#0000008C] hover:bg-gray-200 transition-colors duration-200 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-gray-500"
+              >
+                Styled/Stitched Blouse
+              </button>
+            </div>
+          </div>
+
+          <div>
+            <p class="font-semibold text-[#0000008C] mb-1 md:text-md text-sm">Custom Tailor</p>
+            <div class="relative">
+              <select
+                class="block w-auto px-4 py-2 pr-8 border border-gray-300 rounded-[5px] text-sm text-[#0000008C] bg-white appearance-none focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-gray-500"
+              >
+                <option>Tailor Name</option>
+              </select>
+            </div>
+          </div>
+        </div>
+
+        <div class="mt-2 flex flex-col space-y-2">
+          <button
+            class="cursor-pointer md:px-6 md:py-3 px-4 py-2 font-semibold text-black border border-gray-300 bg-white rounded-[5px] hover:bg-gray-300 transition-colors duration-200 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-gray-700"
+          >
+            ADD TO CART
+          </button>
+          <button
+            class="cursor-pointer md:px-6 md:py-3 px-4 py-2 font-semibold text-white bg-[#680C01] rounded-[5px] hover:bg-red-800 transition-colors duration-200 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-red-800"
+          >
+            BUY IT NOW
+          </button>
+          <a
+            href="#"
+            class="text-sm font-medium text-gray-600 hover:text-gray-800 transition-colors duration-200 text-left"
+            >View Details</a
+          >
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

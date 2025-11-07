@@ -1,0 +1,38 @@
+<div class="max-w-7xl mx-auto py-[50px]">
+  <h1
+    class="text-3xl md:text-4xl lg:text-5xl font-serif text-gray-800 text-center mt-4 md:mt-0 mb-6 md:mb-8"
+  >
+    Your Wishlist
+  </h1>
+
+  <!-- The main container for the product cards. Flex-wrap allows the cards to wrap to a new row. -->
+  <div class="justify-center flex flex-wrap grid md:grid-cols-5 gap-10">
+    <!-- Product Card 1 -->
+    @for (wishlistItem of wishlistArray(); track $index) {
+    <div class="">
+      <div class="image-wrapper">
+        <img
+          [src]="wishlistItem.images[0]"
+          alt="Product Image 1"
+          class="product-image image-main"
+        />
+        <img
+          [src]="wishlistItem.images[1]"
+          alt="Product Image 1 Hover"
+          class="product-image image-secondary"
+        />
+
+        <div class="absolute top-3 right-3 p-2 bg-white rounded-full shadow-md cursor-pointer">
+          <img [src]="wishlistItem.icon" alt="delete icon" class="w-[17px] h-[17px]" (mouseenter)="addRedColorDeleteIcon(true, $index)" (mouseleave)="addRedColorDeleteIcon(false, $index)"/>
+        </div>
+      </div>
+      <a [routerLink]="['/' + productDetailRoute]" [queryParams]="{ id: wishlistItem.id}">
+        <div class="py-4">
+          <p class="text-lg font-medium text-gray-800">{{wishlistItem.name}}</p>
+          <p class="text-2xl font-medium text-gray-500 mt-1">Rs. {{wishlistItem.price}}</p>
+        </div>
+      </a>
+    </div>
+    }
+  </div>
+</div>

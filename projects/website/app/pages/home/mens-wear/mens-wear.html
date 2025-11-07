@@ -1,0 +1,104 @@
+<!-- <section class="bg-white pt-8 pb-12">
+  <div class="w-full block">
+    <h1
+      class="text-3xl md:text-4xl lg:text-5xl text-gray-800 text-center"
+      data-aos="fade-up"
+      data-aos-duration="1000"
+    >
+      MEN'S WEAR
+    </h1>
+  </div>
+  <div class="gallery-container max-w-7xl">
+    <button
+      id="prevBtn"
+      class="prev absolute left-0 top-1/2 -translate-y-1/2 z-10 p-2 md:p-[.5rem] bg-white/70 backdrop-blur-sm rounded-full shadow-lg transition-transform duration-300 hover:scale-110 focus:outline-none focus:ring-2 focus:ring-[#cdb29c] focus:ring-offset-2"
+    >
+      <svg
+        xmlns="http://www.w3.org/20-00/svg"
+        class="md:h-6 md:w-6 h-3 w-3 text-gray-800"
+        fill="none"
+        viewBox="0 0 24 24"
+        stroke="currentColor"
+        stroke-width="2"
+      >
+        <path stroke-linecap="round" stroke-linejoin="round" d="M15 19l-7-7 7-7"></path>
+      </svg>
+    </button>
+    <div class="gallery" #galleryRef >
+      @for (item of mensWearList; track $index; let idx = $index) {
+        <div #itemRef class="item" (onclick)="zoomImage(itemRef, $index)">
+          <img [src]="item.image" alt="Kurta Set" />
+          <p class="text-center font-bold mt-2 text-sm md:text-lg">{{item.name}}</p>
+        </div>
+      }
+    </div>
+    <button
+      id="nextBtn"
+      class="next absolute right-0 top-1/2 -translate-y-1/2 z-10 p-2 md:p-[.5rem] bg-white/70 backdrop-blur-sm rounded-full shadow-lg transition-transform duration-300 hover:scale-110 focus:outline-none focus:ring-2 focus:ring-[#cdb29c] focus:ring-offset-2"
+    >
+      <svg
+        xmlns="http://www.w3.org/2000/svg"
+        class="md:h-6 md:w-6 h-3 w-3 text-gray-800"
+        fill="none"
+        viewBox="0 0 24 24"
+        stroke="currentColor"
+        stroke-width="2"
+      >
+        <path stroke-linecap="round" stroke-linejoin="round" d="M9 5l7 7-7 7"></path>
+      </svg>
+    </button>
+  </div>
+</section> -->
+
+<section class="bg-white pt-8 pb-12">
+  <div class="w-full block">
+    <h1
+      class="text-3xl md:text-4xl lg:text-5xl text-gray-800 text-center"
+      data-aos="fade-up"
+      data-aos-duration="1000"
+    >
+      MEN'S WEAR
+    </h1>
+  </div>
+
+  <div class="gallery-container max-w-7xl relative overflow-hidden">
+    <button id="prevBtn" class="prev absolute left-0 top-1/2 -translate-y-1/2 ..." (click)="prev()">
+      <svg
+        xmlns="http://www.w3.org/2000/svg"
+        class="md:h-6 md:w-6 h-3 w-3 text-gray-800"
+        fill="none"
+        viewBox="0 0 24 24"
+        stroke="currentColor"
+        stroke-width="2"
+      >
+        <path stroke-linecap="round" stroke-linejoin="round" d="M15 19l-7-7 7-7"></path>
+      </svg>
+    </button>
+
+    <div #galleryRef class="gallery flex transition-transform duration-500 ease-in-out">
+      @for (item of mensWearList; track $index) {
+      <div #itemRef class="item cursor-pointer" (click)="zoomImage(itemRef, $index)">
+        <img [src]="item.image" [alt]="item.name" />
+        <p class="text-center font-bold mt-2 text-sm md:text-lg">{{ item.name }}</p>
+      </div>
+      }
+    </div>
+
+    <button
+      id="nextBtn"
+      class="next absolute right-0 top-1/2 -translate-y-1/2 ..."
+      (click)="next()"
+    >
+      <svg
+        xmlns="http://www.w3.org/2000/svg"
+        class="md:h-6 md:w-6 h-3 w-3 text-gray-800"
+        fill="none"
+        viewBox="0 0 24 24"
+        stroke="currentColor"
+        stroke-width="2"
+      >
+        <path stroke-linecap="round" stroke-linejoin="round" d="M9 5l7 7-7 7"></path>
+      </svg>
+    </button>
+  </div>
+</section>

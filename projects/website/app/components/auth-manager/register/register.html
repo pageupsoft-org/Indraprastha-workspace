@@ -1,0 +1,107 @@
+<div class="p-8 !pt-0">
+  <h2 class="text-lg font-bold uppercase mb-4 tracking-widest">Register</h2>
+
+  <form [formGroup]="registerForm" (ngSubmit)="registerUser()">
+    <div class="flex flex-col">
+      <div class="grid grid-cols-12 w-full gap-4 mb-5">
+        <div class="col-span-12">
+          <label class="block text-sm font-bold text-gray-700 uppercase tracking-widest mb-1"
+            >First name</label
+          >
+          <input
+            type="text"
+            [formControl]="registerForm.controls.firstName"
+            appErrorHandler
+            [control]="registerForm.controls.firstName"
+            class="w-full rounded-[5px] p-2 border border-gray-400 focus:outline-none focus:border-red-800 transition-colors duration-200"
+          />
+        </div>
+        <div class="col-span-12">
+          <label class="block text-sm font-bold text-gray-700 uppercase tracking-widest mb-1"
+            >Last name</label
+          >
+          <input
+            type="text"
+            [formControl]="registerForm.controls.lastName"
+            appErrorHandler
+            [control]="registerForm.controls.lastName"
+            class="w-full rounded-[5px] p-2 border border-gray-400 focus:outline-none focus:border-red-800 transition-colors duration-200"
+          />
+        </div>
+      </div>
+      <div class="grid grid-cols-12 w-full gap-4 mb-3">
+        <div class="col-span-12">
+          <label class="block text-sm font-bold text-gray-700 uppercase tracking-widest mb-1"
+            >Email</label
+          >
+          <input
+            type="email"
+            [formControl]="registerForm.controls.email"
+            appErrorHandler
+            [control]="registerForm.controls.email"
+            class="w-full rounded-[5px] p-2 border border-gray-400 focus:outline-none focus:border-red-800 transition-colors duration-200"
+          />
+        </div>
+        <div class="col-span-12">
+          <label class="block text-sm font-bold text-gray-700 uppercase tracking-widest mb-1"
+            >Contact</label
+          >
+          <input
+            type="text"
+            [formControl]="registerForm.controls.contact"
+            appErrorHandler
+            [control]="registerForm.controls.contact"
+            class="w-full rounded-[5px] p-2 border border-gray-400 focus:outline-none focus:border-red-800 transition-colors duration-200"
+          />
+        </div>
+      </div>
+      <div class="grid grid-cols-12 w-full gap-4 mb-3">
+        <div class="col-span-12">
+          <label class="block text-sm font-bold text-gray-700 uppercase tracking-widest mb-1"
+            >Username</label
+          >
+          <input
+            type="text"
+            [formControl]="registerForm.controls.userName"
+            appErrorHandler
+            [control]="registerForm.controls.userName"
+            class="w-full rounded-[5px] p-2 border border-gray-400 focus:outline-none focus:border-red-800 transition-colors duration-200"
+          />
+        </div>
+        <div class="col-span-12">
+          <label class="block text-sm font-bold text-gray-700 uppercase tracking-widest mb-1"
+            >Password</label
+          >
+          <input
+            type="text"
+            [formControl]="registerForm.controls.password"
+            appErrorHandler
+            [control]="registerForm.controls.password"
+            class="w-full rounded-[5px] p-2 border border-gray-400 focus:outline-none focus:border-red-800 transition-colors duration-200"
+          />
+        </div>
+      </div>
+
+      <div class="flex items-center justify-between">
+        @if(isShowloader()){
+        <app-button-loader></app-button-loader>
+        } @else {
+        <button
+          type="submit"
+          class="bg-red-800 rounded-[5px] text-white font-semibold py-3 px-6 hover:bg-red-900 transition-colors duration-300 uppercase cursor-pointer"
+        >
+          Register
+        </button>
+        }
+        
+        <span
+          href="#"
+          class="text-sm font-medium text-gray-600 transition-colors duration-300 uppercase tracking-widest"
+        >
+          Already Have Account?
+          <a class="text-red-800 cursor-pointer" (click)="openRegisterForm()">Login</a>
+        </span>
+      </div>
+    </div>
+  </form>
+</div>

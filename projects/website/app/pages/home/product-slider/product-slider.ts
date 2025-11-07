@@ -1,0 +1,130 @@
+import {
+  AfterViewInit,
+  Component,
+  ElementRef,
+  HostListener,
+  input,
+  signal,
+  ViewChild,
+  WritableSignal,
+} from '@angular/core';
+import { RNewArrivals } from '../../../core/interface/response/newArrival.response';
+import { NewArrivalProductCard } from '../../../components/new-arrival-product-card/new-arrival-product-card';
+import { PlatformService } from '../../../core/services/platform-service';
+import { MatDialog, MatDialogModule } from '@angular/material/dialog';
+import { ProductDetailDialog } from '../../../components/product-detail-dialog/product-detail-dialog';
+
+@Component({
+  selector: 'app-product-slider',
+  imports: [NewArrivalProductCard, MatDialogModule],
+  templateUrl: './product-slider.html',
+  styleUrl: './product-slider.scss',
+})
+export class ProductSlider implements AfterViewInit {
+  @ViewChild('sliderTrack', { static: false }) sliderTrack!: ElementRef<HTMLDivElement>;
+  @ViewChild('prevBtn', { static: false }) prevBtn!: ElementRef<HTMLButtonElement>;
+  @ViewChild('nextBtn', { static: false }) nextBtn!: ElementRef<HTMLButtonElement>;
+  @ViewChild('cardsContainer', { static: false }) cardsContainer!: ElementRef<HTMLDivElement>;
+
+  public title = input<string>('');
+  public apiToGetProduct = input<string>('');
+
+  public newArrivals: WritableSignal<RNewArrivals[]> = signal([
+    { name: 'Elegant Silk Saree', price: 4500, wishList: false },
+    { name: 'Traditional Kanjeevaram', price: 12000, wishList: true },
+    { name: 'Cotton Casual Saree', price: 2200, wishList: false },
+    { name: 'Designer Georgette Saree', price: 8500, wishList: true },
+    { name: 'Handloom Linen Saree', price: 6800, wishList: false },
+    { name: 'Embroidered Chiffon Saree', price: 9000, wishList: true },
+    { name: 'Banarasi Silk Saree', price: 15000, wishList: false },
+    { name: 'Printed Crepe Saree', price: 3500, wishList: false },
+    { name: 'Festive Organza Saree', price: 7800, wishList: true },
+    { name: 'Casual Linen Saree', price: 2500, wishList: false },
+  ]);
+
+  public totalCards: WritableSignal<number> = signal(this.newArrivals.length);
+  public currentCardIndex: WritableSignal<number> = signal(0);
+
+  constructor(private platformService: PlatformService, private matDialog: MatDialog) {}
+
+  ngAfterViewInit() {
+    if (this.platformService.isBrowser) {
+      const cards = Array.from(this.sliderTrack.nativeElement.children) as HTMLElement[];
+
+      this.totalCards.set(cards.length);
+      this.updateSlider();
+    }
+  }
+
+  private updateSlider() {
+    const sliderTrack = this.sliderTrack.nativeElement;
+    const prevBtn = this.prevBtn.nativeElement;
+    const nextBtn = this.nextBtn.nativeElement;
+    const cards = Array.from(this.sliderTrack.nativeElement.children) as HTMLElement[];
+
+    // Determine number of visible cards
+    let visibleCards = 1;
+    if (window.innerWidth >= 1024) {
+      visibleCards = 4;
+    } else if (window.innerWidth >= 640) {
+      visibleCards = 2;
+    }
+
+    const maxCardIndex = this.totalCards() - visibleCards;
+    this.currentCardIndex.set(Math.max(0, Math.min(this.currentCardIndex(), maxCardIndex)));
+
+    const firstCard = cards[0] as HTMLElement;
+    const cardWidth = firstCard.offsetWidth;
+    const cardMargin = parseFloat(window.getComputedStyle(sliderTrack).getPropertyValue('gap'));
+    const offset = -(this.currentCardIndex() * (cardWidth + cardMargin));
+    sliderTrack.style.transform = `translateX(${offset}px)`;
+
+    // Update button states
+    prevBtn.disabled = this.currentCardIndex() === 0;
+    nextBtn.disabled = this.currentCardIndex() >= maxCardIndex;
+    prevBtn.style.opacity = prevBtn.disabled ? '0.5' : '1';
+    nextBtn.style.opacity = nextBtn.disabled ? '0.5' : '1';
+    prevBtn.style.cursor = prevBtn.disabled ? 'default' : 'pointer';
+    nextBtn.style.cursor = nextBtn.disabled ? 'default' : 'pointer';
+  }
+
+  public openProductDetail() {
+    // this.matDialog.open(ProductDetails).afterClosed().subscribe()
+    this.matDialog.open(ProductDetailDialog, {
+      panelClass: 'product-detail-dialog',
+      width: '900px',
+      maxWidth: '90vw',
+      data: {
+        name: 'Silk Saree',
+        price: 2500,
+        color: 'Ruby Red',
+        image: 'assets/images/new-arrival-1.png',
+      },
+    });
+  }
+
+  public next() {
+    this.currentCardIndex.set(this.currentCardIndex() + 1);
+    this.updateSlider();
+  }
+
+  public prev() {
+    this.currentCardIndex.set(this.currentCardIndex() - 1);
+    this.updateSlider();
+  }
+
+
+  private getProduct(){
+    
+  }
+
+  //#region  Hostlistner
+
+  @HostListener('window:resize')
+  onWindowResize() {
+    if (this.platformService.isBrowser) {
+      this.updateSlider();
+    }
+  }
+  //#endregion
+}
