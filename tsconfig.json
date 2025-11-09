@@ -12,8 +12,11 @@
     "isolatedModules": true,
     "experimentalDecorators": true,
     "paths": {
-      "shared": [
-        "./dist/shared"
+      // "shared": [
+      //   "./dist/shared"
+      // ]
+      "@Shared/Core": [
+        "./projects/shared/src/public-api.ts"
       ]
     },
     "importHelpers": true,
@@ -28,6 +31,7 @@
     "strictTemplates": true,
     "path": {
       "@Core": ["projects/portal/src/app"],
+      "@Shared/Core": ["projects/shared/src/core"]
     }
   },
   "files": [],
