@@ -1,21 +1,13 @@
 import {
-  AfterViewInit,
   Component,
-  computed,
-  effect,
-  Signal,
   signal,
-  TemplateRef,
   ViewChild,
-  ViewContainerRef,
   WritableSignal,
-  ElementRef,
 } from '@angular/core';
 import { GenderMenu } from './gender-menu/gender-menu';
 import { RouterLink } from '@angular/router';
 import { appRoutes } from '../../core/const/appRoutes.const';
 import { CommonModule } from '@angular/common';
-import { PlatformService } from '../../core/services/platform-service';
 import { ShoppingCart } from '../shopping-cart/shopping-cart';
 import { AuthManager } from "../auth-manager/auth-manager";
 

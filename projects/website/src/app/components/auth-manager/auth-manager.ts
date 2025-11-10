@@ -1,4 +1,4 @@
-import { Component, effect, ElementRef, model, signal, ViewChild } from '@angular/core';
+import { Component, ElementRef, signal, ViewChild } from '@angular/core';
 import { Login } from "./login/login";
 import { EAuthManager } from '../../core/enum/auth-manager.enum';
 import { Register } from "./register/register";

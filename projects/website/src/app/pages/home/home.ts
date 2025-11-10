@@ -1,9 +1,9 @@
 import { AfterViewInit, Component } from '@angular/core';
-import { PlatformService } from '../../core/services/platform-service';
 import AOS from 'aos';
 import { ProductSlider } from "./product-slider/product-slider";
 import { WomenWear } from "./women-wear/women-wear";
 import { MensWear } from "./mens-wear/mens-wear";
+import { PlatformService } from '@shared';
 // import taos from 'taos';
 
 @Component({

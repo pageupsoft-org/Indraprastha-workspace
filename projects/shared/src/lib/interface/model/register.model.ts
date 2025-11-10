@@ -1,6 +1,6 @@
 import { FormControl } from '@angular/forms';
 
-export interface IMRegister {
+export interface IRegisterForm {
   firstName: FormControl<string | null>;
   lastName: FormControl<string | null>;
   email: FormControl<string | null>;
@@ -9,7 +9,7 @@ export interface IMRegister {
   password: FormControl<string | null>;
 }
 
-export interface IRRegister {
+export interface IRegisterFormData {
   firstName: string;
   lastName: string;
   email: string;

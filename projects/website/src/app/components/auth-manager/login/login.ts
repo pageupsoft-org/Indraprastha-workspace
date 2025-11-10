@@ -1,10 +1,9 @@
 import { Component, model } from '@angular/core';
 import { EAuthManager } from '../../../core/enum/auth-manager.enum';
-import { IMLogin, IDLogin } from '../../../core/interface/model/login.model';
 import { FormControl, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 import { HttpErrorResponse } from '@angular/common/http';
 import { ButtonLoader } from "../../../core/component/button-loader/button-loader";
-import { ApiRoutes, ErrorHandler, EToastType, httpPost, IRGeneric, IRLogin, ToastService } from '@shared';
+import { ApiRoutes, ErrorHandler, EToastType, httpPost, ILoginForm, ILoginFormData, IRGeneric, IRLogin, ToastService } from '@shared';
 
 
 @Component({
@@ -17,7 +16,7 @@ export class Login {
   public authType = model.required<EAuthManager>();
   public isShowloader = model.required<boolean>();
 
-  public loginForm: FormGroup<IMLogin> = new FormGroup<IMLogin>({
+  public loginForm: FormGroup<ILoginForm> = new FormGroup<ILoginForm>({
     userName: new FormControl(null, [Validators.required]),
     password: new FormControl(null, [Validators.required, Validators.minLength(6)]),
   });
@@ -32,9 +31,9 @@ export class Login {
     if (this.loginForm.valid) {
       this.isShowloader.set(true);
 
-      httpPost<IRGeneric<IRLogin>, IDLogin>(
+      httpPost<IRGeneric<IRLogin>, ILoginFormData>(
         ApiRoutes.LOGIN.BASE,
-        <IDLogin>this.loginForm.value
+        <ILoginFormData>this.loginForm.value
       ).subscribe({
         next: (res: IRGeneric<IRLogin>) => {
           if (res) {

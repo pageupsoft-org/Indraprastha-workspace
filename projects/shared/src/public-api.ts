@@ -11,6 +11,7 @@ export * from './lib/environments/dev.env';
 export * from './lib/interface/model/header.model';
 export * from './lib/interface/model/login.model';
 export * from './lib/interface/model/register.model';
+export * from './lib/interface/model/toast.model';
 
 export * from './lib/interface/response/generic.response';
 export * from './lib/interface/response/login.response';

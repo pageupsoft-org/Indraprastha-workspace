@@ -5,13 +5,13 @@
     "ng": "ng",
     "start": "ng serve",
     "start-portal": "ng serve portal",
-    "start-website": "ng serve website",
     "build": "ng build",
     "build-portal": "ng build portal --output-path=dist/portal",
     "build-website": "ng build website --output-path=dist/website",
     "watch": "ng build --watch --configuration development",
     "test": "ng test",
-    "serve:ssr:website": "node dist/website/server/server.mjs"
+    "start-website": "ng serve website",
+    "serve-website": "node dist/website/server/server.mjs"
   },
   "prettier": {
     "printWidth": 100,

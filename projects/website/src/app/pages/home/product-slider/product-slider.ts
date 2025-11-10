@@ -10,9 +10,9 @@ import {
 } from '@angular/core';
 import { RNewArrivals } from '../../../core/interface/response/newArrival.response';
 import { NewArrivalProductCard } from '../../../components/new-arrival-product-card/new-arrival-product-card';
-import { PlatformService } from '../../../core/services/platform-service';
 import { MatDialog, MatDialogModule } from '@angular/material/dialog';
 import { ProductDetailDialog } from '../../../components/product-detail-dialog/product-detail-dialog';
+import { PlatformService } from '@shared';
 
 @Component({
   selector: 'app-product-slider',

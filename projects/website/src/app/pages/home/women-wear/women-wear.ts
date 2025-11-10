@@ -6,7 +6,7 @@ import {
   ViewChild,
   ViewChildren,
 } from '@angular/core';
-import { PlatformService } from '../../../core/services/platform-service';
+import { PlatformService } from '@shared';
 
 @Component({
   selector: 'app-women-wear',

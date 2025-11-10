@@ -7,9 +7,9 @@ import {
   ViewChild,
   WritableSignal,
 } from '@angular/core';
-import { PlatformService } from '../../core/services/platform-service';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
+import { PlatformService } from '@shared';
 
 @Component({
   selector: 'app-dynamic-catalog',

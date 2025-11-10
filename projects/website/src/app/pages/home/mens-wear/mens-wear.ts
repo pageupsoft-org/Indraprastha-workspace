@@ -1,5 +1,5 @@
 import { AfterViewInit, Component, ElementRef, QueryList, ViewChildren } from '@angular/core';
-import { PlatformService } from '../../../core/services/platform-service';
+import { PlatformService } from '@shared';
 
 @Component({
   selector: 'app-mens-wear',

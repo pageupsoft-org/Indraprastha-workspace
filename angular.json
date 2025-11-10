@@ -18,20 +18,18 @@
           "builder": "@angular/build:application",
           "options": {
             "browser": "projects/website/src/main.ts",
-            "polyfills": [
-              "zone.js"
-            ],
+            "polyfills": ["zone.js"],
             "tsConfig": "projects/website/tsconfig.app.json",
             "inlineStyleLanguage": "scss",
             "assets": [
               {
                 "glob": "**/*",
                 "input": "projects/website/public"
-              }
+              },
+              "projects/website/src/assets",
+              "projects/website/src/firebase-messaging-sw.js"
             ],
-            "styles": [
-              "projects/website/src/styles.scss"
-            ],
+            "styles": ["projects/website/src/styles.scss"],
             "server": "projects/website/src/main.server.ts",
             "outputMode": "server",
             "ssr": {
@@ -80,10 +78,7 @@
         "test": {
           "builder": "@angular/build:karma",
           "options": {
-            "polyfills": [
-              "zone.js",
-              "zone.js/testing"
-            ],
+            "polyfills": ["zone.js", "zone.js/testing"],
             "tsConfig": "projects/website/tsconfig.spec.json",
             "inlineStyleLanguage": "scss",
             "assets": [
@@ -92,9 +87,7 @@
                 "input": "projects/website/public"
               }
             ],
-            "styles": [
-              "projects/website/src/styles.scss"
-            ]
+            "styles": ["projects/website/src/styles.scss"]
           }
         }
       }
@@ -114,20 +107,17 @@
           "builder": "@angular/build:application",
           "options": {
             "browser": "projects/portal/src/main.ts",
-            "polyfills": [
-              "zone.js"
-            ],
+            "polyfills": ["zone.js"],
             "tsConfig": "projects/portal/tsconfig.app.json",
             "inlineStyleLanguage": "scss",
             "assets": [
               {
                 "glob": "**/*",
                 "input": "projects/portal/public"
-              }
+              },
+              "projects/portal/src/assets"
             ],
-            "styles": [
-              "projects/portal/src/styles.scss"
-            ]
+            "styles": ["projects/portal/src/styles.scss"]
           },
           "configurations": {
             "production": {
@@ -171,10 +161,7 @@
         "test": {
           "builder": "@angular/build:karma",
           "options": {
-            "polyfills": [
-              "zone.js",
-              "zone.js/testing"
-            ],
+            "polyfills": ["zone.js", "zone.js/testing"],
             "tsConfig": "projects/portal/tsconfig.spec.json",
             "inlineStyleLanguage": "scss",
             "assets": [
@@ -183,9 +170,7 @@
                 "input": "projects/portal/public"
               }
             ],
-            "styles": [
-              "projects/portal/src/styles.scss"
-            ]
+            "styles": ["projects/portal/src/styles.scss"]
           }
         }
       }
@@ -212,10 +197,7 @@
           "builder": "@angular/build:karma",
           "options": {
             "tsConfig": "projects/shared/tsconfig.spec.json",
-            "polyfills": [
-              "zone.js",
-              "zone.js/testing"
-            ]
+            "polyfills": ["zone.js", "zone.js/testing"]
           }
         }
       }

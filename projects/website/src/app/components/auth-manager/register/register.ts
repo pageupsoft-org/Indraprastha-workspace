@@ -4,17 +4,11 @@ import {
   FormControl,
   FormGroup,
   ReactiveFormsModule,
-  Validators,
-  ɵInternalFormsSharedModule,
+  Validators
 } from '@angular/forms';
-import { IMRegister, IRRegister } from '../../../core/interface/model/register.model';
-import { patternWithMessage } from '../../../core/utils/pattern-message.util';
-import { ErrorHandler } from '../../../core/directive/error-handler';
-import { httpPost } from '../../../core/utils/api.helper';
-import { APIRoutes } from '../../../core/const/api-routes.const';
-import { IRGeneric } from '../../../core/interface/response/generic.response';
 import { ButtonLoader } from '../../../core/component/button-loader/button-loader';
 import { HttpErrorResponse } from '@angular/common/http';
+import { ApiRoutes, ErrorHandler, httpPost, IRegisterForm, IRegisterFormData, IRGeneric, patternWithMessage } from '@shared';
 
 @Component({
   selector: 'app-register',
@@ -26,7 +20,7 @@ export class Register implements OnInit {
   public authType = model.required<EAuthManager>();
   public isShowloader = model.required<boolean>();
 
-  public registerForm: FormGroup<IMRegister> = new FormGroup<IMRegister>({
+  public registerForm: FormGroup<IRegisterForm> = new FormGroup<IRegisterForm>({
     firstName: new FormControl(null, [Validators.required]),
     lastName: new FormControl(null, [Validators.required]),
     email: new FormControl(null, [Validators.required, Validators.email]),
@@ -51,9 +45,9 @@ export class Register implements OnInit {
   public registerUser() {
     if (this.registerForm.valid) {
       this.isShowloader.set(true);
-      httpPost<IRGeneric<boolean>, IRRegister>(
-        APIRoutes.LOGIN.REGISTER_CUSTOMER,
-        <IRRegister>this.registerForm.value
+      httpPost<IRGeneric<boolean>, IRegisterFormData>(
+        ApiRoutes.LOGIN.REGISTER_CUSTOMER,
+        <IRegisterFormData>this.registerForm.value
       ).subscribe({
         next: (res: IRGeneric<boolean>) => {
           if (res) {
