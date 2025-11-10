@@ -4,8 +4,6 @@ export * from './base/base';
 export * from './const/appRoutes.const';
 //#endregion
 
-export * from './directive/validation';
-
 //#region Interceptor
 export * from './interceptor/auth-interceptor';
 export * from './interceptor/loader-interceptor';
@@ -20,6 +18,5 @@ export * from './services/loader-service';
 //#endregion Service
 
 //#region Utility
-export * from './utils/confimation.util';
 export * from './utils/pagination.util';
 //#endregion

@@ -1,6 +1,6 @@
 import { Component, Input } from '@angular/core';
 import { MatDialogRef, MatDialogContent, MatDialogActions } from '@angular/material/dialog';
-import { getDefaultConfirmationModalData, MConfirmationModalData } from '../../core/interface/model/confirmation.model';
+import { getDefaultConfirmationModalData, MConfirmationModalData } from '../../interface/model/confirmation.model';
 
 @Component({
   selector: 'app-confirmation-dialog',

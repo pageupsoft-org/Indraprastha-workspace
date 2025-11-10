@@ -2,12 +2,12 @@ import { Component } from '@angular/core';
 import { FormControl, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 import { IGenericResponse } from '../../core/interface/response/responseGeneric';
 import { registerForm, registerPayload } from '../../core/interface/request/request';
-import { Base, Validation } from '@portal/core';
-// import { Base, Validation } from '@portal/core';
+import { Base } from '@portal/core';
+import { ErrorHandler } from '@shared';
 
 @Component({
   selector: 'app-register',
-  imports: [ReactiveFormsModule, Validation],
+  imports: [ReactiveFormsModule, ErrorHandler],
   templateUrl: './register.html',
   styleUrl: './register.scss',
 })

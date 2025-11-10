@@ -3,12 +3,12 @@ import { FormControl, FormGroup, ReactiveFormsModule, Validators } from '@angula
 
 import { IGenericResponse } from '../../core/interface/response/responseGeneric';
 import { customerForm , customerPayload} from '../../core/interface/request/customer';
-import { Base, Validation } from '@portal/core';
-import { EToastType, ToastService } from '@shared';
+import { Base } from '@portal/core';
+import { ErrorHandler, EToastType, ToastService } from '@shared';
 
 @Component({
   selector: 'app-customer',
-  imports: [ReactiveFormsModule, Validation],
+  imports: [ReactiveFormsModule, ErrorHandler],
   templateUrl: './customer.html',
   styleUrl: './customer.scss',
 })

@@ -5,13 +5,13 @@ import { Router } from '@angular/router';
 import { IGenericResponse } from '../../core/interface/response/responseGeneric';
 import { LoginResponse } from '../../core/interface/response/login.response';
 import { loginForm, loginPayload } from '../../core/interface/request/login';
-import { Base, Validation } from '@portal/core';
-import { ApiRoutes, EToastType, localStorageEnum, setLocalStorageItem, ToastService } from '@shared';
+import { Base } from '@portal/core';
+import { ApiRoutes, ErrorHandler, EToastType, localStorageEnum, setLocalStorageItem, ToastService } from '@shared';
 
 
 @Component({
   selector: 'app-login',
-  imports: [ReactiveFormsModule, Validation],
+  imports: [ReactiveFormsModule, ErrorHandler],
   templateUrl: './login.html',
   styleUrl: './login.scss',
 })

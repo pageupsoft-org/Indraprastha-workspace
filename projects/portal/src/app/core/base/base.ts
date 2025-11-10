@@ -3,8 +3,7 @@ import { Observable, Subscription } from 'rxjs';
 import { environment } from '../environment/dev.env';
 import { AppRoutes } from '../const/appRoutes.const';
 import { HttpClient, HttpErrorResponse, HttpHeaders } from '@angular/common/http';
-import { ConfirmationUtil } from '@portal/core';
-import { ApiRoutes, ToastService, variable } from '@shared';
+import { ApiRoutes, ToastService, variable, ConfirmationUtil } from '@shared';
 
 @Component({
   selector: 'app-base',

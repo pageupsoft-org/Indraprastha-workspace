@@ -6,7 +6,8 @@ import { Subscription } from 'rxjs';
   selector: '[appErrorHandler]'
 })
 export class ErrorHandler implements AfterViewInit, OnDestroy {
-  @Input() control: AbstractControl | null = null;
+  @Input('appErrorHandler') control!: AbstractControl | null
+  // @Input() control: AbstractControl | null = null;
   private errorContainer: HTMLElement | null = null;
   private subscription: Subscription | null = null;
 

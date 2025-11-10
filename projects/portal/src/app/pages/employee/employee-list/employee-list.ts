@@ -6,14 +6,15 @@ import { IEmployee, IEmployeeResponse } from '../../../core/interface/response/e
 import { intializepagInationPayload, IPaginationPayload } from '../../../core/interface/request/genericPayload';
 import { FormControl, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 import { registerForm, registerPayload } from '../../../core/interface/request/request';
-import { Base, Validation } from '@portal/core';
+import { Base } from '@portal/core';
+import { ErrorHandler } from '@shared';
 // import { apiRoutes, Base, Validation } from '@Core';
 
 
 
 @Component({
   selector: 'app-employee-list',
-  imports: [PaginationController, Validation, ReactiveFormsModule],
+  imports: [PaginationController, ErrorHandler, ReactiveFormsModule],
   templateUrl: './employee-list.html',
   styleUrl: './employee-list.scss',
 })

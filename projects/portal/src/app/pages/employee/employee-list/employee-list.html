@@ -107,35 +107,35 @@
             <!-- First Name -->
             <div>
                 <label class="block text-sm font-medium text-gray-700 mb-1">First Name</label>
-                <input type="text" placeholder="Enter first name" formControlName="firstName" [appValidation]="registerForm.controls.firstName"
+                <input type="text" placeholder="Enter first name" formControlName="firstName" [appErrorHandler]="registerForm.controls.firstName"
                  maxlength="15" minlength="3"  class="w-full border border-gray-300 rounded-lg px-3 py-2 focus:outline-none focus:ring-2 focus:ring-indigo-500" />
             </div>
 
             <!-- Last Name -->
             <div>
                 <label class="block text-sm font-medium text-gray-700 mb-1">Last Name</label>
-                <input type="text" placeholder="Enter last name" formControlName="lastName" [appValidation]="registerForm.controls.lastName"
+                <input type="text" placeholder="Enter last name" formControlName="lastName" [appErrorHandler]="registerForm.controls.lastName"
                     maxlength="50" minlength="3"  class="w-full border border-gray-300 rounded-lg px-3 py-2 focus:outline-none focus:ring-2 focus:ring-indigo-500" />
             </div>
 
             <!-- Email -->
             <div>
                 <label class="block text-sm font-medium text-gray-700 mb-1">Email</label>
-                <input type="email" placeholder="Enter email" formControlName="email" [appValidation]="registerForm.controls.email"
+                <input type="email" placeholder="Enter email" formControlName="email" [appErrorHandler]="registerForm.controls.email"
                    maxlength="30" minlength="10" class="w-full border border-gray-300 rounded-lg px-3 py-2 focus:outline-none focus:ring-2 focus:ring-indigo-500" />
             </div>
 
             <!-- Contact -->
             <div>
                 <label class="block text-sm font-medium text-gray-700 mb-1">Contact</label>
-                <input type="tel" placeholder="Enter contact number" formControlName="contact" [appValidation]="registerForm.controls.contact"
+                <input type="tel" placeholder="Enter contact number" formControlName="contact" [appErrorHandler]="registerForm.controls.contact"
                   maxlength="10" minlength="10"   class="w-full border border-gray-300 rounded-lg px-3 py-2 focus:outline-none focus:ring-2 focus:ring-indigo-500" />
             </div>
 
             <!-- User Type -->
             <div>
                 <label class="block text-sm font-medium text-gray-700 mb-1">User Type</label>
-                <select formControlName="userType" [appValidation]="registerForm.controls.userType"
+                <select formControlName="userType" [appErrorHandler]="registerForm.controls.userType"
                     class="w-full border border-gray-300 rounded-lg px-3 py-2 bg-white focus:outline-none focus:ring-2 focus:ring-indigo-500">
                     <option>Admin</option>
                     <option>User</option>
@@ -145,7 +145,7 @@
             <!-- Address (span full width on large screens) -->
             <div class="lg:col-span-3">
                 <label class="block text-sm font-medium text-gray-700 mb-1">Address</label>
-                <textarea rows="2" placeholder="Enter address" formControlName="address" [appValidation]="registerForm.controls.address"
+                <textarea rows="2" placeholder="Enter address" formControlName="address" [appErrorHandler]="registerForm.controls.address"
                    maxlength="50" class="w-full border border-gray-300 rounded-lg px-3 py-3 resize-none focus:outline-none focus:ring-2 focus:ring-indigo-500"></textarea>
             </div>
             <!-- Login Section -->
@@ -164,7 +164,7 @@
                     <!-- Username -->
                     <div>
                         <label class="block text-sm text-slate-600 mb-1" for="loginUsername">Username</label>
-                        <input #loginUsername id="loginUsername" formControlName="username" type="text" [appValidation]="registerForm.controls.username"
+                        <input #loginUsername id="loginUsername" formControlName="username" type="text" [appErrorHandler]="registerForm.controls.username"
                           maxlength="15" minlength="15"  class="w-full px-3 py-2 rounded-md border border-slate-200 bg-slate-50 text-sm focus:outline-none focus:ring-2 focus:ring-indigo-300"
                             placeholder="username" />
                     </div>
@@ -172,7 +172,7 @@
                     <!-- Password -->
                     <div>
                         <label class="block text-sm text-slate-600 mb-1" for="loginPassword">Password</label>
-                        <input id="loginPassword" formControlName="password" type="password" formControlName="password" [appValidation]="registerForm.controls.password"
+                        <input id="loginPassword" formControlName="password" type="password" formControlName="password" [appErrorHandler]="registerForm.controls.password"
                             class="w-full px-3 py-2 rounded-md border border-slate-200 bg-slate-50 text-sm focus:outline-none focus:ring-2 focus:ring-indigo-300"
                             placeholder="Enter password" maxlength="8" minlength="8"/>
                     </div>
