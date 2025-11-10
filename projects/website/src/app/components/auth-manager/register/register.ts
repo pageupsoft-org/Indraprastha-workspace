@@ -38,7 +38,7 @@ export class Register implements OnInit {
   constructor(){    
   }
 
-  public openRegisterForm() {
+  public openLoginForm() {
     this.authType.set(EAuthManager.login);
   }
 

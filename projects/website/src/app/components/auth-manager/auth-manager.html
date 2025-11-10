@@ -11,7 +11,7 @@
     class="fixed top-0 right-0 w-full md:w-[40%] h-full bg-white shadow-2xl transform translate-x-full transition-transform duration-500 p-8 flex flex-col"
   >
      <div class="flex justify-end items-center">
-      <button (click)="closeForm()" class="text-gray-500 hover:text-gray-800 text-2xl" [ngClass]="isShowLoader()?'cursor-not-allowed':'cursor-pointer'">&times;</button>
+      <button [disabled]="isShowLoader()" (click)="closeForm()" class="text-gray-500 hover:text-gray-800 text-2xl" [ngClass]="isShowLoader()?'cursor-not-allowed':'cursor-pointer'">&times;</button>
     </div>
     
     @switch (currentAuthView()) {
