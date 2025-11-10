@@ -1,5 +1,5 @@
 import { SafeHtml } from "@angular/platform-browser";
-import { appRoutes } from "@Core";
+import { AppRoutes } from "@portal/core";
 
 export interface IMenuItem {
     name: string;
@@ -16,21 +16,21 @@ export interface IMenuSideBarItem extends IMenuItem {
 export const MenuItems: IMenuSideBarItem[] = [
     {
         name: 'Dashboard',
-        route: appRoutes.DASHBOARD,
+        route: AppRoutes.DASHBOARD,
         icon: 'bx bxs-dashboard',
         userType: [],
         child: [],
     },
     {
         name: 'Employee',
-        route: appRoutes.EMPLOYEE_LIST,
+        route: AppRoutes.EMPLOYEE_LIST,
         icon: 'bx bxs-dashboard',
         userType: [],
         child: [],
     },
     {
         name: 'Customers',
-        route: appRoutes.CUSTOMER_LIST,
+        route: AppRoutes.CUSTOMER_LIST,
         icon: 'bx bxs-dashboard',
         userType: [],
         child: [],

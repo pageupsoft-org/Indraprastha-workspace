@@ -1,4 +1,4 @@
-export const appRoutes = {
+export const AppRoutes = {
   LOGIN: "login",
   REGISTER : "register",
   CUSTOMER : "customer",

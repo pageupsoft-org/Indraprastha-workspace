@@ -1,7 +1,7 @@
 import { Component, inject } from '@angular/core';
 import { Observable, Subscription } from 'rxjs';
 import { environment } from '../environment/dev.env';
-import { appRoutes } from '../const/appRoutes.const';
+import { AppRoutes } from '../const/appRoutes.const';
 import { HttpClient, HttpErrorResponse, HttpHeaders } from '@angular/common/http';
 import { ConfirmationUtil } from '@portal/core';
 import { ApiRoutes, ToastService, variable } from '@shared';
@@ -18,7 +18,7 @@ export class Base {
   public readonly apiBaseUrl: string = environment.apiBaseUrl;
   public readonly objConfirmationUtil: ConfirmationUtil = new ConfirmationUtil();
   public readonly apiRoutes = ApiRoutes;
-  public readonly appRoutes = appRoutes;
+  public readonly appRoutes = AppRoutes;
 
   private httpClient: HttpClient = inject(HttpClient);
 

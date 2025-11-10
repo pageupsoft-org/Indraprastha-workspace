@@ -5,7 +5,7 @@ import { IGenericResponse } from '../../core/interface/response/responseGeneric'
 import { PaginationController } from "../../component/pagination-controller/pagination-controller";
 import { createPaginationMetadata, PaginationControlMetadata } from '../../core/interface/model/pagination-detail.model';
 import { intializepagInationPayload, IPaginationPayload } from '../../core/interface/request/genericPayload';
-import { apiRoutes, Base, handlePagination } from '@Core';
+import { Base, handlePagination } from '@portal/core';
 
 @Component({
   selector: 'app-customers-list',
@@ -29,7 +29,7 @@ export class CustomersList extends Base implements OnInit{
     console.log(this.payload)
   }
   private getCustomers(){  
-    this.httpPostPromise<IGenericResponse<customerResponse>, IPaginationPayload>(apiRoutes.CUSTOMERS.CUSTOMER_ALL, this.payload).then(response=>{
+    this.httpPostPromise<IGenericResponse<customerResponse>, IPaginationPayload>(this.apiRoutes.CUSTOMERS.CUSTOMER_ALL, this.payload).then(response=>{
       console.log(response)
     })
   }

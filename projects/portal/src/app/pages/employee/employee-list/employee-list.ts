@@ -6,7 +6,8 @@ import { IEmployee, IEmployeeResponse } from '../../../core/interface/response/e
 import { intializepagInationPayload, IPaginationPayload } from '../../../core/interface/request/genericPayload';
 import { FormControl, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 import { registerForm, registerPayload } from '../../../core/interface/request/request';
-import { apiRoutes, Base, Validation } from '@Core';
+import { Base, Validation } from '@portal/core';
+// import { apiRoutes, Base, Validation } from '@Core';
 
 
 
@@ -43,7 +44,7 @@ export class EmployeeList extends Base implements OnInit {
   }
 
   public getEmployee() {
-    this.httpPostPromise<IGenericResponse<IEmployeeResponse>, IPaginationPayload>(apiRoutes.EMPLOYEE.GET, this.payLoad).then(response => {
+    this.httpPostPromise<IGenericResponse<IEmployeeResponse>, IPaginationPayload>(this.apiRoutes.EMPLOYEE.GET, this.payLoad).then(response => {
       if (response && response.data) {
         this.employees = response.data.employees;
         console.log(this.employees)
@@ -93,7 +94,7 @@ export class EmployeeList extends Base implements OnInit {
 
   public deleteEmployee(id: number) {
     if (id) {
-      this.httpDeletePromise(apiRoutes.EMPLOYEE.GETBYID(id)).then((response) => {
+      this.httpDeletePromise(this.apiRoutes.EMPLOYEE.GETBYID(id)).then((response) => {
         console.log()
       })
         .catch((error) => {
@@ -103,7 +104,7 @@ export class EmployeeList extends Base implements OnInit {
   }
  
   public fetchEmployee(id:number){
-   this.httpGetPromise<any>(apiRoutes.EMPLOYEE.GETBYID(id)).then((response)=>{
+   this.httpGetPromise<any>(this.apiRoutes.EMPLOYEE.GETBYID(id)).then((response)=>{
    console.log(response)
    }).catch((error)=>{
    console.log(error)

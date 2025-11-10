@@ -1,14 +1,14 @@
 import { Routes } from '@angular/router';
-import { appRoutes, MainLayout } from '@Core';
+import { AppRoutes, MainLayout } from './core';
 
 export const routes: Routes = [
   {
     path: '',
-    redirectTo: appRoutes.LOGIN,
+    redirectTo: AppRoutes.LOGIN,
     pathMatch: 'full',
   },
   {
-    path: appRoutes.LOGIN,
+    path: AppRoutes.LOGIN,
     loadComponent: () => import('./pages/login/login').then((m) => m.Login),
   },
   {
@@ -16,17 +16,17 @@ export const routes: Routes = [
     component: MainLayout,
     children: [
       {
-        path: appRoutes.DASHBOARD,
+        path: AppRoutes.DASHBOARD,
         loadComponent: () =>
           import('./pages/dashboard/dashboard').then((m) => m.Dashboard),
       },
        {
-        path: appRoutes.EMPLOYEE_LIST,
+        path: AppRoutes.EMPLOYEE_LIST,
         loadComponent: () =>
           import('./pages/employee/employee-list/employee-list').then((m) => m.EmployeeList),
       },
        {
-        path: appRoutes.CUSTOMER_LIST,
+        path: AppRoutes.CUSTOMER_LIST,
         loadComponent: () =>
           import('./pages/customers-list/customers-list').then((m) => m.CustomersList),
       },

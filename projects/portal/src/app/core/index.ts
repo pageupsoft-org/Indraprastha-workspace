@@ -6,35 +6,10 @@ export * from './const/appRoutes.const';
 
 export * from './directive/validation';
 
-//#endregion Environment
-// export * from './environment/dev.env';
-//#endregion Environment
-
 //#region Interceptor
 export * from './interceptor/auth-interceptor';
 export * from './interceptor/loader-interceptor';
 //#endregion Interceptor
-
-//#region Interface
-    //#region Model
-// export * from './interface/model/confirmation.model';
-// export * from './interface/model/pagination-detail.model';
-// export * from './interface/model/toast.model';
-// export * from './interface/model/utility.model';
-    //#endregion
-
-    //#region Response
-// export * from './interface/response/customer';
-// export * from './interface/response/employee';
-// export * from './interface/response/login.response';
-// export * from './interface/response/responseGeneric';
-    //#endregion
-
-    //#region Request
-// export * from './interface/request/customer';
-// export * from './interface/request/employee';
-    //#endregion
-//#endregion
 
 //#region Layout
 export * from './layout/main-layout/main-layout';
