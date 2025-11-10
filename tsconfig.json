@@ -11,17 +11,31 @@
     "skipLibCheck": true,
     "isolatedModules": true,
     "experimentalDecorators": true,
+    "forceConsistentCasingInFileNames": true,
+    "alwaysStrict": true,
+    "strictNullChecks": true,
+    "strictBindCallApply": true,
+    "strictFunctionTypes": true, 
+    "strictPropertyInitialization": true,
+    "noImplicitAny": false,
+    "noImplicitThis": false,
+    "useUnknownInCatchVariables": true,
     "paths": {
-      // "shared": [
-      //   "./dist/shared"
-      // ]
-      "@Shared/Core": [
-        "./projects/shared/src/public-api.ts"
+      "@shared": [
+        "./dist/shared"
       ]
     },
     "importHelpers": true,
     "target": "ES2022",
-    "module": "preserve"
+    "module": "preserve",
+    // "baseUrl": "./",
+    // "outDir": "./dist/out-tsc",
+    // "moduleResolution": "node",
+    // "sourceMap": true,
+    // "declaration": false,
+    // "downlevelIteration": true,
+    // "typeRoots": ["node_modules/@types"],
+    // "lib": ["ES2022", "dom"],
   },
   "angularCompilerOptions": {
     "enableI18nLegacyMessageIdFormat": false,
@@ -33,26 +47,5 @@
       "@Core": ["projects/portal/src/app"],
       "@Shared/Core": ["projects/shared/src/core"]
     }
-  },
-  "files": [],
-  "references": [
-    {
-      "path": "./projects/website/tsconfig.app.json"
-    },
-    {
-      "path": "./projects/website/tsconfig.spec.json"
-    },
-    {
-      "path": "./projects/portal/tsconfig.app.json"
-    },
-    {
-      "path": "./projects/portal/tsconfig.spec.json"
-    },
-    {
-      "path": "./projects/shared/tsconfig.lib.json"
-    },
-    {
-      "path": "./projects/shared/tsconfig.spec.json"
-    }
-  ]
+  }
 }

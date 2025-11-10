@@ -1,32 +1,27 @@
-/*
- * Public API Surface of shared
- */
-export * from './core/component/toast/toast';
-export * from './core/const/apiRoutes.const';
-export * from './core/directive/error-handler';
 
-export * from './core/enum/toast-type.enum';
-export * from './core/enum/variable.enum';
+export * from './lib/component/toast/toast';
+export * from './lib/const/apiRoutes.const';
+export * from './lib/directive/error-handler';
 
-export * from './core/environments/dev.env';
+export * from './lib/enum/toast-type.enum';
+export * from './lib/enum/variable.enum';
 
-export * from './core/interface/model/header.model';
-export * from './core/interface/model/login.model';
-export * from './core/interface/model/register.model';
-// export * from './core/interface/model/toast.model';
+export * from './lib/environments/dev.env';
 
-export * from './core/interface/response/generic.response';
-export * from './core/interface/response/login.response';
-export * from './core/interface/response/newArrival.response';
-export * from './core/interface/response/product-detail.response';
-export * from './core/interface/response/shopping-cart.response';
-export * from './core/interface/response/wishlist.response';
+export * from './lib/interface/model/header.model';
+export * from './lib/interface/model/login.model';
+export * from './lib/interface/model/register.model';
 
-export * from './core/services/firebase-service';
-export * from './core/services/platform-service';
-export * from './core/services/toast-service';
+export * from './lib/interface/response/generic.response';
+export * from './lib/interface/response/login.response';
+export * from './lib/interface/response/newArrival.response';
+export * from './lib/interface/response/product-detail.response';
+export * from './lib/interface/response/shopping-cart.response';
+export * from './lib/interface/response/wishlist.response';
 
-export * from './core/utils/api.helper';
-export * from './core/utils/pattern-message.util';
+export * from './lib/services/firebase-service';
+export * from './lib/services/platform-service';
+export * from './lib/services/toast-service';
 
-export * from './lib/shared';
+export * from './lib/utils/api.helper';
+export * from './lib/utils/pattern-message.util';

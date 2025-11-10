@@ -2,18 +2,9 @@ import { Component, model } from '@angular/core';
 import { EAuthManager } from '../../../core/enum/auth-manager.enum';
 import { IMLogin, IDLogin } from '../../../core/interface/model/login.model';
 import { FormControl, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
-import { ErrorHandler } from '../../../core/directive/error-handler';
-import { httpPost } from '../../../core/utils/api.helper';
-import { IRGeneric } from '../../../core/interface/response/generic.response';
-import { IRLogin } from '../../../core/interface/response/login.response';
-import { APIRoutes } from '../../../core/const/api-routes.const';
 import { HttpErrorResponse } from '@angular/common/http';
-import { ToastService } from '../../../core/services/toast-service';
 import { ButtonLoader } from "../../../core/component/button-loader/button-loader";
-import { EToastType } from '../../../core/enum/toast-type.enum';
-// import { ToastService } from '../../../../../shared/src/public-api';
-// import { ToastService } from '../../../../../shared/src/public-api';
-// import { ToastService } from './../../../../../shared/src/core/services/toast-service';
+import { ApiRoutes, ErrorHandler, EToastType, httpPost, IRGeneric, IRLogin, ToastService } from '@shared';
 
 
 @Component({
@@ -42,7 +33,7 @@ export class Login {
       this.isShowloader.set(true);
 
       httpPost<IRGeneric<IRLogin>, IDLogin>(
-        APIRoutes.LOGIN.BASE,
+        ApiRoutes.LOGIN.BASE,
         <IDLogin>this.loginForm.value
       ).subscribe({
         next: (res: IRGeneric<IRLogin>) => {
