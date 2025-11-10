@@ -2,7 +2,7 @@ import { HttpErrorResponse, HttpInterceptorFn } from '@angular/common/http';
 import { catchError, throwError } from 'rxjs';
 import { inject } from '@angular/core';
 import { Router } from '@angular/router';
-import { getLocalStorageItem, localStorageEnum, ToastService } from '@Core';
+import { getLocalStorageItem, localStorageEnum, ToastService } from '@shared';
 
 export const authInterceptor: HttpInterceptorFn = (req, next) => {
   const toastService = inject(ToastService);

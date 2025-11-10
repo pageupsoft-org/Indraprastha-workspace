@@ -1,5 +1,5 @@
 import { Component, signal, WritableSignal } from '@angular/core';
-import { LoaderService } from '@Core';
+import { LoaderService } from '@portal/core';
 
 @Component({
   selector: 'app-loader',

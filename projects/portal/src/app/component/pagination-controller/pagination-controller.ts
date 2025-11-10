@@ -1,7 +1,7 @@
 import { Component, EventEmitter, input, Input, OnChanges, OnInit, output, Output, signal, SimpleChanges, WritableSignal } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormControl, ReactiveFormsModule } from '@angular/forms';
-import { createPaginationMetadata, PaginationControlMetadata } from '../../core/interface/model/pagination-detail.model';
+import { PaginationControlMetadata } from '../../core/interface/model/pagination-detail.model';
 
 @Component({
   selector: 'app-pagination-controller',

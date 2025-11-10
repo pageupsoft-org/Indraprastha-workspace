@@ -1,9 +1,8 @@
 import { Component, OnInit, signal } from '@angular/core';
 import { NavigationEnd, Router, RouterOutlet } from '@angular/router';
-import { Toast } from "./component/toast/toast";
 import { HttpClient } from '@angular/common/http';
 import { filter } from 'rxjs';
-import { setHttpClient } from '@Core';
+import { setHttpClient, Toast } from '@shared';
 
 @Component({
   selector: 'app-root',

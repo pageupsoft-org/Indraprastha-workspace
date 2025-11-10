@@ -5,7 +5,8 @@ import { Router } from '@angular/router';
 import { IGenericResponse } from '../../core/interface/response/responseGeneric';
 import { LoginResponse } from '../../core/interface/response/login.response';
 import { loginForm, loginPayload } from '../../core/interface/request/login';
-import { apiRoutes, Base, EToastType, localStorageEnum, setLocalStorageItem, ToastService, Validation } from '@Core';
+import { Base, Validation } from '@portal/core';
+import { ApiRoutes, EToastType, localStorageEnum, setLocalStorageItem, ToastService } from '@shared';
 
 
 @Component({
@@ -31,7 +32,7 @@ export class Login extends Base {
         password: this.loginForm.controls.password.value || '',
       };
       this.httpPostPromise<IGenericResponse<LoginResponse>, loginPayload>(
-        apiRoutes.LOGIN.BASE,
+        ApiRoutes.LOGIN.BASE,
         loginPayload
       )
         .then((response) => {

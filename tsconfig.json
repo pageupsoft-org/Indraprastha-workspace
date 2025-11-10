@@ -23,7 +23,8 @@
     "paths": {
       "@shared": [
         "./dist/shared"
-      ]
+      ],
+      "@portal/core": ["./projects/portal/src/app/core"],
     },
     "importHelpers": true,
     "target": "ES2022",
@@ -44,8 +45,7 @@
     "typeCheckHostBindings": true,
     "strictTemplates": true,
     "path": {
-      "@Core": ["projects/portal/src/app"],
-      "@Shared/Core": ["projects/shared/src/core"]
+      // "@portal/core": ["projects/portal/src/app/core"]
     }
   }
 }

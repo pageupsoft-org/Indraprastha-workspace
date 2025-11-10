@@ -1,12 +1,10 @@
 import { Component, inject } from '@angular/core';
-import { ToastService } from '../services/toast-service';
 import { Observable, Subscription } from 'rxjs';
 import { environment } from '../environment/dev.env';
 import { appRoutes } from '../const/appRoutes.const';
-import { apiRoutes } from '../const/apiRoutes.const';
 import { HttpClient, HttpErrorResponse, HttpHeaders } from '@angular/common/http';
-import { variable } from '../enum/variable.enum';
-import { ConfirmationUtil } from '@Core';
+import { ConfirmationUtil } from '@portal/core';
+import { ApiRoutes, ToastService, variable } from '@shared';
 
 @Component({
   selector: 'app-base',
@@ -19,7 +17,7 @@ export class Base {
   public subscriptionArray: Array<Subscription> = [];
   public readonly apiBaseUrl: string = environment.apiBaseUrl;
   public readonly objConfirmationUtil: ConfirmationUtil = new ConfirmationUtil();
-  public readonly apiRoutes = apiRoutes;
+  public readonly apiRoutes = ApiRoutes;
   public readonly appRoutes = appRoutes;
 
   private httpClient: HttpClient = inject(HttpClient);
