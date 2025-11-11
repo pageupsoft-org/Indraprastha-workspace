@@ -10,6 +10,7 @@ import { appRoutes } from '../../core/const/appRoutes.const';
 import { CommonModule } from '@angular/common';
 import { ShoppingCart } from '../shopping-cart/shopping-cart';
 import { AuthManager } from "../auth-manager/auth-manager";
+import { UtilityService } from '../../core/services/utility-service';
 
 @Component({
   selector: 'app-header',
@@ -27,8 +28,13 @@ export class Header {
   public isDropdownVisible: WritableSignal<boolean> = signal(false);
 
   public isCartOpen: WritableSignal<boolean> = signal(false);
+  dropdownOpen = false;
 
-  constructor() {}
+  constructor(
+    public _utitlityService: UtilityService
+  ) {
+    // _utitlityService.isUserLoggedIn.set(true); 
+  }
 
   public openCart() {
     this.shoppingCartRef.openCart();
@@ -50,4 +56,14 @@ export class Header {
       this.isDropdownVisible.set(false);
     }, 400);
   }
+
+  toggleDropdown() {
+  this.dropdownOpen = !this.dropdownOpen;
+}
+
+logout() {
+  this.dropdownOpen = false;
+  // Your logout logic here
+  console.log('Logged out');
+}
 }

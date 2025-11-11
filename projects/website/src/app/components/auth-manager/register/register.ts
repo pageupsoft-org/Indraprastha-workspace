@@ -1,14 +1,19 @@
 import { Component, model, OnInit, signal, WritableSignal } from '@angular/core';
 import { EAuthManager } from '../../../core/enum/auth-manager.enum';
-import {
-  FormControl,
-  FormGroup,
-  ReactiveFormsModule,
-  Validators
-} from '@angular/forms';
+import { FormControl, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 import { ButtonLoader } from '../../../core/component/button-loader/button-loader';
 import { HttpErrorResponse } from '@angular/common/http';
-import { ApiRoutes, ErrorHandler, httpPost, IRegisterForm, IRegisterFormData, IRGeneric, patternWithMessage } from '@shared';
+import {
+  ApiRoutes,
+  ErrorHandler,
+  EToastType,
+  httpPost,
+  IRegisterForm,
+  IRegisterFormData,
+  IRGeneric,
+  patternWithMessage,
+  ToastService,
+} from '@shared';
 
 @Component({
   selector: 'app-register',
@@ -32,11 +37,9 @@ export class Register implements OnInit {
     password: new FormControl(null, [Validators.required, Validators.minLength(6)]),
   });
 
-  ngOnInit(): void {
-  }
-  
-  constructor(){    
-  }
+  ngOnInit(): void {}
+
+  constructor(private _toastService: ToastService) {}
 
   public openLoginForm() {
     this.authType.set(EAuthManager.login);
@@ -52,6 +55,18 @@ export class Register implements OnInit {
         next: (res: IRGeneric<boolean>) => {
           if (res) {
             if (res.data) {
+              this.authType.set(EAuthManager.login);
+              this._toastService.show({
+                message: 'Login success',
+                type: EToastType.success,
+                duration: 2000,
+              });
+            } else {
+              this._toastService.show({
+                message: res.errorMessage,
+                type: EToastType.error,
+                duration: 2000,
+              });
             }
           }
 
