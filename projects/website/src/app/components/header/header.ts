@@ -11,6 +11,7 @@ import { CommonModule } from '@angular/common';
 import { ShoppingCart } from '../shopping-cart/shopping-cart';
 import { AuthManager } from "../auth-manager/auth-manager";
 import { UtilityService } from '../../core/services/utility-service';
+import { GenderTypeEnum } from '@shared';
 
 @Component({
   selector: 'app-header',
@@ -23,7 +24,9 @@ export class Header {
   @ViewChild('authFormRef') authFormRef!: AuthManager;
   public readonly appRoutes = appRoutes;
 
-  public activeGender: WritableSignal<'men' | 'women' | ''> = signal('');
+  public GenderTypeEnum = GenderTypeEnum;
+
+  public activeGender: WritableSignal<GenderTypeEnum | ''> = signal('');
   private timeout: any;
   public isDropdownVisible: WritableSignal<boolean> = signal(false);
 
@@ -43,7 +46,7 @@ export class Header {
     this.authFormRef.openForm();
   }
 
-  public setGender(type: 'men' | 'women' | ''): void {
+  public setGender(type: GenderTypeEnum | ''): void {
     clearTimeout(this.timeout);
     this.isDropdownVisible.set(true);
     this.activeGender.set(type);

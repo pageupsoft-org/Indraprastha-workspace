@@ -1,4 +1,3 @@
-
 import { Observable } from 'rxjs';
 import { MStringEnumToArray } from '../interface/model/utility.model';
 
@@ -33,14 +32,15 @@ export function getStringEnumKeyByValue<T extends Record<string, string>>(
 }
 
 export function getLocalStorageItem<T>(key: string): T | null {
-  try {
-    const item = localStorage.getItem(key);
-    if (item) {
-      return JSON.parse(item) as T;
+  if (typeof window !== 'undefined' && typeof window.localStorage !== 'undefined') {
+    try {
+      const item = localStorage.getItem(key);
+      if (item) {
+        return JSON.parse(item) as T;
+      }
+    } catch (error) {
+      console.error('Error reading from localStorage:', error);
     }
-  } catch (error) {
-    console.log(error);
-    return null;
   }
   return null;
 }

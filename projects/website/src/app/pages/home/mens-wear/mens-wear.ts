@@ -1,5 +1,22 @@
-import { AfterViewInit, Component, ElementRef, QueryList, ViewChildren } from '@angular/core';
-import { PlatformService } from '@shared';
+import {
+  AfterViewInit,
+  Component,
+  ElementRef,
+  QueryList,
+  signal,
+  ViewChildren,
+  WritableSignal,
+} from '@angular/core';
+import {
+  ApiRoutes,
+  DashboardProductTypeStringEnum,
+  httpPost,
+  intializepagInationPayload,
+  IRGeneric,
+  PlatformService,
+} from '@shared';
+import { IDashboadRequest } from '../product-slider/dashboard.request';
+import { DashboardResponseRoot, Product } from '../product-slider/dashboard.response';
 
 @Component({
   selector: 'app-mens-wear',
@@ -13,51 +30,12 @@ export class MensWear implements AfterViewInit {
   private currentIndex = 2;
   private readonly visibleCount = 5;
 
-  public mensWearList: {
-    image: string;
-    name: string;
-  }[] = [
-    {
-      image: 'assets/images/mens-wear-1.png',
-      name: 'Kurta Set',
-    },
-    {
-      image: 'assets/images/mens-wear-2.png',
-      name: 'Bandikoti',
-    },
-    {
-      image: 'assets/images/mens-wear-3.png',
-      name: 'Raja Koti',
-    },
-    {
-      image: 'assets/images/mens-wear-4.png',
-      name: 'Shirt',
-    },
-    {
-      image: 'assets/images/mens-wear-5.png',
-      name: 'Pocket Square',
-    },
-    {
-      image: 'assets/images/mens-wear-1.png',
-      name: 'Image 6',
-    },
-    {
-      image: 'assets/images/mens-wear-2.png',
-      name: 'Image 7',
-    },
-    {
-      image: 'assets/images/mens-wear-3.png',
-      name: 'Image 8',
-    },
-    {
-      image: 'assets/images/mens-wear-4.png',
-      name: 'Image 9',
-    },
-    {
-      image: 'assets/images/mens-wear-5.png',
-      name: 'Image 10',
-    },
-  ];
+  public mensWearList: WritableSignal<Product[]> = signal([]);
+
+  private payload: IDashboadRequest = {
+    ...intializepagInationPayload(),
+    type: DashboardProductTypeStringEnum.Women,
+  };
 
   constructor(private platformService: PlatformService) {}
 
@@ -106,5 +84,22 @@ export class MensWear implements AfterViewInit {
       this.currentIndex = this.mensWearList.length - this.visibleCount;
 
     this.updateGallery();
+  }
+
+  private getDashboardProduct() {
+    httpPost<IRGeneric<DashboardResponseRoot>, IDashboadRequest>(
+      ApiRoutes.PRODUCT.DASHBOARD,
+      this.payload,
+      false
+    ).subscribe({
+      next: (response) => {
+        if (response?.data) {
+          this.mensWearList.set(response.data.products);
+        }
+      },
+      error: (error) => {
+        console.error('Dashboard Product Error: ', error);
+      },
+    });
   }
 }
