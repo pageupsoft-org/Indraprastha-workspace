@@ -4,9 +4,8 @@ import { HttpErrorResponse } from '@angular/common/http';
 import { Router } from '@angular/router';
 import { IGenericResponse } from '../../core/interface/response/responseGeneric';
 import { LoginResponse } from '../../core/interface/response/login.response';
-import { loginForm, loginPayload } from '../../core/interface/request/login';
 import { Base } from '@portal/core';
-import { ApiRoutes, ErrorHandler, EToastType, localStorageEnum, setLocalStorageItem, ToastService } from '@shared';
+import { ApiRoutes, ErrorHandler, EToastType, ILoginForm, ILoginFormData, localStorageEnum, setLocalStorageItem, ToastService } from '@shared';
 
 
 @Component({
@@ -16,8 +15,8 @@ import { ApiRoutes, ErrorHandler, EToastType, localStorageEnum, setLocalStorageI
   styleUrl: './login.scss',
 })
 export class Login extends Base {
-  public loginForm = new FormGroup<loginForm>({
-    username: new FormControl('', [Validators.required]),
+  public loginForm = new FormGroup<ILoginForm>({
+    userName: new FormControl('', [Validators.required]),
     password: new FormControl('', [Validators.required]),
   });
 
@@ -27,11 +26,11 @@ export class Login extends Base {
 
   public login() {
     if (this.loginForm.valid) {
-      const loginPayload: loginPayload = {
-        username: this.loginForm.controls.username.value || '',
+      const loginPayload: ILoginFormData = {
+        userName: this.loginForm.controls.userName.value || '',
         password: this.loginForm.controls.password.value || '',
       };
-      this.httpPostPromise<IGenericResponse<LoginResponse>, loginPayload>(
+      this.httpPostPromise<IGenericResponse<LoginResponse>, ILoginFormData>(
         ApiRoutes.LOGIN.BASE,
         loginPayload
       )

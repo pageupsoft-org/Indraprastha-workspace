@@ -11,8 +11,8 @@
           <input
             type="text"
             [formControl]="registerForm.controls.firstName"
-            appErrorHandler
-            [control]="registerForm.controls.firstName"
+        
+            [appErrorHandler]="registerForm.controls.firstName"
             class="w-full rounded-[5px] p-2 border border-gray-400 focus:outline-none focus:border-red-800 transition-colors duration-200"
           />
         </div>
@@ -23,8 +23,7 @@
           <input
             type="text"
             [formControl]="registerForm.controls.lastName"
-            appErrorHandler
-            [control]="registerForm.controls.lastName"
+            [appErrorHandler]="registerForm.controls.lastName"
             class="w-full rounded-[5px] p-2 border border-gray-400 focus:outline-none focus:border-red-800 transition-colors duration-200"
           />
         </div>
@@ -37,8 +36,7 @@
           <input
             type="email"
             [formControl]="registerForm.controls.email"
-            appErrorHandler
-            [control]="registerForm.controls.email"
+            [appErrorHandler]="registerForm.controls.email"
             class="w-full rounded-[5px] p-2 border border-gray-400 focus:outline-none focus:border-red-800 transition-colors duration-200"
           />
         </div>
@@ -49,8 +47,7 @@
           <input
             type="text"
             [formControl]="registerForm.controls.contact"
-            appErrorHandler
-            [control]="registerForm.controls.contact"
+            [appErrorHandler]="registerForm.controls.contact"
             class="w-full rounded-[5px] p-2 border border-gray-400 focus:outline-none focus:border-red-800 transition-colors duration-200"
           />
         </div>
@@ -63,8 +60,7 @@
           <input
             type="text"
             [formControl]="registerForm.controls.userName"
-            appErrorHandler
-            [control]="registerForm.controls.userName"
+            [appErrorHandler]="registerForm.controls.userName"
             class="w-full rounded-[5px] p-2 border border-gray-400 focus:outline-none focus:border-red-800 transition-colors duration-200"
           />
         </div>
@@ -75,8 +71,7 @@
           <input
             type="text"
             [formControl]="registerForm.controls.password"
-            appErrorHandler
-            [control]="registerForm.controls.password"
+            [appErrorHandler]="registerForm.controls.password"
             class="w-full rounded-[5px] p-2 border border-gray-400 focus:outline-none focus:border-red-800 transition-colors duration-200"
           />
         </div>
