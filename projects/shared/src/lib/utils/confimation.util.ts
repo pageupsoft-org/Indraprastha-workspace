@@ -1,6 +1,8 @@
 import { inject } from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
-import { ConfirmationDialog, getDefaultConfirmationModalData, MConfirmationModalData } from '@shared';
+import { getDefaultConfirmationModalData, MConfirmationModalData } from '../interface/model/confirmation.model';
+import { ConfirmationDialog } from '../component/confirmation-dialog/confirmation-dialog';
+// import { ConfirmationDialog, getDefaultConfirmationModalData, MConfirmationModalData } from '@shared';
 
 export class ConfirmationUtil {
   private _matDialogService: MatDialog = inject(MatDialog);
