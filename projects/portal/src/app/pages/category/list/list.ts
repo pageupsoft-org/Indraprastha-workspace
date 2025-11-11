@@ -37,9 +37,9 @@ export class List extends Base implements OnInit {
       },
     });
 
-    dialogRef.afterClosed().subscribe(result => {
+    dialogRef.afterClosed().subscribe((result: boolean) => {
       if (result) {
-        console.log('Form Submitted:', result);
+        this.getCategoryData()
       }
     });
   }
@@ -72,5 +72,7 @@ export class List extends Base implements OnInit {
         })
     }
   }
+
+  
 
 }

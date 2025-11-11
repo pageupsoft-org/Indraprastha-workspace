@@ -4,6 +4,11 @@ import { FormControl, FormGroup } from '@angular/forms';
 import { MatDialogRef } from '@angular/material/dialog';
 import { List } from '../../employee/list/list';
 import { IProductForm } from '../../../core/interface/request/product';
+import { IGenericResponse } from '../../../core/interface/response/responseGeneric';
+import { ApiRoutes, IRGeneric, MStringEnumToArray, stringEnumToArray } from '@shared';
+import { IGenericComboResponse } from '../../../core/interface/response/banner';
+import { EGender } from '../../../core/enum/gender.enum';
+
 
 @Component({
   selector: 'app-product-upsert',
@@ -12,9 +17,9 @@ import { IProductForm } from '../../../core/interface/request/product';
   styleUrl: './product-upsert.scss',
 })
 export class ProductUpsert extends Base implements OnInit {
-  readonly dialogRef = inject(MatDialogRef<List>);
-  // public combo: IGenericResponse[] = [];
-  // public genders: MStringEnumToArray[] = stringEnumToArray(EGender);
+ 
+  public combo: IGenericComboResponse[] = [];
+  public genders: MStringEnumToArray[] = stringEnumToArray(EGender);
   public productForm = new FormGroup<IProductForm>({
     id: new FormControl(0),
     categoryIds: new FormControl(null),
@@ -27,29 +32,44 @@ export class ProductUpsert extends Base implements OnInit {
   })
 
   ngOnInit(): void {
-    // this.getCategoryCombo();
+    this.getCategoryCombo();
   }
 
-  public onCancel() {
-    this.dialogRef.close();
-  }
+  // public onCancel() {
+  //   this.dialogRef.close();
+  // }
 
   constructor() {
     super()
   }
 
-  // private getCategoryCombo() {
-  //   this.httpGetPromise<IGenericResponse<IGenericComboResponse[]>>(ApiRoutes.CATEGORY.GET_COMBO)
-  //     .then((response) => {
-  //       console.log(response);
-  //       if (response) {
-  //         if (response.data) {
-  //           this.combo = response.data;
-  //         }
-  //       }
-  //     })
-  //     .catch((error) => { });
-  // }
+  // GET CATEGORY COMBO
+  private getCategoryCombo() {
+    this.httpGetPromise<IRGeneric<IGenericComboResponse[]>>(ApiRoutes.CATEGORY.GET_COMBO)
+      .then((response) => {
+        console.log(response);
+        if (response) {
+          if (response.data) {
+            this.combo = response.data;
+          }
+        }
+      })
+      .catch((error) => { });
+  }
+
+  // GET PRODUCTS
+  
+    // public getProducts() {
+    //   this.httpPostPromise<IGenericResponse<IEmployeeResponse>, IPaginationPayload>(ApiRoutes.EMPLOYEE.GET, this.payLoad).then(response => {
+    //     if (response) {
+    //       if (response.data) {
+    //         this.employees = response.data.employees;
+    //       }
+    //     }
+    //   }).catch((error) => {
+    //   //   handel error
+    //   })
+    // } 
   
 
 }

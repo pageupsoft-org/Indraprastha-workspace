@@ -48,7 +48,6 @@ export class Upsert extends Base implements OnInit {
   ngOnInit(): void {
     const id = this.data.id
     this.fetchEmployee(id)
-
   }
 
   // Close PopUp

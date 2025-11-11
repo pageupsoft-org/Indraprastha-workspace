@@ -46,7 +46,8 @@ export const ApiRoutes = {
   },
   PRODUCT: {
     BASE: '/api/product',
-    GET: '/api/product/All',
+    ALL: '/api/product/All',
     GET_COMBO: '/api/product/combo',
+    // ALL : '/api/product/All',
   },
 };

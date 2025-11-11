@@ -42,8 +42,8 @@ export class Upsert extends Base implements OnInit {
     }
   }
 
-  public onCancel() {
-    this.dialogRef.close();
+  public onCancel(isSuccess?: boolean) {
+    this.dialogRef.close(isSuccess);
   }
 
   public onCategorySubmit() {
@@ -54,11 +54,11 @@ export class Upsert extends Base implements OnInit {
         if (response) {
           if (response.data) {
             if (this.data.id === 0) {
-              this.onCancel()
+              this.onCancel(true)
               this.toaster.show({ message: 'Category Add successfully', duration: 3000, type: EToastType.success });
             }
             else {
-              this.onCancel()
+              this.onCancel(true)
               this.toaster.show({ message: 'Category Update successfully', duration: 3000, type: EToastType.success });
             }
           }
