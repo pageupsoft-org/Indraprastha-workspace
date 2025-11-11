@@ -1,6 +1,6 @@
 import { FormControl } from "@angular/forms";
 
-export interface customerForm {
+export interface ICustomerForm {
     firstName: FormControl<string | null>;
     lastName: FormControl<string | null>;
     email: FormControl<string | null>;
@@ -9,7 +9,7 @@ export interface customerForm {
     password: FormControl<string | null>;
 }
 
-export interface customerPayload {
+export interface ICustomer {
     firstName: string;
     lastName: string;
     email: string;
@@ -17,3 +17,5 @@ export interface customerPayload {
     userName: string | null;
     password: string | null;
 }
+
+

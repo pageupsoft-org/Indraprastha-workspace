@@ -1,13 +1,11 @@
-export interface customerResponse{
+import { ICustomer } from "../request/customer";
+
+export interface ICustomerResponse{
      total : number;
-    customers : customers[]
+     customers : Customers[]
 }
 
-export interface customers{
-    id : number
-    firstName: string
-    lastName: string
-    isActive : boolean
-    email: string
-    contact : string
+export interface Customers extends ICustomer{
+    id:number
+    isActive:boolean;
 }

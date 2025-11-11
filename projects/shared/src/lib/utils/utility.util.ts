@@ -60,3 +60,21 @@ export function clearLocalStorageItems(): void {
     console.log(error);
   }
 }
+
+export function convertImageToBase64(event: Event): Promise<string | ArrayBuffer | null> {
+  return new Promise((resolve, reject) => {
+    const input = event.target as HTMLInputElement;
+    if (!input.files || input.files.length === 0) {
+      reject('No file selected');
+      return;
+    }
+
+    const file = input.files[0];
+    const reader = new FileReader();
+
+    reader.onload = () => resolve(reader.result);
+    reader.onerror = (error) => reject(error);
+
+    reader.readAsDataURL(file);
+  });
+}

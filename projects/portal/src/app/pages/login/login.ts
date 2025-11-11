@@ -16,8 +16,9 @@ import { ApiRoutes, ErrorHandler, EToastType, ILoginForm, ILoginFormData, localS
 })
 export class Login extends Base {
   public loginForm = new FormGroup<ILoginForm>({
-    userName: new FormControl('', [Validators.required]),
+    username: new FormControl('', [Validators.required]),
     password: new FormControl('', [Validators.required]),
+    fcmToken: new FormControl(''),
   });
 
   constructor(private toster: ToastService, private router: Router) {
@@ -27,8 +28,9 @@ export class Login extends Base {
   public login() {
     if (this.loginForm.valid) {
       const loginPayload: ILoginFormData = {
-        userName: this.loginForm.controls.userName.value || '',
+        username: this.loginForm.controls.username.value || '',
         password: this.loginForm.controls.password.value || '',
+        fcmToken: ""
       };
       this.httpPostPromise<IGenericResponse<LoginResponse>, ILoginFormData>(
         ApiRoutes.LOGIN.BASE,

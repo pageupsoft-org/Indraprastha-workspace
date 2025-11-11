@@ -1,0 +1,58 @@
+/* popup.component.scss */
+
+/* Basic title styling */
+.title {
+  font-size: 1.25rem;
+  font-weight: 600;
+  color: #0f172a; /* slate-900 */
+}
+
+/* Form grid:
+   - 1 column on very small screens
+   - 2 columns on small screens (>= 640px)
+   - 3 columns on large screens (>= 1024px)
+*/
+.form-grid {
+  display: grid;
+  gap: 16px;
+  grid-template-columns: 1fr;
+  margin-top: 8px;
+}
+
+/* 2 columns @ small screens, 3 columns @ large */
+@media (min-width: 640px) {
+  .form-grid { grid-template-columns: repeat(2, 1fr); }
+}
+@media (min-width: 1024px) {
+  .form-grid { grid-template-columns: repeat(3, 1fr); }
+}
+
+/* Make mat-form-field occupy its grid cell fully */
+.full {
+  width: 100%;
+}
+
+/* Make address (textarea) span all columns */
+.full-span {
+  grid-column: 1 / -1;
+}
+
+/* Dialog actions spacing (small gap between buttons) */
+.dialog-actions {
+  margin-top: 12px;
+  display: flex;
+  gap: 12px;
+}
+
+/* Dialog container tweaks when opened with panelClass 'custom-dialog' */
+.custom-dialog .mat-dialog-container {
+  padding: 24px;
+  border-radius: 10px;
+  max-width: 900px;
+}
+
+/* Optional: slightly larger input height for better touch targets */
+.mat-form-field-appearance-fill .mat-form-field-flex {
+  min-height: 52px;
+  border-radius: 8px;
+}

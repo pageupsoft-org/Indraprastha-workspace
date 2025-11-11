@@ -1,0 +1,95 @@
+<!-- CUSTOMER LIST -->
+
+<div class="w-full">
+  <!-- Header: Search + Add -->
+  <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4 mb-6">
+    <div
+      class="flex flex-col sm:flex-row items-center justify-between gap-4 w-full bg-white p-4 rounded-xl shadow-sm border border-slate-200">
+      <!-- Search Bar (static) -->
+      <div class="relative w-full sm:w-80 md:w-96">
+        <input type="text" placeholder="Search customers..."
+          class="w-full pl-10 pr-4 py-2 rounded-lg border border-slate-300 bg-gray-50 placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 transition" />
+        <span class="absolute left-3 top-1/2 transform -translate-y-1/2 text-slate-400">
+          <!-- Search Icon -->
+          <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+              d="M21 21l-4.35-4.35M11 19a8 8 0 100-16 8 8 0 000 16z"></path>
+          </svg>
+        </span>
+      </div>
+
+      <!-- Add Button (static) -->
+      <!-- <div>
+          <button type="button" (click)="openModel()" hidden
+          class="inline-flex items-center gap-2 px-4 py-2 bg-indigo-600 text-white font-medium rounded-lg shadow-sm hover:bg-indigo-700 focus:ring-2 focus:ring-indigo-400 focus:outline-none transition cursor-pointer">
+          <svg xmlns="http://www.w3.org/2000/svg" class="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"></path>
+          </svg>
+          Add Customer
+        </button>
+      </div> -->
+    </div>
+  </div>
+</div>
+
+<!-- Table  -->
+<div class="rounded-lg border border-slate-200 shadow-sm overflow-x-auto">
+  <table class="min-w-full divide-y divide-slate-200">
+    <thead class="bg-slate-50">
+      <tr>
+        <th class="px-4 py-3 text-left text-sm font-medium text-slate-700">SN</th>
+        <th class="px-4 py-3 text-left text-sm font-medium text-slate-700 cursor-pointer select-none">
+          Name
+          <svg class="inline w-3 h-3 ml-1 text-slate-400" viewBox="0 0 20 20" fill="currentColor"
+            xmlns="http://www.w3.org/2000/svg">
+            <path d="M5 8l5-5 5 5H5z"></path>
+          </svg>
+        </th>
+        <th class="px-4 py-3 text-left text-sm font-medium text-slate-700">Contact</th>
+        <!-- <th class="px-4 py-3 text-left text-sm font-medium text-slate-700">User Type</th> -->
+        <th class="px-4 py-3 text-left text-sm font-medium text-slate-700">Active</th>
+        <th class="px-4 py-3 text-left text-sm font-medium text-slate-700">Actions</th>
+      </tr>
+    </thead>
+
+    <tbody class="bg-white divide-y divide-slate-100">
+      <!-- Row 1 -->
+      @for (item of customers; track $index) {
+      <tr class="hover:bg-slate-50">
+        <td class="px-4 py-3 text-sm text-slate-600">{{$index+1}}</td>
+        <td class="px-4 py-3 text-sm">
+          <div class="flex items-center gap-3">
+            <div class="w-10 h-10 rounded-full bg-blue-100 flex items-center justify-center text-slate-700 font-medium">
+              {{item.firstName.charAt(0)}}{{item.lastName.charAt(0)}}
+            </div>
+            <div>
+              <div class="text-slate-900 font-medium"> {{ item.firstName + ' ' + item.lastName }}</div>
+              <div class="text-xs text-blue-400">{{item.email}}</div>
+            </div>
+          </div>
+        </td>
+        <td class="px-4 py-3 text-sm text-slate-700">{{item.contact}}</td>
+        <td class="px-4 py-3 text-sm text-slate-700">
+          @if (item.isActive) {
+          <span class="font-semibold text-green-500 bg-green-100 px-3 py-1 rounded-full">
+            Active
+          </span>
+          } @else {
+          <span class="font-semibold text-red-500 bg-red-100 px-3 py-1 rounded-full">
+            Deactive
+          </span>
+          }
+        </td>
+        <td class="px-4 py-3 text-sm">
+          <div class="flex items-center gap-2">
+            <!-- <button class="px-2 py-1 rounded-md bg-blue-50 text-blue-600 hover:bg-blue-100 cursor-pointer" (click)="openModel(item.id)">Edit</button> -->
+            <button class="px-2 py-1 rounded-md bg-red-50 text-red-600 hover:bg-red-100 cursor-pointer"
+              (click)="deleteCustomer(item.id)">Delete</button>
+          </div>
+        </td>
+      </tr>
+      }
+
+    </tbody>
+  </table>
+</div>
