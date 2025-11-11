@@ -8,7 +8,7 @@ import { intializepagInationPayload, IPaginationPayload } from '../../../core/in
 import { ReactiveFormsModule } from '@angular/forms';
 import { MatDialog } from '@angular/material/dialog';
 import { Upsert } from '../upsert/upsert';
-import { ApiRoutes, EToastType, ToastService } from '@shared';
+import { ApiRoutes, EToastType, MConfirmationModalData, ToastService } from '@shared';
 
 @Component({
   selector: 'app-list',
@@ -41,7 +41,7 @@ export class List extends Base implements OnInit {
         }
       }
     }).catch((error) => {
-    //   handel error
+      //   handel error
     })
   }
 
@@ -65,18 +65,30 @@ export class List extends Base implements OnInit {
   // Delete Employees
   public deleteEmployee(id: number) {
     if (id) {
-      this.httpDeletePromise<IGenericResponse<boolean>>(ApiRoutes.EMPLOYEE.GETBYID(id)).then(response => {
-        if (response) {
-          if (response.data) {
-            this.toaster.show({ message: 'Delete Successful', duration: 3000, type: EToastType.success });
-            this.getEmployees();
-          }
+      const modalData: MConfirmationModalData = {
+        heading: 'Confirm Delete',
+        body: 'Are you sure you want to delete this Employee?',
+        yesText: 'Yes',
+        noText: 'No'
+      };
+      this.objConfirmationUtil.getConfirmation(modalData).then((res: boolean) => {
+        if (res) {
+          this.httpDeletePromise<IGenericResponse<boolean>>(ApiRoutes.EMPLOYEE.GETBYID(id)).then(response => {
+            if (response) {
+              if (response.data) {
+                this.toaster.show({ message: 'Delete Successful', duration: 3000, type: EToastType.success });
+                this.getEmployees();
+              }
+            }
+          })
+            .catch((error) => {
+              // handle error
+            })
         }
       })
-        .catch((error) => {
-          // handle error
-        })
+
     }
   }
 
+ 
 }

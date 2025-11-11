@@ -66,39 +66,25 @@ export class CollectionList extends Base implements OnInit {
         noText: 'No'
       };
 
-      // Step 2️⃣ — Open the dialog
-      const dialogRef = this.dialog.open(ConfirmationDialog, {
-        width: '400px',
-        disableClose: true
-      });
-
-      // Step 3️⃣ — Set @Input() values since your dialog uses @Input
-      if (dialogRef.componentInstance) {
-        dialogRef.componentInstance.modalData = modalData;
-        dialogRef.componentInstance.modalRef = dialogRef;
-      }
-
-      // Step 4️⃣ — Handle dialog close (Yes/No)
-      dialogRef.afterClosed().subscribe((isConfirmed: boolean) => {
-        if (!isConfirmed) return; // If user clicked "No", stop here.
-
-        // Step 5️⃣ — Proceed to delete only if confirmed
-        this.httpDeletePromise<IGenericResponse<boolean>>(ApiRoutes.COLLECTION.GETBYID(id))
-          .then(response => {
-            if (response?.data) {
-              this.toaster.show({
-                message: 'Collection deleted successfully',
-                duration: 3000,
-                type: EToastType.success
-              });
-              this.getAllCollections();
-            }
-          })
-          .catch((error) => {
-          });
-      });
+      this.objConfirmationUtil.getConfirmation(modalData).then((res: boolean) => {
+        if (res) {
+          this.httpDeletePromise<IGenericResponse<boolean>>(ApiRoutes.COLLECTION.GETBYID(id))
+            .then(response => {
+              if (response?.data) {
+                this.toaster.show({
+                  message: 'Collection deleted successfully',
+                  duration: 3000,
+                  type: EToastType.success
+                });
+                this.getAllCollections();
+              }
+            })
+            .catch((error) => {
+            });
+        }
+      })
     }
   }
-}
 
+}
 

@@ -18,9 +18,7 @@ export class Upsert extends Base implements OnInit {
 
   public readonly dialogRef = inject(MatDialogRef<List>);
   public readonly data = inject(MAT_DIALOG_DATA);
-
-  // public categoryCombo:categoryComboResponse[] = [] 
-  public categoryCombo: any;
+  public collectionCombo:IGenericComboResponse[] = [] 
 
   public categoryForm = new FormGroup<ICategoryForm>({
     id: new FormControl(0),
@@ -35,15 +33,15 @@ export class Upsert extends Base implements OnInit {
   }
 
   ngOnInit(): void {
-    this.getCategoryCombo()
+    this.getCollectionCombo()
     const id = this.data.id
     if (id) {
       this.getCategoryById(id)
     }
   }
 
-  public onCancel() {
-    this.dialogRef.close();
+  public onCancel(isSuccess?:boolean) {
+    this.dialogRef.close(isSuccess);
   }
 
   public onCategorySubmit() {
@@ -54,11 +52,11 @@ export class Upsert extends Base implements OnInit {
         if (response) {
           if (response.data) {
             if (this.data.id === 0) {
-              this.onCancel()
+              this.onCancel(true)
               this.toaster.show({ message: 'Category Add successfully', duration: 3000, type: EToastType.success });
             }
             else {
-              this.onCancel()
+              this.onCancel(true)
               this.toaster.show({ message: 'Category Update successfully', duration: 3000, type: EToastType.success });
             }
           }
@@ -71,12 +69,11 @@ export class Upsert extends Base implements OnInit {
     // }
   }
 
-  private getCategoryCombo() {
-    this.httpGetPromise<IGenericResponse<IGenericComboResponse>>(ApiRoutes.CATEGORY.GET_COMBO).then(response => {
+  private getCollectionCombo() {
+    this.httpGetPromise<IGenericResponse<IGenericComboResponse[]>>(ApiRoutes.COLLECTION.GET_COMBO).then(response => {
       if (response) {
         if (response.data) {
-          console.log(response)
-          this.categoryCombo = response.data
+          this.collectionCombo = response.data
         }
       }
     }).catch(error => {

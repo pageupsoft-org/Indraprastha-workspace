@@ -73,7 +73,7 @@
         <select formControlName="mainCategoryId"
           class="w-full h-10 pl-3 pr-8 rounded-lg border border-slate-300 bg-white text-sm text-slate-800 focus:outline-none focus:ring-2 focus:ring-indigo-200 focus:border-indigo-300 transition">
           <option value="" disabled selected>Select main category</option>
-          @for (item of categoryCombo; track $index) {
+          @for (item of collectionCombo; track $index) {
           <option [ngValue]="item.id">{{ item.name }}</option>
           }
         </select>

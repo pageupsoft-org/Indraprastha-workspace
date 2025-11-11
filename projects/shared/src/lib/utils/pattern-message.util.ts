@@ -10,3 +10,4 @@ export function patternWithMessage(pattern: RegExp, message: string): ValidatorF
             : { pattern: { message } };
     };
 }
+
