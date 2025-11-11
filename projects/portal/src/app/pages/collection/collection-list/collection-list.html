@@ -35,7 +35,7 @@
 
       <!-- Add Button (static) -->
       <div>
-        <button
+        <button (click)="openModel()"
           type="button"
           class="inline-flex items-center gap-2 px-4 py-2 bg-indigo-600 text-white font-medium rounded-lg shadow-sm hover:bg-indigo-700 focus:ring-2 focus:ring-indigo-400 focus:outline-none transition cursor-pointer"
         >
@@ -53,7 +53,7 @@
               d="M12 4v16m8-8H4"
             />
           </svg>
-          Add Category
+          Add Collection
         </button>
       </div>
     </div>
@@ -83,16 +83,15 @@
           <td class="px-4 py-3 text-sm">
             {{ item.name }}
           </td>
-          <td class="px-4 py-3 text-sm text-slate-700">{{ item.gender }}</td>
+          <td class="px-4 py-3 text-sm text-slate-700">{{ item.gender}}</td>
           <td class="px-4 py-3 text-sm">
             <div class="flex items-center gap-2">
-              <!--  -->
-              <button
+              <button (click)="openModel(item.id)"
                 class="px-2 py-1 rounded-md bg-blue-50 text-blue-600 hover:bg-blue-100 cursor-pointer"
               >
-                Edit
+                Edit 
               </button>
-              <button
+              <button (click)="deleteCollection(item.id)"
                 class="px-2 py-1 rounded-md bg-red-50 text-red-600 hover:bg-red-100 cursor-pointer"
               >
                 Delete

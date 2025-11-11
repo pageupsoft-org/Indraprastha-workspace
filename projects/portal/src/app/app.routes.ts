@@ -43,6 +43,11 @@ export const routes: Routes = [
         loadComponent: () => import('./pages/customer/list/list').then((m) => m.List),
       },
       {
+        path: AppRoutes.COLLECTION,
+        loadComponent: () =>
+          import('./pages/collection/collection-list/collection-list').then((m) => m.CollectionList),
+      },
+      {
         path: AppRoutes.CATEGORY,
         loadComponent: () => import('./pages/category/list/list').then((m) => m.List),
       },
@@ -59,6 +64,7 @@ export const routes: Routes = [
         loadComponent: () =>
           import('./pages/product/product-upsert/product-upsert').then((m) => m.ProductUpsert),
       },
+
     ],
   },
 ];

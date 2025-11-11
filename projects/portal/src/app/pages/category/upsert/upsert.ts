@@ -89,6 +89,7 @@ export class Upsert extends Base implements OnInit {
       this.httpGetPromise<any>(ApiRoutes.CATEGORY.GETBYID(id)).then((response) => {
         if (response) {
           if (response.data) {
+            console.log(response)
             this.categoryForm.patchValue(response.data)
           }
         }

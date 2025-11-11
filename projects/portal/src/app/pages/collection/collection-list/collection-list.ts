@@ -1,6 +1,12 @@
-import { Component, signal, WritableSignal } from '@angular/core';
+import { Component, inject, OnInit, signal, WritableSignal } from '@angular/core';
 import { Base } from '@portal/core';
-import { ICollectionResponse } from '../../../core/interface/response/collection.response';
+import { ICollection, ICollectionResponse } from '../../../core/interface/response/collection.response';
+import { MAT_DIALOG_DATA, MatDialog } from '@angular/material/dialog';
+import { CollectionUpsert } from '../collection-upsert/collection-upsert';
+import { intializepagInationPayload, IPaginationPayload } from '../../../core/interface/request/genericPayload';
+import { ApiRoutes, ConfirmationDialog, EToastType, MConfirmationModalData, ToastService } from '@shared';
+import { IGenericResponse } from '../../../core/interface/response/responseGeneric';
+import { response } from 'express';
 
 @Component({
   selector: 'app-collection-list',
@@ -8,16 +14,91 @@ import { ICollectionResponse } from '../../../core/interface/response/collection
   templateUrl: './collection-list.html',
   styleUrl: './collection-list.scss',
 })
-export class CollectionList extends Base {
+export class CollectionList extends Base implements OnInit {
+  public readonly dialog = inject(MatDialog);
+  public collectionList: WritableSignal<ICollection[]> = signal([]);
+  public payLoad: IPaginationPayload = intializepagInationPayload()
+  public collections: ICollection[] = []
 
-  public collectionList: WritableSignal<ICollectionResponse[]> = signal([]);
+  constructor(private toaster: ToastService) {
+    super()
+  }
 
-  constructor(){
-    super();
+  ngOnInit(): void {
     this.getAllCollections();
   }
 
-  private getAllCollections(): void {
-    // this.httpGetPromise<>
+  private getAllCollections() {
+    this.httpPostPromise<IGenericResponse<ICollectionResponse>, IPaginationPayload>(ApiRoutes.COLLECTION.ALL, this.payLoad).then(response => {
+      if (response) {
+        if (response.data) {
+          this.collectionList.set(response.data.collections);
+        }
+      }
+    })
+  }
+
+  // Open PopUp
+  public openModel(id: number = 0) {
+    console.log(id)
+    const dialogRef = this.dialog.open(CollectionUpsert, {
+      width: '80%',
+      maxWidth: '900px',
+      data: {
+        id: id
+      },
+    });
+
+    dialogRef.afterClosed().subscribe((result: boolean) => {
+      if (result) {
+        this.getAllCollections()
+      }
+    });
+  }
+
+  //Delete Collection
+  public deleteCollection(id: number) {
+    if (id) {
+      const modalData: MConfirmationModalData = {
+        heading: 'Confirm Delete',
+        body: 'Are you sure you want to delete this collection?',
+        yesText: 'Yes',
+        noText: 'No'
+      };
+
+      // Step 2️⃣ — Open the dialog
+      const dialogRef = this.dialog.open(ConfirmationDialog, {
+        width: '400px',
+        disableClose: true
+      });
+
+      // Step 3️⃣ — Set @Input() values since your dialog uses @Input
+      if (dialogRef.componentInstance) {
+        dialogRef.componentInstance.modalData = modalData;
+        dialogRef.componentInstance.modalRef = dialogRef;
+      }
+
+      // Step 4️⃣ — Handle dialog close (Yes/No)
+      dialogRef.afterClosed().subscribe((isConfirmed: boolean) => {
+        if (!isConfirmed) return; // If user clicked "No", stop here.
+
+        // Step 5️⃣ — Proceed to delete only if confirmed
+        this.httpDeletePromise<IGenericResponse<boolean>>(ApiRoutes.COLLECTION.GETBYID(id))
+          .then(response => {
+            if (response?.data) {
+              this.toaster.show({
+                message: 'Collection deleted successfully',
+                duration: 3000,
+                type: EToastType.success
+              });
+              this.getAllCollections();
+            }
+          })
+          .catch((error) => {
+          });
+      });
+    }
   }
 }
+
+
