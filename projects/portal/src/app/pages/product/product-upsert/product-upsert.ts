@@ -1,6 +1,6 @@
 import { Component, inject, OnInit } from '@angular/core';
 import { Base } from '../../../core/base/base';
-import { FormControl, FormGroup } from '@angular/forms';
+import { FormControl, FormGroup, ReactiveFormsModule } from '@angular/forms';
 import { MatDialogRef } from '@angular/material/dialog';
 import { List } from '../../employee/list/list';
 import { IProductForm } from '../../../core/interface/request/product';
@@ -8,11 +8,12 @@ import { IGenericResponse } from '../../../core/interface/response/responseGener
 import { ApiRoutes, IRGeneric, MStringEnumToArray, stringEnumToArray } from '@shared';
 import { IGenericComboResponse } from '../../../core/interface/response/banner';
 import { EGender } from '../../../core/enum/gender.enum';
+import { CommonModule } from '@angular/common';
 
 
 @Component({
   selector: 'app-product-upsert',
-  imports: [],
+  imports: [ReactiveFormsModule, CommonModule],
   templateUrl: './product-upsert.html',
   styleUrl: './product-upsert.scss',
 })
