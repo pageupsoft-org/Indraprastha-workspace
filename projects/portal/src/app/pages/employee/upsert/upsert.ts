@@ -26,8 +26,8 @@ export class Upsert extends Base implements OnInit {
 
   public employeeForm = new FormGroup<IEmployeeForm>({
     id: new FormControl(0),
-    firstName: new FormControl('', [Validators.required]),
-    lastName: new FormControl('', [Validators.required]),
+    firstName: new FormControl('', [Validators.required, Validators.minLength(3), Validators.maxLength(30)]),
+    lastName: new FormControl(''),
     email: new FormControl('', [Validators.required, Validators.email]),
     contact: new FormControl('', [Validators.required]),
     userType: new FormControl('', [Validators.required]),

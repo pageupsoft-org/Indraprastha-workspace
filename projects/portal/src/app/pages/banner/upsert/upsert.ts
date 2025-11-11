@@ -56,8 +56,8 @@ export class Upsert extends Base implements OnInit {
     }
   }
 
-  public onCancel() {
-    this.dialogRef.close();
+  public onCancel(isSuccess? : boolean) {
+    this.dialogRef.close(isSuccess);
   }
 
   public async onImageChange(event: Event) {
@@ -79,9 +79,11 @@ export class Upsert extends Base implements OnInit {
         if (response) {
           if (response.data) {
             if (this.data.id === 0) {
+              this.onCancel(true)
               this.toaster.show({ message: 'Banner Add Successful', duration: 3000, type: EToastType.success})
             }
             else {
+              this.onCancel(true)
               this.toaster.show({ message: 'Banner Update Successful', duration: 3000, type: EToastType.success })
             }
           }

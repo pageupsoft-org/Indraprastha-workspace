@@ -33,6 +33,12 @@ export const ApiRoutes = {
     GET: '/api/Employee/All',
     GETBYID: (id: number) => `/api/Employee/${id}`,
   },
+  COLLECTION: {
+    BASE: "/api/Collection",
+    ALL: "/api/Collection/ALL",
+    GET_COMBO: '/api/Collection/combo',
+    GETBYID: (id: number) => `/api/Collection/${id}`,
+  },
   CATEGORY: {
     BASE: '/api/Category',
     GET: '/api/Category/All',

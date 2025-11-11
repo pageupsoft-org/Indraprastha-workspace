@@ -5,7 +5,7 @@ import { Base } from '../../../core/base/base';
 import { IGenericResponse } from '../../../core/interface/response/responseGeneric';
 import { intializepagInationPayload, IPaginationPayload } from '../../../core/interface/request/genericPayload';
 import { ICategory } from '../../../core/interface/request/category';
-import { ApiRoutes, EToastType, ToastService } from '@shared';
+import { ApiRoutes, EToastType, MConfirmationModalData, ToastService } from '@shared';
 import { ICategoryResponse } from '../../../core/interface/response/category';
 
 @Component({
@@ -58,21 +58,29 @@ export class List extends Base implements OnInit {
 
   public deleteCategory(id: number) {
     if (id) {
-      this.httpDeletePromise<IGenericResponse<boolean>>(ApiRoutes.CATEGORY.GETBYID(id)).then(response => {
-        console.log(response)
-        if (response) {
-          if (response.data) {
-            this.toaster.show({ message: 'Delete Successful', duration: 3000, type: EToastType.success });
-            this.getCategoryData()
-          }
+      const modalData: MConfirmationModalData = {
+        heading: 'Confirm Delete',
+        body: 'Are you sure you want to delete this Category?',
+        yesText: 'Yes',
+        noText: 'No'
+      };
+      this.objConfirmationUtil.getConfirmation(modalData).then((res: boolean) => {
+        if (res) {
+          this.httpDeletePromise<IGenericResponse<boolean>>(ApiRoutes.CATEGORY.GETBYID(id)).then(response => {
+            console.log(response)
+            if (response) {
+              if (response.data) {
+                this.toaster.show({ message: 'Delete Successful', duration: 3000, type: EToastType.success });
+                this.getCategoryData()
+              }
+            }
+          })
+            .catch((error) => {
+              // handle error
+            })
         }
       })
-        .catch((error) => {
-          // handle error
-        })
     }
   }
-
-  
 
 }

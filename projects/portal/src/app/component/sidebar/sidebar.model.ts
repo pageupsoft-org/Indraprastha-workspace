@@ -35,6 +35,13 @@ export const MenuItems: IMenuSideBarItem[] = [
         userType: [],
         child: [],
     },
+     {
+        name: 'Collection',
+        route: AppRoutes.COLLECTION,
+        icon: 'bx bxs-dashboard',
+        userType: [],
+        child: [],
+    },
       {
         name: 'Category',
         route: AppRoutes.CATEGORY,

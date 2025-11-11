@@ -18,9 +18,7 @@ export class Upsert extends Base implements OnInit {
 
   public readonly dialogRef = inject(MatDialogRef<List>);
   public readonly data = inject(MAT_DIALOG_DATA);
-
-  // public categoryCombo:categoryComboResponse[] = [] 
-  public categoryCombo: any;
+  public collectionCombo:IGenericComboResponse[] = [] 
 
   public categoryForm = new FormGroup<ICategoryForm>({
     id: new FormControl(0),
@@ -35,14 +33,14 @@ export class Upsert extends Base implements OnInit {
   }
 
   ngOnInit(): void {
-    this.getCategoryCombo()
+    this.getCollectionCombo()
     const id = this.data.id
     if (id) {
       this.getCategoryById(id)
     }
   }
 
-  public onCancel(isSuccess?: boolean) {
+  public onCancel(isSuccess?:boolean) {
     this.dialogRef.close(isSuccess);
   }
 
@@ -71,12 +69,11 @@ export class Upsert extends Base implements OnInit {
     // }
   }
 
-  private getCategoryCombo() {
-    this.httpGetPromise<IGenericResponse<IGenericComboResponse>>(ApiRoutes.CATEGORY.GET_COMBO).then(response => {
+  private getCollectionCombo() {
+    this.httpGetPromise<IGenericResponse<IGenericComboResponse[]>>(ApiRoutes.COLLECTION.GET_COMBO).then(response => {
       if (response) {
         if (response.data) {
-          console.log(response)
-          this.categoryCombo = response.data
+          this.collectionCombo = response.data
         }
       }
     }).catch(error => {
@@ -89,6 +86,7 @@ export class Upsert extends Base implements OnInit {
       this.httpGetPromise<any>(ApiRoutes.CATEGORY.GETBYID(id)).then((response) => {
         if (response) {
           if (response.data) {
+            console.log(response)
             this.categoryForm.patchValue(response.data)
           }
         }

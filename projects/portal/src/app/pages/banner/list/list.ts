@@ -9,7 +9,7 @@ import { Upsert } from '../upsert/upsert';
 import { Base } from '../../../core/base/base';
 import { IGenericResponse } from '../../../core/interface/response/responseGeneric';
 import { CommonModule } from '@angular/common';
-import { ApiRoutes, EToastType, ToastService } from '@shared';
+import { ApiRoutes, EToastType, MConfirmationModalData, ToastService } from '@shared';
 import { IBannerPagination } from '../../../core/interface/request/banner';
 import { IBannerResponse } from '../../../core/interface/response/banner';
 
@@ -46,9 +46,9 @@ export class List extends Base implements OnInit {
       },
     });
 
-    dialogRef.afterClosed().subscribe((result) => {
+    dialogRef.afterClosed().subscribe((result: boolean) => {
       if (result) {
-        console.log('Form Submitted:', result);
+        this.getBannerData()
       }
     });
   }
@@ -66,17 +66,28 @@ export class List extends Base implements OnInit {
   // }
 
   public deleteBanner(id: number) {
-    this.httpDeletePromise<IGenericResponse<boolean>>(ApiRoutes.BANNER.GETBYID(id))
-      .then((response) => {
-        console.log(response);
-        if (response) {
-          if (response.data) {
-            this.toaster.show({ message: 'Delete Successful', duration: 3000, type: EToastType.success });
-            this.getBannerData();
-          }
-        }
-      })
-      .catch((error) => {});
+    const modalData: MConfirmationModalData = {
+      heading: 'Confirm Delete',
+      body: 'Are you sure you want to delete this Banner?',
+      yesText: 'Yes',
+      noText: 'No'
+    };
+    this.objConfirmationUtil.getConfirmation(modalData).then((res: boolean) => {
+      if (res) {
+        this.httpDeletePromise<IGenericResponse<boolean>>(ApiRoutes.BANNER.GETBYID(id))
+          .then((response) => {
+            console.log(response);
+            if (response) {
+              if (response.data) {
+                this.toaster.show({ message: 'Delete Successful', duration: 3000, type: EToastType.success });
+                this.getBannerData();
+              }
+            }
+          })
+          .catch((error) => { });
+      }
+    })
+
   }
 
   public getBannerData() {
