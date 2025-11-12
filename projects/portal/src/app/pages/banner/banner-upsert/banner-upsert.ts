@@ -1,25 +1,25 @@
 import { Component, inject, OnInit } from '@angular/core';
 import { Base } from '../../../core/base/base';
 import { FormControl, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
-import { IGenericResponse } from '../../../core/interface/response/responseGeneric';
+import { IGenericResponse } from '../../../core/interface/response/genericResponse';
 import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
-import { List } from '../list/list';
+import { BannerList } from '../banner-list/banner-list';
 import { CommonModule } from '@angular/common';
 import { EBannerConnectionType } from '../../../core/enum/banner-connection-type.enum';
 import { EGender } from '../../../core/enum/gender.enum';
 import { EbannerTypes } from '../../../core/enum/banner-types.enum';
 import { ApiRoutes, convertImageToBase64, ErrorHandler, EToastType, MStringEnumToArray, stringEnumToArray, ToastService } from '@shared';
-import { IBannerResponse, IGenericComboResponse } from '../../../core/interface/response/banner';
-import { IBanner, IBannerForm } from '../../../core/interface/request/banner';
+import { IBannerResponse, IGenericComboResponse } from '../../../core/interface/response/banner.response';
+import { IBanner, IBannerForm } from '../../../core/interface/request/banner.request';
 
 @Component({
-  selector: 'app-upsert',
+  selector: 'app-banner-upsert',
   imports: [ReactiveFormsModule, CommonModule, ErrorHandler],
-  templateUrl: './upsert.html',
-  styleUrl: './upsert.scss',
+  templateUrl: './banner-upsert.html',
+  styleUrl: './banner-upsert.scss',
 })
-export class Upsert extends Base implements OnInit {
-  readonly dialogRef = inject(MatDialogRef<List>);
+export class BannerUpsert extends Base implements OnInit {
+  readonly dialogRef = inject(MatDialogRef<BannerList>);
   readonly data = inject(MAT_DIALOG_DATA);
   public bannerConnectionTypes: MStringEnumToArray[] = stringEnumToArray(EBannerConnectionType);
   public bannerTypes: MStringEnumToArray[] = stringEnumToArray(EbannerTypes);

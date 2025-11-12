@@ -36,11 +36,11 @@ export const routes: Routes = [
       },
       {
         path: AppRoutes.EMPLOYEE,
-        loadComponent: () => import('./pages/employee/list/list').then((m) => m.List),
+        loadComponent: () => import('./pages/employee/employee-list/employee-list').then((m) => m.BannerList),
       },
       {
         path: AppRoutes.CUSTOMER,
-        loadComponent: () => import('./pages/customer/list/list').then((m) => m.List),
+        loadComponent: () => import('./pages/customer/customer-list/customer-list').then((m) => m.BannerList),
       },
       {
         path: AppRoutes.COLLECTION,
@@ -49,11 +49,11 @@ export const routes: Routes = [
       },
       {
         path: AppRoutes.CATEGORY,
-        loadComponent: () => import('./pages/category/list/list').then((m) => m.List),
+        loadComponent: () => import('./pages/category/category-list/category-list').then((m) => m.BannerList),
       },
       {
         path: AppRoutes.BANNER,
-        loadComponent: () => import('./pages/banner/list/list').then((m) => m.List),
+        loadComponent: () => import('./pages/banner/banner-list/banner-list').then((m) => m.BannerList),
       },
       {
         path: AppRoutes.PRODUCT,

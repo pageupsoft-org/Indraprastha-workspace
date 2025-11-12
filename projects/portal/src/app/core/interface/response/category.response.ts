@@ -1,4 +1,4 @@
-import { ICategory } from "../request/category";
+import { ICategory } from "../request/category.request";
 
 export interface ICategoryResponse {
     total: number;

@@ -1,22 +1,22 @@
 import { Component, inject, OnInit } from '@angular/core';
 import { FormControl, FormGroup, ReactiveFormsModule, Validators, ɵInternalFormsSharedModule } from '@angular/forms';
 import { Base } from '../../../core/base/base';
-import { IGenericResponse } from '../../../core/interface/response/responseGeneric';
-import { List } from '../list/list';
+import { IGenericResponse } from '../../../core/interface/response/genericResponse';
+import { CategoryList } from '../category-list/category-list';
 import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
-import { ICategory, ICategoryForm } from '../../../core/interface/request/category';
+import { ICategory, ICategoryForm } from '../../../core/interface/request/category.request';
 import { ApiRoutes, ErrorHandler, EToastType, ToastService } from '@shared';
-import { IGenericComboResponse } from '../../../core/interface/response/banner';
+import { IGenericComboResponse } from '../../../core/interface/response/banner.response';
 
 @Component({
-  selector: 'app-upsert',
+  selector: 'app-category-upsert',
   imports: [ReactiveFormsModule, ErrorHandler],
-  templateUrl: './upsert.html',
-  styleUrl: './upsert.scss',
+  templateUrl: './category-upsert.html',
+  styleUrl: './category-upsert.scss',
 })
-export class Upsert extends Base implements OnInit {
+export class CategoryUpsert extends Base implements OnInit {
 
-  public readonly dialogRef = inject(MatDialogRef<List>);
+  public readonly dialogRef = inject(MatDialogRef<CategoryList>);
   public readonly data = inject(MAT_DIALOG_DATA);
   public collectionCombo:IGenericComboResponse[] = [] 
 

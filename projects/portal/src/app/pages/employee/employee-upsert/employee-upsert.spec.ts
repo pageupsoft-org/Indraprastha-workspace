@@ -1,18 +1,18 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 
-import { Upsert } from './upsert';
+import { EmployeeUpsert } from './employee-upsert';
 
-describe('Upsert', () => {
-  let component: Upsert;
-  let fixture: ComponentFixture<Upsert>;
+describe('EmployeeUpsert', () => {
+  let component: EmployeeUpsert;
+  let fixture: ComponentFixture<EmployeeUpsert>;
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      imports: [Upsert]
+      imports: [EmployeeUpsert]
     })
     .compileComponents();
 
-    fixture = TestBed.createComponent(Upsert);
+    fixture = TestBed.createComponent(EmployeeUpsert);
     component = fixture.componentInstance;
     fixture.detectChanges();
   });

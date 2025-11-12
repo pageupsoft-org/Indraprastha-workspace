@@ -1,21 +1,21 @@
 import { Component, inject, OnInit } from '@angular/core';
 import { FormControl, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 import { Base } from '../../../core/base/base';
-import { IGenericResponse } from '../../../core/interface/response/responseGeneric';
-import { ICustomer, ICustomerForm } from '../../../core/interface/request/customer';
+import { IGenericResponse } from '../../../core/interface/response/genericResponse';
+import { ICustomer, ICustomerForm } from '../../../core/interface/request/customer.request';
 import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
-import { List } from '../list/list';
+import { CustomerList } from '../customer-list/customer-list';
 import { ApiRoutes, ErrorHandler, EToastType, ToastService } from '@shared';
 
 @Component({
-  selector: 'app-upsert',
+  selector: 'app-customer-upsert',
   imports: [ReactiveFormsModule, ErrorHandler],
-  templateUrl: './upsert.html',
-  styleUrl: './upsert.scss',
+  templateUrl: './customer-upsert.html',
+  styleUrl: './customer-upsert.scss',
 })
 
-export class Upsert extends Base implements OnInit {
-  public readonly dialogRef = inject(MatDialogRef<List>);
+export class CustomerUpsert extends Base implements OnInit {
+  public readonly dialogRef = inject(MatDialogRef<CustomerList>);
   public readonly data = inject(MAT_DIALOG_DATA);
   public customerRegisetr = new FormGroup<ICustomerForm>({
     firstName: new FormControl('', Validators.required),

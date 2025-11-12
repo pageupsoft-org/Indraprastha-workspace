@@ -2,22 +2,22 @@ import { Component, inject, OnInit } from '@angular/core';
 import { PaginationController } from "../../../component/pagination-controller/pagination-controller";
 import { createPaginationMetadata, PaginationControlMetadata } from '../../../core/interface/model/pagination-detail.model';
 import { Base } from '../../../core/base/base';
-import { IGenericResponse } from '../../../core/interface/response/responseGeneric';
-import { IEmployee, IEmployeeResponse } from '../../../core/interface/response/employee';
+import { IGenericResponse } from '../../../core/interface/response/genericResponse';
+import { IEmployee, IEmployeeResponse } from '../../../core/interface/response/employee.response';
 import { intializepagInationPayload, IPaginationPayload } from '../../../core/interface/request/genericPayload';
 import { ReactiveFormsModule } from '@angular/forms';
 import { MatDialog } from '@angular/material/dialog';
-import { Upsert } from '../upsert/upsert';
+import { EmployeeUpsert } from '../employee-upsert/employee-upsert';
 import { ApiRoutes, EToastType, MConfirmationModalData, ToastService } from '@shared';
 
 @Component({
-  selector: 'app-list',
+  selector: 'app-employee-list',
   imports: [PaginationController, ReactiveFormsModule],
-  templateUrl: './list.html',
-  styleUrl: './list.scss',
+  templateUrl: './employee-list.html',
+  styleUrl: './employee-list.scss',
 })
 
-export class List extends Base implements OnInit {
+export class EmployeeList extends Base implements OnInit {
   public payLoad: IPaginationPayload = intializepagInationPayload()
   public paginationMetadata: PaginationControlMetadata = createPaginationMetadata();
   public employees: IEmployee[] = [];
@@ -47,7 +47,7 @@ export class List extends Base implements OnInit {
 
   // Open PopUp
   public openModel(id: number = 0) {
-    const dialogRef = this.dialog.open(Upsert, {
+    const dialogRef = this.dialog.open(EmployeeUpsert, {
       width: '80%',
       maxWidth: '900px',
       data: {

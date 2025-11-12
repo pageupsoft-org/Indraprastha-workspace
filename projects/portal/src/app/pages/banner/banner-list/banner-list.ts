@@ -5,21 +5,21 @@ import {
   intializepagInationPayload,
   IPaginationPayload,
 } from '../../../core/interface/request/genericPayload';
-import { Upsert } from '../upsert/upsert';
+import { BannerUpsert } from '../banner-upsert/banner-upsert';
 import { Base } from '../../../core/base/base';
-import { IGenericResponse } from '../../../core/interface/response/responseGeneric';
+import { IGenericResponse } from '../../../core/interface/response/genericResponse';
 import { CommonModule } from '@angular/common';
 import { ApiRoutes, EToastType, MConfirmationModalData, ToastService } from '@shared';
-import { IBannerPagination } from '../../../core/interface/request/banner';
-import { IBannerResponse } from '../../../core/interface/response/banner';
+import { IBannerPagination } from '../../../core/interface/request/banner.request';
+import { IBannerResponse } from '../../../core/interface/response/banner.response';
 
 @Component({
-  selector: 'app-list',
+  selector: 'app-banner-list',
   imports: [CommonModule],
-  templateUrl: './list.html',
-  styleUrl: './list.scss',
+  templateUrl: './banner-list.html',
+  styleUrl: './banner-list.scss',
 })
-export class List extends Base implements OnInit {
+export class BannerList extends Base implements OnInit {
   readonly dialog = inject(MatDialog);
   public payLoad: IBannerPagination = {
     ...intializepagInationPayload(),
@@ -38,7 +38,7 @@ export class List extends Base implements OnInit {
   }
 
   public openModel(id: number = 0) {
-    const dialogRef = this.dialog.open(Upsert, {
+    const dialogRef = this.dialog.open(BannerUpsert, {
       width: '80%',
       maxWidth: '900px',
       data: {

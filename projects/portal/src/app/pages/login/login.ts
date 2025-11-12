@@ -2,7 +2,7 @@ import { Component } from '@angular/core';
 import { FormControl, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 import { HttpErrorResponse } from '@angular/common/http';
 import { Router } from '@angular/router';
-import { IGenericResponse } from '../../core/interface/response/responseGeneric';
+import { IGenericResponse } from '../../core/interface/response/genericResponse';
 import { LoginResponse } from '../../core/interface/response/login.response';
 import { Base } from '@portal/core';
 import { ApiRoutes, ErrorHandler, EToastType, ILoginForm, ILoginFormData, localStorageEnum, setLocalStorageItem, ToastService } from '@shared';

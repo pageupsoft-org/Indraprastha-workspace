@@ -4,26 +4,26 @@ import { FormControl } from '@angular/forms';
 import { intializepagInationPayload, IPaginationPayload } from '../../../core/interface/request/genericPayload';
 import { createPaginationMetadata, PaginationControlMetadata } from '../../../core/interface/model/pagination-detail.model';
 import { handlePagination } from '../../../core/utils/pagination.util';
-import { IGenericResponse } from '../../../core/interface/response/responseGeneric';
+import { IGenericResponse } from '../../../core/interface/response/genericResponse';
 import { PaginationController } from '../../../component/pagination-controller/pagination-controller';
-import { Customers, ICustomerResponse } from '../../../core/interface/response/customer';
+import { CustomerResponse, ICustomerResponse } from '../../../core/interface/response/customer.response';
 import { MatDialog } from '@angular/material/dialog';
-import { Upsert } from '../upsert/upsert';
+import { CustomerUpsert } from '../customer-upsert/customer-upsert';
 import { ApiRoutes, EToastType, ToastService } from '@shared';
 
 
 @Component({
-  selector: 'app-list',
+  selector: 'app-customer-list',
   imports: [PaginationController],
-  templateUrl: './list.html',
-  styleUrl: './list.scss',
+  templateUrl: './customer-list.html',
+  styleUrl: './customer-list.scss',
 })
-export class List extends Base implements OnInit {
+export class CustomerList extends Base implements OnInit {
   public readonly dialog = inject(MatDialog);
   public searchInput = new FormControl('');
   public payload: IPaginationPayload = intializepagInationPayload();
   public paginationMetadata: PaginationControlMetadata = createPaginationMetadata();
-  public customers: Customers[] = [];
+  public customers: CustomerResponse[] = [];
 
   constructor(private toaster: ToastService) {
     super()
@@ -44,7 +44,7 @@ export class List extends Base implements OnInit {
   // Open PopUp
   public openModel(id: number = 0) {
     console.log(id)
-    const dialogRef = this.dialog.open(Upsert, {
+    const dialogRef = this.dialog.open(CustomerUpsert, {
       width: '80%',
       maxWidth: '900px',
       data: {

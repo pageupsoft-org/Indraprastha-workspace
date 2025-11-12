@@ -2,26 +2,26 @@ import { Component, inject, OnInit } from '@angular/core';
 import { FormBuilder, FormControl, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
 import { CommonModule } from '@angular/common';
-import { List } from '../list/list';
+import { EmployeeList } from '../employee-list/employee-list';
 import { Base } from '../../../core/base/base';
-import { IGenericResponse } from '../../../core/interface/response/responseGeneric';
-import { IEmployeeForm, IEmployee } from '../../../core/interface/request/employee';
+import { IGenericResponse } from '../../../core/interface/response/genericResponse';
+import { IEmployeeForm, IEmployee } from '../../../core/interface/request/employee.request';
 import { ApiRoutes, ErrorHandler, EToastType, ToastService } from '@shared';
 
 
 @Component({
-  selector: 'app-upsert',
+  selector: 'app-employee-upsert',
   imports: [
     CommonModule,
     ReactiveFormsModule,
     ErrorHandler
   ],
-  templateUrl: './upsert.html',
-  styleUrl: './upsert.scss',
+  templateUrl: './employee-upsert.html',
+  styleUrl: './employee-upsert.scss',
 })
 
-export class Upsert extends Base implements OnInit {
-  readonly dialogRef = inject(MatDialogRef<List>);
+export class EmployeeUpsert extends Base implements OnInit {
+  readonly dialogRef = inject(MatDialogRef<EmployeeList>);
   readonly data = inject(MAT_DIALOG_DATA);
 
   public employeeForm = new FormGroup<IEmployeeForm>({

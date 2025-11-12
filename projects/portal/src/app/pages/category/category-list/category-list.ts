@@ -1,20 +1,20 @@
 import { Component, inject, OnInit } from '@angular/core';
-import { Upsert } from '../upsert/upsert';
+import { CategoryUpsert } from '../category-upsert/category-upsert';
 import { MatDialog } from '@angular/material/dialog';
 import { Base } from '../../../core/base/base';
-import { IGenericResponse } from '../../../core/interface/response/responseGeneric';
+import { IGenericResponse } from '../../../core/interface/response/genericResponse';
 import { intializepagInationPayload, IPaginationPayload } from '../../../core/interface/request/genericPayload';
-import { ICategory } from '../../../core/interface/request/category';
+import { ICategory } from '../../../core/interface/request/category.request';
 import { ApiRoutes, EToastType, MConfirmationModalData, ToastService } from '@shared';
-import { ICategoryResponse } from '../../../core/interface/response/category';
+import { ICategoryResponse } from '../../../core/interface/response/category.response';
 
 @Component({
-  selector: 'app-list',
+  selector: 'app-category-list',
   imports: [],
-  templateUrl: './list.html',
-  styleUrl: './list.scss',
+  templateUrl: './category-list.html',
+  styleUrl: './category-list.scss',
 })
-export class List extends Base implements OnInit {
+export class CategoryList extends Base implements OnInit {
 
   public readonly dialog = inject(MatDialog);
   public payLoad: IPaginationPayload = intializepagInationPayload()
@@ -29,7 +29,7 @@ export class List extends Base implements OnInit {
   }
 
   public openModel(id: number = 0) {
-    const dialogRef = this.dialog.open(Upsert, {
+    const dialogRef = this.dialog.open(CategoryUpsert, {
       width: '80%',
       maxWidth: '900px',
       data: {

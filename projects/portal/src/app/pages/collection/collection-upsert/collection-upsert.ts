@@ -5,11 +5,11 @@ import { CommonModule } from '@angular/common';
 import { FormControl, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 import { ICollectionForm } from '../../../core/interface/request/collection.request';
 import { ICollection } from '../../../core/interface/response/collection.response';
-import { IGenericResponse } from '../../../core/interface/response/responseGeneric';
+import { IGenericResponse } from '../../../core/interface/response/genericResponse';
 import { Base } from '@portal/core';
 import { ErrorHandler } from '@shared';
 import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
-import { List } from '../../employee/list/list';
+import { EmployeeList } from '../../employee/employee-list/employee-list';
 
 @Component({
   selector: 'app-collection-upsert',
@@ -18,7 +18,7 @@ import { List } from '../../employee/list/list';
   styleUrl: './collection-upsert.scss',
 })
 export class CollectionUpsert extends Base {
-  public readonly dialogRef = inject(MatDialogRef<List>);
+  public readonly dialogRef = inject(MatDialogRef<EmployeeList>);
   public readonly data = inject(MAT_DIALOG_DATA);
   public genders: MStringEnumToArray[] = stringEnumToArray(EGender);
 

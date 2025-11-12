@@ -6,7 +6,7 @@ import { Base } from '@portal/core';
 import { intializepagInationPayload } from '../../../core/interface/request/genericPayload';
 import { IProductPagination } from '../../../core/interface/request/product.request';
 import { EGender } from '../../../core/enum/gender.enum';
-import { IGenericResponse } from '../../../core/interface/response/responseGeneric';
+import { IGenericResponse } from '../../../core/interface/response/genericResponse';
 
 import { ApiRoutes } from '@shared';
 import { response } from 'express';

@@ -1,4 +1,4 @@
-import { IBanner } from "../request/banner";
+import { IBanner } from "../request/banner.request";
 
 export interface IBannerResponse{
     total:number

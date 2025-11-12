@@ -5,7 +5,7 @@ import { MAT_DIALOG_DATA, MatDialog } from '@angular/material/dialog';
 import { CollectionUpsert } from '../collection-upsert/collection-upsert';
 import { intializepagInationPayload, IPaginationPayload } from '../../../core/interface/request/genericPayload';
 import { ApiRoutes, ConfirmationDialog, EToastType, MConfirmationModalData, ToastService } from '@shared';
-import { IGenericResponse } from '../../../core/interface/response/responseGeneric';
+import { IGenericResponse } from '../../../core/interface/response/genericResponse';
 import { response } from 'express';
 
 @Component({

@@ -2,11 +2,11 @@ import { Component, inject, OnInit } from '@angular/core';
 import { Base } from '../../../core/base/base';
 import { FormArray, FormControl, FormGroup, ReactiveFormsModule } from '@angular/forms';
 import { MatDialogRef } from '@angular/material/dialog';
-import { List } from '../../employee/list/list';
+import { EmployeeList } from '../../employee/employee-list/employee-list';
 import { description, IProductForm, stocks, variants } from '../../../core/interface/request/product.request';
-import { IGenericResponse } from '../../../core/interface/response/responseGeneric';
+import { IGenericResponse } from '../../../core/interface/response/genericResponse';
 import { ApiRoutes, EDiscriptionType, IRGeneric, MStringEnumToArray, stringEnumToArray } from '@shared';
-import { IGenericComboResponse } from '../../../core/interface/response/banner';
+import { IGenericComboResponse } from '../../../core/interface/response/banner.response';
 import { EGender } from '../../../core/enum/gender.enum';
 import { CommonModule } from '@angular/common';
 import { EStockSize } from '../../../../../../shared/src/lib/enum/size.enum';
@@ -26,7 +26,6 @@ export class ProductUpsert extends Base implements OnInit {
   public StockSize: MStringEnumToArray[] = stringEnumToArray(EStockSize);
   public ShowDiscription: boolean = false;
   public readonly EDiscriptionType = EDiscriptionType;
-
   public productForm = new FormGroup<IProductForm>({
     id: new FormControl(0),
     categoryIds: new FormControl(),
