@@ -96,26 +96,13 @@ export function createUrlFromObject(object: Record<string, any>, baseUrl: string
   return `${baseUrl}?${params.toString()}`;
 }
 
-// export function getObjectFromUrl(url: string): Record<string, any> {
-//   const result: Record<string, any> = {};
-//   const queryString = url.includes('?') ? url.split('?')[1] : url;
-
-//   const params = new URLSearchParams(queryString);
-
-//   params.forEach((value, key) => {
-//     if (result[key]) {
-//       // convert to array if key appears multiple times
-//       result[key] = Array.isArray(result[key]) ? [...result[key], value] : [result[key], value];
-//     } else {
-//       result[key] = value;
-//     }
-//   });
-
-//   return result;
-// }
-export function getObjectFromUrl(url: string, arrayKeys: string[] = []): Record<string, any> {
+export function getObjectFromUrl(
+  url: string,
+  arrayKeys: string[] = []
+): { baseUrl: string; params: Record<string, any> } {
   const result: Record<string, any> = {};
-  const queryString = url.includes('?') ? url.split('?')[1] : url;
+
+  const [baseUrl, queryString] = url.includes('?') ? url.split('?') : [url, ''];
   const params = new URLSearchParams(queryString);
 
   const parseValue = (value: string): any => {
@@ -135,12 +122,12 @@ export function getObjectFromUrl(url: string, arrayKeys: string[] = []): Record<
     }
   });
 
-  // ensure all arrayKeys exist, even if empty
+  // Ensure all arrayKeys exist, even if empty
   for (const key of arrayKeys) {
     if (!(key in result)) {
       result[key] = [];
     }
   }
 
-  return result;
+  return { baseUrl, params: result };
 }

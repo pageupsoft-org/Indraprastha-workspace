@@ -239,13 +239,13 @@
               <div class="flex space-x-2">
                 <input
                   type="text"
-                  [value]="'₹ ' + payloadGenderMenu().minPrice.toLocaleString()"
+                  [value]="'₹ ' + payloadGenderMenu().minPrice"
                   class="w-1/2 border px-2 py-1 rounded text-sm focus:ring-1 focus:ring-black"
                   readonly
                 />
                 <input
                   type="text"
-                  [value]="'₹ ' + payloadGenderMenu().maxPrice.toLocaleString()"
+                  [value]="'₹ ' + payloadGenderMenu().maxPrice"
                   class="w-1/2 border px-2 py-1 rounded text-sm focus:ring-1 focus:ring-black"
                   readonly
                 />
@@ -294,11 +294,6 @@
                   >✓</span>
                 }
               </label>
-
-              <!-- <button
-                class="w-8 h-8 rounded-full border shadow-sm hover:scale-110 transition-transform cursor-pointer"
-                [style.background-color]="color.name"
-              ></button> -->
               }
             </div>
           </div>

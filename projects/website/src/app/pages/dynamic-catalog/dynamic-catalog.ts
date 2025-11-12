@@ -11,6 +11,7 @@ import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import {
   ApiRoutes,
+  createUrlFromObject,
   GenderTypeEnum,
   getObjectFromUrl,
   httpPost,
@@ -19,7 +20,7 @@ import {
   PlatformService,
   ToastService,
 } from '@shared';
-import { ActivatedRoute, UrlSegment } from '@angular/router';
+import { ActivatedRoute, Router, UrlSegment } from '@angular/router';
 import { IRequestProductMenu } from '../../core/interface/model/header.model';
 import {
   Filter,
@@ -66,6 +67,8 @@ export class DynamicCatalog implements AfterViewInit {
   public minLimit: WritableSignal<number> = signal(10000);
   public maxLimit: WritableSignal<number> = signal(150000);
 
+  public baseUrl: WritableSignal<string> = signal("");
+
   public dynamicData: WritableSignal<IResponseDynamicCatalogue> = signal(
     initializeIResponseDynamicCatalogue()
   );
@@ -73,17 +76,19 @@ export class DynamicCatalog implements AfterViewInit {
   constructor(
     private platformService: PlatformService,
     private activatedRoute: ActivatedRoute,
-    private toastService: ToastService
+    private toastService: ToastService,
+    private router: Router
   ) {
     activatedRoute.url.subscribe((url: any) => {
-      this.payloadGenderMenu.set(
-        getObjectFromUrl((url as Array<UrlSegment>)[0].path, [
-          'collectionIds',
-          'categoryIds',
-          'colors',
-          'sizes',
-        ]) as IRequestProductMenu
-      );
+      const { baseUrl, params } = getObjectFromUrl((url as Array<UrlSegment>)[0].path, [
+        'collectionIds',
+        'categoryIds',
+        'colors',
+        'sizes',
+      ]);
+
+      this.baseUrl.set(baseUrl);
+      this.payloadGenderMenu.set(params as IRequestProductMenu);
       this.getData();
     });
   }
@@ -239,6 +244,10 @@ export class DynamicCatalog implements AfterViewInit {
 
     this.payloadGenderMenu().categoryIds = categoryIds;
     this.payloadGenderMenu().colors = colors;
-    this.getData();
+
+    // console.log(this.baseUrl());
+    this.router.navigate([createUrlFromObject(this.payloadGenderMenu(), this.baseUrl())]);
+
+    // this.getData();
   }
 }
