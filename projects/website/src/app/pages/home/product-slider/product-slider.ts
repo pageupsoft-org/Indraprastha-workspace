@@ -16,7 +16,7 @@ import {
   ApiRoutes,
   DashboardProductTypeStringEnum,
   httpPost,
-  intializepagInationPayload,
+  initializePagInationPayload,
   IRGeneric,
   PlatformService,
 } from '@shared';
@@ -44,7 +44,7 @@ export class ProductSlider implements AfterViewInit {
   public currentCardIndex: WritableSignal<number> = signal(0);
 
   private payload: IDashboadRequest = {
-    ...intializepagInationPayload(),
+    ...initializePagInationPayload(),
     type: DashboardProductTypeStringEnum.NewArrival,
   };
 

@@ -12,7 +12,7 @@ import {
   ApiRoutes,
   DashboardProductTypeStringEnum,
   httpPost,
-  intializepagInationPayload,
+  initializePagInationPayload,
   IRGeneric,
   PlatformService,
 } from '@shared';
@@ -31,7 +31,7 @@ export class WomenWear implements AfterViewInit {
   @ViewChildren('slide') slidesRef!: QueryList<ElementRef<HTMLDivElement>>;
 
   private payload: IDashboadRequest = {
-    ...intializepagInationPayload(),
+    ...initializePagInationPayload(),
     type: DashboardProductTypeStringEnum.Women,
   };
 

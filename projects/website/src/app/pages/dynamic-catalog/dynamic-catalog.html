@@ -144,15 +144,16 @@
               class="accordion-content mt-3 space-y-2 text-sm text-gray-700"
               [class.active]="isActive('category')"
             >
+              @for (category of dynamicData().filter.category; track $index) {
               <label class="flex items-center space-x-2 cursor-pointer hover:text-black">
-                <input type="checkbox" class="w-4 h-4 rounded border-gray-400 text-black" />
-                <span>Dress (9)</span>
+                <input
+                  type="checkbox"
+                  class="w-4 h-4 rounded border-gray-400 text-black"
+                  [(ngModel)]="category.isSelected"
+                />
+                <span>{{ category.name }} ({{ category.count }})</span>
               </label>
-
-              <label class="flex items-center space-x-2 cursor-pointer hover:text-black">
-                <input type="checkbox" class="w-4 h-4 rounded border-gray-400 text-black" />
-                <span>Tunic Set (3)</span>
-              </label>
+              }
             </div>
           </div>
           <div class="filter-group border-b pb-4">
@@ -178,13 +179,13 @@
               </svg>
             </button>
 
-            <div
+            <!-- <div
               class="accordion-content mt-3 space-y-3 text-sm text-gray-700"
               [class.active]="isActive('price')"
             >
               <input
                 type="range"
-                [min]="priceMin()"
+                [min]="payloadGenderMenu.minPrice"
                 [max]="priceMax()"
                 [(ngModel)]="selectedPrice"
                 class="w-full accent-black"
@@ -192,13 +193,59 @@
               <div class="flex space-x-2">
                 <input
                   type="text"
-                  [value]="'₹ ' + priceMin()"
+                  [value]="'₹ ' + payloadGenderMenu.minPrice"
                   class="w-1/2 border px-2 py-1 rounded text-sm focus:ring-1 focus:ring-black"
                   readonly
                 />
                 <input
                   type="text"
                   [value]="'₹ ' + selectedPrice()"
+                  class="w-1/2 border px-2 py-1 rounded text-sm focus:ring-1 focus:ring-black"
+                  readonly
+                />
+              </div>
+            </div> -->
+            <div
+              class="accordion-content mt-3 space-y-3 text-sm text-gray-700"
+              [class.active]="isActive('price')"
+            >
+              <div class="relative h-6 flex items-center select-none">
+                <!-- Full track -->
+                <div class="absolute w-full h-1 bg-gray-300 rounded"></div>
+                <!-- Active (selected) range -->
+                <div class="absolute h-1 bg-black rounded" [ngStyle]="getRangeStyle()"></div>
+                <!-- Min slider -->
+                <input
+                  type="range"
+                  [min]="minLimit()"
+                  [max]="maxLimit()"
+                  step="1000"
+                  [value]="payloadGenderMenu().minPrice"
+                  (input)="onMinChange($event)"
+                  class="absolute w-full appearance-none bg-transparent accent-black pointer-events-auto"
+                />
+                <!-- Max slider -->
+                <input
+                  type="range"
+                  [min]="minLimit()"
+                  [max]="maxLimit()"
+                  step="1000"
+                  [value]="payloadGenderMenu().maxPrice"
+                  (input)="onMaxChange($event)"
+                  class="absolute w-full appearance-none bg-transparent accent-black pointer-events-auto"
+                />
+              </div>
+              <!-- Display values -->
+              <div class="flex space-x-2">
+                <input
+                  type="text"
+                  [value]="'₹ ' + payloadGenderMenu().minPrice.toLocaleString()"
+                  class="w-1/2 border px-2 py-1 rounded text-sm focus:ring-1 focus:ring-black"
+                  readonly
+                />
+                <input
+                  type="text"
+                  [value]="'₹ ' + payloadGenderMenu().maxPrice.toLocaleString()"
                   class="w-1/2 border px-2 py-1 rounded text-sm focus:ring-1 focus:ring-black"
                   readonly
                 />
@@ -231,22 +278,33 @@
             </button>
 
             <div class="accordion-content mt-3 flex space-x-3" [class.active]="isActive('color')">
-              <button
-                class="w-8 h-8 rounded-full border shadow-sm bg-black hover:scale-110 transition-transform"
-              ></button>
-              <button
-                class="w-8 h-8 rounded-full border shadow-sm bg-white hover:scale-110 transition-transform"
-              ></button>
-              <button
-                class="w-8 h-8 rounded-full border shadow-sm bg-green-300 hover:scale-110 transition-transform"
-              ></button>
-              <button
-                class="w-8 h-8 rounded-full border shadow-sm bg-gray-400 hover:scale-110 transition-transform"
-              ></button>
+              @for (color of dynamicData().filter.color; track $index) {
+              <label
+                class="relative w-8 h-8 rounded-full border shadow-sm hover:scale-110 transition-transform cursor-pointer inline-block"
+                [style.background-color]="color.name"
+              >
+                <input
+                  type="checkbox"
+                  class="absolute inset-0 opacity-0 cursor-pointer"
+                  [(ngModel)]="color.isSelected"
+                />
+                @if(color.isSelected){
+                <span
+                  class="absolute inset-0 flex items-center justify-center text-white text-sm font-bold"
+                  >✓</span>
+                }
+              </label>
+
+              <!-- <button
+                class="w-8 h-8 rounded-full border shadow-sm hover:scale-110 transition-transform cursor-pointer"
+                [style.background-color]="color.name"
+              ></button> -->
+              }
             </div>
           </div>
 
           <button
+            (click)="search()"
             class="w-full bg-gray-900 text-white py-3 text-sm font-bold tracking-wider hover:bg-gray-700 transition-colors rounded-md"
           >
             APPLY FILTERS
@@ -263,318 +321,21 @@
         #productGrid
         class="grid grid-cols-2 sm:grid-cols-2 lg:grid-cols-3 gap-x-6 gap-y-10 pb-14"
       >
+        @for (item of dynamicData().products; track $index) {
         <div class="group">
           <div class="aspect-w-1 aspect-h-1 h-[90%] w-full overflow-hidden rounded-lg bg-gray-200">
             <img
-              src="assets/images/saree-1.png"
+              [src]="item.productURL[0]"
               alt="Red Saree"
               class="w-full h-full object-cover object-center group-hover:opacity-75 transition-opacity"
             />
           </div>
           <div class="h-[10%]">
-            <h3 class="mt-4 text-sm text-gray-700">Red Madras Muse Saree</h3>
-            <p class="mt-1 text-lg font-medium text-gray-900">Rs. 28,000</p>
+            <h3 class="mt-4 text-sm text-gray-700">{{ item.name }}</h3>
+            <p class="mt-1 text-lg font-medium text-gray-900">Rs. {{ item.mrp }}</p>
           </div>
         </div>
-        <div class="group">
-          <div class="aspect-w-1 aspect-h-1 w-full h-[90%] overflow-hidden rounded-lg bg-gray-200">
-            <img
-              src="assets/images/saree-2.png"
-              alt="Black Saree"
-              class="w-full h-full object-cover object-center group-hover:opacity-75 transition-opacity"
-            />
-          </div>
-          <div class="h-[10%]">
-            <h3 class="mt-4 text-sm text-gray-700">Never Not Iconic Saree</h3>
-            <p class="mt-1 text-lg font-medium text-gray-900">Rs. 28,000</p>
-          </div>
-        </div>
-        <div class="group">
-          <div class="aspect-w-1 aspect-h-1 w-full h-[90%] overflow-hidden rounded-lg bg-gray-200">
-            <img
-              src="assets/images/saree-3.png"
-              alt="Black Saree"
-              class="w-full h-full object-cover object-center group-hover:opacity-75 transition-opacity"
-            />
-          </div>
-          <div class="h-[10%]">
-            <h3 class="mt-4 text-sm text-gray-700">Black Palm Theory Saree</h3>
-            <p class="mt-1 text-lg font-medium text-gray-900">Rs. 20,000</p>
-          </div>
-        </div>
-        <div class="group">
-          <div class="aspect-w-1 aspect-h-1 w-full h-[90%] overflow-hidden rounded-lg bg-gray-200">
-            <img
-              src="assets/images/wishlist-1.png"
-              alt="Black Saree with embroidery"
-              class="w-full h-full object-cover object-center group-hover:opacity-75 transition-opacity"
-            />
-          </div>
-          <div class="h-[10%]">
-            <h3 class="mt-4 text-sm text-gray-700">Black Heath Phool Saree</h3>
-            <p class="mt-1 text-lg font-medium text-gray-900">Rs. 24,000</p>
-          </div>
-        </div>
-        <div class="group">
-          <div class="aspect-w-1 aspect-h-1 w-full h-[90%] overflow-hidden rounded-lg bg-gray-200">
-            <img
-              src="assets/images/saree-5.png"
-              alt="Red Saree"
-              class="w-full h-full object-cover object-center group-hover:opacity-75 transition-opacity"
-            />
-          </div>
-          <div class="h-[10%]">
-            <h3 class="mt-4 text-sm text-gray-700">Red Madras Muse Saree</h3>
-            <p class="mt-1 text-lg font-medium text-gray-900">Rs. 28,000</p>
-          </div>
-        </div>
-        <div class="group">
-          <div class="aspect-w-1 aspect-h-1 w-full h-[90%] overflow-hidden rounded-lg bg-gray-200">
-            <img
-              src="assets/images/saree-6.png"
-              alt="Black Saree"
-              class="w-full h-full object-cover object-center group-hover:opacity-75 transition-opacity"
-            />
-          </div>
-          <div class="h-[10%]">
-            <h3 class="mt-4 text-sm text-gray-700">Never Not Iconic Saree</h3>
-            <p class="mt-1 text-lg font-medium text-gray-900">Rs. 28,000</p>
-          </div>
-        </div>
-        <div class="group">
-          <div class="aspect-w-1 aspect-h-1 w-full h-[90%] overflow-hidden rounded-lg bg-gray-200">
-            <img
-              src="assets/images/saree-7.png"
-              alt="Black Saree"
-              class="w-full h-full object-cover object-center group-hover:opacity-75 transition-opacity"
-            />
-          </div>
-          <div class="h-[10%]">
-            <h3 class="mt-4 text-sm text-gray-700">Black Palm Theory Saree</h3>
-            <p class="mt-1 text-lg font-medium text-gray-900">Rs. 20,000</p>
-          </div>
-        </div>
-        <div class="group">
-          <div class="aspect-w-1 aspect-h-1 w-full h-[90%] overflow-hidden rounded-lg bg-gray-200">
-            <img
-              src="assets/images/saree-8.png"
-              alt="Black Saree with embroidery"
-              class="w-full h-full object-cover object-center group-hover:opacity-75 transition-opacity"
-            />
-          </div>
-          <div class="h-[10%]">
-            <h3 class="mt-4 text-sm text-gray-700">Black Heath Phool Saree</h3>
-            <p class="mt-1 text-lg font-medium text-gray-900">Rs. 24,000</p>
-          </div>
-        </div>
-        <div class="group">
-          <div class="aspect-w-1 aspect-h-1 w-full h-[90%] overflow-hidden rounded-lg bg-gray-200">
-            <img
-              src="assets/images/saree-9.png"
-              alt="Black Saree"
-              class="w-full h-full object-cover object-center group-hover:opacity-75 transition-opacity"
-            />
-          </div>
-          <div class="h-[10%]">
-            <h3 class="mt-4 text-sm text-gray-700">Never Not Iconic Saree</h3>
-            <p class="mt-1 text-lg font-medium text-gray-900">Rs. 28,000</p>
-          </div>
-        </div>
-        <div class="group">
-          <div class="aspect-w-1 aspect-h-1 h-[90%] w-full overflow-hidden rounded-lg bg-gray-200">
-            <img
-              src="assets/images/saree-10.png"
-              alt="Black Saree"
-              class="w-full h-full object-cover object-center group-hover:opacity-75 transition-opacity"
-            />
-          </div>
-          <div class="h-[10%]">
-            <h3 class="mt-4 text-sm text-gray-700">Black Palm Theory Saree</h3>
-            <p class="mt-1 text-lg font-medium text-gray-900">Rs. 20,000</p>
-          </div>
-        </div>
-        <div class="group">
-          <div class="aspect-w-1 aspect-h-1 h-[90%] w-full overflow-hidden rounded-lg bg-gray-200">
-            <img
-              src="assets/images/saree-11.png"
-              alt="Black Saree"
-              class="w-full h-full object-cover object-center group-hover:opacity-75 transition-opacity"
-            />
-          </div>
-          <div class="h-[10%]">
-            <h3 class="mt-4 text-sm text-gray-700">Black Palm Theory Saree</h3>
-            <p class="mt-1 text-lg font-medium text-gray-900">Rs. 20,000</p>
-          </div>
-        </div>
-        <div class="group">
-          <div class="aspect-w-1 aspect-h-1 h-[90%] w-full overflow-hidden rounded-lg bg-gray-200">
-            <img
-              src="assets/images/saree-12.png"
-              alt="Black Saree"
-              class="w-full h-full object-cover object-center group-hover:opacity-75 transition-opacity"
-            />
-          </div>
-          <div class="h-[10%]">
-            <h3 class="mt-4 text-sm text-gray-700">Black Palm Theory Saree</h3>
-            <p class="mt-1 text-lg font-medium text-gray-900">Rs. 20,000</p>
-          </div>
-        </div>
-        <div class="group">
-          <div class="aspect-w-1 aspect-h-1 h-[90%] w-full overflow-hidden rounded-lg bg-gray-200">
-            <img
-              src="assets/images/saree-1.png"
-              alt="Red Saree"
-              class="w-full h-full object-cover object-center group-hover:opacity-75 transition-opacity"
-            />
-          </div>
-          <div class="h-[10%]">
-            <h3 class="mt-4 text-sm text-gray-700">Red Madras Muse Saree</h3>
-            <p class="mt-1 text-lg font-medium text-gray-900">Rs. 28,000</p>
-          </div>
-        </div>
-        <div class="group">
-          <div class="aspect-w-1 aspect-h-1 w-full h-[90%] overflow-hidden rounded-lg bg-gray-200">
-            <img
-              src="assets/images/saree-2.png"
-              alt="Black Saree"
-              class="w-full h-full object-cover object-center group-hover:opacity-75 transition-opacity"
-            />
-          </div>
-          <div class="h-[10%]">
-            <h3 class="mt-4 text-sm text-gray-700">Never Not Iconic Saree</h3>
-            <p class="mt-1 text-lg font-medium text-gray-900">Rs. 28,000</p>
-          </div>
-        </div>
-        <div class="group">
-          <div class="aspect-w-1 aspect-h-1 w-full h-[90%] overflow-hidden rounded-lg bg-gray-200">
-            <img
-              src="assets/images/saree-3.png"
-              alt="Black Saree"
-              class="w-full h-full object-cover object-center group-hover:opacity-75 transition-opacity"
-            />
-          </div>
-          <div class="h-[10%]">
-            <h3 class="mt-4 text-sm text-gray-700">Black Palm Theory Saree</h3>
-            <p class="mt-1 text-lg font-medium text-gray-900">Rs. 20,000</p>
-          </div>
-        </div>
-        <div class="group">
-          <div class="aspect-w-1 aspect-h-1 w-full h-[90%] overflow-hidden rounded-lg bg-gray-200">
-            <img
-              src="assets/images/wishlist-1.png"
-              alt="Black Saree with embroidery"
-              class="w-full h-full object-cover object-center group-hover:opacity-75 transition-opacity"
-            />
-          </div>
-          <div class="h-[10%]">
-            <h3 class="mt-4 text-sm text-gray-700">Black Heath Phool Saree</h3>
-            <p class="mt-1 text-lg font-medium text-gray-900">Rs. 24,000</p>
-          </div>
-        </div>
-        <div class="group">
-          <div class="aspect-w-1 aspect-h-1 w-full h-[90%] overflow-hidden rounded-lg bg-gray-200">
-            <img
-              src="assets/images/saree-5.png"
-              alt="Red Saree"
-              class="w-full h-full object-cover object-center group-hover:opacity-75 transition-opacity"
-            />
-          </div>
-          <div class="h-[10%]">
-            <h3 class="mt-4 text-sm text-gray-700">Red Madras Muse Saree</h3>
-            <p class="mt-1 text-lg font-medium text-gray-900">Rs. 28,000</p>
-          </div>
-        </div>
-        <div class="group">
-          <div class="aspect-w-1 aspect-h-1 w-full h-[90%] overflow-hidden rounded-lg bg-gray-200">
-            <img
-              src="assets/images/saree-6.png"
-              alt="Black Saree"
-              class="w-full h-full object-cover object-center group-hover:opacity-75 transition-opacity"
-            />
-          </div>
-          <div class="h-[10%]">
-            <h3 class="mt-4 text-sm text-gray-700">Never Not Iconic Saree</h3>
-            <p class="mt-1 text-lg font-medium text-gray-900">Rs. 28,000</p>
-          </div>
-        </div>
-        <div class="group">
-          <div class="aspect-w-1 aspect-h-1 w-full h-[90%] overflow-hidden rounded-lg bg-gray-200">
-            <img
-              src="assets/images/saree-7.png"
-              alt="Black Saree"
-              class="w-full h-full object-cover object-center group-hover:opacity-75 transition-opacity"
-            />
-          </div>
-          <div class="h-[10%]">
-            <h3 class="mt-4 text-sm text-gray-700">Black Palm Theory Saree</h3>
-            <p class="mt-1 text-lg font-medium text-gray-900">Rs. 20,000</p>
-          </div>
-        </div>
-        <div class="group">
-          <div class="aspect-w-1 aspect-h-1 w-full h-[90%] overflow-hidden rounded-lg bg-gray-200">
-            <img
-              src="assets/images/saree-8.png"
-              alt="Black Saree with embroidery"
-              class="w-full h-full object-cover object-center group-hover:opacity-75 transition-opacity"
-            />
-          </div>
-          <div class="h-[10%]">
-            <h3 class="mt-4 text-sm text-gray-700">Black Heath Phool Saree</h3>
-            <p class="mt-1 text-lg font-medium text-gray-900">Rs. 24,000</p>
-          </div>
-        </div>
-        <div class="group">
-          <div class="aspect-w-1 aspect-h-1 w-full h-[90%] overflow-hidden rounded-lg bg-gray-200">
-            <img
-              src="assets/images/saree-9.png"
-              alt="Black Saree"
-              class="w-full h-full object-cover object-center group-hover:opacity-75 transition-opacity"
-            />
-          </div>
-          <div class="h-[10%]">
-            <h3 class="mt-4 text-sm text-gray-700">Never Not Iconic Saree</h3>
-            <p class="mt-1 text-lg font-medium text-gray-900">Rs. 28,000</p>
-          </div>
-        </div>
-        <div class="group">
-          <div class="aspect-w-1 aspect-h-1 h-[90%] w-full overflow-hidden rounded-lg bg-gray-200">
-            <img
-              src="assets/images/saree-10.png"
-              alt="Black Saree"
-              class="w-full h-full object-cover object-center group-hover:opacity-75 transition-opacity"
-            />
-          </div>
-          <div class="h-[10%]">
-            <h3 class="mt-4 text-sm text-gray-700">Black Palm Theory Saree</h3>
-            <p class="mt-1 text-lg font-medium text-gray-900">Rs. 20,000</p>
-          </div>
-        </div>
-        <div class="group">
-          <div class="aspect-w-1 aspect-h-1 h-[90%] w-full overflow-hidden rounded-lg bg-gray-200">
-            <img
-              src="assets/images/saree-11.png"
-              alt="Black Saree"
-              class="w-full h-full object-cover object-center group-hover:opacity-75 transition-opacity"
-            />
-          </div>
-          <div class="h-[10%]">
-            <h3 class="mt-4 text-sm text-gray-700">Black Palm Theory Saree</h3>
-            <p class="mt-1 text-lg font-medium text-gray-900">Rs. 20,000</p>
-          </div>
-        </div>
-        <div class="group">
-          <div class="aspect-w-1 aspect-h-1 h-[90%] w-full overflow-hidden rounded-lg bg-gray-200">
-            <img
-              src="assets/images/saree-12.png"
-              alt="Black Saree"
-              class="w-full h-full object-cover object-center group-hover:opacity-75 transition-opacity"
-            />
-          </div>
-          <div class="h-[10%]">
-            <h3 class="mt-4 text-sm text-gray-700">Black Palm Theory Saree</h3>
-            <p class="mt-1 text-lg font-medium text-gray-900">Rs. 20,000</p>
-          </div>
-        </div>
+        }
       </div>
     </section>
   </main>

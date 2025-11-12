@@ -10,7 +10,7 @@
           </h2>
           <ul class="sm:text-sm lg:text-lg text-gray-600 space-y-2">
             @for (item of collectionList(); track $index) {
-            <li (mouseenter)="updatedCategory(item.categories)">
+            <li (mouseenter)="updatedCategory(item.categories)" (click)="openProductPage(item, null)">
               <a class="hover:text-[#680c01] transition-colors cursor-pointer" >
                 {{ item.name }}</a
               >
@@ -25,7 +25,7 @@
           </h2>
           <ul class="sm:text-sm lg:text-lg text-gray-600 space-y-2">
             @for (item of categoryList(); track $index) {
-            <li>
+            <li  (click)="openProductPage(null, item)">
               <a class="hover:text-[#680c01] transition-colors cursor-pointer">{{ item.name }}</a>
             </li>
             }

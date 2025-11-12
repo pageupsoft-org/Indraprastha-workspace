@@ -51,6 +51,7 @@ export const ApiRoutes = {
     BASE: '/api/product',
     GET: '/api/product/All',
     GET_COMBO: '/api/product/combo',
+    MENU: '/api/Product/Menu',
     DASHBOARD: '/api/Product/Dashboard'
   },
   WISH: {

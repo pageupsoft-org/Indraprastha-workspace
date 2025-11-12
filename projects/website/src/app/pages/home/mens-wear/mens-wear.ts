@@ -11,7 +11,7 @@ import {
   ApiRoutes,
   DashboardProductTypeStringEnum,
   httpPost,
-  intializepagInationPayload,
+  initializePagInationPayload,
   IRGeneric,
   PlatformService,
 } from '@shared';
@@ -33,7 +33,7 @@ export class MensWear implements AfterViewInit {
   public mensWearList: WritableSignal<Product[]> = signal([]);
 
   private payload: IDashboadRequest = {
-    ...intializepagInationPayload(),
+    ...initializePagInationPayload(),
     type: DashboardProductTypeStringEnum.Women,
   };
 

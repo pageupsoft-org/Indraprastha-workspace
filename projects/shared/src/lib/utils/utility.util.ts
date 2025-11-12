@@ -78,3 +78,69 @@ export function convertImageToBase64(event: Event): Promise<string | ArrayBuffer
     reader.readAsDataURL(file);
   });
 }
+
+export function createUrlFromObject(object: Record<string, any>, baseUrl: string): string {
+  const params = new URLSearchParams();
+
+  for (const key in object) {
+    const value = object[key];
+    if (value === undefined || value === null) continue;
+
+    if (Array.isArray(value)) {
+      value.forEach((v) => params.append(key, String(v)));
+    } else {
+      params.append(key, String(value));
+    }
+  }
+
+  return `${baseUrl}?${params.toString()}`;
+}
+
+// export function getObjectFromUrl(url: string): Record<string, any> {
+//   const result: Record<string, any> = {};
+//   const queryString = url.includes('?') ? url.split('?')[1] : url;
+
+//   const params = new URLSearchParams(queryString);
+
+//   params.forEach((value, key) => {
+//     if (result[key]) {
+//       // convert to array if key appears multiple times
+//       result[key] = Array.isArray(result[key]) ? [...result[key], value] : [result[key], value];
+//     } else {
+//       result[key] = value;
+//     }
+//   });
+
+//   return result;
+// }
+export function getObjectFromUrl(url: string, arrayKeys: string[] = []): Record<string, any> {
+  const result: Record<string, any> = {};
+  const queryString = url.includes('?') ? url.split('?')[1] : url;
+  const params = new URLSearchParams(queryString);
+
+  const parseValue = (value: string): any => {
+    if (value === 'true') return true;
+    if (value === 'false') return false;
+    if (!isNaN(Number(value)) && value.trim() !== '') return Number(value);
+    return value;
+  };
+
+  params.forEach((value, key) => {
+    const parsed = parseValue(value);
+
+    if (result[key]) {
+      result[key] = Array.isArray(result[key]) ? [...result[key], parsed] : [result[key], parsed];
+    } else {
+      result[key] = arrayKeys.includes(key) ? [parsed] : parsed;
+    }
+  });
+
+  // ensure all arrayKeys exist, even if empty
+  for (const key of arrayKeys) {
+    if (!(key in result)) {
+      result[key] = [];
+    }
+  }
+
+  return result;
+}

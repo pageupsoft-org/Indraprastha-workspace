@@ -24,7 +24,15 @@ export const routes: Routes = [
         loadComponent: () => import('./../app/pages/checkout/checkout').then(m => m.Checkout)
     },
     {
-        path: ':gender/:collection/:category',
+        path: ':path',
         loadComponent: () => import('./pages/dynamic-catalog/dynamic-catalog').then(m => m.DynamicCatalog)
-    }
+    },
+    // {
+    //     path: ':gender/:category',
+    //     loadComponent: () => import('./pages/dynamic-catalog/dynamic-catalog').then(m => m.DynamicCatalog)
+    // },
+    // {
+    //     path: ':gender/:collection/:category',
+    //     loadComponent: () => import('./pages/dynamic-catalog/dynamic-catalog').then(m => m.DynamicCatalog)
+    // }
 ];
