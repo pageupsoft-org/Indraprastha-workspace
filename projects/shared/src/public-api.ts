@@ -8,6 +8,8 @@ export * from './lib/directive/error-handler';
 export * from './lib/enum/toast-type.enum';
 export * from './lib/enum/variable.enum';
 export * from './lib/enum/localStorage.enum';
+export * from './lib/enum/discriptionType.enum';
+export * from './lib/enum/size.enum';
 
 export * from './lib/environments/dev.env';
 

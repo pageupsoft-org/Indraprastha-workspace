@@ -5,7 +5,7 @@ export interface ICategoryForm{
     name : FormControl<string | null>
     gst: FormControl<number | null>
     description: FormControl<string | null>
-    mainCategoryId: FormControl<number | null>
+    collectionId: FormControl<number | null>
 }
 
 export interface ICategory{
@@ -13,5 +13,5 @@ export interface ICategory{
     name:string;
     gst:number;
     description:string;
-    mainCategoryId:number;
+    collectionName:number;
 }

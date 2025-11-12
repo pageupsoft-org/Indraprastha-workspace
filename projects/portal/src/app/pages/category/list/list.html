@@ -45,6 +45,7 @@
             </svg>
           </th>
           <th class="px-4 py-3 text-left text-sm font-medium text-slate-700">GST</th>
+          <th class="px-4 py-3 text-left text-sm font-medium text-slate-700">collectionName</th>
           <th class="px-4 py-3 text-left text-sm font-medium text-slate-700">DESCRIPTION</th>
           <th class="px-4 py-3 text-left text-sm font-medium text-slate-700">ACTION</th>
         </tr>
@@ -56,18 +57,19 @@
         <tr class="hover:bg-slate-50">
           <td class="px-4 py-3 text-sm text-slate-600">{{$index+1}}</td>
           <td class="px-4 py-3 text-sm">
-            <div class="flex items-center gap-3">
+            <!-- <div class="flex items-center gap-3"> -->
               <div
-                class="w-10 h-10 rounded-full bg-slate-100 flex items-center justify-center text-slate-700 font-medium">
+                >
                 {{item.name}}
               </div>
               <!-- <div>
                 <div class="text-slate-900 font-medium">Jane Doe</div>
                 <div class="text-xs text-slate-500">jane.doe@example.com</div>
               </div> -->
-            </div>
+            <!-- </div> -->
           </td>
           <td class="px-4 py-3 text-sm text-slate-700">{{item.gst}}</td>
+           <td class="px-4 py-3 text-sm text-slate-700">{{item.collectionName}}</td>
           <td class="px-4 py-3 text-sm text-slate-700">{{item.description}}</td>
           <!-- <td class="px-4 py-3 text-sm text-slate-700">{{item.mainCategoryName}}</td> -->
           <td class="px-4 py-3 text-sm">

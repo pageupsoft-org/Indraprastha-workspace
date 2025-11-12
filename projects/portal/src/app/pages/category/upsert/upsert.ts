@@ -23,9 +23,9 @@ export class Upsert extends Base implements OnInit {
   public categoryForm = new FormGroup<ICategoryForm>({
     id: new FormControl(0),
     name: new FormControl(''),
-    gst: new FormControl(null),
+    gst: new FormControl(0),
     description: new FormControl(''),
-    mainCategoryId: new FormControl(null)
+    collectionId: new FormControl(null)
   })
 
   constructor(private toaster: ToastService) {

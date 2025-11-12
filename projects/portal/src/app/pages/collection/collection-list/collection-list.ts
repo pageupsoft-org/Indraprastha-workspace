@@ -15,6 +15,7 @@ import { response } from 'express';
   styleUrl: './collection-list.scss',
 })
 export class CollectionList extends Base implements OnInit {
+  
   public readonly dialog = inject(MatDialog);
   public collectionList: WritableSignal<ICollection[]> = signal([]);
   public payLoad: IPaginationPayload = intializepagInationPayload()

@@ -54,6 +54,6 @@ export const ApiRoutes = {
     BASE: '/api/product',
     ALL: '/api/product/All',
     GET_COMBO: '/api/product/combo',
-    // ALL : '/api/product/All',
+    GETBYID: (id: number) => `/api/Product/${id}`
   },
 };
