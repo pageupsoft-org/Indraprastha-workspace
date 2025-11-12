@@ -29,6 +29,7 @@ import {
 } from '../../core/interface/response/header.response';
 import { HttpErrorResponse } from '@angular/common/http';
 import { dynamicCatalogData } from '../../../dummy-data';
+import { appRoutes } from '../../core/const/appRoutes.const';
 
 @Component({
   selector: 'app-dynamic-catalog',
@@ -67,7 +68,7 @@ export class DynamicCatalog implements AfterViewInit {
   public minLimit: WritableSignal<number> = signal(10000);
   public maxLimit: WritableSignal<number> = signal(150000);
 
-  public baseUrl: WritableSignal<string> = signal("");
+  public baseUrl: WritableSignal<string> = signal('');
 
   public dynamicData: WritableSignal<IResponseDynamicCatalogue> = signal(
     initializeIResponseDynamicCatalogue()
@@ -195,6 +196,14 @@ export class DynamicCatalog implements AfterViewInit {
     });
   }
 
+  public routeToProductDetail(productId: number) {
+    this.router.navigate([appRoutes.PRODUCTDETAIL], {
+      queryParams: {
+        id: productId
+      },
+    });
+  }
+
   onMinChange(event: Event) {
     const value = +(event.target as HTMLInputElement).value;
     const current = this.payloadGenderMenu();
@@ -244,10 +253,6 @@ export class DynamicCatalog implements AfterViewInit {
 
     this.payloadGenderMenu().categoryIds = categoryIds;
     this.payloadGenderMenu().colors = colors;
-
-    // console.log(this.baseUrl());
     this.router.navigate([createUrlFromObject(this.payloadGenderMenu(), this.baseUrl())]);
-
-    // this.getData();
   }
 }

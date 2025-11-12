@@ -4,12 +4,12 @@
     <div class="flex flex-col lg:flex-row lg:space-x-4 w-full lg:w-3/5">
       <!-- Left Image Gallery (Thumbnails) -->
       <div class="flex flex-row lg:flex-col space-x-3 lg:space-x-0 lg:space-y-4 mb-8 lg:mb-0">
-        @for(productImage of productDetail().image; track $index){
-          <img
-            [src]="productImage"
-            (click)="enlargeImage(productImage)"
-            class="thumbnail-img w-20 sm:w-24 h-28 sm:h-32 object-cover rounded-lg transition-all cursor-pointer selected-thumb"
-          />
+        @for(productImage of productDetail().productURL; track $index){
+        <img
+          [src]="productImage"
+          (click)="enlargeImage(productImage)"
+          class="thumbnail-img w-20 sm:w-24 h-28 sm:h-32 object-cover rounded-lg transition-all cursor-pointer selected-thumb"
+        />
         }
       </div>
 
@@ -31,10 +31,10 @@
         id="modal-product-name"
         class="text-3xl md:text-4xl font-bold text-gray-900 leading-tight"
       >
-        Ivory Lace Anarkali
+        {{ productDetail().name }}
       </h2>
       <p class="text-xl text-gray-700">
-        Rs. <span id="modal-product-price" class="font-semibold">18,000</span>
+        Rs. <span id="modal-product-price" class="font-semibold">{{ productDetail().mrp }}</span>
       </p>
       <p class="text-sm text-gray-500">(MRP inclusive of all Taxes)</p>
 
@@ -43,31 +43,13 @@
         <div>
           <p class="font-semibold text-gray-800 mb-2">SIZE</p>
           <div class="flex flex-wrap gap-2">
-            <button
-              class="px-4 py-2 border border-gray-300 rounded-[5px] text-sm text-gray-700 hover:bg-gray-200 transition-colors duration-200 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-gray-500"
+            @for (stockSize of stockSizeArray; track $index) {
+            <button 
+              class="px-4 py-2 cursor-pointer border border-gray-300 rounded-[5px] text-sm text-gray-700 hover:bg-gray-200 transition-colors duration-200 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-gray-500"
             >
-              S
+              {{ stockSize.value }}
             </button>
-            <button
-              class="px-4 py-2 border border-gray-300 rounded-[5px] text-sm text-gray-700 hover:bg-gray-200 transition-colors duration-200 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-gray-500"
-            >
-              M
-            </button>
-            <button
-              class="px-4 py-2 border border-gray-300 rounded-[5px] text-sm text-gray-700 hover:bg-gray-200 transition-colors duration-200 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-gray-500"
-            >
-              L
-            </button>
-            <button
-              class="px-4 py-2 border border-gray-300 rounded-[5px] text-sm text-gray-700 hover:bg-gray-200 transition-colors duration-200 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-gray-500"
-            >
-              XL
-            </button>
-            <button
-              class="px-4 py-2 border border-gray-300 rounded-[5px] text-sm text-gray-700 hover:bg-gray-200 transition-colors duration-200 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-gray-500"
-            >
-              XXL
-            </button>
+            }
           </div>
         </div>
 
@@ -133,5 +115,8 @@
 </div>
 
 <div class="max-w-7xl mx-auto">
-  <app-product-slider [title]="'RELATED PRODUCTS'" [productType]="DashboardProductTypeStringEnum.Featured"></app-product-slider>
+  <app-product-slider
+    [title]="'RELATED PRODUCTS'"
+    [productType]="DashboardProductTypeStringEnum.Featured"
+  ></app-product-slider>
 </div>
