@@ -52,7 +52,7 @@ export const routes: Routes = [
       },
       {
         path: AppRoutes.PRODUCT,
-        loadComponent: () => import('./pages/banner/list/list').then((m) => m.List),
+        loadComponent: () => import('./pages/product/product-list/product-list').then((m) => m.ProductList),
       },
       {
         path: AppRoutes.PRODUCT_UPSERT,
