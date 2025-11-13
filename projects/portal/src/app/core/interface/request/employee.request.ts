@@ -26,6 +26,20 @@ export interface IEmployee {
     isLogin: boolean | null
 }
 
+export interface updatePayload {
+    id:number| 0;
+    firstName: string;
+    lastName: string;
+    email: string;
+    contact: string;
+    userType: string;
+    address: string;
+    isLogin: boolean | null
+}
+
+
+
+
 
 
 

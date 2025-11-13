@@ -5,7 +5,7 @@ import { CommonModule } from '@angular/common';
 import { EmployeeList } from '../employee-list/employee-list';
 import { Base } from '../../../core/base/base';
 import { IGenericResponse } from '../../../core/interface/response/genericResponse';
-import { IEmployeeForm, IEmployee } from '../../../core/interface/request/employee.request';
+import { IEmployeeForm, IEmployee, updatePayload } from '../../../core/interface/request/employee.request';
 import { ApiRoutes, ErrorHandler, EToastType, ToastService } from '@shared';
 
 
@@ -36,10 +36,10 @@ export class EmployeeUpsert extends Base implements OnInit {
     password: new FormControl(null),
     isLogin: new FormControl(false),
   });
-
   public isLoginMode: boolean = false;
   public btn: string = '+ Add'
-  // public userType: string[] = ['Admin', 'User']
+  public removeLoginMode: boolean = false
+
 
   constructor(private toaster: ToastService) {
     super()
@@ -47,6 +47,11 @@ export class EmployeeUpsert extends Base implements OnInit {
 
   ngOnInit(): void {
     const id = this.data.id
+    console.log(id)
+    if (id === 0) {
+      this.removeLoginMode = !this.removeLoginMode;
+    }
+
     this.fetchEmployee(id)
   }
 
@@ -56,31 +61,31 @@ export class EmployeeUpsert extends Base implements OnInit {
   }
 
   // Create New Employee & Update Employee
-  public onSubmitEmployee() {
-    console.log(this.employeeForm.value)
-    if (this.employeeForm.valid) {
-      this.httpPostPromise<IGenericResponse<number>, IEmployee>(this.apiRoutes.LOGIN.REGISTER_EMPLOYEE, this.employeeForm.value as IEmployee).then(response => {
-        if (response) {
-          if (response.data) {
-            if (this.data.id === 0) {
-              this.onCancel(true)
-              this.toaster.show({ message: 'Employee register Successful', duration: 3000, type: EToastType.success });
-            }
-            else {
-              this.onCancel(true)
-              this.toaster.show({ message: 'Employee Update Successful', duration: 3000, type: EToastType.success });
-            }
-          }
-        }
-      })
-        .catch(error => {
-          // handle error
-        });
-    }
-    else {
-      this.employeeForm.markAllAsTouched();
-    }
-  }
+  // public onSubmitEmployee() {
+  //   if (this.employeeForm.valid) {
+  //     this.httpPostPromise<IGenericResponse<number>, IEmployee>(this.apiRoutes.LOGIN.REGISTER_EMPLOYEE, this.employeeForm.value as IEmployee).then(response => {
+  //       if (response) {
+  //         if (response.data) {
+  //           if (this.data.id === 0) {
+  //             this.onCancel(true)
+  //             this.toaster.show({ message: 'Employee register Successful', duration: 3000, type: EToastType.success });
+  //           }
+  //           else {
+  //             this.onCancel(true)
+  //             this.toaster.show({ message: 'Employee Update Successful', duration: 3000, type: EToastType.success });
+  //           }
+  //         }
+  //       }
+
+  //     })
+  //       .catch(error => {
+  //         // handle error
+  //       });
+  //   }
+  //   else {
+  //     this.employeeForm.markAllAsTouched();
+  //   }
+  // }
 
   // Toggle Login Section
   public toggleMode() {
@@ -116,5 +121,51 @@ export class EmployeeUpsert extends Base implements OnInit {
       })
     }
   }
+
+  public onSubmitEmployee() {
+    const updatePayload: updatePayload = {
+      id: this.employeeForm.controls.id.value || 0,
+      firstName: this.employeeForm.controls.firstName.value || '',
+      lastName: this.employeeForm.controls.lastName.value || '',
+      email: this.employeeForm.controls.email.value || '',
+      isLogin: this.employeeForm.controls.isLogin.value || false,
+      contact: this.employeeForm.controls.contact.value || '',
+      address: this.employeeForm.controls.address.value || '',
+      userType: this.employeeForm.controls.userType.value || ''
+    }
+    if (this.employeeForm.valid) {
+      if (this.data.id === 0) {
+        this.httpPostPromise<IGenericResponse<number>, IEmployee>(ApiRoutes.LOGIN.REGISTER_EMPLOYEE, this.employeeForm.value as IEmployee).then(response => {
+          if (response) {
+            if (response.data) {
+              this.onCancel(true)
+              this.toaster.show({ message: 'Employee register Successful', duration: 3000, type: EToastType.success });
+            }
+          }
+        })
+          .catch(error => {
+            // handle error
+          });
+      }
+      else {
+        this.httpPostPromise<IGenericResponse<number>, updatePayload>(ApiRoutes.EMPLOYEE.BASE, updatePayload).then(response => {
+          if (response) {
+            if (response.data) {
+              this.onCancel(true)
+              this.toaster.show({ message: 'Employee Update Successful', duration: 3000, type: EToastType.success });
+            }
+          }
+        })
+          .catch(error => {
+            // handle error
+          });
+      }
+    }
+    else {
+      this.employeeForm.markAllAsTouched();
+    }
+  }
+
+
 
 }
