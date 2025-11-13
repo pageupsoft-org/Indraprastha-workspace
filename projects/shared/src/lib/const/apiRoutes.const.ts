@@ -35,6 +35,7 @@ export const ApiRoutes = {
   },
   COLLECTION: {
     BASE: "/api/Collection",
+    MENU: '/api/Collection/Menu',
     ALL: "/api/Collection/ALL",
     GET_COMBO: '/api/Collection/combo',
     GETBYID: (id: number) => `/api/Collection/${id}`,
@@ -44,9 +45,6 @@ export const ApiRoutes = {
     GET: '/api/Category/All',
     GET_COMBO: '/api/Category/Combo',
     GETBYID: (id: number) => `/api/Category/${id}`,
-  },
-  COLLECTION: {
-    MENU: '/api/Collection/Menu',
   },
   BANNER: {
     BASE: '/api/Banner',
