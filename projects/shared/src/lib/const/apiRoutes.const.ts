@@ -33,14 +33,18 @@ export const ApiRoutes = {
     GET: '/api/Employee/All',
     GETBYID: (id: number) => `/api/Employee/${id}`,
   },
+  COLLECTION: {
+    BASE: "/api/Collection",
+    MENU: '/api/Collection/Menu',
+    ALL: "/api/Collection/ALL",
+    GET_COMBO: '/api/Collection/combo',
+    GETBYID: (id: number) => `/api/Collection/${id}`,
+  },
   CATEGORY: {
     BASE: '/api/Category',
     GET: '/api/Category/All',
     GET_COMBO: '/api/Category/Combo',
     GETBYID: (id: number) => `/api/Category/${id}`,
-  },
-  COLLECTION: {
-    MENU: '/api/Collection/Menu',
   },
   BANNER: {
     BASE: '/api/Banner',
@@ -48,11 +52,12 @@ export const ApiRoutes = {
     GETBYID: (id: number) => `/api/Banner/${id}`,
   },
   PRODUCT: {
-    BASE: '/api/product',
-    GET: '/api/product/All',
+    POST: '/api/product',
+    ALL: '/api/product/All',
     GET_COMBO: '/api/product/combo',
     MENU: '/api/Product/Menu',
-    DASHBOARD: '/api/Product/Dashboard'
+    DASHBOARD: '/api/Product/Dashboard',
+    GETBYID: (id: number) => `/api/Product/${id}`
   },
   WISH: {
     GET: '/api/Wish',

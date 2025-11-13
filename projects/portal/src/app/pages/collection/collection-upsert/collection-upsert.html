@@ -1,0 +1,65 @@
+<!-- Customer FORM -->
+<div class="w-full rounded-3xl shadow-xl p-6 sm:p-8 bg-white">
+
+  <!-- Header -->
+  <div class="flex items-center gap-4 mb-6">
+    <div class="flex gap-2">
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor"
+        class="w-8 h-8 text-indigo-600 cursor-pointer">
+        <path fill-rule="evenodd"
+          d="M12 2.25a4.125 4.125 0 1 1 0 8.25 4.125 4.125 0 0 1 0-8.25zM4.5 20.25a7.5 7.5 0 0 1 15 0v.75a.75.75 0 0 1-.75.75h-13.5a.75.75 0 0 1-.75-.75v-.75z"
+          clip-rule="evenodd" />
+      </svg>
+      <h1 class="text-xl sm:text-2xl font-medium text-slate-900 leading-tight">Create New Collection</h1>
+    </div>
+  </div>
+
+  <!-- Form -->
+  <form class="space-y-9" autocomplete="off" [formGroup]="collectionForm">
+
+    <!-- Row 1 -->
+    <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-3">
+      <!-- Collection Name -->
+      <div>
+        <label for="firstName" class="block text-slate-700 text-sm mb-1">Collection Name</label>
+        <input id="firstName" type="text" placeholder="Enter collection name" formControlName="name" [appErrorHandler]="collectionForm.controls.name"
+          class="w-full rounded-md px-3 py-2 border border-slate-300 placeholder-slate-400 focus:ring-2 focus:ring-indigo-500 focus:outline-none disabled:bg-slate-100 disabled:text-slate-500 disabled:border-slate-200 disabled:cursor-not-allowed" />
+      </div>
+
+      <!-- Gender -->
+      <div>
+        <label for="gender" class="block text-slate-700 text-sm mb-1">Gender</label>
+        <select id="gender" [appErrorHandler]="collectionForm.controls.gender" formControlName="gender"
+          class="w-full rounded-md px-3 py-2 border border-slate-300 text-slate-700 focus:ring-2 focus:ring-indigo-500 focus:outline-none">
+          <option [ngValue]="null" disabled>Select gender</option>
+          @for (item of genders; track $index) {
+              <option [ngValue]="item.key">{{ item.value }}</option>
+          }
+        
+        </select>
+      </div>
+
+      <!-- Description -->
+      <div>
+        <label for="description" class="block text-slate-700 text-sm mb-1">Description</label>
+        <textarea id="description" rows="1" placeholder="Write short description..." formControlName="description"
+          class="w-full rounded-md px-3 py-2 border border-slate-300 placeholder-slate-400 focus:ring-2 focus:ring-indigo-500 focus:outline-none resize-none"></textarea>
+      </div>
+    </div>
+
+    <input type="text" hidden formControlName="id">
+    <!-- Actions -->
+    <div class="flex justify-end gap-4 mt-6">
+      <button (click)="onCancel()"
+        class="px-5 py-2 rounded-lg border border-slate-300 text-slate-700 hover:bg-slate-100 transition cursor-pointer"
+      >
+        Cancel
+      </button>
+      <button (click)="onCollectionSubmit()"
+        class="px-5 py-2 rounded-lg bg-indigo-600 text-white hover:bg-indigo-700 transition cursor-pointer"
+        >
+        Save
+      </button>
+    </div>
+  </form>
+</div>

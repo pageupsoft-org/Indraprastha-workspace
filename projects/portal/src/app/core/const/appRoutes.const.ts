@@ -11,6 +11,7 @@ export const AppRoutes = {
   CUSTOMER: 'customer',
   DASHBOARD: 'dashboard',
   CATEGORY: 'category',
+  COLLECTION: 'collection',
   BANNER: 'banner',
   PRODUCT: 'product',
   PRODUCT_UPSERT: 'product-upsert',

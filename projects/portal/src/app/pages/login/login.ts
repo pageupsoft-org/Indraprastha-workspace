@@ -2,7 +2,7 @@ import { Component } from '@angular/core';
 import { FormControl, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 import { HttpErrorResponse } from '@angular/common/http';
 import { Router } from '@angular/router';
-import { IGenericResponse } from '../../core/interface/response/responseGeneric';
+import { IGenericResponse } from '../../core/interface/response/genericResponse';
 import { LoginResponse } from '../../core/interface/response/login.response';
 import { Base } from '@portal/core';
 import { ApiRoutes, ErrorHandler, EToastType, ILoginForm, ILoginFormData, localStorageEnum, setLocalStorageItem, ToastService } from '@shared';
@@ -20,6 +20,7 @@ export class Login extends Base {
     password: new FormControl('', [Validators.required]),
     fcmToken: new FormControl(''),
   });
+  public showPassword: boolean = false
 
   constructor(private toster: ToastService, private router: Router) {
     super();
@@ -54,5 +55,9 @@ export class Login extends Base {
     } else {
       this.loginForm.markAllAsTouched();
     }
+  }
+
+  public togglePassword() {
+    this.showPassword = !this.showPassword;
   }
 }
