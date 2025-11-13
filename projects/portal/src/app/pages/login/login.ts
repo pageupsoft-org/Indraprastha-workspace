@@ -20,6 +20,7 @@ export class Login extends Base {
     password: new FormControl('', [Validators.required]),
     fcmToken: new FormControl(''),
   });
+  public showPassword: boolean = false
 
   constructor(private toster: ToastService, private router: Router) {
     super();
@@ -54,5 +55,9 @@ export class Login extends Base {
     } else {
       this.loginForm.markAllAsTouched();
     }
+  }
+
+  public togglePassword() {
+    this.showPassword = !this.showPassword;
   }
 }
