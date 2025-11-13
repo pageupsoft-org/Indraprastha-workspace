@@ -8,16 +8,16 @@ import { EDescriptionType } from '../../../../../../shared/src/lib/enum/discript
 export interface IProductForm {
   id: FormControl<number | null>;
   categoryIds: FormControl<Array<number> | null>;
+  categoryIdsList: FormControl<Array<{id: number; name: string}> | null>;
   name: FormControl<string | null>;
   isCustomSize: FormControl<boolean | null>;
   customSizeName: FormControl<string | null>;
   color: FormArray<FormControl<string | null>>;
   mrp: FormControl<number | null>;
-  gender: FormControl<EGender | null>;
+  gender: FormControl<string | null>;
   variants: FormArray<FormGroup<IVariantForm>>;
   stocks: FormArray<FormGroup<stocks>>;
   descriptions: FormArray<FormGroup<IDescriptionForm>>;
-  // productBase64: FormControl<Array<string> | null>;
   productBase64: FormArray<FormControl<string | null>>;
   removeURL: FormControl<Array<string> | null>;
 }
@@ -56,6 +56,13 @@ export interface IDescriptionForm {
   shortDescription: FormControl<string | null>;
   jsonText: FormArray<FormGroup<IJsonTextForm>>;
 }
+export interface IDescriptionData {
+  header: string | null;
+  descriptionType: EDescriptionType | null;
+  description: string | null;
+  shortDescription: string | null;
+  jsonText: IJsonTextFormData[];
+}
 
 export interface IJsonTextForm {
   key: FormControl<string | null>;
@@ -67,13 +74,15 @@ export interface IJsonTextFormData {
 }
 
 // --- Initialization Helpers ---
-export const initializeJsonTextForm = (data: IJsonTextFormData | null): FormGroup<IJsonTextForm> => {
+export const initializeJsonTextForm = (
+  data: IJsonTextFormData | null
+): FormGroup<IJsonTextForm> => {
   const form = new FormGroup<IJsonTextForm>({
     key: new FormControl<string>(''),
     value: new FormControl<string>(''),
   });
 
-  if(data){
+  if (data) {
     form.patchValue(data);
   }
 
@@ -81,7 +90,7 @@ export const initializeJsonTextForm = (data: IJsonTextFormData | null): FormGrou
 };
 
 export const initializeDescriptionForm = (
-  data: IVariantData | null
+  data: IDescriptionData | null
 ): FormGroup<IDescriptionForm> => {
   const form = new FormGroup<IDescriptionForm>({
     header: new FormControl<string | null>(null),
@@ -99,8 +108,8 @@ export const initializeDescriptionForm = (
 
 export const initializeVariantForm = (data: IVariantData | null): FormGroup<IVariantForm> => {
   const form = new FormGroup<IVariantForm>({
-    id: new FormControl<number | null>(null),
-    productId: new FormControl<number | null>(null),
+    id: new FormControl<number | null>(0),
+    productId: new FormControl<number | null>(0),
     name: new FormControl<string | null>(null),
     description: new FormControl<string | null>(null),
     mrp: new FormControl<number | null>(null),
@@ -129,8 +138,9 @@ export const initializeStockForm = (
 // --- Main Form Initialization ---
 export const initializeIProductForm = (): FormGroup<IProductForm> =>
   new FormGroup<IProductForm>({
-    id: new FormControl<number | null>(null),
+    id: new FormControl<number | null>(0),
     categoryIds: new FormControl<number[]>([]),
+    categoryIdsList: new FormControl<Array<{id: number; name: string}> | null>([]),
     name: new FormControl<string | null>(null),
     isCustomSize: new FormControl<boolean | null>(false),
     customSizeName: new FormControl<string | null>(''),

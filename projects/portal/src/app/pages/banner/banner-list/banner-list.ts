@@ -2,7 +2,7 @@ import { Component, inject, OnInit } from '@angular/core';
 
 import { MatDialog } from '@angular/material/dialog';
 import {
-  intializepagInationPayload,
+  initializePagInationPayload,
   IPaginationPayload,
 } from '../../../core/interface/request/genericPayload';
 import { BannerUpsert } from '../banner-upsert/banner-upsert';
@@ -22,7 +22,7 @@ import { IBannerResponse } from '../../../core/interface/response/banner.respons
 export class BannerList extends Base implements OnInit {
   readonly dialog = inject(MatDialog);
   public payLoad: IBannerPagination = {
-    ...intializepagInationPayload(),
+    ...initializePagInationPayload(),
     bannerConnectionType: null,
     bannerType: null,
     gender: null,

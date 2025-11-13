@@ -3,7 +3,7 @@ import { Base } from '@portal/core';
 import { ICollection, ICollectionResponse } from '../../../core/interface/response/collection.response';
 import { MAT_DIALOG_DATA, MatDialog } from '@angular/material/dialog';
 import { CollectionUpsert } from '../collection-upsert/collection-upsert';
-import { intializepagInationPayload, IPaginationPayload } from '../../../core/interface/request/genericPayload';
+import { initializePagInationPayload, IPaginationPayload } from '../../../core/interface/request/genericPayload';
 import { ApiRoutes, ConfirmationDialog, EToastType, MConfirmationModalData, ToastService } from '@shared';
 import { IGenericResponse } from '../../../core/interface/response/genericResponse';
 import { response } from 'express';
@@ -18,7 +18,7 @@ export class CollectionList extends Base implements OnInit {
   
   public readonly dialog = inject(MatDialog);
   public collectionList: WritableSignal<ICollection[]> = signal([]);
-  public payLoad: IPaginationPayload = intializepagInationPayload()
+  public payLoad: IPaginationPayload = initializePagInationPayload()
   public collections: ICollection[] = []
 
   constructor(private toaster: ToastService) {

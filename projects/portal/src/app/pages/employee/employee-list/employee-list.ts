@@ -4,7 +4,7 @@ import { createPaginationMetadata, PaginationControlMetadata } from '../../../co
 import { Base } from '../../../core/base/base';
 import { IGenericResponse } from '../../../core/interface/response/genericResponse';
 import { IEmployee, IEmployeeResponse } from '../../../core/interface/response/employee.response';
-import { intializepagInationPayload, IPaginationPayload } from '../../../core/interface/request/genericPayload';
+import { initializePagInationPayload, IPaginationPayload } from '../../../core/interface/request/genericPayload';
 import { ReactiveFormsModule } from '@angular/forms';
 import { MatDialog } from '@angular/material/dialog';
 import { EmployeeUpsert } from '../employee-upsert/employee-upsert';
@@ -18,7 +18,7 @@ import { ApiRoutes, EToastType, MConfirmationModalData, ToastService } from '@sh
 })
 
 export class EmployeeList extends Base implements OnInit {
-  public payLoad: IPaginationPayload = intializepagInationPayload()
+  public payLoad: IPaginationPayload = initializePagInationPayload()
   public paginationMetadata: PaginationControlMetadata = createPaginationMetadata();
   public employees: IEmployee[] = [];
   public btn: string = '+ Add'

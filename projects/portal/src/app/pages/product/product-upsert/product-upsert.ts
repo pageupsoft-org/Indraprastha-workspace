@@ -9,11 +9,15 @@ import {
   initializeStockForm,
   initializeVariantForm,
   IProductForm,
+  IVariantData,
 } from '../../../core/interface/request/product.request';
 import {
   ApiRoutes,
   EDescriptionType,
+  EToastType,
   IRGeneric,
+  IRProductDetailRoot,
+  jsonToArray,
   MStringEnumToArray,
   stringEnumToArray,
 } from '@shared';
@@ -21,12 +25,13 @@ import { IGenericComboResponse } from '../../../core/interface/response/banner.r
 import { EGender } from '../../../core/enum/gender.enum';
 import { CommonModule } from '@angular/common';
 import { EStockSize } from '../../../../../../shared/src/lib/enum/size.enum';
-import { convertImagesToBase64Array } from '../../../core/utils/portal-utility.util';
-import { IDropdownSettings } from 'ng-multiselect-dropdown';
+import { arrayToJson, convertImagesToBase64Array } from '../../../core/utils/portal-utility.util';
+import { IDropdownSettings, NgMultiSelectDropDownModule } from 'ng-multiselect-dropdown';
+import { ActivatedRoute, Params, Router } from '@angular/router';
 
 @Component({
   selector: 'app-product-upsert',
-  imports: [ReactiveFormsModule, CommonModule, FormsModule],
+  imports: [ReactiveFormsModule, CommonModule, FormsModule, NgMultiSelectDropDownModule],
   templateUrl: './product-upsert.html',
   styleUrl: './product-upsert.scss',
 })
@@ -51,6 +56,14 @@ export class ProductUpsert extends Base implements OnInit {
     allowSearchFilter: false,
   };
 
+  // public onCancel() {
+  //   this.dialogRef.close();
+  // }
+
+  constructor(private activatedRoute: ActivatedRoute, public router: Router) {
+    super();
+  }
+
   ngOnInit(): void {
     this.getCategoryCombo();
 
@@ -60,14 +73,12 @@ export class ProductUpsert extends Base implements OnInit {
     this.stockSize.forEach((size) => {
       this.productForm.controls.stocks.push(initializeStockForm(0, size.key as EStockSize));
     });
-  }
 
-  // public onCancel() {
-  //   this.dialogRef.close();
-  // }
-
-  constructor() {
-    super();
+    this.activatedRoute.queryParams.subscribe((param: Params) => {
+      if (param && param['id']) {
+        this.getProductById(+param['id']);
+      }
+    });
   }
 
   // GET CATEGORY COMBO
@@ -147,7 +158,46 @@ export class ProductUpsert extends Base implements OnInit {
   }
 
   public upsertProduct() {
-    console.log(this.productForm.value);
+    const data = this.productForm.getRawValue();
+    data.descriptions.forEach((desc: any) => {
+      if (desc.descriptionType === EDescriptionType.Json) {
+        desc.description = JSON.stringify(arrayToJson(desc.jsonText));
+      }
+      delete desc.jsonText; // ✅ deletes the key from the object
+    });
+
+    data.stocks = data.stocks.filter((x) => (x.quantity ?? 0) > 0);
+    data.categoryIds = data.categoryIdsList?.map((x) => x.id) || [];
+
+    data.productBase64 = data.productBase64.filter((x) => !x?.startsWith('https://'));
+    data.variants.forEach((v) => {
+      if (v.variantBase64?.startsWith('https://')) {
+        v.variantBase64 = '';
+      }
+    });
+
+    delete (data as any).categoryIdsList;
+
+    this.httpPostPromise<IRGeneric<number>, any>(ApiRoutes.PRODUCT.POST, data).then(
+      (res: IRGeneric<number>) => {
+        if (res?.data) {
+          const msg: string = (this.productForm.controls.id.value) ? 'Product Updated' : 'Product Added';
+          this.toastService.show({
+            message: msg,
+            type: EToastType.success,
+            duration: 3000,
+          });
+          this.productForm = initializeIProductForm();
+          this.router.navigate([this.appRoutes.PRODUCT]);
+        } else {
+          this.toastService.show({
+            message: res.errorMessage,
+            type: EToastType.error,
+            duration: 3000,
+          });
+        }
+      }
+    );
   }
 
   public onDescriptionTypeChange(form: FormGroup<IDescriptionForm>) {
@@ -156,5 +206,101 @@ export class ProductUpsert extends Base implements OnInit {
     } else {
       form.controls.jsonText.clear();
     }
+  }
+
+  private getProductById(productId: number) {
+    this.httpGetPromise<IRGeneric<IRProductDetailRoot>>(ApiRoutes.PRODUCT.GETBYID(productId)).then(
+      (res) => {
+        if (res?.data) {
+          // this.patchProductData(res);
+          const {
+            id,
+            name,
+            categoryIds, //not working
+            isCustomSize,
+            customSizeName,
+            color,
+            mrp,
+            gender,
+            productURL,
+            variants,
+            stocks,
+            descriptions,
+          } = res.data;
+
+          this.productForm.patchValue({
+            id,
+            name,
+            isCustomSize,
+            customSizeName,
+            color,
+            mrp,
+            gender,
+          });
+
+          // Assuming categoryIds is the array of selected IDs (e.g., [1, 5, 9])
+          const selectedCategoryObjects = categoryIds.map((id) => {
+            // Find the full category object from the dropdown source data
+            const category = this.categoryCombo.find((c) => c.id === id);
+
+            // Return the object expected by the dropdown (e.g., { id: 1, name: 'Fiction' })
+            return {
+              id: id,
+              name: category?.name ?? '',
+            };
+          });
+
+          // Use patchValue to update the FormControl bound to the dropdown
+          this.productForm.controls.categoryIdsList.patchValue(selectedCategoryObjects);
+
+          this.productForm.controls.color.clear();
+          color.forEach((c) => {
+            this.productForm.controls.color.push(new FormControl(c));
+          });
+
+          productURL.forEach((p) => {
+            this.productForm.controls.productBase64.push(new FormControl(p));
+          });
+
+          variants.forEach((v) => {
+            const newV: IVariantData = {
+              id: v.id,
+              productId: v.productId,
+              name: v.name,
+              description: v.description,
+              mrp: v.mrp,
+              stocks: {
+                quantity: v.stocks.quantity,
+              },
+              variantBase64: v.variantURL,
+            };
+            this.productForm.controls.variants.push(initializeVariantForm(newV));
+          });
+
+          this.productForm.controls.stocks.controls.forEach((x) => {
+            x.controls.quantity.setValue(
+              stocks.find((f) => f.size == x.controls.size.value)?.quantity ?? 0
+            );
+          });
+
+          descriptions.forEach((d) => {
+            const form = initializeDescriptionForm(null);
+
+            const { header, descriptionType, shortDescription } = d;
+            form.patchValue({ header, descriptionType, shortDescription });
+
+            if (d.descriptionType == EDescriptionType.Json) {
+              jsonToArray(JSON.parse(d.description)).forEach((v) => {
+                form.controls.jsonText.push(initializeJsonTextForm({ key: v.key, value: v.value }));
+              });
+            } else {
+              form.controls.description.setValue(d.description);
+            }
+
+            this.productForm.controls.descriptions.push(form);
+          });
+        }
+      }
+    );
   }
 }

@@ -1,7 +1,7 @@
 import { Component, inject, OnInit } from '@angular/core';
 import { Base } from '../../../core/base/base';
 import { FormControl } from '@angular/forms';
-import { intializepagInationPayload, IPaginationPayload } from '../../../core/interface/request/genericPayload';
+import { initializePagInationPayload, IPaginationPayload } from '../../../core/interface/request/genericPayload';
 import { createPaginationMetadata, PaginationControlMetadata } from '../../../core/interface/model/pagination-detail.model';
 import { handlePagination } from '../../../core/utils/pagination.util';
 import { IGenericResponse } from '../../../core/interface/response/genericResponse';
@@ -21,7 +21,7 @@ import { ApiRoutes, EToastType, ToastService } from '@shared';
 export class CustomerList extends Base implements OnInit {
   public readonly dialog = inject(MatDialog);
   public searchInput = new FormControl('');
-  public payload: IPaginationPayload = intializepagInationPayload();
+  public payload: IPaginationPayload = initializePagInationPayload();
   public paginationMetadata: PaginationControlMetadata = createPaginationMetadata();
   public customers: CustomerResponse[] = [];
 

@@ -3,7 +3,7 @@ import { CategoryUpsert } from '../category-upsert/category-upsert';
 import { MatDialog } from '@angular/material/dialog';
 import { Base } from '../../../core/base/base';
 import { IGenericResponse } from '../../../core/interface/response/genericResponse';
-import { intializepagInationPayload, IPaginationPayload } from '../../../core/interface/request/genericPayload';
+import { initializePagInationPayload, IPaginationPayload } from '../../../core/interface/request/genericPayload';
 import { ICategory } from '../../../core/interface/request/category.request';
 import { ApiRoutes, EToastType, MConfirmationModalData, ToastService } from '@shared';
 import { ICategoryResponse } from '../../../core/interface/response/category.response';
@@ -17,7 +17,7 @@ import { ICategoryResponse } from '../../../core/interface/response/category.res
 export class CategoryList extends Base implements OnInit {
 
   public readonly dialog = inject(MatDialog);
-  public payLoad: IPaginationPayload = intializepagInationPayload()
+  public payLoad: IPaginationPayload = initializePagInationPayload()
   public category: ICategory[] = []
 
   ngOnInit(): void {

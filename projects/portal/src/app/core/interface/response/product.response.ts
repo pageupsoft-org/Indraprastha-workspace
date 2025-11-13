@@ -1,21 +1,19 @@
-import { EGender } from "../../enum/gender.enum";
+export interface IProductResponseRoot{
+    total:number;
+    products:IProduct[]
+}
 
-// export interface IProductResponse{
-//     total:number;
-//     products:Iproducts[]
-// }
-
-// export interface Iproducts{
-//     name:string;
-//     isCustomSize:true;
-//     customSizeName:string;
-//     color:
-//     mrp:number;
-//     gender:EGender|null;
-//     productURL:
-//     isActive:boolean;
-//     stockId:number;
-//     size:string;
-//     quantity:number;
-//     id:number;
-// }
+export interface IProduct {
+  name: string;
+  isCustomSize: boolean;
+  customSizeName: string;
+  color: string[];
+  mrp: number;
+  gender: string;
+  productURL: string[];
+  isActive: boolean;
+  stockId: number;
+  size: string;
+  quantity: number;
+  id: number;
+}

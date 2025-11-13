@@ -12,7 +12,7 @@ export interface IOrdersBy {
     sort: "Asc" | "Desc";
 }
 
-export function intializepagInationPayload(): IPaginationPayload {
+export function initializePagInationPayload(): IPaginationPayload {
     // const orderBy: IOrdersBy = {
     //     fieldName: "Id",
     //     sort: 

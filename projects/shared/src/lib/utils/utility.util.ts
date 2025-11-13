@@ -1,4 +1,3 @@
-
 import { Observable } from 'rxjs';
 import { MStringEnumToArray } from '../interface/model/utility.model';
 
@@ -76,5 +75,25 @@ export function convertImageToBase64(event: Event): Promise<string | ArrayBuffer
     reader.onerror = (error) => reject(error);
 
     reader.readAsDataURL(file);
+  });
+}
+
+/**
+ * Converts a single JSON object (key-value map) into an array of { key: string, value: string } objects.
+ * @param {Record<string, string>} obj The input JSON object.
+ * @returns {Array<{key: string, value: string}>} The resulting array of objects.
+ */
+export function jsonToArray(obj) {
+  if (typeof obj !== 'object' || obj === null || Array.isArray(obj)) {
+    console.error('Input must be a non-null, non-array object.');
+    return [];
+  }
+
+  // Uses Object.keys to get all property keys, then uses 'map' to transform each key/value pair.
+  return Object.keys(obj).map((key) => {
+    return {
+      key: String(key),
+      value: String(obj[key]), // Ensure value is stored as a string, consistent with the input type
+    };
   });
 }

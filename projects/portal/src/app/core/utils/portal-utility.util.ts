@@ -47,3 +47,28 @@ export function convertImagesToBase64Array(event: Event): Promise<(string | Arra
       .catch(reject); // Reject the main promise if any file conversion fails
   });
 }
+
+/**
+ * Converts an array of { key: string, value: string } objects into a single JSON object (key-value map).
+ * @param {Array<{key: string, value: string}>} arr The input array.
+ * @returns {Record<string, string>} The resulting JSON object.
+ */
+export function arrayToJson(arr) {
+  if (!Array.isArray(arr)) {
+    console.error('Input must be an array.');
+    return {};
+  }
+
+  // Uses 'reduce' to iterate over the array and build the accumulator object.
+  return arr.reduce((accumulator, currentItem) => {
+    // We use the 'key' as the property name and 'value' as the property value.
+    // Type casting is used here as a safeguard if properties are missing.
+    const key = String(currentItem.key);
+    const value = String(currentItem.value);
+
+    if (key && value) {
+      accumulator[key] = value;
+    }
+    return accumulator;
+  }, {});
+}
