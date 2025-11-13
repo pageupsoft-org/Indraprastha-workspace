@@ -197,7 +197,7 @@ export class DynamicCatalog implements AfterViewInit {
   }
 
   public routeToProductDetail(productId: number) {
-    this.router.navigate([appRoutes.PRODUCTDETAIL], {
+    this.router.navigate([appRoutes.PRODUCT_DETAIL], {
       queryParams: {
         id: productId
       },

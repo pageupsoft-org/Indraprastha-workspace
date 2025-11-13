@@ -11,6 +11,7 @@ export * from './lib/enum/localStorage.enum';
 export * from './lib/enum/dashboard.enum';
 export * from './lib/enum/gender-type.enum';
 export * from './lib/enum/stock-size.enum';
+export * from './lib/enum/description-type.enum';
 
 export * from './lib/environments/dev.env';
 
@@ -38,3 +39,5 @@ export * from './lib/utils/api.helper';
 export * from './lib/utils/pattern-message.util';
 export * from './lib/utils/utility.util';
 export * from './lib/utils/confimation.util';
+
+export * from './lib/interceptors/auth-interceptor';

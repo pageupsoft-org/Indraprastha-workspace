@@ -332,6 +332,7 @@ export const dummyProductDetail: IRProductDetailRoot = {
       descriptionType: 'Details',
       description: '100% cotton. Machine wash cold. Do not bleach. Warm iron if needed.',
       shortDescription: 'Comfortable cotton fabric suitable for daily wear.',
+      jsonText: []
     },
     {
       id: 2,
@@ -340,6 +341,7 @@ export const dummyProductDetail: IRProductDetailRoot = {
       descriptionType: 'Style',
       description: 'Available in slim and regular fits with button-down collars.',
       shortDescription: 'Perfect for casual or semi-formal outings.',
+      jsonText: []
     },
   ],
 };

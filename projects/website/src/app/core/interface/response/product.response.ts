@@ -68,5 +68,6 @@ export interface Description {
   header: string;
   descriptionType: string;
   description: string;
+  jsonText: Array<{key: string; value: string}>;
   shortDescription: string;
 }
