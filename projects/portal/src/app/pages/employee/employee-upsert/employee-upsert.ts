@@ -61,33 +61,6 @@ export class EmployeeUpsert extends Base implements OnInit {
     this.dialogRef.close(isSuccess);
   }
 
-  // Create New Employee & Update Employee
-  // public onSubmitEmployee() {
-  //   if (this.employeeForm.valid) {
-  //     this.httpPostPromise<IGenericResponse<number>, IEmployee>(this.apiRoutes.LOGIN.REGISTER_EMPLOYEE, this.employeeForm.value as IEmployee).then(response => {
-  //       if (response) {
-  //         if (response.data) {
-  //           if (this.data.id === 0) {
-  //             this.onCancel(true)
-  //             this.toaster.show({ message: 'Employee register Successful', duration: 3000, type: EToastType.success });
-  //           }
-  //           else {
-  //             this.onCancel(true)
-  //             this.toaster.show({ message: 'Employee Update Successful', duration: 3000, type: EToastType.success });
-  //           }
-  //         }
-  //       }
-
-  //     })
-  //       .catch(error => {
-  //         // handle error
-  //       });
-  //   }
-  //   else {
-  //     this.employeeForm.markAllAsTouched();
-  //   }
-  // }
-
   // Toggle Login Section
   public toggleMode() {
     this.isLoginMode = !this.isLoginMode
