@@ -19,7 +19,7 @@
         <app-register [(authType)]="currentAuthView" [(isShowloader)]="isShowLoader"></app-register>
       }
       @default {
-        <app-login [(authType)]="currentAuthView" [(isShowloader)]="isShowLoader"></app-login>
+        <app-login [(authType)]="currentAuthView" [(isShowloader)]="isShowLoader" (closeForm)="closeForm()"></app-login>
       }
     }
   </div>

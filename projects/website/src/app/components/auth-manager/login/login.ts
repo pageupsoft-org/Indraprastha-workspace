@@ -1,9 +1,10 @@
-import { Component, model } from '@angular/core';
+import { Component, model, output } from '@angular/core';
 import { EAuthManager } from '../../../core/enum/auth-manager.enum';
 import { FormControl, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 import { HttpErrorResponse } from '@angular/common/http';
 import { ButtonLoader } from "../../../core/component/button-loader/button-loader";
-import { ApiRoutes, ErrorHandler, EToastType, httpPost, ILoginForm, ILoginFormData, IRGeneric, IRLogin, ToastService } from '@shared';
+import { ApiRoutes, ErrorHandler, EToastType, httpPost, ILoginForm, ILoginFormData, IRGeneric, IRLogin, localStorageEnum, setLocalStorageItem, ToastService } from '@shared';
+import { UtilityService } from '../../../core/services/utility-service';
 
 
 @Component({
@@ -16,12 +17,15 @@ export class Login {
   public authType = model.required<EAuthManager>();
   public isShowloader = model.required<boolean>();
 
+  public closeForm = output<void>();
+
   public loginForm: FormGroup<ILoginForm> = new FormGroup<ILoginForm>({
-    userName: new FormControl(null, [Validators.required]),
+    username: new FormControl(null, [Validators.required]),
     password: new FormControl(null, [Validators.required, Validators.minLength(6)]),
+    fcmToken: new FormControl(""),
   });
 
-  constructor(private _toastService: ToastService) {}
+  constructor(private _toastService: ToastService, private _utilityService: UtilityService) {}
 
   public openRegisterForm() {
     this.authType.set(EAuthManager.register);
@@ -38,11 +42,15 @@ export class Login {
         next: (res: IRGeneric<IRLogin>) => {
           if (res) {
             if (res.data) {
+              this._utilityService.isUserLoggedIn.set(true);
+              setLocalStorageItem(localStorageEnum.token, res.data.token);
+              setLocalStorageItem(localStorageEnum.refreshToken, res.data.refreshToken);
               this._toastService.show({
                 message: 'Login success',
                 type: EToastType.success,
                 duration: 2000,
               });
+              this.closeForm.emit();
             }
             else{
                this._toastService.show({

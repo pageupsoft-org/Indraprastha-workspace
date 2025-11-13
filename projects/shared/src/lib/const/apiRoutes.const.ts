@@ -39,6 +39,9 @@ export const ApiRoutes = {
     GET_COMBO: '/api/Category/Combo',
     GETBYID: (id: number) => `/api/Category/${id}`,
   },
+  COLLECTION: {
+    MENU: '/api/Collection/Menu',
+  },
   BANNER: {
     BASE: '/api/Banner',
     GET: '/api/Banner/All',
@@ -48,5 +51,11 @@ export const ApiRoutes = {
     BASE: '/api/product',
     GET: '/api/product/All',
     GET_COMBO: '/api/product/combo',
+    MENU: '/api/Product/Menu',
+    DASHBOARD: '/api/Product/Dashboard'
+  },
+  WISH: {
+    GET: '/api/Wish',
+    DELETE: (id: number) => `/api/Wish/${id}`,
   },
 };

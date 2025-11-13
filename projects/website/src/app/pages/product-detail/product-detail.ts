@@ -1,6 +1,7 @@
 import { Component, signal, WritableSignal } from '@angular/core';
 import { ProductSlider } from '../home/product-slider/product-slider';
 import { IRProductDetail } from '../../core/interface/response/product-detail.response';
+import { DashboardProductTypeStringEnum } from '@shared';
 
 @Component({
   selector: 'app-product-detail',
@@ -18,6 +19,8 @@ export class ProductDetail {
     ],
     activeImage: "assets/images/mens-wear-1.png"
   });
+
+  public DashboardProductTypeStringEnum = DashboardProductTypeStringEnum
 
   constructor() {
   }

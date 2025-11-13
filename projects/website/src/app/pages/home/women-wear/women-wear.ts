@@ -3,10 +3,22 @@ import {
   Component,
   ElementRef,
   QueryList,
+  signal,
   ViewChild,
   ViewChildren,
+  WritableSignal,
 } from '@angular/core';
-import { PlatformService } from '@shared';
+import {
+  ApiRoutes,
+  DashboardProductTypeStringEnum,
+  httpPost,
+  initializePagInationPayload,
+  IRGeneric,
+  PlatformService,
+} from '@shared';
+import { IDashboadRequest } from '../product-slider/dashboard.request';
+import { DashboardResponseRoot, Product } from '../product-slider/dashboard.response';
+import { sign } from 'crypto';
 
 @Component({
   selector: 'app-women-wear',
@@ -18,48 +30,19 @@ export class WomenWear implements AfterViewInit {
   @ViewChild('slider', { static: true }) sliderRef!: ElementRef<HTMLDivElement>;
   @ViewChildren('slide') slidesRef!: QueryList<ElementRef<HTMLDivElement>>;
 
-  public womemsWearList: {
-    image: string;
-    name: string;
-  }[] = [
-    {
-      image: 'assets/images/womens-wear-2.png',
-      name: 'KAFTAN',
-    },
-    {
-      image: 'assets/images/womens-wear-3.png',
-      name: 'DRESSES',
-    },
-    {
-      image: 'assets/images/womens-wear-4.png',
-      name: 'SAREE',
-    },
-    {
-      image: 'assets/images/womens-wear-2.png',
-      name: 'LEHENGA',
-    },
-    {
-      image: 'assets/images/womens-wear-3.png',
-      name: 'KURTAS',
-    },
-    {
-      image: 'assets/images/womens-wear-4.png',
-      name: 'TOPS',
-    },
-    {
-      image: 'assets/images/womens-wear-2.png',
-      name: 'SKIRTS',
-    },
-    {
-      image: 'assets/images/womens-wear-3.png',
-      name: 'JEANS',
-    },
-  ];
+  private payload: IDashboadRequest = {
+    ...initializePagInationPayload(),
+    type: DashboardProductTypeStringEnum.Women,
+  };
+
+  public womemsWearList: WritableSignal<Product[]> = signal([]);
 
   slideWidth = 0;
   slideMargin = 16; // matches your 16px margin
 
-  constructor(private platformService: PlatformService) {}
+  constructor(private platformService: PlatformService) {
+    this.getDashboardProduct();
+  }
 
   ngAfterViewInit(): void {
     if (this.platformService.isBrowser) {
@@ -90,5 +73,22 @@ export class WomenWear implements AfterViewInit {
       }
       // Else do nothing to prevent jump to end
     }
+  }
+
+  private getDashboardProduct() {
+    httpPost<IRGeneric<DashboardResponseRoot>, IDashboadRequest>(
+      ApiRoutes.PRODUCT.DASHBOARD,
+      this.payload,
+      false
+    ).subscribe({
+      next: (response) => {
+        if (response?.data) {
+          this.womemsWearList.set(response.data.products);
+        }
+      },
+      error: (error) => {
+        console.error('Dashboard Product Error: ', error);
+      },
+    });
   }
 }

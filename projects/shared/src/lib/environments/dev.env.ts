@@ -1,5 +1,5 @@
 export const environment = {
-  baseUrl: 'https://wonderful-brattain.88-150-154-84.plesk.page',
+  baseUrl: 'https://wonderful-brattain.77-245-76-122.plesk.page',
 
   firebase: {
     apiKey: 'AIzaSyCAH3JSPltdvmP-AaPG7pJaqlsFe1rCF9A',

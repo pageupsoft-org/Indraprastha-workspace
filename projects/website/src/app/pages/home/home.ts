@@ -3,7 +3,7 @@ import AOS from 'aos';
 import { ProductSlider } from "./product-slider/product-slider";
 import { WomenWear } from "./women-wear/women-wear";
 import { MensWear } from "./mens-wear/mens-wear";
-import { PlatformService } from '@shared';
+import { DashboardProductTypeStringEnum, PlatformService } from '@shared';
 // import taos from 'taos';
 
 @Component({
@@ -13,6 +13,7 @@ import { PlatformService } from '@shared';
   styleUrl: './home.scss',
 })
 export class Home implements AfterViewInit {
+  public readonly DashboardProductTypeStringEnum = DashboardProductTypeStringEnum;
   constructor(private platformService: PlatformService) {}
 
   ngAfterViewInit(): void {
