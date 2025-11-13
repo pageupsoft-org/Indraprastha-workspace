@@ -1,3 +1,5 @@
+import { EDescriptionType } from "../../enum/discriptionType.enum"
+
 export interface IRProductDetailRoot {
   id: number
   name: string
@@ -21,7 +23,7 @@ export interface Variant {
   description: string
   mrp: number
   variantURL: string
-  stocks: Stock[]
+  stocks: Stock
 }
 
 export interface Stock {
@@ -46,7 +48,7 @@ export interface Description {
   id: number
   productId: number
   header: string
-  descriptionType: string
+  descriptionType: EDescriptionType
   description: string
   shortDescription: string
 }
