@@ -44,6 +44,7 @@ export class ErrorHandler implements AfterViewInit, OnDestroy {
       const control = this.control;
       const shouldShowError = control.invalid && (control.dirty || control.touched);
 
+      //console.log(shouldShowError, control);
       if (shouldShowError) {
         const errorMessage = this.getErrorMessage(control);
         this.render.setStyle(this.errorContainer, 'display', 'block');

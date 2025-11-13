@@ -6,7 +6,7 @@ import { initializePagInationPayload } from '../../../core/interface/request/gen
 import { IProductPagination } from '../../../core/interface/request/product.request';
 import { IGenericResponse } from '../../../core/interface/response/genericResponse';
 
-import { ApiRoutes, IRGeneric } from '@shared';
+import { ApiRoutes, EToastType, IRGeneric, MConfirmationModalData, ToastService } from '@shared';
 import { IProduct, IProductResponseRoot } from '../../../core/interface/response/product.response';
 
 @Component({
@@ -29,7 +29,7 @@ export class ProductList extends Base implements OnInit {
     // throw new Error('Method not implemented.');
   }
 
-  constructor(private router: Router) {
+  constructor(private router: Router, private toaster: ToastService) {
     super();
     this.getProductData();
   }
@@ -58,10 +58,35 @@ export class ProductList extends Base implements OnInit {
 
   // Delete Product
   public deleteProduct(id: number) {
-    this.httpDeletePromise<IGenericResponse<boolean>>(ApiRoutes.PRODUCT.GETBYID(id)).then(
-      (response) => {
-        console.log(response);
-      }
-    );
+    if (id) {
+      const modalData: MConfirmationModalData = {
+        heading: 'Confirm Delete',
+        body: 'Are you sure you want to delete this Product?',
+        yesText: 'Yes',
+        noText: 'No'
+      };
+
+      this.objConfirmationUtil.getConfirmation(modalData).then((res: boolean) => {
+        if (res) {
+          this.httpDeletePromise<IGenericResponse<boolean>>(ApiRoutes.PRODUCT.GETBYID(id))
+            .then(response => {
+              if (response.data) {
+                this.toaster.show({
+                  message: 'Product deleted successfully',
+                  duration: 3000,
+                  type: EToastType.success
+                });
+                this.getProductData();
+              }
+            })
+            .catch((error) => {
+            });
+        }
+      })
+    }
   }
 }
+
+
+
+

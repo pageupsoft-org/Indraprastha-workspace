@@ -6,6 +6,7 @@ import { ICustomer, ICustomerForm } from '../../../core/interface/request/custom
 import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
 import { CustomerList } from '../customer-list/customer-list';
 import { ApiRoutes, ErrorHandler, EToastType, ToastService } from '@shared';
+import { patternWithMessage } from '../../../../../../shared/src/public-api';
 
 @Component({
   selector: 'app-customer-upsert',
@@ -20,7 +21,7 @@ export class CustomerUpsert extends Base implements OnInit {
   public customerRegisetr = new FormGroup<ICustomerForm>({
     firstName: new FormControl('', Validators.required),
     lastName: new FormControl('', Validators.required),
-    email: new FormControl('', Validators.required),
+    email: new FormControl('', [Validators.required, patternWithMessage(/^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/, 'Please enter a valid email address (e.g. example@domain.com).')]),
     contact: new FormControl('', Validators.required),
     userName: new FormControl('', Validators.required),
     password: new FormControl('', Validators.required),

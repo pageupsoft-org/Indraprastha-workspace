@@ -5,5 +5,6 @@ export enum EStockSize{
     L = "L",
     XL = "XL",
     XXL = "XXL",
-    XXXL = "XXXL"
+    XXXL = "XXXL",
+    FreeSize = "FreeSize"
 }

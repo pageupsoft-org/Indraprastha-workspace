@@ -1,6 +1,6 @@
 import { Component, inject, OnInit, signal, WritableSignal } from '@angular/core';
 import { Base } from '../../../core/base/base';
-import { FormControl, FormGroup, FormsModule, ReactiveFormsModule } from '@angular/forms';
+import { FormArray, FormControl, FormGroup, FormsModule, ReactiveFormsModule, Validators } from '@angular/forms';
 import {
   IDescriptionForm,
   initializeDescriptionForm,
@@ -14,6 +14,7 @@ import {
 import {
   ApiRoutes,
   EDescriptionType,
+  ErrorHandler,
   EToastType,
   IRGeneric,
   IRProductDetailRoot,
@@ -29,9 +30,10 @@ import { arrayToJson, convertImagesToBase64Array } from '../../../core/utils/por
 import { IDropdownSettings, NgMultiSelectDropDownModule } from 'ng-multiselect-dropdown';
 import { ActivatedRoute, Params, Router } from '@angular/router';
 
+
 @Component({
   selector: 'app-product-upsert',
-  imports: [ReactiveFormsModule, CommonModule, FormsModule, NgMultiSelectDropDownModule],
+  imports: [ReactiveFormsModule, CommonModule, FormsModule, NgMultiSelectDropDownModule, ErrorHandler],
   templateUrl: './product-upsert.html',
   styleUrl: './product-upsert.scss',
 })
@@ -67,6 +69,7 @@ export class ProductUpsert extends Base implements OnInit {
   ngOnInit(): void {
     this.getCategoryCombo();
 
+
     // add one default value
     this.productForm.controls.color.push(new FormControl<string>('#9c1c1c'));
 
@@ -76,7 +79,7 @@ export class ProductUpsert extends Base implements OnInit {
 
     this.activatedRoute.queryParams.subscribe((param: Params) => {
       if (param && param['id']) {
-        this.getProductById(+param['id']);
+        this.getProductById(+param['id']); 
       }
     });
   }
@@ -92,7 +95,7 @@ export class ProductUpsert extends Base implements OnInit {
           }
         }
       })
-      .catch((error) => {});
+      .catch((error) => { });
   }
 
   public mutateColorControl(index: number | null) {
@@ -110,6 +113,7 @@ export class ProductUpsert extends Base implements OnInit {
       this.productForm.controls.variants.removeAt(index);
     }
   }
+
   public mutateDescriptionControl(index: number | null) {
     if (index == null) {
       this.productForm.controls.descriptions.push(initializeDescriptionForm(null));
@@ -125,6 +129,7 @@ export class ProductUpsert extends Base implements OnInit {
       description.controls.jsonText.removeAt(index);
     }
   }
+
   public mutateImageControl(index: number | null) {
     if (index == null) {
       this.productForm.controls.productBase64.push(new FormControl(null));
@@ -142,6 +147,7 @@ export class ProductUpsert extends Base implements OnInit {
       }
     });
   }
+
   public onProductImageChange(event: any, index: number) {
     convertImagesToBase64Array(event).then((res: (string | ArrayBuffer | null)[]) => {
       if (res) {
@@ -158,6 +164,8 @@ export class ProductUpsert extends Base implements OnInit {
   }
 
   public upsertProduct() {
+    console.log(this.productForm.value)
+    // if (this.productForm.valid) {
     const data = this.productForm.getRawValue();
     data.descriptions.forEach((desc: any) => {
       if (desc.descriptionType === EDescriptionType.Json) {
@@ -198,13 +206,25 @@ export class ProductUpsert extends Base implements OnInit {
         }
       }
     );
+    // }
+    // else {
+    //   this.productForm.markAllAsTouched();
+
+    //   console.log(this.productForm.controls.name);
+
+    //   this.productForm.updateValueAndValidity();
+
+    // }
   }
 
   public onDescriptionTypeChange(form: FormGroup<IDescriptionForm>) {
+    console.log(form)
     if (form.controls.descriptionType.value == EDescriptionType.Json) {
       this.mutateJsonValueControl(null, form);
     } else {
       form.controls.jsonText.clear();
+      form.controls.description.setErrors({ 'required': true })
+      form.controls.description.updateValueAndValidity();
     }
   }
 
@@ -299,8 +319,15 @@ export class ProductUpsert extends Base implements OnInit {
 
             this.productForm.controls.descriptions.push(form);
           });
+
+          this.productForm.controls.stocks.disable();
         }
       }
     );
   }
+
+
+
+
+
 }

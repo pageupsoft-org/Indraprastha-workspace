@@ -7,6 +7,7 @@ import { Base } from '../../../core/base/base';
 import { IGenericResponse } from '../../../core/interface/response/genericResponse';
 import { IEmployeeForm, IEmployee } from '../../../core/interface/request/employee.request';
 import { ApiRoutes, ErrorHandler, EToastType, ToastService } from '@shared';
+import { patternWithMessage } from '../../../../../../shared/src/public-api';
 
 
 @Component({
@@ -28,7 +29,7 @@ export class EmployeeUpsert extends Base implements OnInit {
     id: new FormControl(0),
     firstName: new FormControl('', [Validators.required, Validators.minLength(3), Validators.maxLength(30)]),
     lastName: new FormControl(''),
-    email: new FormControl('', [Validators.required, Validators.email]),
+    email: new FormControl('', [Validators.required, patternWithMessage(/^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/, 'Please enter a valid email address (e.g. example@domain.com).')]),
     contact: new FormControl('', [Validators.required]),
     userType: new FormControl('', [Validators.required]),
     address: new FormControl('', [Validators.required]),
@@ -36,10 +37,9 @@ export class EmployeeUpsert extends Base implements OnInit {
     password: new FormControl(null),
     isLogin: new FormControl(false),
   });
-
   public isLoginMode: boolean = false;
   public btn: string = '+ Add'
-  // public userType: string[] = ['Admin', 'User']
+
 
   constructor(private toaster: ToastService) {
     super()
