@@ -1,4 +1,4 @@
-export enum EDiscriptionType{
+export enum EDescriptionType{
    SingleText = "SingleText",
    Json = "Json"
 }
