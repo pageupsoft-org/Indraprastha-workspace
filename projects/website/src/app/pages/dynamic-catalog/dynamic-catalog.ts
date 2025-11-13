@@ -9,7 +9,26 @@ import {
 } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
-import { PlatformService } from '@shared';
+import {
+  ApiRoutes,
+  createUrlFromObject,
+  GenderTypeEnum,
+  getObjectFromUrl,
+  httpPost,
+  initializePagInationPayload,
+  IRGeneric,
+  PlatformService,
+  ToastService,
+} from '@shared';
+import { ActivatedRoute, Router, UrlSegment } from '@angular/router';
+import { IRequestProductMenu } from '../../core/interface/model/header.model';
+import {
+  Filter,
+  initializeIResponseDynamicCatalogue,
+  IResponseDynamicCatalogue,
+} from '../../core/interface/response/header.response';
+import { HttpErrorResponse } from '@angular/common/http';
+import { dynamicCatalogData } from '../../../dummy-data';
 
 @Component({
   selector: 'app-dynamic-catalog',
@@ -30,11 +49,49 @@ export class DynamicCatalog implements AfterViewInit {
   sortOpen = false;
   public currentCols: WritableSignal<number> = signal(3);
 
-  public priceMin: WritableSignal<number> = signal(6999);
-  public priceMax: WritableSignal<number> = signal(412499);
-  public selectedPrice: WritableSignal<number> = signal(this.priceMin());
+  public priceMax: WritableSignal<number> = signal(0);
+  public selectedPrice: WritableSignal<number> = signal(0);
 
-  constructor(private platformService: PlatformService) {}
+  public isShowLoading: WritableSignal<boolean> = signal(false);
+  public payloadGenderMenu: WritableSignal<IRequestProductMenu> = signal({
+    ...initializePagInationPayload(),
+    gender: GenderTypeEnum.Men,
+    collectionIds: [],
+    categoryIds: [],
+    colors: [],
+    sizes: [],
+    minPrice: 10000,
+    maxPrice: 150000,
+  });
+
+  public minLimit: WritableSignal<number> = signal(10000);
+  public maxLimit: WritableSignal<number> = signal(150000);
+
+  public baseUrl: WritableSignal<string> = signal("");
+
+  public dynamicData: WritableSignal<IResponseDynamicCatalogue> = signal(
+    initializeIResponseDynamicCatalogue()
+  );
+
+  constructor(
+    private platformService: PlatformService,
+    private activatedRoute: ActivatedRoute,
+    private toastService: ToastService,
+    private router: Router
+  ) {
+    activatedRoute.url.subscribe((url: any) => {
+      const { baseUrl, params } = getObjectFromUrl((url as Array<UrlSegment>)[0].path, [
+        'collectionIds',
+        'categoryIds',
+        'colors',
+        'sizes',
+      ]);
+
+      this.baseUrl.set(baseUrl);
+      this.payloadGenderMenu.set(params as IRequestProductMenu);
+      this.getData();
+    });
+  }
 
   ngOnInit(): void {
     this.handleResize();
@@ -105,5 +162,92 @@ export class DynamicCatalog implements AfterViewInit {
 
   isActive(section: string): boolean {
     return !!this.activeSections[section];
+  }
+
+  private getData() {
+    this.isShowLoading.set(true);
+    httpPost<IRGeneric<IResponseDynamicCatalogue>, IRequestProductMenu>(
+      ApiRoutes.PRODUCT.MENU,
+      this.payloadGenderMenu(),
+      false
+    ).subscribe({
+      next: (res: IRGeneric<IResponseDynamicCatalogue>) => {
+        if (res?.data) {
+          this.dynamicData.set(res.data);
+
+          this.dynamicData.set(dynamicCatalogData);
+          this.priceMax.set(this.dynamicData().filter.maxPrice);
+          this.selectedPrice.set(this.dynamicData().filter.minPrice);
+
+          this.payloadGenderMenu().minPrice = this.dynamicData().filter.minPrice;
+          this.payloadGenderMenu().maxPrice = this.dynamicData().filter.maxPrice;
+
+          console.log(this.payloadGenderMenu);
+        } else {
+          this.dynamicData.set(initializeIResponseDynamicCatalogue());
+        }
+        this.isShowLoading.set(false);
+      },
+      error: (err: HttpErrorResponse) => {
+        this.dynamicData.set(initializeIResponseDynamicCatalogue());
+        this.isShowLoading.set(false);
+      },
+    });
+  }
+
+  onMinChange(event: Event) {
+    const value = +(event.target as HTMLInputElement).value;
+    const current = this.payloadGenderMenu();
+
+    // Ensure min does not exceed max
+    const newMin = Math.min(value, current.maxPrice - 1000);
+
+    this.payloadGenderMenu.set({
+      ...current,
+      minPrice: newMin,
+    });
+  }
+
+  onMaxChange(event: Event) {
+    const value = +(event.target as HTMLInputElement).value;
+    const current = this.payloadGenderMenu();
+
+    // Ensure max does not go below min
+    const newMax = Math.max(value, current.minPrice + 1000);
+
+    this.payloadGenderMenu.set({
+      ...current,
+      maxPrice: newMax,
+    });
+  }
+
+  getRangeStyle() {
+    const current = this.payloadGenderMenu();
+    return {
+      left:
+        ((current.minPrice - this.minLimit()) / (this.maxLimit() - this.minLimit())) * 100 + '%',
+      right:
+        100 -
+        ((current.maxPrice - this.minLimit()) / (this.maxLimit() - this.minLimit())) * 100 +
+        '%',
+    };
+  }
+
+  public search() {
+    const categoryIds: number[] = this.dynamicData()
+      .filter.category.filter((category) => category.isSelected)
+      .map((category) => category.id);
+
+    const colors: string[] = this.dynamicData()
+      .filter.color.filter((color) => color.isSelected)
+      .map((color) => color.name);
+
+    this.payloadGenderMenu().categoryIds = categoryIds;
+    this.payloadGenderMenu().colors = colors;
+
+    // console.log(this.baseUrl());
+    this.router.navigate([createUrlFromObject(this.payloadGenderMenu(), this.baseUrl())]);
+
+    // this.getData();
   }
 }

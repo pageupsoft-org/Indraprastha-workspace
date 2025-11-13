@@ -1,4 +1,4 @@
-import { Component, EventEmitter, Input, Output } from '@angular/core';
+import { Component, EventEmitter, input, Input, OnInit, Output } from '@angular/core';
 import { RNewArrivals } from '../../core/interface/response/newArrival.response';
 
 @Component({
@@ -8,17 +8,10 @@ import { RNewArrivals } from '../../core/interface/response/newArrival.response'
   styleUrl: './new-arrival-product-card.scss',
 })
 export class NewArrivalProductCard {
-
   @Input() product: RNewArrivals = { name: '', price: 0, wishList: false };
   @Output() addButtonPressed: EventEmitter<null> = new EventEmitter<null>();
-  // @Output() wishListButtonPressed: EventEmitter = new EventEmitter();
-  
 
-  constructor(){
-    // this.addButtonPressed.emit
-  }
-
-  public addProduct(){
+  public addProduct() {
     this.addButtonPressed.emit();
   }
 }

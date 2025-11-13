@@ -12,7 +12,16 @@ import { RNewArrivals } from '../../../core/interface/response/newArrival.respon
 import { NewArrivalProductCard } from '../../../components/new-arrival-product-card/new-arrival-product-card';
 import { MatDialog, MatDialogModule } from '@angular/material/dialog';
 import { ProductDetailDialog } from '../../../components/product-detail-dialog/product-detail-dialog';
-import { PlatformService } from '@shared';
+import {
+  ApiRoutes,
+  DashboardProductTypeStringEnum,
+  httpPost,
+  initializePagInationPayload,
+  IRGeneric,
+  PlatformService,
+} from '@shared';
+import { IDashboadRequest } from './dashboard.request';
+import { DashboardResponseRoot } from './dashboard.response';
 
 @Component({
   selector: 'app-product-slider',
@@ -26,26 +35,25 @@ export class ProductSlider implements AfterViewInit {
   @ViewChild('nextBtn', { static: false }) nextBtn!: ElementRef<HTMLButtonElement>;
   @ViewChild('cardsContainer', { static: false }) cardsContainer!: ElementRef<HTMLDivElement>;
 
-  public title = input<string>('');
-  public apiToGetProduct = input<string>('');
+  public productType = input.required<DashboardProductTypeStringEnum>();
+  public title = input.required<string>();
 
-  public newArrivals: WritableSignal<RNewArrivals[]> = signal([
-    { name: 'Elegant Silk Saree', price: 4500, wishList: false },
-    { name: 'Traditional Kanjeevaram', price: 12000, wishList: true },
-    { name: 'Cotton Casual Saree', price: 2200, wishList: false },
-    { name: 'Designer Georgette Saree', price: 8500, wishList: true },
-    { name: 'Handloom Linen Saree', price: 6800, wishList: false },
-    { name: 'Embroidered Chiffon Saree', price: 9000, wishList: true },
-    { name: 'Banarasi Silk Saree', price: 15000, wishList: false },
-    { name: 'Printed Crepe Saree', price: 3500, wishList: false },
-    { name: 'Festive Organza Saree', price: 7800, wishList: true },
-    { name: 'Casual Linen Saree', price: 2500, wishList: false },
-  ]);
+  public productList: WritableSignal<DashboardResponseRoot> = signal('' as any);
 
-  public totalCards: WritableSignal<number> = signal(this.newArrivals.length);
+  public totalCards: WritableSignal<number> = signal(this.productList()?.products?.length);
   public currentCardIndex: WritableSignal<number> = signal(0);
 
+  private payload: IDashboadRequest = {
+    ...initializePagInationPayload(),
+    type: DashboardProductTypeStringEnum.NewArrival,
+  };
+
   constructor(private platformService: PlatformService, private matDialog: MatDialog) {}
+
+  ngOnInit(): void {
+    this.payload.type = this.productType();
+    this.getDashboardProduct();
+  }
 
   ngAfterViewInit() {
     if (this.platformService.isBrowser) {
@@ -74,7 +82,7 @@ export class ProductSlider implements AfterViewInit {
     this.currentCardIndex.set(Math.max(0, Math.min(this.currentCardIndex(), maxCardIndex)));
 
     const firstCard = cards[0] as HTMLElement;
-    const cardWidth = firstCard.offsetWidth;
+    const cardWidth = firstCard?.offsetWidth;
     const cardMargin = parseFloat(window.getComputedStyle(sliderTrack).getPropertyValue('gap'));
     const offset = -(this.currentCardIndex() * (cardWidth + cardMargin));
     sliderTrack.style.transform = `translateX(${offset}px)`;
@@ -113,9 +121,20 @@ export class ProductSlider implements AfterViewInit {
     this.updateSlider();
   }
 
-
-  private getProduct(){
-    
+  private getDashboardProduct() {
+    httpPost<IRGeneric<DashboardResponseRoot>, IDashboadRequest>(
+      ApiRoutes.PRODUCT.DASHBOARD,
+      this.payload,
+      false
+    ).subscribe({
+      next: (response) => {
+        if (response?.data) {
+        }
+      },
+      error: (error) => {
+        console.error('Dashboard Product Error: ', error);
+      },
+    });
   }
 
   //#region  Hostlistner

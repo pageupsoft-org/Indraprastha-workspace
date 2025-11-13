@@ -1,7 +1,17 @@
 import { Component, signal, WritableSignal } from '@angular/core';
-import { IRWishlist } from '../../core/interface/response/wishlist.response';
 import { RouterLink } from '@angular/router';
 import { appRoutes } from '../../core/const/appRoutes.const';
+import {
+  ApiRoutes,
+  ConfirmationUtil,
+  EToastType,
+  httpDelete,
+  httpGet,
+  IRGeneric,
+  ToastService,
+} from '@shared';
+import { IRWishlistRoot, Product } from '../../core/interface/response/wishlist.response';
+import { wishlistArray } from '../../../dummy-data';
 
 @Component({
   selector: 'app-wishlist',
@@ -11,44 +21,10 @@ import { appRoutes } from '../../core/const/appRoutes.const';
 })
 export class Wishlist {
   public readonly productDetailRoute: string = appRoutes.PRODUCTDETAIL;
+  private readonly objectCOnfirmationUtil: ConfirmationUtil = new ConfirmationUtil();
+  public wishlistArray: WritableSignal<Product[]> = signal(wishlistArray.data);
 
-  public wishlistArray: WritableSignal<IRWishlist[]> = signal([
-    {
-      id: 1,
-      images: ['assets/images/wishlist-1.png', 'assets/images/wishlist-2.png'],
-      name: 'Luxe Matka Silk Anarkali',
-      price: 78465.9,
-      icon: 'assets/icons/delete-black.svg',
-    },
-    {
-      id: 2,
-      images: ['assets/images/wishlist-2.png', 'assets/images/wishlist-3.png'],
-      name: 'Elegant Cotton Saree',
-      price: 12345.0,
-      icon: 'assets/icons/delete-black.svg',
-    },
-    {
-      id: 3,
-      images: ['assets/images/wishlist-3.png', 'assets/images/wishlist-1.png'],
-      name: 'Chic Designer Lehenga',
-      price: 54321.5,
-      icon: 'assets/icons/delete-black.svg',
-    },
-    {
-      id: 4,
-      images: ['assets/images/wishlist-4.png', 'assets/images/wishlist-5.png'],
-      name: 'Classic Georgette Dress',
-      price: 26789.99,
-      icon: 'assets/icons/delete-black.svg',
-    },
-    {
-      id: 5,
-      images: ['assets/images/wishlist-2.png', 'assets/images/wishlist-5.png'],
-      name: 'Stylish Silk Kurti',
-      price: 19876.75,
-      icon: 'assets/icons/delete-black.svg',
-    },
-  ]);
+  constructor(private toastService: ToastService) {}
 
   public addRedColorDeleteIcon(isEnter: boolean, index: number) {
     this.wishlistArray()[index].icon = isEnter
@@ -57,4 +33,43 @@ export class Wishlist {
   }
 
   public routeToProductDetail() {}
+
+  private getWishlist() {
+    httpGet<IRGeneric<IRWishlistRoot>>(ApiRoutes.WISH.GET, false).subscribe({
+      next: (response) => {
+        if (response?.data) {
+          this.wishlistArray.set(response.data.products);
+        } else {
+          this.wishlistArray.set([]);
+        }
+      },
+    });
+  }
+
+  public removeFromWishList(id: number) {
+    this.objectCOnfirmationUtil.getConfirmation(null).then((res: boolean) => {
+      if (res) {
+        console.log('in');
+        httpDelete<IRGeneric<IRWishlistRoot>>(ApiRoutes.WISH.DELETE(id), true).subscribe({
+          next: (response) => {
+            if (response?.data) {
+              this.toastService.show({
+                message: 'Item removed from wishlist successfully',
+                type: EToastType.success,
+                duration: 3000,
+              });
+
+              this.getWishlist();
+            } else {
+              this.toastService.show({
+                message: response.errorMessage|| 'Failed to remove item from wishlist',
+                type: EToastType.error,
+                duration: 3000,
+              });
+            }
+          },
+        });
+      }
+    });
+  }
 }

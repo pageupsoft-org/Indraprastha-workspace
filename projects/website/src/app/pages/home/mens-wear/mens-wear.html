@@ -76,9 +76,9 @@
     </button>
 
     <div #galleryRef class="gallery flex transition-transform duration-500 ease-in-out">
-      @for (item of mensWearList; track $index) {
+      @for (item of mensWearList(); track $index) {
       <div #itemRef class="item cursor-pointer" (click)="zoomImage(itemRef, $index)">
-        <img [src]="item.image" [alt]="item.name" />
+        <img [src]="item.productURL" [alt]="item.name" />
         <p class="text-center font-bold mt-2 text-sm md:text-lg">{{ item.name }}</p>
       </div>
       }

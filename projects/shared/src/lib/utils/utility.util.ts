@@ -32,14 +32,15 @@ export function getStringEnumKeyByValue<T extends Record<string, string>>(
 }
 
 export function getLocalStorageItem<T>(key: string): T | null {
-  try {
-    const item = localStorage.getItem(key);
-    if (item) {
-      return JSON.parse(item) as T;
+  if (typeof window !== 'undefined' && typeof window.localStorage !== 'undefined') {
+    try {
+      const item = localStorage.getItem(key);
+      if (item) {
+        return JSON.parse(item) as T;
+      }
+    } catch (error) {
+      console.error('Error reading from localStorage:', error);
     }
-  } catch (error) {
-    console.log(error);
-    return null;
   }
   return null;
 }
@@ -77,6 +78,60 @@ export function convertImageToBase64(event: Event): Promise<string | ArrayBuffer
     reader.readAsDataURL(file);
   });
 }
+
+export function createUrlFromObject(object: Record<string, any>, baseUrl: string): string {
+  const params = new URLSearchParams();
+
+  for (const key in object) {
+    const value = object[key];
+    if (value === undefined || value === null) continue;
+
+    if (Array.isArray(value)) {
+      value.forEach((v) => params.append(key, String(v)));
+    } else {
+      params.append(key, String(value));
+    }
+  }
+
+  return `${baseUrl}?${params.toString()}`;
+}
+
+export function getObjectFromUrl(
+  url: string,
+  arrayKeys: string[] = []
+): { baseUrl: string; params: Record<string, any> } {
+  const result: Record<string, any> = {};
+
+  const [baseUrl, queryString] = url.includes('?') ? url.split('?') : [url, ''];
+  const params = new URLSearchParams(queryString);
+
+  const parseValue = (value: string): any => {
+    if (value === 'true') return true;
+    if (value === 'false') return false;
+    if (!isNaN(Number(value)) && value.trim() !== '') return Number(value);
+    return value;
+  };
+
+  params.forEach((value, key) => {
+    const parsed = parseValue(value);
+
+    if (result[key]) {
+      result[key] = Array.isArray(result[key]) ? [...result[key], parsed] : [result[key], parsed];
+    } else {
+      result[key] = arrayKeys.includes(key) ? [parsed] : parsed;
+    }
+  });
+
+  // Ensure all arrayKeys exist, even if empty
+  for (const key of arrayKeys) {
+    if (!(key in result)) {
+      result[key] = [];
+    }
+  }
+
+  return { baseUrl, params: result };
+}
+
 
 /**
  * Converts a single JSON object (key-value map) into an array of { key: string, value: string } objects.
