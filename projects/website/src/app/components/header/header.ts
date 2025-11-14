@@ -42,6 +42,7 @@ export class Header {
   public openCart() {
     this.shoppingCartRef.openCart();
   }
+  
   public openAuthForm() {
     this.authFormRef.openForm();
   }

@@ -54,6 +54,7 @@ export class Login extends Base {
         });
     } else {
       this.loginForm.markAllAsTouched();
+      this.loginForm.updateValueAndValidity()
     }
   }
 

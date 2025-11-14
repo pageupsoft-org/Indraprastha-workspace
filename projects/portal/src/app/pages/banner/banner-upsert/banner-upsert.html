@@ -13,7 +13,7 @@
   <div>
     <label class="block text-sm font-medium text-slate-700 mb-1">Name</label>
     <input formControlName="name" type="text" placeholder="Enter name" minlength="3" maxlength="20"
-      [appErrorHandler]="bannerForm.controls.name"
+    appErrorHandler
       class="w-full border border-slate-200 rounded-lg px-3 py-2 text-sm text-gray-800 focus:outline-none focus:ring-2 focus:ring-indigo-200" />
   </div>
 
@@ -85,7 +85,7 @@
   <div class="md:col-span-3">
     <label class="block text-sm font-medium text-slate-700 mb-1">Description</label>
     <textarea formControlName="description" rows="3" placeholder="Write short description..." minlength="20"
-      maxlength="200" [appErrorHandler]="bannerForm.controls.description"
+      maxlength="200" appErrorHandler
       class="w-full border border-slate-200 rounded-lg px-3 py-2 text-sm resize-none focus:outline-none focus:ring-2 focus:ring-indigo-200"></textarea>
   </div>
 

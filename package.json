@@ -6,6 +6,7 @@
     "start": "ng serve",
     "start-portal": "ng serve portal",
     "build": "ng build",
+    "start-library": "ng build shared --watch",
     "build-portal": "ng build portal --output-path=dist/portal",
     "build-website": "ng build website --output-path=dist/website",
     "watch": "ng build --watch --configuration development",

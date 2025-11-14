@@ -31,7 +31,7 @@
                         </svg>
                     </span>
                     <input type="text" id="username" formControlName="username" placeholder="Enter your username"
-                        [appErrorHandler]="loginForm.controls.username"
+                        appErrorHandler
                         class="w-full pl-10 pr-3 py-2 border border-gray-300 rounded-lg bg-gray-50 text-gray-600 focus:ring-indigo-500 focus:border-indigo-500 dark:bg-gray-700 dark:border-gray-600 dark:text-white" />
                 </div>
             </div>
@@ -51,7 +51,7 @@
                     </span>
 
                     <input [type]="showPassword ? 'text' : 'password'" id="password" formControlName="password"
-                        placeholder="Enter your password" [appErrorHandler]="loginForm.controls.password"
+                        placeholder="Enter your password" appErrorHandler
                         class="w-full pl-10 pr-10 py-2 border border-gray-300 rounded-lg bg-gray-50 text-gray-600 focus:ring-indigo-500 focus:border-indigo-500 dark:bg-gray-700 dark:border-gray-600 dark:text-white" />
 
                     <!--  Password Toggle -->
@@ -92,7 +92,7 @@
 
             <!-- Submit Button -->
             <button type="button" (click)="login()"
-                class="w-full bg-indigo-600 hover:bg-indigo-700 text-white font-medium rounded-lg py-2.5 transition focus:ring-4 focus:ring-indigo-300 dark:focus:ring-indigo-800">
+                class="w-full bg-indigo-600 hover:bg-indigo-700 text-white font-medium rounded-lg py-2.5 transition focus:ring-4 focus:ring-indigo-300 dark:focus:ring-indigo-800 cursor-pointer">
                 Sign in
             </button>
 
