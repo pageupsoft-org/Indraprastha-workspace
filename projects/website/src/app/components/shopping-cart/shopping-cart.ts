@@ -4,6 +4,7 @@ import {
   ElementRef,
   Signal,
   signal,
+  viewChild,
   ViewChild,
   WritableSignal,
 } from '@angular/core';
@@ -19,8 +20,8 @@ import { CurrencyPipe } from '@angular/common';
   styleUrl: './shopping-cart.scss',
 })
 export class ShoppingCart {
-  @ViewChild('shoppingCart') cart!: ElementRef;
-  @ViewChild('cartOverlay') cartOverlay!: ElementRef;
+  cart = viewChild<ElementRef>('shoppingCart');
+  cartOverlay = viewChild<ElementRef>('cartOverlay');
 
   public showLoader: WritableSignal<boolean> = signal(false);
   public cartData: WritableSignal<IRCartRoot[]> = signal([]);
@@ -31,15 +32,15 @@ export class ShoppingCart {
   });
 
   public openCart() {
-    this.cartOverlay.nativeElement.classList.remove('hidden');
-    this.cart.nativeElement.classList.remove('translate-x-full');
+    this.cartOverlay()?.nativeElement.classList.remove('hidden');
+    this.cart()?.nativeElement.classList.remove('translate-x-full');
 
     this.getData();
   }
 
   public hideCart() {
-    this.cart.nativeElement.classList.add('translate-x-full');
-    this.cartOverlay.nativeElement.classList.add('hidden');
+    this.cart()?.nativeElement.classList.add('translate-x-full');
+    this.cartOverlay()?.nativeElement.classList.add('hidden');
     this.cartData.set([]);
   }
 
