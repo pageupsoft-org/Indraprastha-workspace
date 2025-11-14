@@ -12,17 +12,6 @@ import {
 } from '@shared';
 import { IRWishlistRoot, Product } from '../../core/interface/response/wishlist.response';
 import { wishlistArray } from '../../../dummy-data';
-import {
-  ApiRoutes,
-  ConfirmationUtil,
-  EToastType,
-  httpDelete,
-  httpGet,
-  IRGeneric,
-  ToastService,
-} from '@shared';
-import { IRWishlistRoot, Product } from '../../core/interface/response/wishlist.response';
-import { wishlistArray } from '../../../dummy-data';
 
 @Component({
   selector: 'app-wishlist',
