@@ -12,9 +12,10 @@ export * from './lib/enum/variable.enum';
 export * from './lib/enum/localStorage.enum';
 export * from './lib/enum/dashboard.enum';
 export * from './lib/enum/gender-type.enum';
+export * from './lib/enum/discriptionType.enum';
+// export * from './lib/enum/size.enum';
 export * from './lib/enum/stock-size.enum';
 export * from './lib/enum/description-type.enum';
-
 export * from './lib/environments/dev.env';
 
 export * from './lib/interface/model/header.model';

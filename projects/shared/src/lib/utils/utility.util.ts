@@ -132,6 +132,7 @@ export function getObjectFromUrl(
   return { baseUrl, params: result };
 }
 
+
 /**
  * Converts a single JSON object (key-value map) into an array of { key: string, value: string } objects.
  * @param {Record<string, string>} obj The input JSON object.

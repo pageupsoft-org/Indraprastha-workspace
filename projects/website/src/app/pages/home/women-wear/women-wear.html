@@ -77,17 +77,14 @@
           #slider
           class="flex overflow-x-auto snap-x snap-mandatory space-x-4 md:space-x-6 pb-2 scroll-smooth"
         >
-          @for (item of womemsWearList(); track $index) {
-          <div
-            #slide
-            class="flex-shrink-0 w-[45%] sm:w-[35%] md:w-1/3 lg:w-1/3 snap-center relative"
 
             (click)="routeToProductDetail(item.id)"
           >
             <img
-              [src]="item.productURL[0]"
-              alt=""
-              class="w-full sm:h-[250px] lg:h-[420px] rounded-xl shadow-lg transition-colors duration-300 cursor-pointer object-cover"
+            [src]="item.productURL[0]"
+            alt=""
+            class="w-full sm:h-[250px] lg:h-[420px] rounded-xl shadow-lg transition-colors duration-300 cursor-pointer object-cover"
+>>>>>>> master
             />
             <p class="text-center mt-2 text-gray-700 font-semibold text-sm md:text-lg">
               {{ item.name }}

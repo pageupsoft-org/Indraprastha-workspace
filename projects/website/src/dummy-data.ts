@@ -1,5 +1,4 @@
 import { GenderTypeEnum } from '@shared';
-import { IRProductDetailRoot } from './app/core/interface/response/product.response';
 
 export const dummyDataGenderMenu = {
   data: [
@@ -269,79 +268,6 @@ export const dynamicCatalogData = {
       gender: 'Women',
       isWishList: false,
       productURL: ['assets/images/saree-7.png'],
-    },
-  ],
-};
-
-export const dummyProductDetail: IRProductDetailRoot = {
-  id: 101,
-  name: "Men's Casual Cotton Shirt",
-  categoryIds: [1, 4],
-  isCustomSize: false,
-  customSizeName: '',
-  color: ['Blue', 'White', 'Black'],
-  mrp: 1999,
-  gender: 'Men',
-  productURL: [
-    'assets/images/mens-wear-1.png',
-    'assets/images/mens-wear-2.png',
-    'assets/images/mens-wear-3.png',
-    'assets/images/mens-wear-4.png',
-  ],
-  activeImage: 'assets/images/mens-wear-1.png',
-  isActive: true,
-  variants: [
-    {
-      id: 1,
-      productId: 101,
-      name: 'Slim Fit - Blue',
-      description: 'Soft cotton fabric with a modern slim fit design.',
-      mrp: 1999,
-      variantURL: 'assets/images/mens-wear-1.png',
-      stocks: [
-        { id: 1, productId: 101, variantId: 1, quantity: 25, reservedQuantity: 2, size: 'S' },
-        { id: 2, productId: 101, variantId: 1, quantity: 30, reservedQuantity: 3, size: 'M' },
-        { id: 3, productId: 101, variantId: 1, quantity: 20, reservedQuantity: 1, size: 'L' },
-      ],
-    },
-    {
-      id: 2,
-      productId: 101,
-      name: 'Regular Fit - White',
-      description: 'Breathable cotton shirt with classic regular fit.',
-      mrp: 1799,
-      variantURL: 'assets/images/mens-wear-2.png',
-      stocks: [
-        { id: 4, productId: 101, variantId: 2, quantity: 15, reservedQuantity: 1, size: 'S' },
-        { id: 5, productId: 101, variantId: 2, quantity: 25, reservedQuantity: 2, size: 'M' },
-        { id: 6, productId: 101, variantId: 2, quantity: 18, reservedQuantity: 1, size: 'L' },
-      ],
-    },
-  ],
-  stocks: [
-    { id: 11, productId: 101, variantId: 1, quantity: 25, reservedQuantity: 2, size: 'S' },
-    { id: 12, productId: 101, variantId: 1, quantity: 30, reservedQuantity: 3, size: 'M' },
-    { id: 13, productId: 101, variantId: 2, quantity: 15, reservedQuantity: 1, size: 'S' },
-    { id: 14, productId: 101, variantId: 2, quantity: 25, reservedQuantity: 2, size: 'M' },
-  ],
-  descriptions: [
-    {
-      id: 1,
-      productId: 101,
-      header: 'Material & Care',
-      descriptionType: 'Details',
-      description: '100% cotton. Machine wash cold. Do not bleach. Warm iron if needed.',
-      shortDescription: 'Comfortable cotton fabric suitable for daily wear.',
-      jsonText: []
-    },
-    {
-      id: 2,
-      productId: 101,
-      header: 'Fit & Style',
-      descriptionType: 'Style',
-      description: 'Available in slim and regular fits with button-down collars.',
-      shortDescription: 'Perfect for casual or semi-formal outings.',
-      jsonText: []
     },
   ],
 };

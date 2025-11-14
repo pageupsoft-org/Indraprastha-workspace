@@ -37,6 +37,12 @@ export class WomenWear implements AfterViewInit {
   };
 
   public womemsWearList: WritableSignal<Product[]> = signal([]);
+  private payload: IDashboadRequest = {
+    ...initializePagInationPayload(),
+    type: DashboardProductTypeStringEnum.Women,
+  };
+
+  public womemsWearList: WritableSignal<Product[]> = signal([]);
 
   slideWidth = 0;
   slideMargin = 16; // matches your 16px margin

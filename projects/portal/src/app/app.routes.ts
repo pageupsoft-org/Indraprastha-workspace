@@ -36,29 +36,35 @@ export const routes: Routes = [
       },
       {
         path: AppRoutes.EMPLOYEE,
-        loadComponent: () => import('./pages/employee/list/list').then((m) => m.List),
+        loadComponent: () => import('./pages/employee/employee-list/employee-list').then((m) => m.EmployeeList),
       },
       {
         path: AppRoutes.CUSTOMER,
-        loadComponent: () => import('./pages/customer/list/list').then((m) => m.List),
+        loadComponent: () => import('./pages/customer/customer-list/customer-list').then((m) => m.CustomerList),
+      },
+      {
+        path: AppRoutes.COLLECTION,
+        loadComponent: () =>
+          import('./pages/collection/collection-list/collection-list').then((m) => m.CollectionList),
       },
       {
         path: AppRoutes.CATEGORY,
-        loadComponent: () => import('./pages/category/list/list').then((m) => m.List),
+        loadComponent: () => import('./pages/category/category-list/category-list').then((m) => m.CategoryList),
       },
       {
         path: AppRoutes.BANNER,
-        loadComponent: () => import('./pages/banner/list/list').then((m) => m.List),
+        loadComponent: () => import('./pages/banner/banner-list/banner-list').then((m) => m.BannerList),
       },
       {
         path: AppRoutes.PRODUCT,
-        loadComponent: () => import('./pages/banner/list/list').then((m) => m.List),
+        loadComponent: () => import('./pages/product/product-list/product-list').then((m) => m.ProductList),
       },
       {
         path: AppRoutes.PRODUCT_UPSERT,
         loadComponent: () =>
           import('./pages/product/product-upsert/product-upsert').then((m) => m.ProductUpsert),
       },
+
     ],
   },
 ];

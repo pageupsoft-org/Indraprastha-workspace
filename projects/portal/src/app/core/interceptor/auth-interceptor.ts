@@ -21,9 +21,7 @@ export const authInterceptor: HttpInterceptorFn = (req, next) => {
         Authorization: `Bearer ${token}`,
         'Content-Type': 'application/json'
       }
-    });
-    console.log(req);
-    
+    });    
   }
  
 

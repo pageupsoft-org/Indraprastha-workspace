@@ -86,14 +86,11 @@ export class ProductSlider implements AfterViewInit {
     const clampedIndex = Math.max(0, Math.min(this.currentCardIndex(), maxIndex));
     this.currentCardIndex.set(clampedIndex);
 
-    // Card width + gap
-    const firstCard = cards[0];
-    const cardWidth = firstCard?.offsetWidth ?? 0;
-
-    const gap = parseFloat(window.getComputedStyle(track).getPropertyValue('gap'));
-
-    const offset = -(clampedIndex * (cardWidth + gap));
-    track.style.transform = `translateX(${offset}px)`;
+    const firstCard = cards[0] as HTMLElement;
+    const cardWidth = firstCard?.offsetWidth;
+    const cardMargin = parseFloat(window.getComputedStyle(sliderTrack).getPropertyValue('gap'));
+    const offset = -(this.currentCardIndex() * (cardWidth + cardMargin));
+    sliderTrack.style.transform = `translateX(${offset}px)`;
 
     // Button states
     const isAtStart = clampedIndex === 0;
