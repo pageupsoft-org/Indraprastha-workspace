@@ -5,7 +5,7 @@ import { CommonModule } from '@angular/common';
 import { EmployeeList } from '../employee-list/employee-list';
 import { Base } from '../../../core/base/base';
 import { IGenericResponse } from '../../../core/interface/response/genericResponse';
-import { IEmployeeForm, IEmployee, updatePayload } from '../../../core/interface/request/employee.request';
+import { IEmployeeForm, IEmployee,  } from '../../../core/interface/request/employee.request';
 import { ApiRoutes, ErrorHandler, EToastType, ToastService } from '@shared';
 import { patternWithMessage } from '../../../../../../shared/src/public-api';
 
@@ -97,16 +97,16 @@ export class EmployeeUpsert extends Base implements OnInit {
   }
 
   public onSubmitEmployee() {
-    const updatePayload: updatePayload = {
-      id: this.employeeForm.controls.id.value || 0,
-      firstName: this.employeeForm.controls.firstName.value || '',
-      lastName: this.employeeForm.controls.lastName.value || '',
-      email: this.employeeForm.controls.email.value || '',
-      isLogin: this.employeeForm.controls.isLogin.value || false,
-      contact: this.employeeForm.controls.contact.value || '',
-      address: this.employeeForm.controls.address.value || '',
-      userType: this.employeeForm.controls.userType.value || ''
-    }
+    // const updatePayload: updatePayload = {
+    //   id: this.employeeForm.controls.id.value || 0,
+    //   firstName: this.employeeForm.controls.firstName.value || '',
+    //   lastName: this.employeeForm.controls.lastName.value || '',
+    //   email: this.employeeForm.controls.email.value || '',
+    //   isLogin: this.employeeForm.controls.isLogin.value || false,
+    //   contact: this.employeeForm.controls.contact.value || '',
+    //   address: this.employeeForm.controls.address.value || '',
+    //   userType: this.employeeForm.controls.userType.value || ''
+    // }
     if (this.employeeForm.valid) {
       if (this.data.id === 0) {
         this.httpPostPromise<IGenericResponse<number>, IEmployee>(ApiRoutes.LOGIN.REGISTER_EMPLOYEE, this.employeeForm.value as IEmployee).then(response => {
@@ -122,7 +122,7 @@ export class EmployeeUpsert extends Base implements OnInit {
           });
       }
       else {
-        this.httpPostPromise<IGenericResponse<number>, updatePayload>(ApiRoutes.EMPLOYEE.BASE, updatePayload).then(response => {
+        this.httpPostPromise<IGenericResponse<number>, IEmployee>(ApiRoutes.EMPLOYEE.BASE, this.employeeForm.value as IEmployee).then(response => {
           if (response) {
             if (response.data) {
               this.onCancel(true)

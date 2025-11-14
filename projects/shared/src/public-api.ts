@@ -12,6 +12,7 @@ export * from './lib/enum/dashboard.enum';
 export * from './lib/enum/gender-type.enum';
 export * from './lib/enum/discriptionType.enum';
 export * from './lib/enum/size.enum';
+export * from './lib/enum/order-status.enum';
 
 export * from './lib/environments/dev.env';
 

@@ -63,4 +63,8 @@ export const ApiRoutes = {
     GET: '/api/Wish',
     DELETE: (id: number) => `/api/Wish/${id}`,
   },
+  ORDERS:{
+    BASE:'/api/Order',
+    ALL: '/api/Order/All'
+  }
 };
