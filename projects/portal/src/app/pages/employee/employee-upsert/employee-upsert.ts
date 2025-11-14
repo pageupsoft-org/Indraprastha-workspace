@@ -9,7 +9,6 @@ import { IEmployeeForm, IEmployee,  } from '../../../core/interface/request/empl
 import { ApiRoutes, ErrorHandler, EToastType, ToastService } from '@shared';
 import { patternWithMessage } from '../../../../../../shared/src/public-api';
 
-
 @Component({
   selector: 'app-employee-upsert',
   imports: [
