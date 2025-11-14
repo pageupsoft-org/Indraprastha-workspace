@@ -2,6 +2,7 @@ import {
   ApplicationConfig,
   provideBrowserGlobalErrorListeners,
   provideZoneChangeDetection,
+  LOCALE_ID
 } from '@angular/core';
 import { provideRouter } from '@angular/router';
 
@@ -20,5 +21,9 @@ export const appConfig: ApplicationConfig = {
       withInterceptorsFromDi(),
       withInterceptors([authInterceptor])
     ),
+    {
+      provide: LOCALE_ID,
+      useValue: 'en-IN'
+    }
   ],
 };

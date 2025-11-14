@@ -34,8 +34,10 @@
       <!-- Slider Container -->
       <div class="relative w-full">
         <!-- Left Arrow -->
+        @if(womemsWearList().length > 3){
         <button
-          id="prevBtn" (click)="scrollSlider('prev')"
+          id="prevBtn"
+          (click)="scrollSlider('prev')"
           class="cursor-pointer absolute left-0 top-1/2 -translate-y-1/2 z-10 p-2 md:p-[.5rem] bg-white/70 backdrop-blur-sm rounded-full shadow-lg transition-transform duration-300 hover:scale-110 focus:outline-none focus:ring-2 focus:ring-[#cdb29c] focus:ring-offset-2"
         >
           <svg
@@ -51,7 +53,8 @@
         </button>
 
         <!-- Right Arrow -->
-        <button (click)="scrollSlider('next')"
+        <button
+          (click)="scrollSlider('next')"
           id="nextBtn"
           class="cursor-pointer absolute right-0 top-1/2 -translate-y-1/2 z-10 p-2 md:p-[.5rem] bg-white/70 backdrop-blur-sm rounded-full shadow-lg transition-transform duration-300 hover:scale-110 focus:outline-none focus:ring-2 focus:ring-[#cdb29c] focus:ring-offset-2"
         >
@@ -66,6 +69,7 @@
             <path stroke-linecap="round" stroke-linejoin="round" d="M9 5l7 7-7 7" />
           </svg>
         </button>
+        }
 
         <!-- Scrollable Images and Text Container -->
         <div
@@ -73,17 +77,23 @@
           #slider
           class="flex overflow-x-auto snap-x snap-mandatory space-x-4 md:space-x-6 pb-2 scroll-smooth"
         >
+          @for (item of womemsWearList(); track $index) {
+          <div
+            #slide
+            class="flex-shrink-0 w-[45%] sm:w-[35%] md:w-1/3 lg:w-1/3 snap-center relative"
 
-        @for (item of womemsWearList(); track $index) {
-          <div #slide class="flex-shrink-0 w-[45%] sm:w-[35%] md:w-1/3 lg:w-1/3 snap-center relative">
+            (click)="routeToProductDetail(item.id)"
+          >
             <img
-            [src]="item.productURL"
-            alt=""
-            class="w-full sm:h-[250px] lg:h-[420px] rounded-xl shadow-lg transition-colors duration-300 cursor-pointer object-cover"
+              [src]="item.productURL[0]"
+              alt=""
+              class="w-full sm:h-[250px] lg:h-[420px] rounded-xl shadow-lg transition-colors duration-300 cursor-pointer object-cover"
             />
-            <p class="text-center mt-2 text-gray-700 font-semibold text-sm md:text-lg">{{item.name}}</p>
+            <p class="text-center mt-2 text-gray-700 font-semibold text-sm md:text-lg">
+              {{ item.name }}
+            </p>
           </div>
-        }
+          }
         </div>
       </div>
     </div>

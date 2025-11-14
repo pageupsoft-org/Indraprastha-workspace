@@ -96,17 +96,14 @@ export class ProductSlider implements AfterViewInit {
     nextBtn.style.cursor = nextBtn.disabled ? 'default' : 'pointer';
   }
 
-  public openProductDetail() {
+  public openProductDetail(productId: number) {
     // this.matDialog.open(ProductDetails).afterClosed().subscribe()
     this.matDialog.open(ProductDetailDialog, {
       panelClass: 'product-detail-dialog',
       width: '900px',
       maxWidth: '90vw',
       data: {
-        name: 'Silk Saree',
-        price: 2500,
-        color: 'Ruby Red',
-        image: 'assets/images/new-arrival-1.png',
+        productId: productId
       },
     });
   }
