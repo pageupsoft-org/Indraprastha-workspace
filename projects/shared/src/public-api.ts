@@ -3,7 +3,9 @@ export * from './lib/component/toast/toast';
 export * from './lib/component/confirmation-dialog/confirmation-dialog';
 
 export * from './lib/const/apiRoutes.const';
+
 export * from './lib/directive/error-handler';
+export * from './lib/directive/validate-control';
 
 export * from './lib/enum/toast-type.enum';
 export * from './lib/enum/variable.enum';

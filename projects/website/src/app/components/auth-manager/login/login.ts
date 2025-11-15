@@ -3,13 +3,13 @@ import { EAuthManager } from '../../../core/enum/auth-manager.enum';
 import { FormControl, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 import { HttpErrorResponse } from '@angular/common/http';
 import { ButtonLoader } from "../../../core/component/button-loader/button-loader";
-import { ApiRoutes, ErrorHandler, EToastType, httpPost, ILoginForm, ILoginFormData, IRGeneric, IRLogin, localStorageEnum, setLocalStorageItem, ToastService } from '@shared';
+import { ApiRoutes, ErrorHandler, EToastType, httpPost, ILoginForm, ILoginFormData, IRGeneric, IRLogin, localStorageEnum, setLocalStorageItem, ToastService, ValidateControl } from '@shared';
 import { UtilityService } from '../../../core/services/utility-service';
 
 
 @Component({
   selector: 'app-login',
-  imports: [ReactiveFormsModule, ErrorHandler, ButtonLoader],
+  imports: [ReactiveFormsModule, ErrorHandler, ButtonLoader, ValidateControl],
   templateUrl: './login.html',
   styleUrl: './login.scss',
 })
