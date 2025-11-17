@@ -2,14 +2,12 @@ import {
   ApplicationConfig,
   provideBrowserGlobalErrorListeners,
   provideZoneChangeDetection,
-  LOCALE_ID
 } from '@angular/core';
 import { provideRouter } from '@angular/router';
 
 import { routes } from './app.routes';
 import { provideClientHydration, withEventReplay } from '@angular/platform-browser';
 import { provideHttpClient, withInterceptorsFromDi, withInterceptors } from '@angular/common/http';
-import { authInterceptor } from '@shared';
 
 export const appConfig: ApplicationConfig = {
   providers: [
@@ -18,12 +16,7 @@ export const appConfig: ApplicationConfig = {
     provideRouter(routes),
     provideClientHydration(withEventReplay()),
     provideHttpClient(
-      withInterceptorsFromDi(),
-      withInterceptors([authInterceptor])
+      withInterceptorsFromDi()
     ),
-    {
-      provide: LOCALE_ID,
-      useValue: 'en-IN'
-    }
   ],
 };

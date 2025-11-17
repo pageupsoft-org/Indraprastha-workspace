@@ -3,13 +3,13 @@ import { EAuthManager } from '../../../core/enum/auth-manager.enum';
 import { FormControl, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 import { HttpErrorResponse } from '@angular/common/http';
 import { ButtonLoader } from "../../../core/component/button-loader/button-loader";
-import { ApiRoutes, ErrorHandler, EToastType, httpPost, ILoginForm, ILoginFormData, IRGeneric, IRLogin, localStorageEnum, setLocalStorageItem, ToastService, ValidateControl } from '@shared';
+import { ApiRoutes, ErrorHandler, EToastType, httpPost, ILoginForm, ILoginFormData, IRGeneric, IRLogin, localStorageEnum, setLocalStorageItem, ToastService } from '@shared';
 import { UtilityService } from '../../../core/services/utility-service';
 
 
 @Component({
   selector: 'app-login',
-  imports: [ReactiveFormsModule, ErrorHandler, ButtonLoader, ValidateControl],
+  imports: [ReactiveFormsModule, ErrorHandler, ButtonLoader],
   templateUrl: './login.html',
   styleUrl: './login.scss',
 })
@@ -51,6 +51,7 @@ export class Login {
                 duration: 2000,
               });
               this.closeForm.emit();
+              this.loginForm.reset()
             }
             else{
                this._toastService.show({
@@ -71,4 +72,6 @@ export class Login {
       this.loginForm.markAllAsTouched();
     }
   }
+
+  
 }

@@ -15,7 +15,6 @@ import {
   ApiRoutes,
   EDescriptionType,
   ErrorHandler,
-  ValidateControl,
   EToastType,
   IRGeneric,
   IRProductDetailRoot,
@@ -34,7 +33,7 @@ import { ActivatedRoute, Params, Router } from '@angular/router';
 
 @Component({
   selector: 'app-product-upsert',
-  imports: [ReactiveFormsModule, CommonModule, FormsModule, NgMultiSelectDropDownModule, ErrorHandler, ValidateControl],
+  imports: [ReactiveFormsModule, CommonModule, FormsModule, NgMultiSelectDropDownModule, ErrorHandler],
   templateUrl: './product-upsert.html',
   styleUrl: './product-upsert.scss',
 })
@@ -80,7 +79,7 @@ export class ProductUpsert extends Base implements OnInit {
 
     this.activatedRoute.queryParams.subscribe((param: Params) => {
       if (param && param['id']) {
-        this.getProductById(+param['id']);
+        this.getProductById(+param['id']); 
       }
     });
   }
@@ -165,11 +164,8 @@ export class ProductUpsert extends Base implements OnInit {
   }
 
   public upsertProduct() {
-    // this.productForm.markAllAsTouched();
-
-    // console.log(this.productForm.value)
-    if (!this.productForm.valid) return;
-
+    console.log(this.productForm.value)
+    // if (this.productForm.valid) {
     const data = this.productForm.getRawValue();
     data.descriptions.forEach((desc: any) => {
       if (desc.descriptionType === EDescriptionType.Json) {

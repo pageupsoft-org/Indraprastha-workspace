@@ -20,7 +20,7 @@ import { wishlistArray } from '../../../dummy-data';
   styleUrl: './wishlist.scss',
 })
 export class Wishlist {
-  public readonly productDetailRoute: string = appRoutes.PRODUCT_DETAIL;
+  public readonly productDetailRoute: string = appRoutes.PRODUCTDETAIL;
   private readonly objectCOnfirmationUtil: ConfirmationUtil = new ConfirmationUtil();
   public wishlistArray: WritableSignal<Product[]> = signal(wishlistArray.data);
 

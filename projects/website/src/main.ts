@@ -3,11 +3,7 @@ import { appConfig } from './app/app.config';
 import { App } from './app/app';
 import { initializeApp } from 'firebase/app';
 import { environment } from './app/core/environments/dev.env';
-import { registerLocaleData } from '@angular/common';
-import localeIn from '@angular/common/locales/en-IN';
-
 initializeApp(environment.firebase);
-registerLocaleData(localeIn);
 
 bootstrapApplication(App, appConfig)
   .catch((err) => console.error(err));

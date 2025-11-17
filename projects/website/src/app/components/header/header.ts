@@ -5,13 +5,15 @@ import {
   WritableSignal,
 } from '@angular/core';
 import { GenderMenu } from './gender-menu/gender-menu';
-import { RouterLink } from '@angular/router';
+import { Router, RouterLink } from '@angular/router';
 import { appRoutes } from '../../core/const/appRoutes.const';
 import { CommonModule } from '@angular/common';
 import { ShoppingCart } from '../shopping-cart/shopping-cart';
 import { AuthManager } from "../auth-manager/auth-manager";
 import { UtilityService } from '../../core/services/utility-service';
-import { GenderTypeEnum } from '@shared';
+import { clearLocalStorageItems, EToastType, GenderTypeEnum } from '@shared';
+import { ToastService } from '@shared';
+
 
 @Component({
   selector: 'app-header',
@@ -31,10 +33,10 @@ export class Header {
   public isDropdownVisible: WritableSignal<boolean> = signal(false);
 
   public isCartOpen: WritableSignal<boolean> = signal(false);
-  dropdownOpen = false;
+  public dropdownOpen: boolean = false;
 
   constructor(
-    public _utitlityService: UtilityService
+    public _utitlityService: UtilityService, private router: Router, private _toastService: ToastService
   ) {
     // _utitlityService.isUserLoggedIn.set(true); 
   }
@@ -42,6 +44,7 @@ export class Header {
   public openCart() {
     this.shoppingCartRef.openCart();
   }
+
   public openAuthForm() {
     this.authFormRef.openForm();
   }
@@ -61,12 +64,18 @@ export class Header {
   }
 
   toggleDropdown() {
-  this.dropdownOpen = !this.dropdownOpen;
-}
+    this.dropdownOpen = !this.dropdownOpen;
+  }
 
-logout() {
-  this.dropdownOpen = false;
-  // Your logout logic here
-  console.log('Logged out');
-}
+  logout() {
+    this.dropdownOpen = false;
+    // Your logout logic here
+    clearLocalStorageItems();
+    this._utitlityService.isUserLoggedIn.set(false);
+    this._toastService.show({
+      message: 'Logout success',
+      type: EToastType.success,
+      duration: 2000,
+    });
+  }
 }

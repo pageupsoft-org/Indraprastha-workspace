@@ -1,265 +1,137 @@
-@if(isShowloader()){
-  <app-loader></app-loader>
-}
-@else {
-  <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12 lg:py-20">
-    <div class="flex flex-col lg:flex-row lg:space-x-16">
-      <!-- Product Image Gallery and Main Image -->
-      <div class="flex flex-col lg:flex-row lg:space-x-4 w-full lg:w-3/5">
-        <!-- Left Image Gallery (Thumbnails) -->
-        <div class="flex flex-row lg:flex-col space-x-3 lg:space-x-0 lg:space-y-4 mb-8 lg:mb-0">
-          @for(productImage of productDetail().productURL; track $index){
+<div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12 lg:py-20">
+  <div class="flex flex-col lg:flex-row lg:space-x-16">
+    <!-- Product Image Gallery and Main Image -->
+    <div class="flex flex-col lg:flex-row lg:space-x-4 w-full lg:w-3/5">
+      <!-- Left Image Gallery (Thumbnails) -->
+      <div class="flex flex-row lg:flex-col space-x-3 lg:space-x-0 lg:space-y-4 mb-8 lg:mb-0">
+        @for(productImage of productDetail().image; track $index){
           <img
             [src]="productImage"
             (click)="enlargeImage(productImage)"
             class="thumbnail-img w-20 sm:w-24 h-28 sm:h-32 object-cover rounded-lg transition-all cursor-pointer selected-thumb"
           />
-          }
+        }
+      </div>
+
+      <!-- Main Product Image and Magnified View Container -->
+      <div class="relative w-full rounded-lg shadow-xl magnify-container image-container">
+        <img
+          id="main-product-image"
+          [src]="productDetail().activeImage"
+          alt="Main Product"
+          class="w-full h-auto object-cover rounded-lg"
+        />
+        <div id="magnified-view" class="absolute inset-0"></div>
+      </div>
+    </div>
+
+    <!-- Product Details Section -->
+    <div class="flex flex-col space-y-4">
+      <h2
+        id="modal-product-name"
+        class="text-3xl md:text-4xl font-bold text-gray-900 leading-tight"
+      >
+        Ivory Lace Anarkali
+      </h2>
+      <p class="text-xl text-gray-700">
+        Rs. <span id="modal-product-price" class="font-semibold">18,000</span>
+      </p>
+      <p class="text-sm text-gray-500">(MRP inclusive of all Taxes)</p>
+
+      <!-- Options -->
+      <div class="space-y-4 mt-6">
+        <div>
+          <p class="font-semibold text-gray-800 mb-2">SIZE</p>
+          <div class="flex flex-wrap gap-2">
+            <button
+              class="px-4 py-2 border border-gray-300 rounded-[5px] text-sm text-gray-700 hover:bg-gray-200 transition-colors duration-200 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-gray-500"
+            >
+              S
+            </button>
+            <button
+              class="px-4 py-2 border border-gray-300 rounded-[5px] text-sm text-gray-700 hover:bg-gray-200 transition-colors duration-200 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-gray-500"
+            >
+              M
+            </button>
+            <button
+              class="px-4 py-2 border border-gray-300 rounded-[5px] text-sm text-gray-700 hover:bg-gray-200 transition-colors duration-200 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-gray-500"
+            >
+              L
+            </button>
+            <button
+              class="px-4 py-2 border border-gray-300 rounded-[5px] text-sm text-gray-700 hover:bg-gray-200 transition-colors duration-200 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-gray-500"
+            >
+              XL
+            </button>
+            <button
+              class="px-4 py-2 border border-gray-300 rounded-[5px] text-sm text-gray-700 hover:bg-gray-200 transition-colors duration-200 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-gray-500"
+            >
+              XXL
+            </button>
+          </div>
         </div>
-  
-        <!-- Main Product Image and Magnified View Container -->
-        <div class="relative w-full rounded-lg shadow-xl magnify-container image-container">
-          <img
-            id="main-product-image"
-            [src]="productDetail().activeImage"
-            alt="Main Product"
-            class="w-full h-auto object-cover rounded-lg"
-          />
-          <div id="magnified-view" class="absolute inset-0"></div>
+
+        <div>
+          <p class="font-semibold text-gray-800 mb-2">COLOR</p>
+          <div class="flex flex-wrap gap-2">
+            <button
+              class="px-4 py-2 border border-gray-300 rounded-[5px] text-sm text-gray-700 hover:bg-gray-200 transition-colors duration-200 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-gray-500"
+            >
+              Ruby Red
+            </button>
+          </div>
+        </div>
+
+        <div>
+          <p class="font-semibold text-gray-800 mb-2">Blouse Piece</p>
+          <div class="flex flex-wrap gap-2">
+            <button
+              class="px-4 py-2 border border-gray-300 rounded-[5px] text-sm text-white bg-[#680C01] hover:bg-gray-200 transition-colors duration-200 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-gray-500"
+            >
+              Blouse Piece
+            </button>
+            <button
+              class="px-4 py-2 border border-gray-300 rounded-[5px] text-sm text-gray-700 hover:bg-gray-200 transition-colors duration-200 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-500"
+            >
+              Styled/Stitched Blouse
+            </button>
+          </div>
+        </div>
+
+        <div>
+          <p class="font-semibold text-gray-800 mb-2">Custom Tailor</p>
+          <div class="relative">
+            <select
+              class="block w-auto px-4 py-2 pr-8 border border-gray-300 rounded-[5px] text-sm text-gray-700 bg-white appearance-none focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-gray-500"
+            >
+              <option>Tailor Name</option>
+            </select>
+          </div>
         </div>
       </div>
-  
-      <!-- Product Details Section -->
-      <div class="flex flex-col space-y-4">
-        <h2
-          id="modal-product-name"
-          class="text-3xl md:text-4xl font-bold text-gray-900 leading-tight"
+
+      <!-- Buttons -->
+      <div class="mt-8 flex flex-col space-y-4">
+        <button
+          class="px-6 py-3 font-semibold text-black border border-gray-300 bg-white rounded-[5px] hover:bg-gray-300 transition-colors duration-200 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-gray-700"
         >
-          {{ productDetail().name }}
-        </h2>
-        <p class="text-xl text-gray-700">
-            {{ productDetail().mrp | currency:'INR':'symbol':'1.0-0':'en-IN' }}
-        </p>
-        <p class="text-sm text-gray-500">(MRP inclusive of all Taxes)</p>
-  
-        <!-- Options -->
-        <div class="space-y-4 mt-6">
-          <div>
-            <p class="font-semibold text-gray-800 mb-2">SIZE</p>
-            <div class="flex flex-wrap gap-2">
-              @for (stockSize of stockSizeArrayWithIds; let i = $index ; track stockSize.value) { @let
-              radioId = 'radio' + i;
-              <input
-                type="radio"
-                name="stockSizeSelection"
-                [id]="radioId"
-                [value]="stockSize.stockId"
-                class="hidden peer"
-                [formControl]="cartForm.controls.stockId"
-              />
-              <label
-                [for]="radioId"
-                class="cursor-pointer px-4 py-2 border rounded"
-                [ngClass]="{
-                  ' peer-checked:bg-[#680C01] peer-checked:text-white':
-                    stockSize.stockId == cartForm.value.stockId
-                }"
-                [ngClass]="{ 'cursor-not-allowed! bg-gray-200 line-through': !stockSize.quantity }"
-              >
-                {{ stockSize.value }}
-              </label>
-              }
-            </div>
-          </div>
-  
-          <div>
-            <p class="font-semibold text-gray-800 mb-2">COLOR</p>
-            <div class="flex flex-wrap gap-2">
-              @for (item of productDetail().color; track $index) {
-              <button
-                class="p-3 w-10 h-10 border cursor-pointer border-gray-300 rounded-full text-sm text-gray-700 hover:bg-gray-200 transition-colors duration-200 flex items-center justify-center focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-gray-500"
-                [style.backgroundColor]="item"
-              ></button>
-              }
-            </div>
-          </div>
-  
-          <!-- variant -->
-          @if(productDetail().variants.length){
-          <div>
-            <p class="font-semibold text-gray-800 mb-2">Variants</p>
-            <div class="flex flex-wrap gap-2">
-              <div class="flex flex-wrap gap-2">
-                @for (variant of productDetail().variants; track $index) {
-                <input
-                  type="radio"
-                  id="variant-{{ variant.id }}"
-                  name="variantSelection"
-                  [value]="variant.stocks.id"
-                  [formControl]="cartForm.controls.variantStockId"
-                  class="hidden peer"
-                />
-  
-                <label
-                  for="variant-{{ variant.id }}"
-                  class="cursor-pointer px-4 py-2 border border-gray-300 rounded-[5px] text-sm text-gray-700 focus:outline-none"
-                  [ngClass]="{
-                    'peer-checked:bg-[#680C01] peer-checked:text-white peer-checked:border-[#680C01]':
-                      cartForm.value.variantStockId == variant.stocks.id
-                  }"
-                >
-                  {{ variant.name }}
-                </label>
-                }
-              </div>
-            </div>
-          </div>
-          }
-  
-          <!-- <div>
-            <p class="font-semibold text-gray-800 mb-2">Blouse Piece</p>
-            <div class="flex flex-wrap gap-2">
-              <button
-                class="px-4 py-2 border border-gray-300 rounded-[5px] text-sm text-white bg-[#680C01] hover:bg-gray-200 transition-colors duration-200 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-gray-500"
-              >
-                Blouse Piece
-              </button>
-              <button
-                class="px-4 py-2 border border-gray-300 rounded-[5px] text-sm text-gray-700 hover:bg-gray-200 transition-colors duration-200 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-500"
-              >
-                Styled/Stitched Blouse
-              </button>
-            </div>
-          </div> -->
-  
-          <!-- <div>
-            <p class="font-semibold text-gray-800 mb-2">Custom Tailor</p>
-            <div class="relative">
-              <select
-                class="block w-auto px-4 py-2 pr-8 border border-gray-300 rounded-[5px] text-sm text-gray-700 bg-white appearance-none focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-gray-500"
-              >
-                <option>Tailor Name</option>
-              </select>
-            </div>
-          </div> -->
-  
-          <!-- Input Number -->
-  
-          <p class="font-semibold text-gray-800 mb-2">Quantity</p>
-          <div class="py-2 px-3 inline-block bg-white border border-gray-200 rounded-lg">
-            <div class="flex items-center gap-x-1.5">
-              <button
-                type="button"
-                (click)="alterQuantityCnt(CartAlterEnum.decrease)"
-                class="size-6 inline-flex justify-center items-center gap-x-2 text-sm font-medium rounded-md border border-gray-200 bg-white text-gray-800 shadow-2xs hover:bg-gray-50 focus:outline-hidden focus:bg-gray-50 disabled:opacity-50 disabled:pointer-events-none cursor-pointer"
-                [disabled]="(cartForm.controls.quantity.value ?? 0) <= 1"
-              >
-                <svg
-                  class="shrink-0 size-3.5"
-                  xmlns="http://www.w3.org/2000/svg"
-                  width="24"
-                  height="24"
-                  viewBox="0 0 24 24"
-                  fill="none"
-                  stroke="currentColor"
-                  stroke-width="2"
-                  stroke-linecap="round"
-                  stroke-linejoin="round"
-                >
-                  <path d="M5 12h14"></path>
-                </svg>
-              </button>
-              <input
-                readonly
-                class="p-0 w-6 bg-transparent border-0 text-gray-800 text-center focus:ring-0 [&::-webkit-inner-spin-button]:appearance-none [&::-webkit-outer-spin-button]:appearance-none"
-                style="-moz-appearance: textfield"
-                type="number"
-                [formControl]="cartForm.controls.quantity"
-              />
-              <button
-                type="button"
-                (click)="alterQuantityCnt(CartAlterEnum.increase)"
-                class="size-6 inline-flex justify-center items-center gap-x-2 text-sm font-medium rounded-md border border-gray-200 bg-white text-gray-800 shadow-2xs hover:bg-gray-50 focus:outline-hidden focus:bg-gray-50 disabled:opacity-50 disabled:pointer-events-none cursor-pointer"
-              >
-                <svg
-                  class="shrink-0 size-3.5"
-                  xmlns="http://www.w3.org/2000/svg"
-                  width="24"
-                  height="24"
-                  viewBox="0 0 24 24"
-                  fill="none"
-                  stroke="currentColor"
-                  stroke-width="2"
-                  stroke-linecap="round"
-                  stroke-linejoin="round"
-                >
-                  <path d="M5 12h14"></path>
-                  <path d="M12 5v14"></path>
-                </svg>
-              </button>
-            </div>
-          </div>
-          <!-- End Input Number -->
-        </div>
-  
-        <!-- Buttons -->
-        <div class="mt-8 flex flex-col space-y-4">
-          <lib-app-loading-button
-            [isLoading]="isBtnLoader()"
-            label="ADD TO CART"
-            type="submit"
-            (clicked)="addToCart()"
-            [btnClass]="'w-full cursor-pointer px-6 py-3 font-semibold text-black border border-gray-300 bg-white rounded-[5px] hover:bg-gray-300 transition-colors duration-200 focus:outline-none'"
-            [conditionalClass]="'cursor-not-allowed!'"
-            [addConditionClass]="!cartForm.value.stockId"
-            [isButtonDisabled]="!cartForm.value.stockId"
-          ></lib-app-loading-button>
-          
-          <button
-            [disabled]="!cartForm.value.stockId"
-            class="cursor-pointer px-6 py-3 font-semibold text-white bg-[#680C01] rounded-[5px] focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-red-500"
-            [ngClass]="{ 'cursor-not-allowed!': !cartForm.value.stockId }"
-          >
-            BUY IT NOW
-          </button>
-        </div>
-  
-        @for (description of productDetail().descriptions; track $index) {
-        <div class="mt-8 flex flex-col space-y-4 p-6 bg-white shadow-lg rounded-lg">
-          <div class="flex justify-between items-center border-b pb-4 mb-6">
-            <h2 class="text-xl font-bold text-gray-800 uppercase tracking-wide">
-              {{ description.header }}
-            </h2>
-          </div>
-  
-          @if(description.descriptionType == DescriptionTypeStringEnum.Json){ @for (jsonText of
-          description.jsonText; track $index) {
-          <div class="space-y-3 text-gray-700">
-            <div class="flex">
-              <div class="w-1/3 font-medium">{{ jsonText.key }}:</div>
-              <div class="w-2/3">{{ jsonText.value }}</div>
-            </div>
-          </div>
-          }
-          <div class="mt-6 pt-4 border-t text-gray-700">{{ description.shortDescription }}</div>
-          } @else {
-          <div class="space-y-3 text-gray-700">
-            <div class="flex">
-              <div class="w-2/3">{{ description.description }}</div>
-            </div>
-          </div>
-          <div class="mt-6 pt-4 border-t text-gray-700">{{ description.shortDescription }}</div>
-          }
-        </div>
-        }
+          ADD TO CART
+        </button>
+        <button
+          class="px-6 py-3 font-semibold text-white bg-[#680C01] rounded-[5px] hover:bg-red-800 transition-colors duration-200 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-red-500"
+        >
+          BUY IT NOW
+        </button>
+        <a
+          href="#"
+          class="text-sm font-medium text-gray-600 hover:text-gray-800 transition-colors duration-200 text-left"
+          >View Details</a
+        >
       </div>
     </div>
   </div>
-}
+</div>
 
 <div class="max-w-7xl mx-auto">
-  <app-product-slider
-    [title]="'RELATED PRODUCTS'"
-    [productType]="DashboardProductTypeStringEnum.Featured"
-  ></app-product-slider>
+  <app-product-slider [title]="'RELATED PRODUCTS'" [productType]="DashboardProductTypeStringEnum.Featured"></app-product-slider>
 </div>

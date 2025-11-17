@@ -18,8 +18,7 @@ import {
 } from '@shared';
 import { IDashboadRequest } from '../product-slider/dashboard.request';
 import { DashboardResponseRoot, Product } from '../product-slider/dashboard.response';
-import { Router } from '@angular/router';
-import { appRoutes } from '../../../core/const/appRoutes.const';
+import { sign } from 'crypto';
 
 @Component({
   selector: 'app-women-wear',
@@ -41,7 +40,7 @@ export class WomenWear implements AfterViewInit {
   slideWidth = 0;
   slideMargin = 16; // matches your 16px margin
 
-  constructor(private platformService: PlatformService, private router: Router) {
+  constructor(private platformService: PlatformService) {
     this.getDashboardProduct();
   }
 
@@ -74,14 +73,6 @@ export class WomenWear implements AfterViewInit {
       }
       // Else do nothing to prevent jump to end
     }
-  }
-
-  public routeToProductDetail(productId: number){
-    this.router.navigate([appRoutes.PRODUCT_DETAIL], {
-      queryParams: {
-        id: productId
-      }
-    })
   }
 
   private getDashboardProduct() {
