@@ -1,31 +1,69 @@
-import { Component, signal, WritableSignal } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { ProductSlider } from '../home/product-slider/product-slider';
-import { IRProductDetail } from '../../core/interface/response/product-detail.response';
-import { DashboardProductTypeStringEnum } from '@shared';
+import {
+  DashboardProductTypeStringEnum,
+  DescriptionTypeStringEnum,
+  AppLoadingButton,
+  Loader,
+} from '@shared';
+import { ActivatedRoute, Params } from '@angular/router';
+import {
+  FormsModule,
+  ReactiveFormsModule,
+} from '@angular/forms';
+import { CommonModule } from '@angular/common';
+import { CartUpdateOperation } from '../../core/enum/cart.enum';
+import { ProductDetailBase } from '../../core/class/product-detail-base';
 
 @Component({
   selector: 'app-product-detail',
-  imports: [ProductSlider],
+  imports: [
+    ProductSlider,
+    CommonModule,
+    ReactiveFormsModule,
+    FormsModule,
+    AppLoadingButton,
+    Loader,
+  ],
   templateUrl: './product-detail.html',
   styleUrl: './product-detail.scss',
 })
-export class ProductDetail {
-  public productDetail: WritableSignal<IRProductDetail> = signal({
-    image: [
-      'assets/images/mens-wear-1.png',
-      'assets/images/mens-wear-2.png',
-      'assets/images/mens-wear-3.png',
-      'assets/images/mens-wear-4.png',
-    ],
-    activeImage: "assets/images/mens-wear-1.png"
-  });
+export class ProductDetail extends ProductDetailBase implements OnInit {
+  public readonly DescriptionTypeStringEnum = DescriptionTypeStringEnum;
+  public readonly CartAlterEnum = CartUpdateOperation;
 
-  public DashboardProductTypeStringEnum = DashboardProductTypeStringEnum
+  public DashboardProductTypeStringEnum = DashboardProductTypeStringEnum;
 
-  constructor() {
+  constructor(
+    private activatedRoute: ActivatedRoute,
+  ) {
+    super();
   }
 
-  public enlargeImage(img: string){
-    this.productDetail().activeImage = img
+  ngOnInit(): void {
+    this.activatedRoute.queryParams.subscribe((param: Params) => {
+      if (param && param['id']) {
+        this.getProductDetail(+param['id']);
+      }
+    });
+  }
+  trackByStockId(index: number, item: any) {
+    return item.stockId;
+  }
+
+  public alterQuantityCnt(operation: CartUpdateOperation) {
+    const quantity = this.cartForm.controls.quantity.value ?? 0;
+
+    if (operation === CartUpdateOperation.increase) {
+      this.cartForm.controls.quantity.setValue(quantity + 1);
+    } else {
+      if (quantity > 1) {
+        this.cartForm.controls.quantity.setValue(quantity - 1);
+      }
+    }
+  }
+
+  public enlargeImage(img: string) {
+    this.productDetail().activeImage = img;
   }
 }

@@ -1,5 +1,5 @@
 import { Component, Input } from '@angular/core';
-import { MatDialogRef, MatDialogContent, MatDialogActions } from '@angular/material/dialog';
+import { MatDialogRef } from '@angular/material/dialog';
 import { getDefaultConfirmationModalData, MConfirmationModalData } from '../../interface/model/confirmation.model';
 
 @Component({
@@ -7,7 +7,7 @@ import { getDefaultConfirmationModalData, MConfirmationModalData } from '../../i
   templateUrl: './confirmation-dialog.html',
   styleUrl: './confirmation-dialog.scss',
   standalone: true,
-  imports: [MatDialogContent, MatDialogActions],
+  imports: [],
 })
 export class ConfirmationDialog {
   

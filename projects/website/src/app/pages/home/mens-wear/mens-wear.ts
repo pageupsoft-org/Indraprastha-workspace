@@ -34,10 +34,12 @@ export class MensWear implements AfterViewInit {
 
   private payload: IDashboadRequest = {
     ...initializePagInationPayload(),
-    type: DashboardProductTypeStringEnum.Women,
+    type: DashboardProductTypeStringEnum.Men,
   };
 
-  constructor(private platformService: PlatformService) {}
+  constructor(private platformService: PlatformService) {
+    this.getDashboardProduct();
+  }
 
   ngAfterViewInit(): void {
     if (this.platformService.isBrowser) {

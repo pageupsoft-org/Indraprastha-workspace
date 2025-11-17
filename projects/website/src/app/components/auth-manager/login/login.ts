@@ -51,6 +51,7 @@ export class Login {
                 duration: 2000,
               });
               this.closeForm.emit();
+              this.loginForm.reset()
             }
             else{
                this._toastService.show({
@@ -71,4 +72,6 @@ export class Login {
       this.loginForm.markAllAsTouched();
     }
   }
+
+  
 }
