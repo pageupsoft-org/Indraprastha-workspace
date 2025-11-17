@@ -1,7 +1,7 @@
 <!-- <div class="w-[calc(100%)] sm:w-[calc(100%/3-12px)] lg:w-[calc(100%/4-24px)] flex-shrink-0"> -->
 <div class="bg-white relative new-arrivals-card rounded-xl shadow-md overflow-hidden group">
   <img
-    src="assets/images/new-arrival-1.png"
+    [src]="product.imageUrl[0]"
     alt="Model 2"
     class="w-full h-full object-cover transition-transform duration-300 group-hover:scale-105"
   />
@@ -43,8 +43,8 @@
   </div>
 
   <!-- Gradient overlay -->
-  <div
-    class="absolute inset-0 bg-gradient-to-t from-gray-900 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300"
+  <div (click)="navigateToProductDetail()"
+    class="absolute inset-0 bg-gradient-to-t from-gray-900 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300 cursor-pointer"
   ></div>
 
   <!-- Hidden Add Button (visible on hover) -->
@@ -69,7 +69,7 @@
 </div>
 
 <div class="mt-4">
-  <p>{{ product.name }}</p>
+  <p class="cursor-pointer" (click)="navigateToProductDetail()">{{ product.name }}</p>
   <p class="sm:text-lg lg:text-2xl text-[#8f8f8f]">Rs. {{ product.price }}</p>
 </div>
 <!-- </div> -->

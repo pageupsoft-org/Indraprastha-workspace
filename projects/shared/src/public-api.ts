@@ -1,9 +1,13 @@
 
 export * from './lib/component/toast/toast';
 export * from './lib/component/confirmation-dialog/confirmation-dialog';
+export * from './lib/component/loader/loader';
+export * from './lib/component/app-loading-button/app-loading-button';
 
 export * from './lib/const/apiRoutes.const';
+
 export * from './lib/directive/error-handler';
+export * from './lib/directive/validate-control';
 
 export * from './lib/enum/toast-type.enum';
 export * from './lib/enum/variable.enum';
@@ -11,9 +15,9 @@ export * from './lib/enum/localStorage.enum';
 export * from './lib/enum/dashboard.enum';
 export * from './lib/enum/gender-type.enum';
 export * from './lib/enum/discriptionType.enum';
-export * from './lib/enum/size.enum';
-export * from './lib/enum/order-status.enum';
-
+// export * from './lib/enum/size.enum';
+export * from './lib/enum/stock-size.enum';
+export * from './lib/enum/description-type.enum';
 export * from './lib/environments/dev.env';
 
 export * from './lib/interface/model/header.model';
@@ -40,3 +44,5 @@ export * from './lib/utils/api.helper';
 export * from './lib/utils/pattern-message.util';
 export * from './lib/utils/utility.util';
 export * from './lib/utils/confimation.util';
+
+export * from './lib/interceptors/auth-interceptor';

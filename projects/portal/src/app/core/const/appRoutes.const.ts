@@ -15,7 +15,6 @@ export const AppRoutes = {
   BANNER: 'banner',
   PRODUCT: 'product',
   PRODUCT_UPSERT: 'product-upsert',
-  ORDERS: 'order-list'
 };
 
 // export const appRoutes = {
