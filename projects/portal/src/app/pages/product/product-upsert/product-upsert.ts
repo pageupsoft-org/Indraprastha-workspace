@@ -22,13 +22,13 @@ import {
   ApiRoutes,
   EDescriptionType,
   ErrorHandler,
-  ValidateControl,
   EToastType,
   IRGeneric,
   IRProductDetailRoot,
   jsonToArray,
   MStringEnumToArray,
   stringEnumToArray,
+  ValidateControl,
 } from '@shared';
 import { IGenericComboResponse } from '../../../core/interface/response/banner.response';
 import { EGender } from '../../../core/enum/gender.enum';
@@ -93,7 +93,7 @@ export class ProductUpsert extends Base implements OnInit {
 
     this.activatedRoute.queryParams.subscribe((param: Params) => {
       if (param && param['id']) {
-        this.getProductById(+param['id']);
+        this.getProductById(+param['id']); 
       }
     });
   }
@@ -198,11 +198,8 @@ export class ProductUpsert extends Base implements OnInit {
   }
 
   public upsertProduct() {
-    // this.productForm.markAllAsTouched();
-
-    // console.log(this.productForm.value)
-    if (!this.productForm.valid) return;
-
+    console.log(this.productForm.value)
+    // if (this.productForm.valid) {
     const data = this.productForm.getRawValue();
     data.descriptions.forEach((desc: any) => {
       if (desc.descriptionType === EDescriptionType.Json) {

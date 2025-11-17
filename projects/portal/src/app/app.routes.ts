@@ -15,21 +15,6 @@ export const routes: Routes = [
     path: '',
     component: MainLayout,
     children: [
-      // {
-      //   path: AppRoutes.DASHBOARD,
-      //   loadComponent: () =>
-      //     import('./pages/dashboard/dashboard').then((m) => m.Dashboard),
-      // },
-      //  {
-      //   path: AppRoutes.EMPLOYEE_LIST,
-      //   loadComponent: () =>
-      //     import('./pages/employee/employee-list/employee-list').then((m) => m.EmployeeList),
-      // },
-      //  {
-      //   path: AppRoutes.CUSTOMER_LIST,
-      //   loadComponent: () =>
-      //     import('./pages/customers-list/customers-list').then((m) => m.CustomersList),
-      // },
       {
         path: AppRoutes.DASHBOARD,
         loadComponent: () => import('./pages/dashboard/dashboard').then((m) => m.Dashboard),
@@ -63,6 +48,11 @@ export const routes: Routes = [
         path: AppRoutes.PRODUCT_UPSERT,
         loadComponent: () =>
           import('./pages/product/product-upsert/product-upsert').then((m) => m.ProductUpsert),
+      }, 
+      {
+        path: AppRoutes.ORDERS,
+        loadComponent: () =>
+          import('./pages/orders/order-list/order-list').then((m) => m.OrderList),
       },
 
     ],

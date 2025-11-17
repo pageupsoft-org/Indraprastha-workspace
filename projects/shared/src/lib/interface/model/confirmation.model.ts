@@ -13,9 +13,9 @@ export const getDefaultConfirmationModalData = (
   noText?: string
 ): MConfirmationModalData => {
   return {
-    heading: heading ?? 'Confirm',
-    body: body ?? 'Are you sure you want to delete this ?',
-    yesText: yesText ?? 'Yes',
-    noText: noText ?? 'No',
+    heading: 'Confirm',
+    body: 'Are you sure you want to delete this ?',
+    yesText: 'Yes',
+    noText: 'No',
   };
 }
