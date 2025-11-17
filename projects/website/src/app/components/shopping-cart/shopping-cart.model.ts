@@ -11,6 +11,8 @@ export interface IRCartRoot {
   cartId: number;
   productId: number;
   cartVariant: CartVariant;
+
+  _isDisable: boolean;
 }
 
 export interface CartVariant {

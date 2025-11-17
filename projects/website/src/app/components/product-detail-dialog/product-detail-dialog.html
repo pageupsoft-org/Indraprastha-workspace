@@ -163,7 +163,7 @@
                   id="variant-{{ variant.id }}"
                   name="variantSelection"
                   [value]="variant.id"
-                  [formControl]="cartForm.controls.variantId"
+                  [formControl]="cartForm.controls.variantStockId"
                   class="hidden peer"
                 />
 
@@ -172,7 +172,7 @@
                   class="cursor-pointer px-4 py-2 border border-gray-300 rounded-[5px] text-sm text-gray-700 focus:outline-none"
                   [ngClass]="{
                     'peer-checked:bg-[#680C01] peer-checked:text-white peer-checked:border-[#680C01]':
-                      cartForm.value.variantId == variant.id
+                      cartForm.value.variantStockId == variant.id
                   }"
                 >
                   {{ variant.name }}

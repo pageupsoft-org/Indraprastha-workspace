@@ -9,6 +9,11 @@ export interface IStockWithIds extends MStringEnumToArray{
 
 export interface ICartForm{
     stockId: FormControl<number | null>;
-    variantId: FormControl<number | null>;
+    variantStockId: FormControl<number | null>;
     quantity: FormControl<number | null>;
+}
+export interface ICartFormData{
+    stockId: number | null;
+    variantId: number | null;
+    quantity: number | null;
 }

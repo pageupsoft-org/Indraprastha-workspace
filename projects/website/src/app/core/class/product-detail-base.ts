@@ -26,7 +26,7 @@ export class ProductDetailBase {
   public isBtnLoader: WritableSignal<boolean> = signal(false);
   public cartForm: FormGroup<ICartForm> = new FormGroup<ICartForm>({
     stockId: new FormControl(null),
-    variantId: new FormControl(null),
+    variantStockId: new FormControl(null),
     quantity: new FormControl<number>(1),
   });
   private readonly stockSizeArray: MStringEnumToArray[] = stringEnumToArray(EStockSize);

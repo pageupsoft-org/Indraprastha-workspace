@@ -43,7 +43,7 @@ export const ApiRoutes = {
   CART: {
     POST: '/api/Cart',
     GET: '/api/Cart',
-    DELETE: (id: number) => `/api/Cart/${id}`,
+    DELETE_ITEM_FROM_CART: (id: number) => `/api/Cart/${id}`,
     CHECKOUT: '/api/Cart/Checkout',
   },
   CATEGORY: {
@@ -51,9 +51,6 @@ export const ApiRoutes = {
     GET: '/api/Category/All',
     GET_COMBO: '/api/Category/Combo',
     GETBYID: (id: number) => `/api/Category/${id}`,
-  },
-  COLLECTION: {
-    MENU: '/api/Collection/Menu',
   },
   BANNER: {
     BASE: '/api/Banner',
@@ -73,9 +70,5 @@ export const ApiRoutes = {
     DELETE: (id: number) => `/api/Wish/${id}`,
     MENU: '/api/Product/Menu',
     DASHBOARD: '/api/Product/Dashboard',
-  },
-  WISH: {
-    GET: '/api/Wish',
-    DELETE: (id: number) => `/api/Wish/${id}`,
   },
 };
