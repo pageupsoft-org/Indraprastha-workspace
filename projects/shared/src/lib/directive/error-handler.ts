@@ -1,4 +1,4 @@
-import { Directive, ElementRef, Input, Renderer2, AfterViewInit, OnDestroy } from '@angular/core';
+import { Directive, ElementRef, Input, Renderer2, AfterViewInit, OnDestroy, HostListener } from '@angular/core';
 import { AbstractControl } from '@angular/forms';
 import { Subscription } from 'rxjs';
 
@@ -6,53 +6,64 @@ import { Subscription } from 'rxjs';
   selector: '[appErrorHandler]'
 })
 export class ErrorHandler implements AfterViewInit, OnDestroy {
-  @Input('appErrorHandler') control!: AbstractControl | null
-  // @Input() control: AbstractControl | null = null;
+  @Input('appErrorHandler') control!: AbstractControl | null;
+
   private errorContainer: HTMLElement | null = null;
-  private subscription: Subscription | null = null;
+  private subscription: Subscription = new Subscription();
 
   constructor(private el: ElementRef, private render: Renderer2) {}
 
   ngAfterViewInit() {
     this.createErrorContainer();
+    this.registerControlListeners();
   }
 
   ngOnDestroy() {
-    this.subscription?.unsubscribe();
+    this.subscription.unsubscribe();
+  }
+
+  // 👇 This catches the case when user focuses → blurs without typing
+  @HostListener('blur')
+  onBlur() {
+    this.control?.markAsTouched();
+    this.updateErrorMessage();
   }
 
   private createErrorContainer() {
-    if (!this.errorContainer) {
-      this.errorContainer = this.render.createElement('div');
-      this.render.addClass(this.errorContainer, 'error-message');
-      this.render.setStyle(this.errorContainer, 'color', 'red');
-      this.render.setStyle(this.errorContainer, 'font-size', '12px');
-      this.render.setStyle(this.errorContainer, 'margin-top', '5px');
-      this.render.setStyle(this.errorContainer, 'display', 'none');
-      this.render.appendChild(this.el.nativeElement.parentNode, this.errorContainer);
-
-      if (this.control) {
-        this.subscription = this.control.statusChanges.subscribe(() => this.updateErrorMessage());
-        // 👇 Add valueChanges to handle user input properly
-        this.subscription.add(this.control.valueChanges.subscribe(() => this.updateErrorMessage()));
-      }
-    }
+    this.errorContainer = this.render.createElement('div');
+    this.render.addClass(this.errorContainer, 'error-message');
+    this.render.setStyle(this.errorContainer, 'color', 'red');
+    this.render.setStyle(this.errorContainer, 'font-size', '12px');
+    this.render.setStyle(this.errorContainer, 'margin-top', '5px');
+    this.render.setStyle(this.errorContainer, 'display', 'none');
+    this.render.appendChild(this.el.nativeElement.parentNode, this.errorContainer);
   }
 
-  private updateErrorMessage(): void {
-    if (this.control && this.errorContainer) {
-      const control = this.control;
-      const shouldShowError = control.invalid && (control.dirty || control.touched);
+  private registerControlListeners() {
+    if (!this.control) return;
 
-      //console.log(shouldShowError, control);
-      if (shouldShowError) {
-        const errorMessage = this.getErrorMessage(control);
-        this.render.setStyle(this.errorContainer, 'display', 'block');
-        this.render.setProperty(this.errorContainer, 'textContent', errorMessage || '');
-      } else {
-        this.render.setStyle(this.errorContainer, 'display', 'none');
-        this.render.setProperty(this.errorContainer, 'textContent', '');
-      }
+    this.subscription.add(
+      this.control.statusChanges?.subscribe(() => this.updateErrorMessage())
+    );
+
+    this.subscription.add(
+      this.control.valueChanges?.subscribe(() => this.updateErrorMessage())
+    );
+  }
+
+  private updateErrorMessage() {
+    if (!this.control || !this.errorContainer) return;
+
+    const shouldShow =
+      this.control.invalid && (this.control.dirty || this.control.touched);
+
+    if (shouldShow) {
+      const msg = this.getErrorMessage(this.control);
+      this.render.setStyle(this.errorContainer, 'display', 'block');
+      this.render.setProperty(this.errorContainer, 'textContent', msg);
+    } else {
+      this.render.setStyle(this.errorContainer, 'display', 'none');
+      this.render.setProperty(this.errorContainer, 'textContent', '');
     }
   }
 

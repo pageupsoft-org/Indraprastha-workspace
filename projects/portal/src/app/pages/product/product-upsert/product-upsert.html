@@ -46,7 +46,7 @@
             <label class="block text-sm font-medium text-slate-700 mb-1">Name</label>
             <input
               [formControl]="productForm.controls.name"
-              [appErrorHandler]="productForm.controls.name"
+              libValidateControl
               type="text"
               placeholder="Enter product name"
               class="w-full border border-slate-200 rounded-lg px-3 py-2 text-sm placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-indigo-500"
@@ -69,7 +69,7 @@
             <label class="block text-sm font-medium text-slate-700 mb-1">MRP</label>
             <input
               [formControl]="productForm.controls.mrp"
-              [appErrorHandler]="productForm.controls.mrp"
+              libValidateControl
               type="text"
               placeholder="0.00"
               step="0.01"
@@ -82,7 +82,7 @@
             <label class="block text-sm font-medium text-slate-700 mb-1">Gender</label>
             <select
               [formControl]="productForm.controls.gender"
-              [appErrorHandler]="productForm.controls.gender"
+              libValidateControl
               class="w-full border border-slate-200 rounded-lg px-3 py-2 text-sm bg-white focus:outline-none focus:ring-2 focus:ring-indigo-500"
             >
               <option [ngValue]="null" disabled>— Select Gender —</option>
@@ -186,7 +186,7 @@
                   class="w-full border border-gray-300 rounded-lg px-3 py-2 text-sm text-gray-700 focus:ring-2 focus:ring-blue-400 outline-none"
                   placeholder="Enter variant name"
                   [formControl]="variant.controls.name"
-                  [appErrorHandler]="variant.controls.name"
+                  libValidateControl
                 />
               </div>
 
@@ -198,7 +198,7 @@
                   class="w-full border border-gray-300 rounded-lg px-3 py-2 text-sm text-gray-700 focus:ring-2 focus:ring-blue-400 outline-none"
                   placeholder="Enter price"
                   [formControl]="variant.controls.mrp"
-                   [appErrorHandler]="variant.controls.mrp"
+                  libValidateControl
                 />
               </div>
 
@@ -220,7 +220,7 @@
                   class="w-full border border-gray-300 rounded-lg px-3 py-2 text-sm text-gray-700 focus:ring-2 focus:ring-blue-400 outline-none"
                   placeholder="Enter quantity"
                   [formControl]="variant.controls.stocks.controls.quantity"
-                   [appErrorHandler]="variant.controls.stocks.controls.quantity"
+                  libValidateControl
                 />
               </div>
             </div>
@@ -236,7 +236,7 @@
                   title=""
                   class="absolute inset-0 opacity-0 cursor-pointer"
                   (change)="onVariantImageChange($event, $index)"
-                  [appErrorHandler]="variant.controls.variantBase64"
+                  libValidateControl
 
                 />
                 <img
@@ -290,14 +290,14 @@
                 <span
                   class="px-3 py-1 text-sm font-semibold text-gray-700 bg-white border border-gray-200 rounded-full shadow-sm"
                 >
-                  {{ stock.controls.size.value }} 
+                  {{ stock.controls.size.value }}
                 </span>
 
                 <input
                   type="text"
                   min="0"
                   class="mt-3 w-24 text-center text-sm border border-gray-300 rounded-lg py-2 px-2 text-gray-700 focus:ring-2 focus:ring-blue-400 outline-none"
-                  [formControl]="stock.controls.quantity" [appErrorHandler]="stock.controls.quantity"
+                  [formControl]="stock.controls.quantity" libValidateControl
                 />
               </div>
 
@@ -351,7 +351,7 @@
                 class="w-full border border-gray-300 rounded-lg px-3 py-2 text-sm text-gray-700 focus:ring-2 focus:ring-blue-400 outline-none"
                 placeholder="Enter header"
                 [formControl]="description.controls.header"
-                [appErrorHandler]="description.controls.header"
+                libValidateControl
               />
             </div>
 
@@ -374,7 +374,7 @@
           <div>
             <label class="block text-sm font-medium text-gray-700 mb-1">Description</label>
             <textarea
-              [formControl]="description.controls.description"  [appErrorHandler]="description.controls.description"
+              [formControl]="description.controls.description"  libValidateControl
               rows="4"
               class="w-full border border-gray-300 rounded-lg px-3 py-2 text-sm text-gray-700 focus:ring-2 focus:ring-blue-400 outline-none"
               placeholder="Write detailed description..."
@@ -399,13 +399,13 @@
               <input
                 type="text"
                 placeholder="Key"
-                [formControl]="jsonText.controls.key" [appErrorHandler]="jsonText.controls.key"
+                [formControl]="jsonText.controls.key" libValidateControl
                 class="w-1/2 border border-gray-300 rounded-lg px-3 py-2 text-sm text-gray-700 focus:ring-2 focus:ring-blue-400 outline-none"
               />
               <input
                 type="text"
                 placeholder="Value"
-                [formControl]="jsonText.controls.value" [appErrorHandler]="jsonText.controls.value"
+                [formControl]="jsonText.controls.value" libValidateControl
                 class="w-1/2 border border-gray-300 rounded-lg px-3 py-2 text-sm text-gray-700 focus:ring-2 focus:ring-blue-400 outline-none"
               />
 
