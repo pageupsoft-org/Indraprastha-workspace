@@ -5,7 +5,6 @@ import { initializePagInationPayload, IPaginationPayload } from '../../../core/i
 import { createPaginationMetadata, PaginationControlMetadata } from '../../../core/interface/model/pagination-detail.model';
 import { handlePagination } from '../../../core/utils/pagination.util';
 import { IGenericResponse } from '../../../core/interface/response/genericResponse';
-import { PaginationController } from '../../../component/pagination-controller/pagination-controller';
 import { CustomerResponse, ICustomerResponse } from '../../../core/interface/response/customer.response';
 import { MatDialog } from '@angular/material/dialog';
 import { CustomerUpsert } from '../customer-upsert/customer-upsert';
@@ -14,7 +13,7 @@ import { ApiRoutes, EToastType, ToastService } from '@shared';
 
 @Component({
   selector: 'app-customer-list',
-  imports: [PaginationController],
+  imports: [],
   templateUrl: './customer-list.html',
   styleUrl: './customer-list.scss',
 })

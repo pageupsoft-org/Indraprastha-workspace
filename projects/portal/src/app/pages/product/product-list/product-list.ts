@@ -11,7 +11,7 @@ import { IProduct, IProductResponseRoot } from '../../../core/interface/response
 
 @Component({
   selector: 'app-product-list',
-  imports: [RouterLink],
+  imports: [],
   templateUrl: './product-list.html',
   styleUrl: './product-list.scss',
 })
@@ -68,7 +68,7 @@ export class ProductList extends Base implements OnInit {
 
       this.objConfirmationUtil.getConfirmation(modalData).then((res: boolean) => {
         if (res) {
-          this.httpDeletePromise<IGenericResponse<boolean>>(ApiRoutes.PRODUCT.GETBYID(id))
+          this.httpDeletePromise<IGenericResponse<boolean>>(ApiRoutes.PRODUCT.GET_BY_ID(id))
             .then(response => {
               if (response.data) {
                 this.toaster.show({

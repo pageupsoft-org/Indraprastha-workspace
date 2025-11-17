@@ -5,12 +5,12 @@ import { IGenericResponse } from '../../../core/interface/response/genericRespon
 import { CategoryList } from '../category-list/category-list';
 import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
 import { ICategory, ICategoryForm } from '../../../core/interface/request/category.request';
-import { ApiRoutes, ErrorHandler, EToastType, ToastService } from '@shared';
+import { ApiRoutes, EToastType, ToastService } from '@shared';
 import { IGenericComboResponse } from '../../../core/interface/response/banner.response';
 
 @Component({
   selector: 'app-category-upsert',
-  imports: [ReactiveFormsModule, ErrorHandler],
+  imports: [ReactiveFormsModule],
   templateUrl: './category-upsert.html',
   styleUrl: './category-upsert.scss',
 })

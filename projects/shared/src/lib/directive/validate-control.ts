@@ -1,107 +1,3 @@
-// import {
-//   Directive,
-//   ElementRef,
-//   Renderer2,
-//   AfterViewInit,
-//   OnDestroy,
-//   HostListener,
-// } from '@angular/core';
-// import { FormGroupDirective, NgControl } from '@angular/forms';
-// import { Subscription } from 'rxjs';
-
-// @Directive({
-//   selector: '[libValidateControl]',
-// })
-// export class ValidateControl implements AfterViewInit, OnDestroy {
-//   private errorContainer: HTMLElement | null = null;
-//   private sub = new Subscription();
-
-//   constructor(
-//     private el: ElementRef,
-//     private renderer: Renderer2,
-//     private ngControl: NgControl,
-//     private formGroupDir: FormGroupDirective
-//   ) {}
-
-//   ngAfterViewInit() {
-//     this.createErrorContainer();
-//     this.registerListeners();
-
-//     this.sub.add(
-//       this.formGroupDir.ngSubmit.subscribe(() => {
-//         this.ngControl.control?.markAsTouched();
-//         this.updateMessage();
-//       })
-//     );
-//   }
-
-//   ngOnDestroy() {
-//     this.sub.unsubscribe();
-//   }
-
-//   // When user clicks out without typing
-//   @HostListener('blur')
-//   onBlur() {
-//     const control = this.ngControl.control;
-//     if (!control) return;
-
-//     control.markAsTouched();
-//     this.updateMessage();
-//   }
-
-//   private registerListeners() {
-//     const control = this.ngControl.control;
-//     if (!control) return;
-
-//     this.sub.add(control.valueChanges?.subscribe(() => this.updateMessage()));
-//     this.sub.add(control.statusChanges?.subscribe(() => this.updateMessage()));
-//   }
-
-//   private createErrorContainer() {
-//     this.errorContainer = this.renderer.createElement('div');
-
-//     this.renderer.addClass(this.errorContainer, 'error-message');
-//     this.renderer.setStyle(this.errorContainer, 'color', 'red');
-//     this.renderer.setStyle(this.errorContainer, 'font-size', '12px');
-//     this.renderer.setStyle(this.errorContainer, 'margin-top', '5px');
-//     this.renderer.setStyle(this.errorContainer, 'display', 'none');
-
-//     const parent = this.el.nativeElement.parentNode;
-//     this.renderer.appendChild(parent, this.errorContainer);
-//   }
-
-//   private updateMessage() {
-//     const control = this.ngControl.control;
-//     if (!control || !this.errorContainer) return;
-
-//     const show = control.invalid && (control.dirty || control.touched);
-
-//     if (show) {
-//       const msg = this.getError(control);
-//       this.renderer.setProperty(this.errorContainer, 'textContent', msg);
-//       this.renderer.setStyle(this.errorContainer, 'display', 'block');
-//     } else {
-//       this.renderer.setStyle(this.errorContainer, 'display', 'none');
-//       this.renderer.setProperty(this.errorContainer, 'textContent', '');
-//     }
-//   }
-
-//   private getError(control: any): string {
-//     const e = control.errors;
-//     if (!e) return '';
-
-//     if (e['required']) return 'This field is required.';
-//     if (e['email']) return 'Please enter a valid email.';
-//     if (e['minlength']) return `Minimum length is ${e['minlength'].requiredLength}.`;
-//     if (e['maxlength']) return `Maximum length is ${e['maxlength'].requiredLength}.`;
-//     if (e['pattern']) return e['pattern'].message || 'Invalid format.';
-//     if (e['max']) return `Value must not exceed ${e['max'].max}.`;
-
-//     return 'Invalid input.';
-//   }
-// }
-
-
 import {
   Directive,
   ElementRef,
@@ -109,6 +5,7 @@ import {
   AfterViewInit,
   OnDestroy,
   HostListener,
+  Optional,
 } from '@angular/core';
 import { FormGroupDirective, NgControl } from '@angular/forms';
 import { Subscription } from 'rxjs';
@@ -123,11 +20,13 @@ export class ValidateControl implements AfterViewInit, OnDestroy {
   constructor(
     private el: ElementRef,
     private renderer: Renderer2,
-    private ngControl: NgControl,
-    private formGroupDir: FormGroupDirective
+    @Optional() private ngControl: NgControl,
+    @Optional() private formGroupDir: FormGroupDirective
   ) {}
 
   ngAfterViewInit() {
+    if (!this.ngControl || !this.ngControl.control) return; // ← FIX
+
     this.wrapInputInRelativeContainer();
     this.createErrorToast();
     this.registerListeners();
@@ -193,12 +92,8 @@ export class ValidateControl implements AfterViewInit, OnDestroy {
     const control = this.ngControl.control;
     if (!control) return;
 
-    this.sub.add(
-      control.valueChanges?.subscribe(() => this.updateMessage())
-    );
-    this.sub.add(
-      control.statusChanges?.subscribe(() => this.updateMessage())
-    );
+    this.sub.add(control.valueChanges?.subscribe(() => this.updateMessage()));
+    this.sub.add(control.statusChanges?.subscribe(() => this.updateMessage()));
   }
 
   private updateMessage() {
@@ -226,10 +121,8 @@ export class ValidateControl implements AfterViewInit, OnDestroy {
 
     if (e['required']) return 'This field is required.';
     if (e['email']) return 'Please enter a valid email.';
-    if (e['minlength'])
-      return `Minimum length is ${e['minlength'].requiredLength}.`;
-    if (e['maxlength'])
-      return `Maximum length is ${e['maxlength'].requiredLength}.`;
+    if (e['minlength']) return `Minimum length is ${e['minlength'].requiredLength}.`;
+    if (e['maxlength']) return `Maximum length is ${e['maxlength'].requiredLength}.`;
     if (e['pattern']) return e['pattern'].message || 'Invalid format.';
     if (e['max']) return `Value must not exceed ${e['max'].max}.`;
 
