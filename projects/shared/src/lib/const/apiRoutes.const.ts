@@ -65,6 +65,7 @@ export const ApiRoutes = {
   },
   ORDERS:{
     BASE:'/api/Order',
-    ALL: '/api/Order/All'
+    ALL: '/api/Order/All',
+    GETBYID: (id: number) => `/api/Order/${id}`,
   }
 };

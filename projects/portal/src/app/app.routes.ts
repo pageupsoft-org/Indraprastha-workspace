@@ -54,6 +54,11 @@ export const routes: Routes = [
         loadComponent: () =>
           import('./pages/orders/order-list/order-list').then((m) => m.OrderList),
       },
+       {
+        path: AppRoutes.ORDERS_UPSERT,
+        loadComponent: () =>
+          import('./pages/orders/order-upsert/order-upsert').then((m) => m.OrderUpsert),
+      },
 
     ],
   },

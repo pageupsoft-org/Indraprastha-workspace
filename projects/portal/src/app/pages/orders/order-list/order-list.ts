@@ -1,10 +1,11 @@
 import { Component, OnInit } from '@angular/core';
 import { IGenericResponse } from '../../../core/interface/response/genericResponse';
-import { IOrderResponse } from '../../../core/interface/response/order.response';
+import { IOrder, IOrderResponse } from '../../../core/interface/response/order.response';
 import { Base } from '@portal/core';
 import { initializePagInationPayload } from '../../../core/interface/request/genericPayload';
 import { IOrderPagination } from '../../../core/interface/request/order.request';
 import { ApiRoutes, EToastType, MConfirmationModalData, ToastService } from '@shared';
+import { Route, Router } from '@angular/router';
 
 @Component({
   selector: 'app-order-list',
@@ -21,10 +22,12 @@ export class OrderList extends Base implements OnInit {
     customerId: 0,
     status: null
   };
+  public orders: IOrder[] = [];
 
-  constructor(private _toaster: ToastService) {
+  constructor(private _toaster: ToastService, private router: Router) {
     super()
   }
+
 
   ngOnInit(): void {
     this.getAllOrders();
@@ -35,10 +38,20 @@ export class OrderList extends Base implements OnInit {
     this.httpPostPromise<IGenericResponse<IOrderResponse>, IOrderPagination>(ApiRoutes.ORDERS.ALL, this.payLoad).then(response => {
       if (response) {
         if (response.data) {
-          console.log(response)
+          this.orders = response.data.orders
         }
       }
     })
+  }
+
+  // ADD ID WHEN USER VIEW OR UPDATE
+  public routeToUpsertPage(orderId: number) {
+    console.log(orderId, "orderid")
+    this.router.navigate([this.appRoutes.ORDERS_UPSERT], {
+      queryParams: {
+        id: orderId,
+      },
+    });
   }
 
   // Delete Orders
