@@ -3,15 +3,16 @@ import { IGenericResponse } from '../../../core/interface/response/genericRespon
 import { IOrder, IOrderResponse } from '../../../core/interface/response/order.response';
 import { Base } from '@portal/core';
 import { initializePagInationPayload } from '../../../core/interface/request/genericPayload';
-import { IOrderPagination } from '../../../core/interface/request/order.request';
+// import { IOrderPagination } from '../../../core/interface/request/order.request';
 import { ApiRoutes, EToastType, MConfirmationModalData, ToastService } from '@shared';
 import { Route, Router } from '@angular/router';
+import { IOrderPagination } from '../../../core/interface/request/order.request';
 
 @Component({
   selector: 'app-order-list',
   imports: [],
   templateUrl: './order-list.html',
-  styleUrl: './order-list.scss',
+  // styleUrl: './order-list.scss',
 })
 export class OrderList extends Base implements OnInit {
 
@@ -22,6 +23,7 @@ export class OrderList extends Base implements OnInit {
     customerId: 0,
     status: null
   };
+
   public orders: IOrder[] = [];
 
   constructor(private _toaster: ToastService, private router: Router) {
@@ -66,7 +68,7 @@ export class OrderList extends Base implements OnInit {
 
       this.objConfirmationUtil.getConfirmation(modalData).then((res: boolean) => {
         if (res) {
-          this.httpDeletePromise<IGenericResponse<boolean>>(ApiRoutes.COLLECTION.GETBYID(id))
+          this.httpDeletePromise<IGenericResponse<boolean>>(ApiRoutes.COLLECTION.GET_BY_ID(id))
             .then(response => {
               if (response?.data) {
                 this._toaster.show({

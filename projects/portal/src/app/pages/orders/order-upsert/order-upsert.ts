@@ -10,7 +10,7 @@ import { ApiRoutes } from '@shared';
   selector: 'app-order-upsert',
   imports: [],
   templateUrl: './order-upsert.html',
-  styleUrl: './order-upsert.scss',
+  // styleUrl: './order-upsert.scss',
 })
 export class OrderUpsert extends Base implements OnInit{
 
@@ -28,7 +28,7 @@ export class OrderUpsert extends Base implements OnInit{
 
   // GET ORDER BY ID  
   public getOrderById(id:number){
-    this.httpGetPromise<IGenericResponse<IorderResponseById>>(ApiRoutes.ORDERS.GETBYID(id)).then(response=>{
+    this.httpGetPromise<IGenericResponse<IorderResponseById>>(ApiRoutes.ORDERS.GET_BY_ID(id)).then(response=>{
       console.log(response)
     }).catch(error=>{
       // handle error

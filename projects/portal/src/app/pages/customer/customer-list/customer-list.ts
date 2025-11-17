@@ -71,7 +71,7 @@ export class CustomerList extends Base implements OnInit {
 
   // Delete Customeru
   public deleteCustomer(id: number) {
-    this.httpDeletePromise<IGenericResponse<boolean>>(ApiRoutes.CUSTOMERS.GETBYID(id)).then(response => {
+    this.httpDeletePromise<IGenericResponse<boolean>>(ApiRoutes.CUSTOMERS.GET_BY_ID(id)).then(response => {
       if (response) {
         if (response.data) {
           this.toaster.show({ message: 'Customer Delete Successful', duration: 3000, type: EToastType.success });
