@@ -6,15 +6,18 @@ import { EmployeeList } from '../employee-list/employee-list';
 import { Base } from '../../../core/base/base';
 import { IGenericResponse } from '../../../core/interface/response/genericResponse';
 import { IEmployeeForm, IEmployee,  } from '../../../core/interface/request/employee.request';
-import { ApiRoutes, ErrorHandler, EToastType, ToastService } from '@shared';
+import { ApiRoutes, ErrorHandler, EToastType, ToastService, ValidateControl } from '@shared';
 import { patternWithMessage } from '../../../../../../shared/src/public-api';
+
+
 
 @Component({
   selector: 'app-employee-upsert',
   imports: [
     CommonModule,
     ReactiveFormsModule,
-    ErrorHandler
+    ErrorHandler,
+    ValidateControl
   ],
   templateUrl: './employee-upsert.html',
   styleUrl: './employee-upsert.scss',
