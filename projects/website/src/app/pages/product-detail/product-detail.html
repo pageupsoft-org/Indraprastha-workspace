@@ -2,10 +2,10 @@
   <app-loader></app-loader>
 }
 @else {
-  <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12 lg:py-20">
-    <div class="flex flex-col lg:flex-row lg:space-x-16">
+  <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12 lg:py-20 bg-white shadow-lg my-10">
+    <div class="flex grid grid-cols-5 lg:flex-row gap-14">
       <!-- Product Image Gallery and Main Image -->
-      <div class="flex flex-col lg:flex-row lg:space-x-4 w-full lg:w-3/5">
+      <div class="flex col-span-2 lg:flex-row lg:space-x-4 w-full sticky top-[150px] max-h-[40%]">
         <!-- Left Image Gallery (Thumbnails) -->
         <div class="flex flex-row lg:flex-col space-x-3 lg:space-x-0 lg:space-y-4 mb-8 lg:mb-0">
           @for(productImage of productDetail().productURL; track $index){
@@ -18,19 +18,19 @@
         </div>
   
         <!-- Main Product Image and Magnified View Container -->
-        <div class="relative w-full rounded-lg shadow-xl magnify-container image-container">
+        <div class="relative w-full rounded-lg magnify-container image-container">
           <img
             id="main-product-image"
             [src]="productDetail().activeImage"
             alt="Main Product"
-            class="w-full h-auto object-cover rounded-lg"
+            class="w-full h-auto object-cover rounded-lg shadow-xl"
           />
           <div id="magnified-view" class="absolute inset-0"></div>
         </div>
       </div>
   
       <!-- Product Details Section -->
-      <div class="flex flex-col space-y-4">
+      <div class="flex col-span-3 flex-col space-y-4">
         <h2
           id="modal-product-name"
           class="text-3xl md:text-4xl font-bold text-gray-900 leading-tight"
@@ -225,7 +225,7 @@
         </div>
   
         @for (description of productDetail().descriptions; track $index) {
-        <div class="mt-8 flex flex-col space-y-4 p-6 bg-white shadow-lg rounded-lg">
+        <div class="mt-8 flex flex-col space-y-4 p-6">
           <div class="flex justify-between items-center border-b pb-4 mb-6">
             <h2 class="text-xl font-bold text-gray-800 uppercase tracking-wide">
               {{ description.header }}
