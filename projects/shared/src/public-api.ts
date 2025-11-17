@@ -5,7 +5,9 @@ export * from './lib/component/loader/loader';
 export * from './lib/component/app-loading-button/app-loading-button';
 
 export * from './lib/const/apiRoutes.const';
+
 export * from './lib/directive/error-handler';
+export * from './lib/directive/validate-control';
 
 export * from './lib/enum/toast-type.enum';
 export * from './lib/enum/variable.enum';

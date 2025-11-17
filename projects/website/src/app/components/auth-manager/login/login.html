@@ -10,7 +10,7 @@
       <input
         type="text"
         [formControl]="loginForm.controls.username"
-        [appErrorHandler]="loginForm.controls.username"
+        libValidateControl
         class="w-full rounded-[5px] p-2 border border-gray-400 focus:outline-none focus:border-red-800 transition-colors duration-200"
       />
     </div>
@@ -22,7 +22,7 @@
       <input
         type="password"
         [formControl]="loginForm.controls.password"
-        [appErrorHandler]="loginForm.controls.password"
+        libValidateControl
         class="w-full rounded-[5px] p-2 border border-gray-400 focus:outline-none focus:border-red-800 transition-colors duration-200"
       />
     </div>
