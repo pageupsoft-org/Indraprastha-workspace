@@ -4,12 +4,10 @@
     data-aos="fade-up"
     data-aos-duration="1000"
   >
-    {{title()}}
+    {{ title() }}
   </h1>
 
-  <!-- Slider Container -->
-
-
+  @if(productList().length){
   <div
     class="relative w-full max-w-7xl mx-auto overflow-hidden p-4 md:p-8"
     data-aos="fade-up"
@@ -17,13 +15,22 @@
   >
     <!-- This track holds all product cards -->
     <div #sliderTrack class="flex transition-transform duration-500 ease-in-out gap-6 md:gap-8">
-      @for (item of productList().products; track $index) {
+      @for (item of productList(); track $index) {
       <div class="w-[calc(100%)] sm:w-[calc(100%/3-12px)] lg:w-[calc(100%/4-24px)] shrink-0">
-        <app-new-arrival-product-card [product]="{ name: item.name, price: item.mrp, wishList: item.isWishList }" (addButtonPressed)="openProductDetail(item.id)"></app-new-arrival-product-card>
+        <app-new-arrival-product-card
+          [product]="{
+            name: item.name,
+            price: item.mrp,
+            wishList: item.isWishList,
+            imageUrl: item.productURL
+          }"
+          (addButtonPressed)="openProductDetail(item.id)"
+        ></app-new-arrival-product-card>
       </div>
       }
     </div>
 
+    @if(productList().length > 4){
     <!-- Slider Navigation Arrows -->
     <button
       #prevBtn
@@ -66,5 +73,9 @@
         ></path>
       </svg>
     </button>
+    }
   </div>
+  } @else {
+  <p>No Data</p>
+  }
 </div>

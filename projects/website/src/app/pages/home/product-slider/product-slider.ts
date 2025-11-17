@@ -1,15 +1,14 @@
 import {
   AfterViewInit,
   Component,
+  computed,
   ElementRef,
   HostListener,
   input,
   signal,
   viewChild,
-  ViewChild,
   WritableSignal,
 } from '@angular/core';
-import { RNewArrivals } from '../../../core/interface/response/newArrival.response';
 import { NewArrivalProductCard } from '../../../components/new-arrival-product-card/new-arrival-product-card';
 import { MatDialog, MatDialogModule } from '@angular/material/dialog';
 import { ProductDetailDialog } from '../../../components/product-detail-dialog/product-detail-dialog';
@@ -22,7 +21,7 @@ import {
   PlatformService,
 } from '@shared';
 import { IDashboadRequest } from './dashboard.request';
-import { DashboardResponseRoot } from './dashboard.response';
+import { DashboardResponseRoot, Product } from './dashboard.response';
 
 @Component({
   selector: 'app-product-slider',
@@ -39,9 +38,9 @@ export class ProductSlider implements AfterViewInit {
   public productType = input.required<DashboardProductTypeStringEnum>();
   public title = input.required<string>();
 
-  public productList: WritableSignal<DashboardResponseRoot> = signal('' as any);
+  public productList: WritableSignal<Product[]> = signal([]);
 
-  public totalCards: WritableSignal<number> = signal(this.productList()?.products?.length);
+  public totalCards = computed(() => this.productList().length);
   public currentCardIndex: WritableSignal<number> = signal(0);
 
   private payload: IDashboadRequest = {
@@ -63,7 +62,7 @@ export class ProductSlider implements AfterViewInit {
       if (!track) return;
       const cards = Array.from(track.children) as HTMLElement[];
 
-      this.totalCards.set(cards.length);
+      // this.totalCards.set(cards.length);
       this.updateSlider();
     }
   }
@@ -138,7 +137,11 @@ export class ProductSlider implements AfterViewInit {
       false
     ).subscribe({
       next: (response) => {
-        if (response?.data) {
+        if (response?.data?.products) {
+          this.productList.set(response.data.products)
+        }
+        else{
+          this.productList.set([]);
         }
       },
       error: (error) => {

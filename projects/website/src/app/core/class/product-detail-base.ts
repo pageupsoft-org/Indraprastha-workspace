@@ -133,6 +133,8 @@ export class ProductDetailBase {
       });
     } else {
       // use localstorage
+      console.log("User not logged. Needed to implement this for local storage.");
+      
     }
   }
 }
