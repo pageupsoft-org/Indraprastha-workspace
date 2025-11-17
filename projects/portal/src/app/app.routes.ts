@@ -49,11 +49,11 @@ export const routes: Routes = [
         loadComponent: () =>
           import('./pages/product/product-upsert/product-upsert').then((m) => m.ProductUpsert),
       }, 
-      {
-        path: AppRoutes.ORDERS,
-        loadComponent: () =>
-          import('./pages/orders/order-list/order-list').then((m) => m.OrderList),
-      },
+      // {
+      //   path: AppRoutes.ORDERS,
+      //   loadComponent: () =>
+      //     import('./pages/orders/order-list/order-list').then((m) => m.OrderList),
+      // },
 
     ],
   },
