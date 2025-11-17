@@ -16,7 +16,7 @@ export const routes: Routes = [
         loadComponent: () => import('./../app/pages/wishlist/wishlist').then(m => m.Wishlist)
     },
     {
-        path: appRoutes.PRODUCTDETAIL,
+        path: appRoutes.PRODUCT_DETAIL,
         loadComponent: () => import('./../app/pages/product-detail/product-detail').then(m => m.ProductDetail)
     },
     {
@@ -27,12 +27,4 @@ export const routes: Routes = [
         path: ':path',
         loadComponent: () => import('./pages/dynamic-catalog/dynamic-catalog').then(m => m.DynamicCatalog)
     },
-    // {
-    //     path: ':gender/:category',
-    //     loadComponent: () => import('./pages/dynamic-catalog/dynamic-catalog').then(m => m.DynamicCatalog)
-    // },
-    // {
-    //     path: ':gender/:collection/:category',
-    //     loadComponent: () => import('./pages/dynamic-catalog/dynamic-catalog').then(m => m.DynamicCatalog)
-    // }
 ];

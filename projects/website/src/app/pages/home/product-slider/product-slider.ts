@@ -5,6 +5,7 @@ import {
   HostListener,
   input,
   signal,
+  viewChild,
   ViewChild,
   WritableSignal,
 } from '@angular/core';
@@ -30,10 +31,10 @@ import { DashboardResponseRoot } from './dashboard.response';
   styleUrl: './product-slider.scss',
 })
 export class ProductSlider implements AfterViewInit {
-  @ViewChild('sliderTrack', { static: false }) sliderTrack!: ElementRef<HTMLDivElement>;
-  @ViewChild('prevBtn', { static: false }) prevBtn!: ElementRef<HTMLButtonElement>;
-  @ViewChild('nextBtn', { static: false }) nextBtn!: ElementRef<HTMLButtonElement>;
-  @ViewChild('cardsContainer', { static: false }) cardsContainer!: ElementRef<HTMLDivElement>;
+  sliderTrack = viewChild<ElementRef<HTMLDivElement>>('sliderTrack');
+  prevBtn = viewChild<ElementRef<HTMLButtonElement>>('prevBtn');
+  nextBtn = viewChild<ElementRef<HTMLButtonElement>>('nextBtn');
+  cardsContainer = viewChild<ElementRef<HTMLDivElement>>('cardsContainer');
 
   public productType = input.required<DashboardProductTypeStringEnum>();
   public title = input.required<string>();
@@ -57,7 +58,10 @@ export class ProductSlider implements AfterViewInit {
 
   ngAfterViewInit() {
     if (this.platformService.isBrowser) {
-      const cards = Array.from(this.sliderTrack.nativeElement.children) as HTMLElement[];
+      // const cards = Array.from(this.sliderTrack()?.nativeElement.children) as HTMLElement[];
+      const track = this.sliderTrack()?.nativeElement;
+      if (!track) return;
+      const cards = Array.from(track.children) as HTMLElement[];
 
       this.totalCards.set(cards.length);
       this.updateSlider();
@@ -65,48 +69,54 @@ export class ProductSlider implements AfterViewInit {
   }
 
   private updateSlider() {
-    const sliderTrack = this.sliderTrack.nativeElement;
-    const prevBtn = this.prevBtn.nativeElement;
-    const nextBtn = this.nextBtn.nativeElement;
-    const cards = Array.from(this.sliderTrack.nativeElement.children) as HTMLElement[];
+    const track = this.sliderTrack()?.nativeElement as HTMLElement | null;
+    const prevBtn = this.prevBtn()?.nativeElement as HTMLButtonElement | null;
+    const nextBtn = this.nextBtn()?.nativeElement as HTMLButtonElement | null;
 
-    // Determine number of visible cards
-    let visibleCards = 1;
-    if (window.innerWidth >= 1024) {
-      visibleCards = 4;
-    } else if (window.innerWidth >= 640) {
-      visibleCards = 2;
-    }
+    if (!track || !prevBtn || !nextBtn) return;
 
-    const maxCardIndex = this.totalCards() - visibleCards;
-    this.currentCardIndex.set(Math.max(0, Math.min(this.currentCardIndex(), maxCardIndex)));
+    const cards = Array.from(track.children) as HTMLElement[];
 
-    const firstCard = cards[0] as HTMLElement;
-    const cardWidth = firstCard?.offsetWidth;
-    const cardMargin = parseFloat(window.getComputedStyle(sliderTrack).getPropertyValue('gap'));
-    const offset = -(this.currentCardIndex() * (cardWidth + cardMargin));
-    sliderTrack.style.transform = `translateX(${offset}px)`;
+    // Visible cards based on screen width
+    const visibleCards = window.innerWidth >= 1024 ? 4 : window.innerWidth >= 640 ? 2 : 1;
 
-    // Update button states
-    prevBtn.disabled = this.currentCardIndex() === 0;
-    nextBtn.disabled = this.currentCardIndex() >= maxCardIndex;
-    prevBtn.style.opacity = prevBtn.disabled ? '0.5' : '1';
-    nextBtn.style.opacity = nextBtn.disabled ? '0.5' : '1';
-    prevBtn.style.cursor = prevBtn.disabled ? 'default' : 'pointer';
-    nextBtn.style.cursor = nextBtn.disabled ? 'default' : 'pointer';
+    const maxIndex = this.totalCards() - visibleCards;
+
+    // Clamp the current index using signals
+    const clampedIndex = Math.max(0, Math.min(this.currentCardIndex(), maxIndex));
+    this.currentCardIndex.set(clampedIndex);
+
+    // Card width + gap
+    const firstCard = cards[0];
+    const cardWidth = firstCard?.offsetWidth ?? 0;
+
+    const gap = parseFloat(window.getComputedStyle(track).getPropertyValue('gap'));
+
+    const offset = -(clampedIndex * (cardWidth + gap));
+    track.style.transform = `translateX(${offset}px)`;
+
+    // Button states
+    const isAtStart = clampedIndex === 0;
+    const isAtEnd = clampedIndex >= maxIndex;
+
+    prevBtn.disabled = isAtStart;
+    nextBtn.disabled = isAtEnd;
+
+    prevBtn.style.opacity = isAtStart ? '0.5' : '1';
+    nextBtn.style.opacity = isAtEnd ? '0.5' : '1';
+
+    prevBtn.style.cursor = isAtStart ? 'default' : 'pointer';
+    nextBtn.style.cursor = isAtEnd ? 'default' : 'pointer';
   }
 
-  public openProductDetail() {
+  public openProductDetail(productId: number) {
     // this.matDialog.open(ProductDetails).afterClosed().subscribe()
     this.matDialog.open(ProductDetailDialog, {
       panelClass: 'product-detail-dialog',
       width: '900px',
       maxWidth: '90vw',
       data: {
-        name: 'Silk Saree',
-        price: 2500,
-        color: 'Ruby Red',
-        image: 'assets/images/new-arrival-1.png',
+        productId: productId,
       },
     });
   }
