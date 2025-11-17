@@ -1,6 +1,13 @@
 import { Component, inject, OnInit, signal, WritableSignal } from '@angular/core';
 import { Base } from '../../../core/base/base';
-import { FormArray, FormControl, FormGroup, FormsModule, ReactiveFormsModule, Validators } from '@angular/forms';
+import {
+  FormArray,
+  FormControl,
+  FormGroup,
+  FormsModule,
+  ReactiveFormsModule,
+  Validators,
+} from '@angular/forms';
 import {
   IDescriptionForm,
   initializeDescriptionForm,
@@ -21,6 +28,7 @@ import {
   jsonToArray,
   MStringEnumToArray,
   stringEnumToArray,
+  ValidateControl,
 } from '@shared';
 import { IGenericComboResponse } from '../../../core/interface/response/banner.response';
 import { EGender } from '../../../core/enum/gender.enum';
@@ -29,11 +37,18 @@ import { EStockSize } from '../../../../../../shared/src/lib/enum/size.enum';
 import { arrayToJson, convertImagesToBase64Array } from '../../../core/utils/portal-utility.util';
 import { IDropdownSettings, NgMultiSelectDropDownModule } from 'ng-multiselect-dropdown';
 import { ActivatedRoute, Params, Router } from '@angular/router';
-
+import { IConvertImageResult } from '../../../core/interface/model/portal-util.model';
 
 @Component({
   selector: 'app-product-upsert',
-  imports: [ReactiveFormsModule, CommonModule, FormsModule, NgMultiSelectDropDownModule, ErrorHandler],
+  imports: [
+    ReactiveFormsModule,
+    CommonModule,
+    FormsModule,
+    NgMultiSelectDropDownModule,
+    ErrorHandler,
+    ValidateControl,
+  ],
   templateUrl: './product-upsert.html',
   styleUrl: './product-upsert.scss',
 })
@@ -69,7 +84,6 @@ export class ProductUpsert extends Base implements OnInit {
   ngOnInit(): void {
     this.getCategoryCombo();
 
-
     // add one default value
     this.productForm.controls.color.push(new FormControl<string>('#9c1c1c'));
 
@@ -95,7 +109,7 @@ export class ProductUpsert extends Base implements OnInit {
           }
         }
       })
-      .catch((error) => { });
+      .catch((error) => {});
   }
 
   public mutateColorControl(index: number | null) {
@@ -139,24 +153,44 @@ export class ProductUpsert extends Base implements OnInit {
   }
 
   public onVariantImageChange(event: any, index: number) {
-    convertImagesToBase64Array(event).then((res: (string | ArrayBuffer | null)[]) => {
-      if (res && res.length) {
-        this.productForm.controls.variants
-          .at(index)
-          .controls.variantBase64.setValue(res[0] as string);
+    convertImagesToBase64Array(event).then((res: IConvertImageResult) => {
+      if (res) {
+        if (res.validBase64Files.length) {
+          this.productForm.controls.variants
+            .at(index)
+            .controls.variantBase64.setValue(res.validBase64Files[0] as string);
+        }
+        if (res.invalidFiles.length) {
+          this.toastService.show({
+            message: 'Some files were invalid and skipped',
+            type: EToastType.warning,
+            duration: 2000,
+          });
+        }
       }
     });
   }
 
   public onProductImageChange(event: any, index: number) {
-    convertImagesToBase64Array(event).then((res: (string | ArrayBuffer | null)[]) => {
+    convertImagesToBase64Array(event).then((res: IConvertImageResult) => {
       if (res) {
-        if (res.length == 1) {
-          this.productForm.controls.productBase64.at(index).setValue(res[0] as string);
-        } else {
-          this.productForm.controls.productBase64.removeAt(index);
-          res.forEach((x) => {
-            this.productForm.controls.productBase64.push(new FormControl(x as string));
+        if (res.validBase64Files.length) {
+          if (res.validBase64Files.length == 1) {
+            this.productForm.controls.productBase64
+              .at(index)
+              .setValue(res.validBase64Files[0] as string);
+          } else {
+            this.productForm.controls.productBase64.removeAt(index);
+            res.validBase64Files.forEach((x) => {
+              this.productForm.controls.productBase64.push(new FormControl(x as string));
+            });
+          }
+        }
+        if (res.invalidFiles.length) {
+          this.toastService.show({
+            message: 'Some files were invalid and skipped',
+            type: EToastType.warning,
+            duration: 2000,
           });
         }
       }
@@ -189,7 +223,9 @@ export class ProductUpsert extends Base implements OnInit {
     this.httpPostPromise<IRGeneric<number>, any>(ApiRoutes.PRODUCT.POST, data).then(
       (res: IRGeneric<number>) => {
         if (res?.data) {
-          const msg: string = (this.productForm.controls.id.value) ? 'Product Updated' : 'Product Added';
+          const msg: string = this.productForm.controls.id.value
+            ? 'Product Updated'
+            : 'Product Added';
           this.toastService.show({
             message: msg,
             type: EToastType.success,
@@ -218,116 +254,111 @@ export class ProductUpsert extends Base implements OnInit {
   }
 
   public onDescriptionTypeChange(form: FormGroup<IDescriptionForm>) {
-    console.log(form)
+    console.log(form);
     if (form.controls.descriptionType.value == EDescriptionType.Json) {
       this.mutateJsonValueControl(null, form);
     } else {
       form.controls.jsonText.clear();
-      form.controls.description.setErrors({ 'required': true })
+      form.controls.description.setErrors({ required: true });
       form.controls.description.updateValueAndValidity();
     }
   }
 
   private getProductById(productId: number) {
-    this.httpGetPromise<IRGeneric<IRProductDetailRoot>>(ApiRoutes.PRODUCT.GETBYID(productId)).then(
-      (res) => {
-        if (res?.data) {
-          // this.patchProductData(res);
-          const {
-            id,
-            name,
-            categoryIds, //not working
-            isCustomSize,
-            customSizeName,
-            color,
-            mrp,
-            gender,
-            productURL,
-            variants,
-            stocks,
-            descriptions,
-          } = res.data;
+    this.httpGetPromise<IRGeneric<IRProductDetailRoot>>(
+      ApiRoutes.PRODUCT.GET_BY_ID(productId)
+    ).then((res) => {
+      if (res?.data) {
+        // this.patchProductData(res);
+        const {
+          id,
+          name,
+          categoryIds, //not working
+          isCustomSize,
+          customSizeName,
+          color,
+          mrp,
+          gender,
+          productURL,
+          variants,
+          stocks,
+          descriptions,
+        } = res.data;
 
-          this.productForm.patchValue({
-            id,
-            name,
-            isCustomSize,
-            customSizeName,
-            color,
-            mrp,
-            gender,
-          });
+        this.productForm.patchValue({
+          id,
+          name,
+          isCustomSize,
+          customSizeName,
+          color,
+          mrp,
+          gender,
+        });
 
-          // Assuming categoryIds is the array of selected IDs (e.g., [1, 5, 9])
-          const selectedCategoryObjects = categoryIds.map((id) => {
-            // Find the full category object from the dropdown source data
-            const category = this.categoryCombo.find((c) => c.id === id);
+        // Assuming categoryIds is the array of selected IDs (e.g., [1, 5, 9])
+        const selectedCategoryObjects = categoryIds.map((id) => {
+          // Find the full category object from the dropdown source data
+          const category = this.categoryCombo.find((c) => c.id === id);
 
-            // Return the object expected by the dropdown (e.g., { id: 1, name: 'Fiction' })
-            return {
-              id: id,
-              name: category?.name ?? '',
-            };
-          });
+          // Return the object expected by the dropdown (e.g., { id: 1, name: 'Fiction' })
+          return {
+            id: id,
+            name: category?.name ?? '',
+          };
+        });
 
-          // Use patchValue to update the FormControl bound to the dropdown
-          this.productForm.controls.categoryIdsList.patchValue(selectedCategoryObjects);
+        // Use patchValue to update the FormControl bound to the dropdown
+        this.productForm.controls.categoryIdsList.patchValue(selectedCategoryObjects);
 
-          this.productForm.controls.color.clear();
-          color.forEach((c) => {
-            this.productForm.controls.color.push(new FormControl(c));
-          });
+        this.productForm.controls.color.clear();
+        color.forEach((c) => {
+          this.productForm.controls.color.push(new FormControl(c));
+        });
 
-          productURL.forEach((p) => {
-            this.productForm.controls.productBase64.push(new FormControl(p));
-          });
+        productURL.forEach((p) => {
+          this.productForm.controls.productBase64.push(new FormControl(p));
+        });
 
-          variants.forEach((v) => {
-            const newV: IVariantData = {
-              id: v.id,
-              productId: v.productId,
-              name: v.name,
-              description: v.description,
-              mrp: v.mrp,
-              stocks: {
-                quantity: v.stocks.quantity,
-              },
-              variantBase64: v.variantURL,
-            };
-            this.productForm.controls.variants.push(initializeVariantForm(newV));
-          });
+        variants.forEach((v) => {
+          const newV: IVariantData = {
+            id: v.id,
+            productId: v.productId,
+            name: v.name,
+            description: v.description,
+            mrp: v.mrp,
+            stocks: {
+              quantity: v.stocks.quantity,
+            },
+            variantBase64: v.variantURL,
+          };
+          this.productForm.controls.variants.push(initializeVariantForm(newV));
+        });
 
-          this.productForm.controls.stocks.controls.forEach((x) => {
-            x.controls.quantity.setValue(
-              stocks.find((f) => f.size == x.controls.size.value)?.quantity ?? 0
-            );
-          });
+        this.productForm.controls.stocks.controls.forEach((x) => {
+          x.controls.quantity.setValue(
+            stocks.find((f) => f.size == x.controls.size.value)?.quantity ?? 0
+          );
+        });
 
-          descriptions.forEach((d) => {
-            const form = initializeDescriptionForm(null);
+        descriptions.forEach((d) => {
+          const form = initializeDescriptionForm(null);
 
-            const { header, descriptionType, shortDescription } = d;
-            form.patchValue({ header, descriptionType, shortDescription });
+          const { header, descriptionType, shortDescription } = d;
+          form.patchValue({ header, descriptionType, shortDescription });
 
-            if (d.descriptionType == EDescriptionType.Json) {
-              jsonToArray(JSON.parse(d.description)).forEach((v) => {
-                form.controls.jsonText.push(initializeJsonTextForm({ key: v.key, value: v.value }));
-              });
-            } else {
-              form.controls.description.setValue(d.description);
-            }
+          if (d.descriptionType == EDescriptionType.Json) {
+            jsonToArray(JSON.parse(d.description)).forEach((v) => {
+              form.controls.jsonText.push(initializeJsonTextForm({ key: v.key, value: v.value }));
+            });
+          } else {
+            form.controls.description.setValue(d.description);
+          }
 
-            this.productForm.controls.descriptions.push(form);
-          });
+          this.productForm.controls.descriptions.push(form);
+        });
 
-          this.productForm.controls.stocks.disable();
-        }
+        this.productForm.controls.stocks.disable();
       }
-    );
+    });
   }
-
-
-
-
-
 }
