@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, signal } from '@angular/core';
 import { ProductSlider } from '../home/product-slider/product-slider';
 import {
   DashboardProductTypeStringEnum,
@@ -7,10 +7,7 @@ import {
   Loader,
 } from '@shared';
 import { ActivatedRoute, Params } from '@angular/router';
-import {
-  FormsModule,
-  ReactiveFormsModule,
-} from '@angular/forms';
+import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { CommonModule } from '@angular/common';
 import { CartUpdateOperation } from '../../core/enum/cart.enum';
 import { ProductDetailBase } from '../../core/class/product-detail-base';
@@ -34,9 +31,13 @@ export class ProductDetail extends ProductDetailBase implements OnInit {
 
   public DashboardProductTypeStringEnum = DashboardProductTypeStringEnum;
 
-  constructor(
-    private activatedRoute: ActivatedRoute,
-  ) {
+toggleAccordion(i: number) {
+  const list = this.productDetail().descriptions;
+  list[i]._isAccordionOpen = !list[i]._isAccordionOpen;
+}
+
+
+  constructor(private activatedRoute: ActivatedRoute) {
     super();
   }
 

@@ -68,6 +68,8 @@ export interface Description {
   header: string;
   descriptionType: string;
   description: string;
-  jsonText: Array<{key: string; value: string}>;
+  jsonText: Array<{ key: string; value: string }>;
   shortDescription: string;
+
+  _isAccordionOpen: boolean;
 }
