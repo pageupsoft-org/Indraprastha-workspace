@@ -22,7 +22,8 @@
             name: item.name,
             price: item.mrp,
             wishList: item.isWishList,
-            imageUrl: item.productURL
+            imageUrl: item.productURL,
+            productId: item.id
           }"
           (addButtonPressed)="openProductDetail(item.id)"
         ></app-new-arrival-product-card>

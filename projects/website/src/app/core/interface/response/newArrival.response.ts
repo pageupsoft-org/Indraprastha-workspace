@@ -2,5 +2,6 @@ export interface RNewArrivals {
     name: string;
     price: number;
     wishList: boolean;
-    imageUrl: string[]
+    imageUrl: string[],
+    productId: number
 }
