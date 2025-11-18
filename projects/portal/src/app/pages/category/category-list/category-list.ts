@@ -66,7 +66,7 @@ export class CategoryList extends Base implements OnInit {
       };
       this.objConfirmationUtil.getConfirmation(modalData).then((res: boolean) => {
         if (res) {
-          this.httpDeletePromise<IGenericResponse<boolean>>(ApiRoutes.CATEGORY.GETBYID(id)).then(response => {
+          this.httpDeletePromise<IGenericResponse<boolean>>(ApiRoutes.CATEGORY.GET_BY_ID(id)).then(response => {
             console.log(response)
             if (response) {
               if (response.data) {

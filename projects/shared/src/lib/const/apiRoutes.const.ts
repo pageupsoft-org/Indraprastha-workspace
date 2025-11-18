@@ -26,19 +26,19 @@ export const ApiRoutes = {
   CUSTOMERS: {
     BASE: '/api/Customer',
     CUSTOMER_ALL: '/api/Customer/All',
-    GETBYID: (id: number) => `/api/Customer/${id}`,
+    GET_BY_ID: (id: number) => `/api/Customer/${id}`,
   },
   EMPLOYEE: {
     BASE: '/api/Employee',
     GET: '/api/Employee/All',
-    GETBYID: (id: number) => `/api/Employee/${id}`,
+    GET_BY_ID: (id: number) => `/api/Employee/${id}`,
   },
   COLLECTION: {
     BASE: "/api/Collection",
     MENU: '/api/Collection/Menu',
     ALL: "/api/Collection/ALL",
     GET_COMBO: '/api/Collection/combo',
-    GETBYID: (id: number) => `/api/Collection/${id}`,
+    GET_BY_ID: (id: number) => `/api/Collection/${id}`,
   },
   CART: {
     POST: '/api/Cart',
@@ -50,12 +50,12 @@ export const ApiRoutes = {
     BASE: '/api/Category',
     GET: '/api/Category/All',
     GET_COMBO: '/api/Category/Combo',
-    GETBYID: (id: number) => `/api/Category/${id}`,
+    GET_BY_ID: (id: number) => `/api/Category/${id}`,
   },
   BANNER: {
     BASE: '/api/Banner',
     GET: '/api/Banner/All',
-    GETBYID: (id: number) => `/api/Banner/${id}`,
+    GET_BY_ID: (id: number) => `/api/Banner/${id}`,
   },
   PRODUCT: {
     POST: '/api/product',
@@ -71,4 +71,9 @@ export const ApiRoutes = {
     MENU: '/api/Product/Menu',
     DASHBOARD: '/api/Product/Dashboard',
   },
+  ORDERS:{
+    BASE:'/api/Order',
+    ALL: '/api/Order/All',
+    GET_BY_ID: (id: number) => `/api/Order/${id}`,
+  }
 };

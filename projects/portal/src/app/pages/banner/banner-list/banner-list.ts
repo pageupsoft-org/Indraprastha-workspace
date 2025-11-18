@@ -74,7 +74,7 @@ export class BannerList extends Base implements OnInit {
     };
     this.objConfirmationUtil.getConfirmation(modalData).then((res: boolean) => {
       if (res) {
-        this.httpDeletePromise<IGenericResponse<boolean>>(ApiRoutes.BANNER.GETBYID(id))
+        this.httpDeletePromise<IGenericResponse<boolean>>(ApiRoutes.BANNER.GET_BY_ID(id))
           .then((response) => {
             console.log(response);
             if (response) {

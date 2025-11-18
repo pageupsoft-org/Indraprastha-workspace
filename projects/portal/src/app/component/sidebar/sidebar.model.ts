@@ -63,11 +63,11 @@ export const MenuItems: IMenuSideBarItem[] = [
         userType: [],
         child: [],
     },
-    // {
-    //     name: 'Orders',
-    //     route: AppRoutes.ORDERS,
-    //     icon: 'bx bxs-dashboard',
-    //     userType: [],
-    //     child: [],
-    // },
+    {
+        name: 'Orders',
+        route: AppRoutes.ORDERS,
+        icon: 'bx bxs-dashboard',
+        userType: [],
+        child: [],
+    },
 ]

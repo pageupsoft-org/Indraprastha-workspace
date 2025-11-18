@@ -69,7 +69,7 @@ export class CollectionList extends Base implements OnInit {
 
       this.objConfirmationUtil.getConfirmation(modalData).then((res: boolean) => {
         if (res) {
-          this.httpDeletePromise<IGenericResponse<boolean>>(ApiRoutes.COLLECTION.GETBYID(id))
+          this.httpDeletePromise<IGenericResponse<boolean>>(ApiRoutes.COLLECTION.GET_BY_ID(id))
             .then(response => {
               if (response?.data) {
                 this.toaster.show({

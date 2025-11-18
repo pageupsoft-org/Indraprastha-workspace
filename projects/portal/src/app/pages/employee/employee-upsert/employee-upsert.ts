@@ -80,7 +80,7 @@ export class EmployeeUpsert extends Base implements OnInit {
   // Fetch Employee
   public fetchEmployee(id: number) {
     if (id) {
-      this.httpGetPromise<any>(ApiRoutes.EMPLOYEE.GETBYID(id)).then((response) => {
+      this.httpGetPromise<any>(ApiRoutes.EMPLOYEE.GET_BY_ID(id)).then((response) => {
         if (response) {
           if (response.data) {
             this.employeeForm.patchValue({
