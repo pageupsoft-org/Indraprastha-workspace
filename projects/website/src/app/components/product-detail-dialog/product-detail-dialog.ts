@@ -4,7 +4,8 @@ import { MatDialogRef, MAT_DIALOG_DATA, MatDialogModule } from '@angular/materia
 import { CartUpdateOperation } from '../../core/enum/cart.enum';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { ProductDetailBase } from '../../core/class/product-detail-base';
-import { AppLoadingButton } from "@shared";
+import { AppLoadingButton } from '@shared';
+import { defaultIRCartRoot, IRCartRoot } from '../shopping-cart/shopping-cart.model';
 
 @Component({
   selector: 'app-product-detail-dialog',

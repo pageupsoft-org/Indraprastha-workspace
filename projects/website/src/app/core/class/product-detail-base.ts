@@ -20,6 +20,8 @@ import {
 import { ICartForm, IStockWithIds } from '../../pages/product-detail/product-detail.model';
 import { UtilityService } from '../services/utility-service';
 import { FormControl, FormGroup } from '@angular/forms';
+import { CartService } from '../services/cart-service';
+import { defaultIRCartRoot, IRCartRoot } from '../../components/shopping-cart/shopping-cart.model';
 
 export class ProductDetailBase {
   public isShowloader: WritableSignal<boolean> = signal(false);
@@ -38,9 +40,10 @@ export class ProductDetailBase {
 
   private utilService: UtilityService = inject(UtilityService);
   private toastService: ToastService = inject(ToastService);
+  private cartService: CartService = inject(CartService);
 
   public getProductDetail(productId: number) {
-    this.isShowloader.set(true)
+    this.isShowloader.set(true);
     httpGet<IRGeneric<IRProductDetailRoot>>(ApiRoutes.PRODUCT.GET_BY_ID(productId), true).subscribe(
       {
         next: (res: IRGeneric<IRProductDetailRoot>) => {
@@ -97,19 +100,62 @@ export class ProductDetailBase {
           } else {
             // this.productDetail.set(initializeIRProductDetailRoot());
           }
-          this.isShowloader.set(false)
+          this.isShowloader.set(false);
         },
       }
     );
   }
 
-  public addToCart() {
+  public addToCartWithDescription(): void {
+    const detail = this.productDetail(); 
+
+    const newProduct: IRCartRoot = {
+      name: detail.name,
+      color: detail.color,
+      mrp: detail.mrp,
+      gender: detail.gender,
+      productURL: detail.productURL,
+      stockId: detail.stocks[0]?.id ?? 0,
+      size: detail.stocks[0]?.size ?? '',
+      stockQuantity: detail.stocks[0]?.quantity ?? 0,
+      cartQuantity: 1,
+      cartId: 0,
+      productId: detail.id,
+      cartVariant: {
+        name: detail.variants[0]?.name ?? '',
+        mrp: detail.variants[0]?.mrp ?? 0,
+        variantURL: detail.variants[0]?.variantURL ?? '',
+        stockId: detail.variants[0]?.stocks?.id ?? 0, // Adjust if stocks in variant is an object
+        stockQuantity: detail.variants[0]?.stocks?.quantity ?? 0,
+        cartQuantity: 1,
+        variantId: detail.variants[0]?.id ?? 0,
+      },
+      _isDisable: false,
+    };
+
+    this.addToCart(newProduct);
+  }
+
+  public addToCart(product: IRCartRoot) {
+    const newAdded: IRCartRoot = defaultIRCartRoot();
+    newAdded.stockId = this.cartForm.controls.stockId.value ?? 0;
+    newAdded.cartVariant.stockId = this.cartForm.controls.variantStockId.value ?? 0;
+    newAdded.cartQuantity = this.cartForm.controls.quantity.value ?? 0;
+
+    const preQty: number = this.cartService.getProductQty(
+      this.cartForm.value.stockId ?? 0,
+      this.cartForm.value.variantStockId ?? 0
+    );
+
     if (this.utilService.isUserLoggedIn()) {
       this.isBtnLoader.set(true);
       // user is logged in make api call to save in db
+      const formData = { ...this.cartForm.value };
+      formData.quantity = preQty + (formData.quantity ?? 0);
+
       httpPost<IRGeneric<number>, Partial<ICartForm>>(
         ApiRoutes.CART.POST,
-        this.cartForm.value as Partial<ICartForm>
+        formData as Partial<ICartForm>
       ).subscribe({
         next: (res) => {
           if (res?.data) {
@@ -118,6 +164,8 @@ export class ProductDetailBase {
               type: EToastType.success,
               duration: 3000,
             });
+
+            this.cartService.addProductInData(newAdded);
           } else {
             this.toastService.show({
               message: res.errorMessage,
@@ -133,8 +181,16 @@ export class ProductDetailBase {
       });
     } else {
       // use localstorage
-      console.log("User not logged. Needed to implement this for local storage.");
-      
+      product.stockId = newAdded.stockId;
+      product.cartVariant.stockId = newAdded.cartVariant.stockId;
+      product.cartQuantity = newAdded.cartQuantity + preQty;
+      this.cartService.addProductInData(product);
+
+      this.toastService.show({
+        message: 'Cart Updated',
+        type: EToastType.success,
+        duration: 2000,
+      });
     }
   }
 }

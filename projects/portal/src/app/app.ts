@@ -2,24 +2,37 @@ import { Component, OnInit, signal } from '@angular/core';
 import { NavigationEnd, Router, RouterOutlet } from '@angular/router';
 import { HttpClient } from '@angular/common/http';
 import { filter } from 'rxjs';
-import { setHttpClient, Toast } from '@shared';
+import { PlatformService, setHttpClient, Toast } from '@shared';
+import { CartService } from '../../../website/src/app/core/services/cart-service';
 
 @Component({
   selector: 'app-root',
   imports: [RouterOutlet, Toast],
   templateUrl: './app.html',
-  styleUrl: './app.scss'
+  styleUrl: './app.scss',
 })
 export class App implements OnInit {
   public currentRoute: string = '';
   protected readonly title = signal('Indraprastha-portal');
-  constructor(private httpClient: HttpClient, private router: Router) {
+  constructor(
+    private httpClient: HttpClient,
+    private router: Router,
+    private cartService: CartService,
+    private platformService: PlatformService
+  ) {
     setHttpClient(httpClient);
+
+    // cartService.getCartProduct().then(() => {
+    //   console.log('app');
+    // });
+    // calling to get cart count
+    // if (platformService.isBrowser) {
+    // }
   }
 
   ngOnInit() {
     this.router.events
-      .pipe(filter(event => event instanceof NavigationEnd))
+      .pipe(filter((event) => event instanceof NavigationEnd))
       .subscribe((event: any) => {
         this.currentRoute = event.url;
         console.log('✅ Current route:', this.currentRoute);

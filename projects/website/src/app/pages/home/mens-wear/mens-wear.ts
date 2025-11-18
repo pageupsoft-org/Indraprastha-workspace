@@ -4,6 +4,7 @@ import {
   ElementRef,
   QueryList,
   signal,
+  ViewChild,
   ViewChildren,
   WritableSignal,
 } from '@angular/core';
@@ -17,17 +18,19 @@ import {
 } from '@shared';
 import { IDashboadRequest } from '../product-slider/dashboard.request';
 import { DashboardResponseRoot, Product } from '../product-slider/dashboard.response';
+import { CommonModule } from '@angular/common';
 
 @Component({
   selector: 'app-mens-wear',
-  imports: [],
+  imports: [CommonModule],
   templateUrl: './mens-wear.html',
   styleUrl: './mens-wear.scss',
 })
 export class MensWear implements AfterViewInit {
+  @ViewChild('galleryRef') gallery!: ElementRef<HTMLDivElement>;
   @ViewChildren('itemRef') items!: QueryList<ElementRef<HTMLDivElement>>;
-  @ViewChildren('galleryRef') gallery!: QueryList<ElementRef<HTMLDivElement>>;
-  private currentIndex = 2;
+
+  public currentIndex = 2;
   private readonly visibleCount = 5;
 
   public mensWearList: WritableSignal<Product[]> = signal([]);
@@ -42,48 +45,60 @@ export class MensWear implements AfterViewInit {
   }
 
   ngAfterViewInit(): void {
-    if (this.platformService.isBrowser) {
+    // Whenever @for renders or updates, this will fire
+    this.items.changes.subscribe(() => {
+      // console.log('Items loaded:', this.items.length);
       this.updateGallery();
-    }
+    });
+
+    // Call once in case items are already available
+    setTimeout(() => this.updateGallery());
   }
 
   private updateGallery(): void {
-    const gallery = this.gallery.first?.nativeElement;
-    if (!gallery) return;
+    const galleryEl = this.gallery?.nativeElement;
+    if (!galleryEl) return;
 
-    const offset = -this.currentIndex * (100 / this.visibleCount);
-    gallery.style.transform = `translateX(${offset}%)`;
+    const centerIndex = Math.floor(this.visibleCount / 2);
+    const offsetIndex = this.currentIndex - centerIndex;
+    const offset = -(offsetIndex * (100 / this.visibleCount));
+
+    galleryEl.style.transform = `translateX(${offset}%)`;
 
     this.items.forEach((item, index) => {
-      item.nativeElement.classList.toggle(
-        'active',
-        index === (this.currentIndex + 2) % this.mensWearList.length
-      );
+      item.nativeElement.classList.toggle('active', index === this.currentIndex);
     });
   }
 
   prev(): void {
-    if (this.currentIndex > 0) {
+    const minCenterIndex = Math.floor(this.visibleCount / 2); // 2
+    if (this.currentIndex > minCenterIndex) {
       this.currentIndex--;
       this.updateGallery();
     }
   }
 
   next(): void {
-    if (this.currentIndex < this.mensWearList.length - this.visibleCount) {
+    const center = Math.floor(this.visibleCount / 2); // 2
+    const maxCenterIndex = this.mensWearList().length - center - 1; // length - 3
+
+    if (this.currentIndex < maxCenterIndex) {
       this.currentIndex++;
       this.updateGallery();
     }
   }
+  public zoomImage(item: HTMLDivElement, index: number): void {
+    if (index < 2) return; // cannot zoom first two images
+    if (!(index + 2 <= this.mensWearList().length - 1)) return; // cannot zoom last two images
 
-  zoomImage(item: HTMLDivElement, index: number): void {
+    // remove previous active
     this.items.forEach((i) => i.nativeElement.classList.remove('active'));
-    item.classList.add('active');
-    this.currentIndex = index - 2;
 
-    if (this.currentIndex < 0) this.currentIndex = 0;
-    if (this.currentIndex > this.mensWearList.length - this.visibleCount)
-      this.currentIndex = this.mensWearList.length - this.visibleCount;
+    // set active on clicked
+    item.classList.add('active');
+
+    // update center index
+    this.currentIndex = index;
 
     this.updateGallery();
   }

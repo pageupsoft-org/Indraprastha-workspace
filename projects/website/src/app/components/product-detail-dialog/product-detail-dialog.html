@@ -162,7 +162,7 @@
                   type="radio"
                   id="variant-{{ variant.id }}"
                   name="variantSelection"
-                  [value]="variant.id"
+                  [value]="variant.stocks.id"
                   [formControl]="cartForm.controls.variantStockId"
                   class="hidden peer"
                 />
@@ -172,7 +172,7 @@
                   class="cursor-pointer px-4 py-2 border border-gray-300 rounded-[5px] text-sm text-gray-700 focus:outline-none"
                   [ngClass]="{
                     'peer-checked:bg-[#680C01] peer-checked:text-white peer-checked:border-[#680C01]':
-                      cartForm.value.variantStockId == variant.id
+                      cartForm.value.variantStockId == variant.stocks.id
                   }"
                 >
                   {{ variant.name }}
@@ -273,7 +273,7 @@
             [isLoading]="isBtnLoader()"
             label="ADD TO CART"
             type="submit"
-            (clicked)="addToCart()"
+            (clicked)="addToCartWithDescription()"
             [btnClass]="
               'w-full cursor-pointer px-6 py-3 font-semibold text-black border border-gray-300 bg-white rounded-[5px] hover:bg-gray-300 transition-colors duration-200 focus:outline-none'
             "
