@@ -14,26 +14,6 @@ export interface IRProductDetailRoot {
   stocks: Stock2[];
   descriptions: Description[];
 }
-
-export const initializeIRProductDetailRoot = () => {
-  return {
-    id: 0,
-    name: '',
-    categoryIds: [],
-    isCustomSize: false,
-    customSizeName: '',
-    color: [],
-    mrp: 0,
-    gender: '',
-    productURL: [],
-    activeImage: '', //used in frontedn
-    isActive: false,
-    variants: [],
-    stocks: [],
-    descriptions: [],
-  };
-};
-
 export interface Variant {
   id: number;
   productId: number;
@@ -73,3 +53,22 @@ export interface Description {
 
   _isAccordionOpen: boolean;
 }
+
+export const initializeIRProductDetailRoot = () => {
+  return {
+    id: 0,
+    name: '',
+    categoryIds: [],
+    isCustomSize: false,
+    customSizeName: '',
+    color: [],
+    mrp: 0,
+    gender: '',
+    productURL: [],
+    activeImage: '', //used in frontedn
+    isActive: false,
+    variants: [],
+    stocks: [],
+    descriptions: [],
+  };
+};

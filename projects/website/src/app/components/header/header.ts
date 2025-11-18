@@ -13,6 +13,7 @@ import { AuthManager } from "../auth-manager/auth-manager";
 import { UtilityService } from '../../core/services/utility-service';
 import { clearLocalStorageItems, EToastType, GenderTypeEnum } from '@shared';
 import { ToastService } from '@shared';
+import { CartService } from '../../core/services/cart-service';
 
 
 @Component({
@@ -36,7 +37,8 @@ export class Header {
   public dropdownOpen: boolean = false;
 
   constructor(
-    public _utitlityService: UtilityService, private router: Router, private _toastService: ToastService
+    public _utitlityService: UtilityService, private router: Router, private _toastService: ToastService,
+    public cartService: CartService
   ) {
     // _utitlityService.isUserLoggedIn.set(true); 
   }
@@ -71,6 +73,7 @@ export class Header {
     this.dropdownOpen = false;
     // Your logout logic here
     clearLocalStorageItems();
+    this.cartService.cartData.set([]);
     this._utitlityService.isUserLoggedIn.set(false);
     this._toastService.show({
       message: 'Logout success',

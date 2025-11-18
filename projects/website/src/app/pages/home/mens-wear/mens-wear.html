@@ -1,19 +1,16 @@
-<section class="bg-white pt-8 pb-12">
+<section class="bg-white pt-8 pb-12" data-aos="fade-up" data-aos-duration="1000">
   <div class="w-full block">
-    <h1
-      class="text-3xl md:text-4xl lg:text-5xl text-gray-800 text-center"
-      data-aos="fade-up"
-      data-aos-duration="1000"
-    >
-      MEN'S WEAR
-    </h1>
+    <h1 class="text-3xl md:text-4xl lg:text-5xl text-gray-800 text-center">MEN'S WEAR</h1>
   </div>
 
-  <div class="gallery-container max-w-7xl relative overflow-hidden">
+  <div class="gallery-container max-w-7xl">
     @if(mensWearList().length > 5){
-    <button id="prevBtn" class="prev absolute left-0 top-1/2 -translate-y-1/2 ..." (click)="prev()">
+    <button
+      (click)="prev()"
+      class="prev absolute left-0 top-1/2 -translate-y-1/2 z-10 p-2 md:p-[.5rem] bg-white/70 backdrop-blur-sm rounded-full shadow-lg transition-transform duration-300 hover:scale-110 focus:outline-none focus:ring-2 focus:ring-[#cdb29c] focus:ring-offset-2"
+    >
       <svg
-        xmlns="http://www.w3.org/2000/svg"
+        xmlns="http://www.w3.org/20-00/svg"
         class="md:h-6 md:w-6 h-3 w-3 text-gray-800"
         fill="none"
         viewBox="0 0 24 24"
@@ -25,20 +22,20 @@
     </button>
     }
 
-    <div #galleryRef class="gallery flex transition-transform duration-500 ease-in-out">
-      @for (item of mensWearList(); track $index) {
-      <div #itemRef class="item cursor-pointer" (click)="zoomImage(itemRef, $index)">
-        <img [src]="item.productURL[0]" [alt]="item.name" />
-        <p class="text-center font-bold mt-2 text-sm md:text-lg">{{ item.name }}</p>
+    <div #galleryRef class="gallery">
+      @for (mensWear of mensWearList(); track mensWear.id) {
+      <div #itemRef class="item" (click)="zoomImage(itemRef, $index)">
+        <img [src]="mensWear.productURL[0]" [alt]="mensWear.name" />
+        <p class="text-center font-bold mt-2 text-sm md:text-lg">{{ mensWear.name }}</p>
       </div>
       }
     </div>
 
+    <!-- [ngClass]="{'cursor-not-allowed': disableNext}" -->
     @if(mensWearList().length > 5){
     <button
-      id="nextBtn"
-      class="next absolute right-0 top-1/2 -translate-y-1/2 ..."
       (click)="next()"
+      class="next absolute right-0 top-1/2 -translate-y-1/2 z-10 p-2 md:p-2 bg-white/70 backdrop-blur-sm rounded-full shadow-lg transition-transform duration-300 hover:scale-110 focus:outline-none focus:ring-2 focus:ring-[#cdb29c] focus:ring-offset-2"
     >
       <svg
         xmlns="http://www.w3.org/2000/svg"
