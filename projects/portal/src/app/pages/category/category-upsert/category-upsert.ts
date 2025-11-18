@@ -83,7 +83,7 @@ export class CategoryUpsert extends Base implements OnInit {
 
   private getCategoryById(id: number) {
     if (id) {
-      this.httpGetPromise<any>(ApiRoutes.CATEGORY.GETBYID(id)).then((response) => {
+      this.httpGetPromise<any>(ApiRoutes.CATEGORY.GET_BY_ID(id)).then((response) => {
         if (response) {
           if (response.data) {
             console.log(response)

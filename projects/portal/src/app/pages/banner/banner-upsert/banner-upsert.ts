@@ -137,7 +137,7 @@ export class BannerUpsert extends Base implements OnInit {
 
   private getBannerById(id: number) {
     if (id) {
-      this.httpGetPromise<IGenericResponse<IBannerResponse>>(ApiRoutes.BANNER.GETBYID(id))
+      this.httpGetPromise<IGenericResponse<IBannerResponse>>(ApiRoutes.BANNER.GET_BY_ID(id))
         .then((response) => {
           if (response) {
             if (response.data) {
