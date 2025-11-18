@@ -97,6 +97,10 @@ export class ProductDetailBase {
 
               this.stockSizeArrayWithIds.push(newStockWithIds);
             });
+
+            if(this.productDetail().variants && this.productDetail().variants.length){
+              this.cartForm.controls.variantStockId.setValue(this.productDetail().variants[0].stocks.id)
+            }
           } else {
             // this.productDetail.set(initializeIRProductDetailRoot());
           }
