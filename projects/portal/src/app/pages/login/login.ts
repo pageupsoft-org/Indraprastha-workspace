@@ -17,7 +17,7 @@ import { CommonModule } from '@angular/common';
 })
 export class Login extends Base {
   public loginForm = new FormGroup<ILoginForm>({
-    username: new FormControl('', [Validators.required]),
+    username: new FormControl('', [Validators.required, Validators.minLength(3), Validators.maxLength(30)]),
     password: new FormControl('', [Validators.required, Validators.minLength(8), Validators.maxLength(8)]),
     fcmToken: new FormControl(''),
   });
