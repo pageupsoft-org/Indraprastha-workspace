@@ -22,16 +22,16 @@
 <div
   tabindex="-1"
   aria-hidden="true"
-  class="overflow-y-auto overflow-x-hidden z-50 justify-center items-center w-full md:inset-0 h-[calc(100%-1rem)] max-h-full"
+  class="overflow-y-auto overflow-x-hidden z-50 justify-center items-center md:inset-0 h-[calc(100%-1rem)] max-h-full w-[500px]"
 >
   <div class="relative p-0 w-full max-w-2xl max-h-full">
     <!-- Modal content -->
-    <div class="relative bg-white rounded-lg shadow-sm dark:bg-gray-700">
+    <div class="relative bg-white shadow-sm">
       <!-- Modal header -->
       <div
-        class="flex items-center justify-between p-4 md:p-5 border-b rounded-t dark:border-gray-600 border-gray-200"
+        class="flex items-center justify-between p-4 md:p-5 border-b rounded-t border-gray-200"
       >
-        <h3 class="text-xl font-semibold text-gray-900 dark:text-white">{{modalData.heading}}</h3>
+        <h3 class="text-xl font-semibold text-gray-900">{{modalData.heading}}</h3>
         <button (click)="close(false)"
           type="button"
           class="text-gray-400 cursor-pointer bg-transparent hover:bg-gray-200 hover:text-gray-900 rounded-lg text-sm w-8 h-8 ms-auto inline-flex justify-center items-center dark:hover:bg-gray-600 dark:hover:text-white"
@@ -63,19 +63,19 @@
       </div>
       <!-- Modal footer -->
       <div
-        class="flex items-center p-4 md:p-5 border-t border-gray-200 rounded-b dark:border-gray-600"
+        class="flex items-center justify-center p-4 md:p-5 border-t border-gray-200 rounded-b"
       >
         <button (click)="close(true)"
           data-modal-hide="default-modal"
           type="button"
-          class="text-white bg-blue-700 cursor-pointer hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800"
+          class="text-white bg-[#680C01] cursor-pointer focus:ring-4 focus:outline-none focus:ring-white font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:bg-[#680C01] dark:focus:ring-white"
         >
           {{modalData.yesText}}
         </button>
         <button (click)="close(false)"
           data-modal-hide="default-modal"
           type="button"
-          class="py-2.5 px-5 ms-3 text-sm font-medium cursor-pointer text-gray-900 focus:outline-none bg-white rounded-lg border border-gray-200 hover:bg-gray-100 hover:text-blue-700 focus:z-10 focus:ring-4 focus:ring-gray-100 dark:focus:ring-gray-700 dark:bg-gray-800 dark:text-gray-400 dark:border-gray-600 dark:hover:text-white dark:hover:bg-gray-700"
+          class="py-2.5 px-5 ms-3 text-sm font-medium cursor-pointer text-[#737373] focus:outline-none bg-white rounded-lg border border-gray-200 hover:bg-gray-100 hover:text-blue-700 focus:z-10 focus:ring-4 focus:ring-gray-100 dark:focus:ring-gray-700"
         >
           {{modalData.noText}}
         </button>

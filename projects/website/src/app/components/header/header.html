@@ -34,16 +34,27 @@
         </a>
 
         @if(_utitlityService.isUserLoggedIn()){
-        <a (click)="toggleDropdown()" class="nav-link cursor-pointer relative"><svg xmlns="http://www.w3.org/2000/svg"
+          <div class="relative">
+        <a (click)="toggleDropdown()" class="nav-link cursor-pointer"><svg xmlns="http://www.w3.org/2000/svg"
             class="sm:h-4 sm:w-4 lg:h-6 lg:w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
               d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z" />
           </svg></a>
-        @if(dropdownOpen){
-        <div class="absolute right-6 mt-[60px] w-40 bg-white border border-gray-200 rounded-lg shadow-lg z-50">
-          <a (click)="logout()" class="block px-4 py-2 text-gray-700 hover:bg-gray-100 rounded-t-lg cursor-pointer">Logout</a>
+        <!-- @if(dropdownOpen){ -->
+        <div class="absolute w-40 bg-white border border-gray-200 rounded-lg shadow-lg z-50 duration-500 ease-in-out right-[-70px]" [ngClass]=" dropdownOpen ? 'visible opacity-100 top-[30px]' : 'opacity-0 invisible top-[70px]' ">
+          <a (click)="logout()"
+            class="block px-4 py-2 text-gray-700 rounded-t-lg cursor-pointer
+            relative before:content-[''] before:absolute 
+            before:w-0 before:h-0 
+            before:border-l-[15px] before:border-l-transparent
+            before:border-r-[15px] before:border-r-transparent
+            before:border-b-[10px] before:border-b-[#ffff]
+            before:top-[-5px] before:left-1/2 before:-translate-x-1/2 
+            before:transform
+            ">Logout</a>
+        </div>        
+        <!-- } -->
         </div>
-        }
         }@else {
         <a (click)="openAuthForm()" class="nav-link cursor-pointer"><svg xmlns="http://www.w3.org/2000/svg"
             class="sm:h-4 sm:w-4 lg:h-6 lg:w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">

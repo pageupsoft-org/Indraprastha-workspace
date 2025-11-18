@@ -1,5 +1,5 @@
-<div class="flex items-center justify-center">
-  <div class="relative bg-white rounded-2xl shadow-2xl p-3 md:p-12 w-full">
+<div class="flex items-center justify-center bg-white h-full min-h-[700px]">
+  <div class="relative p-3 md:p-12 w-full">
     <button
       (click)="close()"
       class="md:absolute top-4 right-4 p-2 text-gray-600 hover:text-gray-800 transition-colors duration-200 sticky z-1000 btn-close cursor-pointer"
@@ -126,7 +126,7 @@
               />
               <label
                 [for]="radioId"
-                class="cursor-pointer px-4 py-2 border rounded"
+                class="cursor-pointer text-md p-3 border rounded"
                 [ngClass]="{
                   ' peer-checked:bg-[#680C01] peer-checked:text-white':
                     stockSize.stockId == cartForm.value.stockId
