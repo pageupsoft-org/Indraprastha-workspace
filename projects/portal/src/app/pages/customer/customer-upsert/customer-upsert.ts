@@ -5,12 +5,12 @@ import { IGenericResponse } from '../../../core/interface/response/genericRespon
 import { ICustomer, ICustomerForm } from '../../../core/interface/request/customer.request';
 import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
 import { CustomerList } from '../customer-list/customer-list';
-import { ApiRoutes, ErrorHandler, EToastType, ToastService } from '@shared';
+import { ApiRoutes, ErrorHandler, EToastType, ToastService, ValidateControl } from '@shared';
 import { patternWithMessage } from '../../../../../../shared/src/public-api';
 
 @Component({
   selector: 'app-customer-upsert',
-  imports: [ReactiveFormsModule, ErrorHandler],
+  imports: [ReactiveFormsModule, ValidateControl],
   templateUrl: './customer-upsert.html',
   styleUrl: './customer-upsert.scss',
 })
@@ -19,13 +19,14 @@ export class CustomerUpsert extends Base implements OnInit {
   public readonly dialogRef = inject(MatDialogRef<CustomerList>);
   public readonly data = inject(MAT_DIALOG_DATA);
   public customerRegisetr = new FormGroup<ICustomerForm>({
-    firstName: new FormControl('', Validators.required),
-    lastName: new FormControl('', Validators.required),
+    firstName: new FormControl('', [Validators.required, Validators.minLength(3), Validators.maxLength(30)]),
+    lastName: new FormControl('', [Validators.minLength(3), Validators.maxLength(50)]),
     email: new FormControl('', [Validators.required, patternWithMessage(/^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/, 'Please enter a valid email address (e.g. example@domain.com).')]),
-    contact: new FormControl('', Validators.required),
-    userName: new FormControl('', Validators.required),
-    password: new FormControl('', Validators.required),
-  })
+    contact: new FormControl('', [Validators.required, Validators.minLength(10), Validators.maxLength(10), patternWithMessage(/^[6-9]\d{9}$/, 'Please enter a valid contact number.')]),
+    userName: new FormControl('', [Validators.required, Validators.minLength(3), Validators.maxLength(30)]),
+    password: new FormControl('', [Validators.required, Validators.minLength(8), Validators.maxLength(8)]),
+  });
+  public showPassword: boolean = false;
 
   ngOnInit(): void {
     const id = this.data.id
@@ -83,6 +84,10 @@ export class CustomerUpsert extends Base implements OnInit {
       })
     }
 
+  }
+
+   public togglePassword() {
+    this.showPassword = !this.showPassword;
   }
 
 }
