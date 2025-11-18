@@ -5,19 +5,20 @@ import { Router } from '@angular/router';
 import { IGenericResponse } from '../../core/interface/response/genericResponse';
 import { LoginResponse } from '../../core/interface/response/login.response';
 import { Base } from '@portal/core';
-import { ApiRoutes, ErrorHandler, EToastType, ILoginForm, ILoginFormData, localStorageEnum, setLocalStorageItem, ToastService } from '@shared';
+import { ApiRoutes, ErrorHandler, EToastType, ILoginForm, ILoginFormData, localStorageEnum, setLocalStorageItem, ToastService, ValidateControl } from '@shared';
+import { CommonModule } from '@angular/common';
 
 
 @Component({
   selector: 'app-login',
-  imports: [ReactiveFormsModule, ErrorHandler],
+  imports: [ReactiveFormsModule,  ValidateControl, CommonModule],
   templateUrl: './login.html',
   styleUrl: './login.scss',
 })
 export class Login extends Base {
   public loginForm = new FormGroup<ILoginForm>({
     username: new FormControl('', [Validators.required]),
-    password: new FormControl('', [Validators.required]),
+    password: new FormControl('', [Validators.required, Validators.minLength(8), Validators.maxLength(8)]),
     fcmToken: new FormControl(''),
   });
   public showPassword: boolean = false
