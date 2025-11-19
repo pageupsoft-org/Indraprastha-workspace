@@ -70,7 +70,7 @@ export class App {
           this.utilityService.genderMenuData.set([]);
           // this.utilityService.genderMenuData.set(response.data);
           this.utilityService.genderMenuData.set(response.data);
-          this.utilityService.genderMenuData.set(dummyDataGenderMenu.data);
+          // this.utilityService.genderMenuData.set(dummyDataGenderMenu.data);
 
         } else {
           this.utilityService.genderMenuData.set([]);
