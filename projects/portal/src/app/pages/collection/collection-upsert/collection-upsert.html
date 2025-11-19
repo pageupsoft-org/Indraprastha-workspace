@@ -17,10 +17,10 @@
   </div>
 
   <!-- Form -->
-  <form [formGroup]="collectionForm" class="space-y-10" autocomplete="off" novalidate>
+  <form [formGroup]="collectionForm" class="space-y-6" autocomplete="off" novalidate>
 
     <!-- Row 1: Collection Name + Gender -->
-    <div class="grid grid-cols-1 lg:grid-cols-2 gap-8">
+    <div class="grid grid-cols-1 lg:grid-cols-2 gap-4">
 
       <!-- Collection Name -->
       <div>
@@ -32,9 +32,9 @@
                 d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
             </svg>
           </span>
-          <input type="text" formControlName="name" libValidateControl placeholder="e.g. Summer Breeze 2025" class="w-full pl-12 pr-5 py-2 rounded-lg border border-slate-300 bg-white text-slate-900
+          <input type="text" formControlName="name" libValidateControl placeholder="Enter collection name" class="w-full pl-12 pr-5 py-2 rounded-lg border border-slate-300 bg-white text-slate-900
                         placeholder-slate-400 focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 
-                        transition duration-200 text-base font-medium" />
+                        transition duration-200 text-base" />
         </div>
       </div>
 
@@ -48,9 +48,9 @@
                 d="M12 4.354a4 4 0 110 5.292M15 21H9v-1a4 4 0 018 0v1zm-3-9a4 4 0 100-8 4 4 0 000 8z" />
             </svg>
           </span>
-          <select libValidateControl formControlName="gender" class="w-full pl-12 pr-10 py-2 rounded-lg border border-slate-300 bg-white text-slate-900
+          <select libValidateControl formControlName="gender" class="w-full pl-12 pr-10 py-2 rounded-lg border border-slate-300 bg-white text-slate-400
                          focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 appearance-none
-                         transition duration-200 text-base font-medium cursor-pointer">
+                         transition duration-200 text-base cursor-pointer">
             <option [ngValue]="null" disabled class="text-slate-400">Select gender</option>
             @for (item of genders; track item.key) {
             <option [ngValue]="item.key">{{ item.value }}</option>
@@ -76,17 +76,17 @@
           </svg>
         </div>
         <textarea formControlName="description" rows="2" libValidateControl
-          placeholder="Write a short description about this collection..." class="w-full pl-12 pr-5 py-2 rounded-lg border border-slate-300 bg-white text-slate-900
+          placeholder="Write a short description about this collection..." class="w-full pl-12 pr-5 py-3 rounded-lg border border-slate-300 bg-white text-slate-900
                          placeholder-slate-400 focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 
                          resize-none transition duration-200 text-base leading-relaxed"></textarea>
       </div>
     </div>
 
     <!-- Hidden ID -->
-    <input type="hidden" formControlName="id">
+    <input type="hidden" formControlName="id" hidden>
 
     <!-- Action Buttons -->
-    <div class="flex justify-end gap-5 pt-8 border-t border-slate-200">
+    <div class="flex justify-end gap-5">
       <button type="button" (click)="onCancel()" class="px-8 py-2 rounded-lg border-2 border-slate-300 text-slate-700 hover:bg-slate-50 
                      font-medium transition duration-200 text-base cursor-pointer">
         Cancel
