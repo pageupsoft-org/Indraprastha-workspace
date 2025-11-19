@@ -27,6 +27,7 @@ import {
   IRProductDetailRoot,
   jsonToArray,
   MStringEnumToArray,
+  patternWithMessage,
   stringEnumToArray,
   ValidateControl,
 } from '@shared';
@@ -43,7 +44,6 @@ import {
 } from '../../../core/interface/model/portal-util.model';
 import { ImageSizeConst, ImageTypeEnum } from '../../../core/enum/image.enum';
 import { IConvertImageResult } from '../../../core/interface/model/portal-util.model';
-import { patternWithMessage } from '../../../../../../shared/src/public-api';
 
 @Component({
   selector: 'app-product-upsert',
