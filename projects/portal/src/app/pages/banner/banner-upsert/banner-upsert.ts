@@ -8,29 +8,13 @@ import { CommonModule } from '@angular/common';
 import { EBannerConnectionType } from '../../../core/enum/banner-connection-type.enum';
 import { EGender } from '../../../core/enum/gender.enum';
 import { EbannerTypes } from '../../../core/enum/banner-types.enum';
-import {
-  ApiRoutes,
-  convertImageToBase64,
-  ErrorHandler,
-  EToastType,
-  MStringEnumToArray,
-  stringEnumToArray,
-  ToastService,
-  ValidateControl,
-} from '@shared';
-import {
-  IBannerResponse,
-  IGenericComboResponse,
-} from '../../../core/interface/response/banner.response';
+import { ApiRoutes, convertImageToBase64, ErrorHandler, EToastType, MStringEnumToArray, stringEnumToArray, ToastService } from '@shared';
+import { IBannerResponse, IGenericComboResponse } from '../../../core/interface/response/banner.response';
 import { IBanner, IBannerForm } from '../../../core/interface/request/banner.request';
-import { IConvertImageResult } from '../../../core/interface/model/portal-util.model';
-import { convertImagesToBase64Array } from '../../../core/utils/portal-utility.util';
-import { ImageTypeEnum } from '../../../core/enum/image-type.enum';
-import { log } from 'console';
 
 @Component({
   selector: 'app-banner-upsert',
-  imports: [ReactiveFormsModule, CommonModule, ValidateControl],
+  imports: [ReactiveFormsModule, CommonModule, ErrorHandler],
   templateUrl: './banner-upsert.html',
   styleUrl: './banner-upsert.scss',
 })
@@ -43,34 +27,34 @@ export class BannerUpsert extends Base implements OnInit {
   public combo: IGenericComboResponse[] = [];
   public selectConnectionType: string = 'None';
   public base64Image: string | ArrayBuffer | null = null;
-  public showImageUploader: boolean = false;
 
   public bannerForm = new FormGroup<IBannerForm>({
     id: new FormControl(0),
-    name: new FormControl('', [Validators.required, Validators.maxLength(100)]),
-    description: new FormControl('', [Validators.maxLength(250)]),
-    bannerConnectionType: new FormControl('None', [Validators.required]),
-    bannerType: new FormControl('', [Validators.required]),
-    gender: new FormControl('', [Validators.required]),
+    name: new FormControl(''),
+    description: new FormControl(''),
+    bannerConnectionType: new FormControl('None'),
+    bannerType: new FormControl(''),
+    gender: new FormControl(''),
     bannerValueId: new FormControl(0),
-    bannerBase64: new FormControl('', [Validators.required]),
+    bannerBase64: new FormControl(''),
   });
 
   constructor(private toaster: ToastService) {
     super();
+    console.log(this.bannerConnectionTypes);
   }
 
   ngOnInit(): void {
     this.bannerForm.controls.bannerValueId.disable();
     this.getCategoryCombo();
-    this.getProductCombo();
+    // this.getProductCombo()
     const id = this.data.id;
     if (id) {
       this.getBannerById(id);
     }
   }
 
-  public onCancel(isSuccess?: boolean) {
+  public onCancel(isSuccess? : boolean) {
     this.dialogRef.close(isSuccess);
   }
 
@@ -84,22 +68,7 @@ export class BannerUpsert extends Base implements OnInit {
   }
 
   public onBannerSubmit() {
-    console.log(this.bannerForm.controls.bannerBase64.value);
-    if (this.bannerForm.controls.bannerBase64.value === null || this.bannerForm.controls.bannerBase64.value === '') {
-      this.toaster.show({
-        message: 'Please select a banner image',
-        duration: 3000,
-        type: EToastType.error,
-      });
-      return;
-    }
-    Object.keys(this.bannerForm.controls).forEach(key => {
-      const control = this.bannerForm.controls[key];
-      if (control.invalid) {
-        console.log(`Control ${key} is invalid. Errors:`, control.errors);
-      }
-    });
-    console.log(this.bannerForm, this.bannerForm.valid);
+    console.log(this.bannerForm.value);
     if (this.bannerForm.valid) {
       this.httpPostPromise<IGenericResponse<boolean>, IBanner>(
         ApiRoutes.BANNER.BASE,
@@ -108,19 +77,12 @@ export class BannerUpsert extends Base implements OnInit {
         if (response) {
           if (response.data) {
             if (this.data.id === 0) {
-              this.onCancel(true);
-              this.toaster.show({
-                message: 'Banner Add Successful',
-                duration: 3000,
-                type: EToastType.success,
-              });
-            } else {
-              this.onCancel(true);
-              this.toaster.show({
-                message: 'Banner Update Successful',
-                duration: 3000,
-                type: EToastType.success,
-              });
+              this.onCancel(true)
+              this.toaster.show({ message: 'Banner Add Successful', duration: 3000, type: EToastType.success})
+            }
+            else {
+              this.onCancel(true)
+              this.toaster.show({ message: 'Banner Update Successful', duration: 3000, type: EToastType.success })
             }
           }
         }
@@ -157,27 +119,12 @@ export class BannerUpsert extends Base implements OnInit {
   public selectBannerConnectionType() {
     const bannerConnectionValue = this.bannerForm.controls.bannerConnectionType.value;
     console.log(bannerConnectionValue);
-    if (bannerConnectionValue === 'Category') {
-      this.bannerForm.controls.bannerValueId.reset();
+    if (bannerConnectionValue === 'Category' || bannerConnectionValue === 'Product') {
       this.bannerForm.controls.bannerValueId.enable();
       this.selectConnectionType = bannerConnectionValue;
-      this.bannerForm.controls.bannerValueId.setValidators([Validators.required]);
-      this.bannerForm.controls.bannerValueId.updateValueAndValidity();
-
-    } else if (bannerConnectionValue === 'Product') {
-      this.bannerForm.controls.bannerValueId.reset();
-      this.bannerForm.controls.bannerValueId.enable();
-      this.selectConnectionType = bannerConnectionValue;
-      this.bannerForm.controls.bannerValueId.setValidators([Validators.required]);
-      this.bannerForm.controls.bannerValueId.updateValueAndValidity();
-
-
     } else {
       this.bannerForm.controls.bannerValueId.reset();
       this.bannerForm.controls.bannerValueId.disable();
-      this.bannerForm.controls.bannerValueId.clearValidators();
-      this.bannerForm.controls.bannerValueId.updateValueAndValidity();
-      this.selectConnectionType = 'None';
     }
     console.log(this.bannerForm.value);
   }
@@ -193,10 +140,8 @@ export class BannerUpsert extends Base implements OnInit {
           if (response) {
             if (response.data) {
               console.log(response);
-              this.bannerForm.patchValue({
-                ...response.data,
-                bannerBase64: response.data.bannerURL,
-              });
+              this.bannerForm.patchValue(response.data);
+              this.selectConnectionType = response.data.bannerConnectionType;
             }
           }
         })
@@ -204,27 +149,6 @@ export class BannerUpsert extends Base implements OnInit {
           //handle error
         });
     }
-  }
-
-  public onBannerImageChange(event: any) {
-    convertImagesToBase64Array(event).then((res: IConvertImageResult) => {
-      if (res) {
-        if (res.validBase64Files.length) {
-          this.bannerForm.controls.bannerBase64.setValue(res.validBase64Files[0] as string);
-        }
-        if (res.invalidFiles.length) {
-          this.toastService.show({
-            message: 'Some files were invalid and skipped',
-            type: EToastType.warning,
-            duration: 2000,
-          });
-        }
-      }
-    });
-  }
-
-  public removeBannerImage() {
-    this.bannerForm.controls.bannerBase64.reset();
   }
 
   // public
