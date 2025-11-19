@@ -37,7 +37,12 @@ import { EStockSize } from '../../../../../../shared/src/lib/enum/size.enum';
 import { arrayToJson, convertImagesToBase64Array } from '../../../core/utils/portal-utility.util';
 import { IDropdownSettings, NgMultiSelectDropDownModule } from 'ng-multiselect-dropdown';
 import { ActivatedRoute, Params, Router } from '@angular/router';
-import { IConvertImageResult } from '../../../core/interface/model/portal-util.model';
+import {
+  IConvertImageParams,
+  IConvertImageResult,
+  initialConvertImageParam,
+} from '../../../core/interface/model/portal-util.model';
+import { ImageSizeConst, ImageTypeEnum } from '../../../core/enum/image.enum';
 
 @Component({
   selector: 'app-product-upsert',
@@ -93,7 +98,7 @@ export class ProductUpsert extends Base implements OnInit {
 
     this.activatedRoute.queryParams.subscribe((param: Params) => {
       if (param && param['id']) {
-        this.getProductById(+param['id']); 
+        this.getProductById(+param['id']);
       }
     });
   }
@@ -153,7 +158,14 @@ export class ProductUpsert extends Base implements OnInit {
   }
 
   public onVariantImageChange(event: any, index: number) {
-    convertImagesToBase64Array(event).then((res: IConvertImageResult) => {
+    const param: IConvertImageParams = initialConvertImageParam({
+      event,
+      allowedTypes: [ImageTypeEnum.jpeg, ImageTypeEnum.png],
+      expectedImgWidth: ImageSizeConst.productVariant.width,
+      expectedImgHeight: ImageSizeConst.productVariant.height,
+    });
+
+    convertImagesToBase64Array(param).then((res: IConvertImageResult) => {
       if (res) {
         if (res.validBase64Files.length) {
           this.productForm.controls.variants
@@ -162,17 +174,25 @@ export class ProductUpsert extends Base implements OnInit {
         }
         if (res.invalidFiles.length) {
           this.toastService.show({
-            message: 'Some files were invalid and skipped',
+            message: 'Some files were invalid or had incorrect dimensions and were skipped',
             type: EToastType.warning,
             duration: 2000,
           });
         }
       }
     });
+
+    event.target.value = null;
   }
 
   public onProductImageChange(event: any, index: number) {
-    convertImagesToBase64Array(event).then((res: IConvertImageResult) => {
+    const param: IConvertImageParams = initialConvertImageParam({
+      event,
+      allowedTypes: [ImageTypeEnum.jpeg, ImageTypeEnum.png],
+      expectedImgWidth: ImageSizeConst.product.width,
+      expectedImgHeight: ImageSizeConst.product.height,
+    });
+    convertImagesToBase64Array(param).then((res: IConvertImageResult) => {
       if (res) {
         if (res.validBase64Files.length) {
           if (res.validBase64Files.length == 1) {
@@ -188,17 +208,19 @@ export class ProductUpsert extends Base implements OnInit {
         }
         if (res.invalidFiles.length) {
           this.toastService.show({
-            message: 'Some files were invalid and skipped',
+            message: 'Some files were invalid or had incorrect dimensions and were skipped',
             type: EToastType.warning,
             duration: 2000,
           });
         }
       }
     });
+
+    event.target.value = null;
   }
 
   public upsertProduct() {
-    console.log(this.productForm.value)
+    console.log(this.productForm.value);
     // if (this.productForm.valid) {
     const data = this.productForm.getRawValue();
     data.descriptions.forEach((desc: any) => {

@@ -1,4 +1,5 @@
-import { ImageTypeEnum } from '../enum/image-type.enum';
+import { ImageTypeEnum } from '../enum/image.enum';
+import { IConvertImageParams } from '../interface/model/portal-util.model';
 
 export function convertImageInputToBase64(event: Event): Promise<string | ArrayBuffer | null> {
   return new Promise((resolve, reject) => {
@@ -18,16 +19,73 @@ export function convertImageInputToBase64(event: Event): Promise<string | ArrayB
   });
 }
 
+// export function convertImagesToBase64Array(
+//   event: Event,
+//   allowedTypes: string[] = [ImageTypeEnum.jpeg, ImageTypeEnum.jpeg]
+// ): Promise<{
+//   validBase64Files: (string | ArrayBuffer | null)[];
+//   invalidFiles: string[];
+//   message: string | null;
+// }> {
+//   return new Promise((resolve, reject) => {
+//     const input = event.target as HTMLInputElement;
+//     const files = input.files;
+
+//     if (!files || files.length === 0) {
+//       reject('No files selected');
+//       return;
+//     }
+
+//     const fileArray = Array.from(files);
+
+//     // Separate valid + invalid files
+//     const validFiles = fileArray.filter((f) => allowedTypes.includes(f.type));
+//     const invalidFiles = fileArray.filter((f) => !allowedTypes.includes(f.type)).map((f) => f.name);
+
+//     // If no valid files
+//     if (validFiles.length === 0) {
+//       resolve({
+//         validBase64Files: [],
+//         invalidFiles,
+//         message: 'Invalid file type selected',
+//       });
+//       return;
+//     }
+
+//     const base64Promises = validFiles.map((file) => {
+//       return new Promise<string | ArrayBuffer | null>((resolveFile, rejectFile) => {
+//         const reader = new FileReader();
+//         reader.onload = () => resolveFile(reader.result);
+//         reader.onerror = (error) => rejectFile(error);
+//         reader.readAsDataURL(file);
+//       });
+//     });
+
+//     Promise.all(base64Promises)
+//       .then((result) => {
+//         resolve({
+//           validBase64Files: result,
+//           invalidFiles,
+//           message: invalidFiles.length > 0 ? 'Some files were invalid and skipped' : null,
+//         });
+//       })
+//       .catch(reject);
+//   });
+// }
+
 export function convertImagesToBase64Array(
-  event: Event,
-  allowedTypes: string[] = [ImageTypeEnum.jpeg, ImageTypeEnum.jpeg]
+  // event: Event,
+  // allowedTypes: string[] = [ImageTypeEnum.jpeg, ImageTypeEnum.png],
+  // expectedWidth?: number,
+  // expectedHeight?: number
+  param: IConvertImageParams
 ): Promise<{
   validBase64Files: (string | ArrayBuffer | null)[];
   invalidFiles: string[];
   message: string | null;
 }> {
   return new Promise((resolve, reject) => {
-    const input = event.target as HTMLInputElement;
+    const input = param.event.target as HTMLInputElement;
     const files = input.files;
 
     if (!files || files.length === 0) {
@@ -37,11 +95,11 @@ export function convertImagesToBase64Array(
 
     const fileArray = Array.from(files);
 
-    // Separate valid + invalid files
-    const validFiles = fileArray.filter((f) => allowedTypes.includes(f.type));
-    const invalidFiles = fileArray.filter((f) => !allowedTypes.includes(f.type)).map((f) => f.name);
+    const validFiles = fileArray.filter((f) => param.allowedTypes.includes(f.type));
+    const invalidFiles = fileArray
+      .filter((f) => !param.allowedTypes.includes(f.type))
+      .map((f) => f.name);
 
-    // If no valid files
     if (validFiles.length === 0) {
       resolve({
         validBase64Files: [],
@@ -54,7 +112,41 @@ export function convertImagesToBase64Array(
     const base64Promises = validFiles.map((file) => {
       return new Promise<string | ArrayBuffer | null>((resolveFile, rejectFile) => {
         const reader = new FileReader();
-        reader.onload = () => resolveFile(reader.result);
+
+        reader.onload = () => {
+          const base64 = reader.result;
+
+          // Image dimension check
+          const img = new Image();
+          img.onload = () => {
+            const isExactMatch =
+              (!param.expectedImgWidth || img.width === param.expectedImgWidth) &&
+              (!param.expectedImgHeight || img.height === param.expectedImgHeight);
+
+            if (!isExactMatch) {
+              invalidFiles.push(file.name);
+              console.log(
+                'Invalid dimensions for file:',
+                file.name,
+                'Expected:',
+                param.expectedImgWidth,
+                'x',
+                param.expectedImgHeight,
+                'Got:',
+                img.width,
+                'x',
+                img.height
+              );
+              resolveFile(null);
+            } else {
+              resolveFile(base64);
+            }
+          };
+
+          img.onerror = () => rejectFile('Invalid image file');
+          img.src = base64 as string;
+        };
+
         reader.onerror = (error) => rejectFile(error);
         reader.readAsDataURL(file);
       });
@@ -62,47 +154,18 @@ export function convertImagesToBase64Array(
 
     Promise.all(base64Promises)
       .then((result) => {
+        const filteredResults = result.filter((r) => r !== null);
+
         resolve({
-          validBase64Files: result,
+          validBase64Files: filteredResults,
           invalidFiles,
-          message: invalidFiles.length > 0 ? 'Some files were invalid and skipped' : null,
+          message:
+            invalidFiles.length > 0 ? 'Some files were invalid or had incorrect dimensions' : null,
         });
       })
       .catch(reject);
   });
 }
-
-// export function convertImagesToBase64Array(event: Event): Promise<(string | ArrayBuffer | null)[]> {
-//   return new Promise((resolve, reject) => {
-//     const input = event.target as HTMLInputElement;
-//     const files = input.files;
-
-//     if (!files || files.length === 0) {
-//       reject('No files selected');
-//       return;
-//     }
-
-//     // Convert the FileList into a standard array of files
-//     const fileArray = Array.from(files);
-
-//     // Create an array of promises, one for each file
-//     const base64Promises = fileArray.map((file) => {
-//       return new Promise<string | ArrayBuffer | null>((resolveFile, rejectFile) => {
-//         const reader = new FileReader();
-
-//         reader.onload = () => resolveFile(reader.result);
-//         reader.onerror = (error) => rejectFile(error);
-
-//         reader.readAsDataURL(file);
-//       });
-//     });
-
-//     // Use Promise.all to wait for all file reading promises to complete
-//     Promise.all(base64Promises)
-//       .then(resolve) // Resolve the main promise with the array of results
-//       .catch(reject); // Reject the main promise if any file conversion fails
-//   });
-// }
 
 /**
  * Converts an array of { key: string, value: string } objects into a single JSON object (key-value map).
