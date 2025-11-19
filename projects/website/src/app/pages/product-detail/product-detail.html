@@ -1,122 +1,151 @@
-@if(isShowloader()){
-  <app-loader></app-loader>
-}
-@else {
-  <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12 lg:py-20 bg-white shadow-lg my-10">
-    <div class="flex grid grid-cols-5 lg:flex-row gap-14">
-      <!-- Product Image Gallery and Main Image -->
-      <div class="flex col-span-2 lg:flex-row lg:space-x-4 w-full sticky top-[150px] max-h-[40%]">
-        <!-- Left Image Gallery (Thumbnails) -->
-        <div class="flex flex-row lg:flex-col space-x-3 lg:space-x-0 lg:space-y-4 mb-8 lg:mb-0">
-          @for(productImage of productDetail().productURL; track $index){
-          <img
-            [src]="productImage"
-            (click)="enlargeImage(productImage)"
-            class="thumbnail-img w-20 sm:w-24 h-28 sm:h-32 object-cover rounded-lg transition-all cursor-pointer selected-thumb"
-          />
-          }
-        </div>
-  
-        <!-- Main Product Image and Magnified View Container -->
-        <div class="relative w-full rounded-lg magnify-container image-container">
-          <img
-            id="main-product-image"
-            [src]="productDetail().activeImage"
-            alt="Main Product"
-            class="w-full h-auto object-cover rounded-lg shadow-xl"
-          />
-          <div id="magnified-view" class="absolute inset-0"></div>
-        </div>
+<!-- @if(isShowloader()){
+<app-loader></app-loader>
+} @else { -->
+<div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12 lg:py-20 bg-white shadow-lg my-10">
+  <div class="flex grid grid-cols-5 lg:flex-row gap-14">
+    <!-- Product Image Gallery and Main Image -->
+    <div class="flex col-span-2 lg:flex-row lg:space-x-4 w-full sticky top-[150px] max-h-[80%]">
+      <!-- Left Image Gallery (Thumbnails) -->
+      <div class="flex flex-row lg:flex-col space-x-3 lg:space-x-0 lg:space-y-4 mb-8 lg:mb-0">
+        @let dummyArr = [1, 2, 3, 4]; @if(isShowloader()){ @for (item of dummyArr; track $index) {
+        <ngx-skeleton-loader
+          count="1"
+          appearance="square"
+          [theme]="{ height: '100px', width: '64px' }"
+        />
+        } } @else { @for(productImage of productDetail().productURL; track $index){
+        <img
+          [src]="productImage"
+          (click)="enlargeImage(productImage)"
+          class="thumbnail-img w-16 sm:w-24 h-20 sm:h-28 object-cover rounded-lg transition-all cursor-pointer selected-thumb"
+        />
+        } }
       </div>
-  
-      <!-- Product Details Section -->
-      <div class="flex col-span-3 flex-col space-y-4">
-        <h2
-          id="modal-product-name"
-          class="text-3xl md:text-4xl font-bold text-gray-900 leading-tight"
-        >
-          {{ productDetail().name }}
-        </h2>
-        <p class="text-xl text-gray-700">
-            {{ productDetail().mrp | currency:'INR':'symbol':'1.0-0':'en-IN' }}
-        </p>
-        <p class="text-sm text-gray-500">(MRP inclusive of all Taxes)</p>
-  
-        <!-- Options -->
-        <div class="space-y-4 mt-6">
-          <div>
-            <p class="font-semibold text-gray-800 mb-2">SIZE</p>
+
+      <!-- Main Product Image and Magnified View Container -->
+      <div class="relative w-full rounded-lg magnify-container image-container">
+        @if(isShowloader()){
+        <ngx-skeleton-loader
+          count="1"
+          appearance="square"
+          [theme]="{ height: '500px', width: '100%' }"
+        />
+        }@else {
+        <img
+          id="main-product-image"
+          [src]="productDetail().activeImage"
+          alt="Main Product"
+          class="w-full h-auto object-cover rounded-lg shadow-xl"
+        />
+        <div id="magnified-view" class="absolute inset-0"></div>
+        }
+      </div>
+    </div>
+
+    <!-- Product Details Section -->
+    <div class="flex col-span-3 flex-col space-y-4">
+      <h2
+        id="modal-product-name"
+        class="text-3xl md:text-4xl font-bold text-gray-900 leading-tight"
+      >
+        @if(isShowloader()){
+        <ngx-skeleton-loader count="1" appearance="line" />
+        }@else{
+        {{ productDetail().name }}
+        }
+      </h2>
+      <p class="text-xl text-gray-700">
+        @if(isShowloader()){
+        <ngx-skeleton-loader count="1" appearance="line" />
+        }@else{
+        {{ productDetail().mrp | currency : 'INR' : 'symbol' : '1.0-0' : 'en-IN' }}
+        }
+      </p>
+      <p class="text-sm text-gray-500">(MRP inclusive of all Taxes)</p>
+
+      <!-- Options -->
+      <div class="space-y-4 mt-6">
+        <div>
+          <p class="font-semibold text-gray-800 mb-2">SIZE</p>
+          <div class="flex flex-wrap gap-2">
+            @if(isShowloader()){
+              @for (item of dummyArr; track $index) {
+                <ngx-skeleton-loader
+                count="1"
+                appearance="square"
+                [theme]="{ height: '50px', width: '50' }"
+                />
+              }
+            }@else { @for (stockSize of stockSizeArrayWithIds; let i = $index ; track
+            stockSize.value) { @let radioId = 'radio' + i;
+            <input
+              type="radio"
+              name="stockSizeSelection"
+              [id]="radioId"
+              [value]="stockSize.stockId"
+              class="hidden peer"
+              [formControl]="cartForm.controls.stockId"
+            />
+            <label
+              [for]="radioId"
+              class="cursor-pointer px-4 py-2 border rounded"
+              [ngClass]="{
+                ' peer-checked:bg-[#680C01] peer-checked:text-white':
+                  stockSize.stockId == cartForm.value.stockId
+              }"
+              [ngClass]="{ 'cursor-not-allowed! bg-gray-200 line-through': !stockSize.quantity }"
+            >
+              {{ stockSize.value }}
+            </label>
+            } }
+          </div>
+        </div>
+
+        <div class="hidden">
+          <p class="font-semibold text-gray-800 mb-2">COLOR</p>
+          <div class="flex flex-wrap gap-2">
+            @for (item of productDetail().color; track $index) {
+            <button
+              class="p-3 w-6 h-6 border cursor-pointer border-gray-300 rounded-full text-sm text-gray-700 hover:bg-gray-200 transition-colors duration-200 flex items-center justify-center focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-gray-500"
+              [style.backgroundColor]="item"
+            ></button>
+            }
+          </div>
+        </div>
+
+        <!-- variant -->
+        @if(productDetail().variants.length){
+        <div>
+          <p class="font-semibold text-gray-800 mb-2">Variants</p>
+          <div class="flex flex-wrap gap-2">
             <div class="flex flex-wrap gap-2">
-              @for (stockSize of stockSizeArrayWithIds; let i = $index ; track stockSize.value) { @let
-              radioId = 'radio' + i;
+              @for (variant of productDetail().variants; track $index) {
               <input
                 type="radio"
-                name="stockSizeSelection"
-                [id]="radioId"
-                [value]="stockSize.stockId"
+                id="variant-{{ variant.id }}"
+                name="variantSelection"
+                [value]="variant.stocks.id"
+                [formControl]="cartForm.controls.variantStockId"
                 class="hidden peer"
-                [formControl]="cartForm.controls.stockId"
               />
+
               <label
-                [for]="radioId"
-                class="cursor-pointer px-4 py-2 border rounded"
+                for="variant-{{ variant.id }}"
+                class="cursor-pointer px-4 py-2 border border-gray-300 rounded-[5px] text-sm text-gray-700 focus:outline-none"
                 [ngClass]="{
-                  ' peer-checked:bg-[#680C01] peer-checked:text-white':
-                    stockSize.stockId == cartForm.value.stockId
+                  'peer-checked:bg-[#680C01] peer-checked:text-white peer-checked:border-[#680C01]':
+                    cartForm.value.variantStockId == variant.stocks.id
                 }"
-                [ngClass]="{ 'cursor-not-allowed! bg-gray-200 line-through': !stockSize.quantity }"
               >
-                {{ stockSize.value }}
+                {{ variant.name }}
               </label>
               }
             </div>
           </div>
-  
-          <div>
-            <p class="font-semibold text-gray-800 mb-2">COLOR</p>
-            <div class="flex flex-wrap gap-2">
-              @for (item of productDetail().color; track $index) {
-              <button
-                class="p-3 w-10 h-10 border cursor-pointer border-gray-300 rounded-full text-sm text-gray-700 hover:bg-gray-200 transition-colors duration-200 flex items-center justify-center focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-gray-500"
-                [style.backgroundColor]="item"
-              ></button>
-              }
-            </div>
-          </div>
-  
-          <!-- variant -->
-          @if(productDetail().variants.length){
-          <div>
-            <p class="font-semibold text-gray-800 mb-2">Variants</p>
-            <div class="flex flex-wrap gap-2">
-              <div class="flex flex-wrap gap-2">
-                @for (variant of productDetail().variants; track $index) {
-                <input
-                  type="radio"
-                  id="variant-{{ variant.id }}"
-                  name="variantSelection"
-                  [value]="variant.stocks.id"
-                  [formControl]="cartForm.controls.variantStockId"
-                  class="hidden peer"
-                />
-  
-                <label
-                  for="variant-{{ variant.id }}"
-                  class="cursor-pointer px-4 py-2 border border-gray-300 rounded-[5px] text-sm text-gray-700 focus:outline-none"
-                  [ngClass]="{
-                    'peer-checked:bg-[#680C01] peer-checked:text-white peer-checked:border-[#680C01]':
-                      cartForm.value.variantStockId == variant.stocks.id
-                  }"
-                >
-                  {{ variant.name }}
-                </label>
-                }
-              </div>
-            </div>
-          </div>
-          }
-  
-          <!-- <div>
+        </div>
+        }
+
+        <!-- <div>
             <p class="font-semibold text-gray-800 mb-2">Blouse Piece</p>
             <div class="flex flex-wrap gap-2">
               <button
@@ -131,8 +160,8 @@
               </button>
             </div>
           </div> -->
-  
-          <!-- <div>
+
+        <!-- <div>
             <p class="font-semibold text-gray-800 mb-2">Custom Tailor</p>
             <div class="relative">
               <select
@@ -142,79 +171,84 @@
               </select>
             </div>
           </div> -->
-  
-          <!-- Input Number -->
-  
-          <p class="font-semibold text-gray-800 mb-2">Quantity</p>
-          <div class="py-2 px-3 inline-block bg-white border border-gray-200 rounded-lg">
-            <div class="flex items-center gap-x-1.5">
-              <button
-                type="button"
-                (click)="alterQuantityCnt(CartAlterEnum.decrease)"
-                class="size-6 inline-flex justify-center items-center gap-x-2 text-sm font-medium rounded-md border border-gray-200 bg-white text-gray-800 shadow-2xs hover:bg-gray-50 focus:outline-hidden focus:bg-gray-50 disabled:opacity-50 disabled:pointer-events-none cursor-pointer"
-                [disabled]="(cartForm.controls.quantity.value ?? 0) <= 1"
+
+        <!-- Input Number -->
+
+        <p class="font-semibold text-gray-800 mb-2">Quantity</p>
+        <div class="py-2 px-3 inline-block bg-white border border-gray-200 rounded-lg">
+          <div class="flex items-center gap-x-1.5">
+            <button
+              type="button"
+              (click)="alterQuantityCnt(CartAlterEnum.decrease)"
+              class="size-6 inline-flex justify-center items-center gap-x-2 text-sm font-medium rounded-md border border-gray-200 bg-white text-gray-800 shadow-2xs hover:bg-gray-50 focus:outline-hidden focus:bg-gray-50 disabled:opacity-50 disabled:pointer-events-none cursor-pointer"
+              [disabled]="(cartForm.controls.quantity.value ?? 0) <= 1"
+            >
+              <svg
+                class="shrink-0 size-3.5"
+                xmlns="http://www.w3.org/2000/svg"
+                width="24"
+                height="24"
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="currentColor"
+                stroke-width="2"
+                stroke-linecap="round"
+                stroke-linejoin="round"
               >
-                <svg
-                  class="shrink-0 size-3.5"
-                  xmlns="http://www.w3.org/2000/svg"
-                  width="24"
-                  height="24"
-                  viewBox="0 0 24 24"
-                  fill="none"
-                  stroke="currentColor"
-                  stroke-width="2"
-                  stroke-linecap="round"
-                  stroke-linejoin="round"
-                >
-                  <path d="M5 12h14"></path>
-                </svg>
-              </button>
-              <input
-                readonly
-                class="p-0 w-6 bg-transparent border-0 text-gray-800 text-center focus:ring-0 [&::-webkit-inner-spin-button]:appearance-none [&::-webkit-outer-spin-button]:appearance-none"
-                style="-moz-appearance: textfield"
-                type="number"
-                [formControl]="cartForm.controls.quantity"
-              />
-              <button
-                type="button"
-                (click)="alterQuantityCnt(CartAlterEnum.increase)"
-                class="size-6 inline-flex justify-center items-center gap-x-2 text-sm font-medium rounded-md border border-gray-200 bg-white text-gray-800 shadow-2xs hover:bg-gray-50 focus:outline-hidden focus:bg-gray-50 disabled:opacity-50 disabled:pointer-events-none cursor-pointer"
+                <path d="M5 12h14"></path>
+              </svg>
+            </button>
+            <input
+              readonly
+              class="p-0 w-6 bg-transparent border-0 text-gray-800 text-center focus:ring-0 [&::-webkit-inner-spin-button]:appearance-none [&::-webkit-outer-spin-button]:appearance-none"
+              style="-moz-appearance: textfield"
+              type="number"
+              [formControl]="cartForm.controls.quantity"
+            />
+            <button
+              type="button"
+              (click)="alterQuantityCnt(CartAlterEnum.increase)"
+              class="size-6 inline-flex justify-center items-center gap-x-2 text-sm font-medium rounded-md border border-gray-200 bg-white text-gray-800 shadow-2xs hover:bg-gray-50 focus:outline-hidden focus:bg-gray-50 disabled:opacity-50 disabled:pointer-events-none cursor-pointer"
+            >
+              <svg
+                class="shrink-0 size-3.5"
+                xmlns="http://www.w3.org/2000/svg"
+                width="24"
+                height="24"
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="currentColor"
+                stroke-width="2"
+                stroke-linecap="round"
+                stroke-linejoin="round"
               >
-                <svg
-                  class="shrink-0 size-3.5"
-                  xmlns="http://www.w3.org/2000/svg"
-                  width="24"
-                  height="24"
-                  viewBox="0 0 24 24"
-                  fill="none"
-                  stroke="currentColor"
-                  stroke-width="2"
-                  stroke-linecap="round"
-                  stroke-linejoin="round"
-                >
-                  <path d="M5 12h14"></path>
-                  <path d="M12 5v14"></path>
-                </svg>
-              </button>
-            </div>
+                <path d="M5 12h14"></path>
+                <path d="M12 5v14"></path>
+              </svg>
+            </button>
           </div>
-          <!-- End Input Number -->
         </div>
-  
-        <!-- Buttons -->
-        <div class="mt-8 flex flex-col space-y-4">
+        <!-- End Input Number -->
+      </div>
+
+      <!-- Buttons -->
+      <div class="mt-8 flex flex-col space-y-4 mb-8">
+        @if(isShowloader()){
+          <ngx-skeleton-loader count="2" appearance="line" />
+        }@else {
           <lib-app-loading-button
             [isLoading]="isBtnLoader()"
             label="ADD TO CART"
             type="submit"
-            (clicked)="addToCart()"
-            [btnClass]="'w-full cursor-pointer px-6 py-3 font-semibold text-black border border-gray-300 bg-white rounded-[5px] hover:bg-gray-300 transition-colors duration-200 focus:outline-none'"
+            (clicked)="addToCartWithDescription()"
+            [btnClass]="
+              'w-full cursor-pointer px-6 py-3 font-semibold text-black border border-gray-300 bg-white rounded-[5px] hover:bg-gray-300 transition-colors duration-200 focus:outline-none'
+            "
             [conditionalClass]="'cursor-not-allowed!'"
             [addConditionClass]="!cartForm.value.stockId"
             [isButtonDisabled]="!cartForm.value.stockId"
           ></lib-app-loading-button>
-          
+  
           <button
             [disabled]="!cartForm.value.stockId"
             class="cursor-pointer px-6 py-3 font-semibold text-white bg-[#680C01] rounded-[5px] focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-red-500"
@@ -222,40 +256,92 @@
           >
             BUY IT NOW
           </button>
-        </div>
-  
-        @for (description of productDetail().descriptions; track $index) {
-        <div class="mt-8 flex flex-col space-y-4 p-6">
-          <div class="flex justify-between items-center border-b pb-4 mb-6">
-            <h2 class="text-xl font-bold text-gray-800 uppercase tracking-wide">
-              {{ description.header }}
-            </h2>
-          </div>
-  
-          @if(description.descriptionType == DescriptionTypeStringEnum.Json){ @for (jsonText of
-          description.jsonText; track $index) {
-          <div class="space-y-3 text-gray-700">
-            <div class="flex">
-              <div class="w-1/3 font-medium">{{ jsonText.key }}:</div>
-              <div class="w-2/3">{{ jsonText.value }}</div>
-            </div>
-          </div>
-          }
-          <div class="mt-6 pt-4 border-t text-gray-700">{{ description.shortDescription }}</div>
-          } @else {
-          <div class="space-y-3 text-gray-700">
-            <div class="flex">
-              <div class="w-2/3">{{ description.description }}</div>
-            </div>
-          </div>
-          <div class="mt-6 pt-4 border-t text-gray-700">{{ description.shortDescription }}</div>
-          }
-        </div>
         }
       </div>
+
+      @for (description of productDetail().descriptions; track $index; let i = $index) {
+      <div class="flex flex-col space-y-4 py-4 border-t border-gray-200 mb-0">
+        <!-- HEADER (Accordion Button) -->
+        <button
+          (click)="toggleAccordion(i)"
+          class="w-full flex justify-between items-center cursor-pointer mb-0"
+        >
+          <h2 class="text-md font-bold text-gray-800 uppercase tracking-wide flex items-center">
+            {{ description.header }}
+          </h2>
+
+          <!-- + / - icons -->
+          <span class="relative w-6 h-6 flex items-center justify-center">
+            <!-- PLUS -->
+            <svg
+              class="absolute w-5 h-5 transition-all duration-200"
+              [class.opacity-0]="description._isAccordionOpen"
+              [class.scale-90]="description._isAccordionOpen"
+              fill="none"
+              stroke="currentColor"
+              stroke-width="2"
+            >
+              <path d="M12 5v14M5 12h14" />
+            </svg>
+
+            <!-- MINUS -->
+            <svg
+              class="absolute w-5 h-5 transition-all duration-200"
+              [class.opacity-100]="description._isAccordionOpen"
+              [class.opacity-0]="!description._isAccordionOpen"
+              [class.scale-90]="!description._isAccordionOpen"
+              fill="none"
+              stroke="currentColor"
+              stroke-width="2"
+            >
+              <path d="M5 12h14" />
+            </svg>
+          </span>
+        </button>
+
+        <!-- CONTENT (Animated) -->
+        <div
+          class="overflow-hidden transition-all duration-300"
+          [style.maxHeight]="description._isAccordionOpen ? '500px' : '0px'"
+        >
+          <!-- Wrapper content -->
+          <div class="pt-4">
+            <!-- JSON TYPE -->
+            @if (description.descriptionType == DescriptionTypeStringEnum.Json) { @for (jsonText of
+            description.jsonText; track $index) {
+            <div class="space-y-3 text-gray-700">
+              <div class="flex">
+                <div class="w-1/3 font-medium">{{ jsonText.key }}:</div>
+                <div class="w-2/3">{{ jsonText.value }}</div>
+              </div>
+            </div>
+            }
+
+            <div class="mt-6 pt-4 border-t border-gray-200 text-gray-700">
+              {{ description.shortDescription }}
+            </div>
+
+            } @else {
+
+            <!-- NORMAL TEXT -->
+            <div class="space-y-3 text-gray-700">
+              <div class="flex">
+                <div class="w-2/3">{{ description.description }}</div>
+              </div>
+            </div>
+
+            <div class="mt-6 pt-4 border-t border-gray-200 text-gray-700">
+              {{ description.shortDescription }}
+            </div>
+            }
+          </div>
+        </div>
+      </div>
+      }
     </div>
   </div>
-}
+</div>
+<!-- } -->
 
 <div class="max-w-7xl mx-auto">
   <app-product-slider

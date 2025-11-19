@@ -25,7 +25,7 @@ export const authInterceptor: HttpInterceptorFn = (req, next) => {
         'Content-Type': 'application/json'
       }
     });
-    console.log(req);
+    // console.log(req);
     
   }
  
@@ -33,6 +33,8 @@ export const authInterceptor: HttpInterceptorFn = (req, next) => {
   return next(req).pipe(
     catchError((error: HttpErrorResponse) => {
       let errorMessage = 'An unexpected error occurred';
+      console.log(error);
+      
       if (error.error instanceof ErrorEvent) {
         errorMessage = `Error: ${error.error.message}`;
       } else {

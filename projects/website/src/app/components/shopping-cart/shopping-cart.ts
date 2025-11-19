@@ -17,17 +17,22 @@ import {
   httpPost,
   IRGeneric,
   Loader,
+  setLocalStorageItem,
   ToastService,
 } from '@shared';
 import { IRCartRoot } from './shopping-cart.model';
 import { CartUpdateOperation } from '../../core/enum/cart.enum';
-import { CurrencyPipe, NgClass } from '@angular/common';
+import { CommonModule, CurrencyPipe, NgClass } from '@angular/common';
 import { UtilityService } from '../../core/services/utility-service';
 import { ICartFormData } from '../../pages/product-detail/product-detail.model';
+import { CartService } from '../../core/services/cart-service';
+import { LocalStorageEnum } from '../../core/enum/local-storage.enum';
+import { Router, RouterModule } from '@angular/router';
+import { appRoutes } from '../../core/const/appRoutes.const';
 
 @Component({
   selector: 'app-shopping-cart',
-  imports: [Loader, CurrencyPipe, NgClass],
+  imports: [Loader, CurrencyPipe, CommonModule],
   templateUrl: './shopping-cart.html',
   styleUrl: './shopping-cart.scss',
 })
@@ -36,15 +41,17 @@ export class ShoppingCart {
   cartOverlay = viewChild<ElementRef>('cartOverlay');
 
   public showLoader: WritableSignal<boolean> = signal(false);
-  public cartData: WritableSignal<IRCartRoot[]> = signal([]);
   private objCOnfirmationUtil: ConfirmationUtil = new ConfirmationUtil();
-
   public CartUpdateOperation = CartUpdateOperation;
-  public cartTotalMrp: Signal<number> = computed(() => {
-    return this.cartData().reduce((total, item) => total + item.mrp * item.cartQuantity, 0);
-  });
 
-  constructor(private utilService: UtilityService, private toastService: ToastService) {}
+  public readonly homeRoute = appRoutes.HOME;
+
+  constructor(
+    private utilService: UtilityService,
+    private toastService: ToastService,
+    public cartService: CartService,
+    private router: Router
+  ) {}
 
   public openCart() {
     this.cartOverlay()?.nativeElement.classList.remove('hidden');
@@ -56,10 +63,10 @@ export class ShoppingCart {
   public hideCart() {
     this.cart()?.nativeElement.classList.add('translate-x-full');
     this.cartOverlay()?.nativeElement.classList.add('hidden');
-    this.cartData.set([]);
+    // this.cartService.cartData.set([]);
   }
   public alterQuantityCnt(operation: CartUpdateOperation, index: number) {
-    const cart = this.cartData();
+    const cart = this.cartService.cartData();
     const item = cart[index];
 
     if (!item) return;
@@ -69,7 +76,7 @@ export class ShoppingCart {
       return;
     }
 
-    this.cartData()[index]._isDisable = true;
+    this.cartService.cartData()[index]._isDisable = true;
     const newQty =
       operation === CartUpdateOperation.increase ? item.cartQuantity + 1 : item.cartQuantity - 1; // this will now be >= 1 always
 
@@ -83,13 +90,36 @@ export class ShoppingCart {
     this.updateCartProductQuantity(payload, index, operation);
   }
 
+  private updateServiceVariable(data: ICartFormData, index: number) {
+    this.cartService.cartData.update((cart) => {
+      const updated = [...cart];
+
+      if (data.quantity === 0) {
+        // remove item from cart
+        updated.splice(index, 1);
+        return updated;
+      }
+
+      const item = { ...updated[index] };
+      item.cartQuantity = data.quantity ?? 0;
+      updated[index] = item;
+
+      return updated;
+    });
+
+    if (!this.utilService.isUserLoggedIn()) {
+      setLocalStorageItem(LocalStorageEnum.cartList, this.cartService.cartData());
+    }
+  }
+
   public updateCartProductQuantity(
     data: ICartFormData,
     index: number,
     operation: CartUpdateOperation
   ) {
     if (!this.utilService.isUserLoggedIn()) {
-      // localstorage logic later
+      this.updateServiceVariable(data, index);
+      this.cartService.cartData()[index]._isDisable = false;
       return;
     }
 
@@ -98,68 +128,46 @@ export class ShoppingCart {
         if (!res?.data) return; // do nothing on failure
 
         // SUCCESS → Now update state
-        this.cartData.update((cart) => {
-          const updated = [...cart];
-
-          if (data.quantity === 0) {
-            // remove item from cart
-            updated.splice(index, 1);
-            return updated;
-          }
-
-          const item = { ...updated[index] };
-          item.cartQuantity = data.quantity ?? 0;
-          updated[index] = item;
-
-          return updated;
-        });
-        this.cartData()[index]._isDisable = false;
+        this.updateServiceVariable(data, index);
+        this.cartService.cartData()[index]._isDisable = false;
       },
 
       error: () => {
         // On error: do nothing, don't update UI
-        this.cartData()[index]._isDisable = false;
+        this.cartService.cartData()[index]._isDisable = false;
       },
     });
   }
 
   private getData() {
     this.showLoader.set(true);
-    httpGet<IRGeneric<IRCartRoot[]>>(ApiRoutes.CART.GET).subscribe({
-      next: (res) => {
-        if (res?.data) {
-          // this.cartData.set(res.data);
-          this.cartData.set(
-            res.data.map((x) => {
-              return {
-                // <-- Add explicit 'return'
-                ...x,
-                _isDisable: false,
-              }; // <-- Note the semicolon (optional, but good practice)
-            })
-          );
-        } else {
-          this.cartData.set([]);
-        }
-        this.showLoader.set(false);
-      },
-
-      error: (err) => {
-        this.showLoader.set(false);
-      },
+    this.cartService.getCartProduct().finally(() => {
+      this.showLoader.set(false);
     });
   }
 
-  public removeItemFromCart(cartId: number) {    
+  public routeToHome(){
+    this.hideCart();
+    this.router.navigate([appRoutes.HOME]);
+  }
+
+  public routeToCheckout(){
+    this.hideCart();
+    this.router.navigate([appRoutes.CHECKOUT]);
+  }
+
+  public removeItemFromCart(cartId: number, index: number) {
     this.objCOnfirmationUtil
-      .getConfirmation(getDefaultConfirmationModalData("Remove item", "Are you sure you want to remove this item?"))
+      .getConfirmation(
+        getDefaultConfirmationModalData('Remove item', 'Are you sure you want to remove this item?')
+      )
       .then((res: boolean) => {
         if (res) {
-          httpDelete<IRGeneric<boolean>>(ApiRoutes.CART.DELETE_ITEM_FROM_CART(cartId)).subscribe(
-            {
+          if (this.utilService.isUserLoggedIn()) {
+            httpDelete<IRGeneric<boolean>>(ApiRoutes.CART.DELETE_ITEM_FROM_CART(cartId)).subscribe({
               next: (res) => {
                 if (res?.data) {
-                  this.cartData.update((currentCart) =>
+                  this.cartService.cartData.update((currentCart) =>
                     currentCart.filter((item) => item.cartId !== cartId)
                   );
 
@@ -170,8 +178,18 @@ export class ShoppingCart {
                   });
                 }
               },
-            }
-          );
+            });
+          } else {
+            this.cartService.cartData.update((currentCart) =>
+              currentCart.filter((item, prodIndex) => prodIndex !== index)
+            );
+            setLocalStorageItem(LocalStorageEnum.cartList, this.cartService.cartData());
+            this.toastService.show({
+              message: 'Product removed',
+              type: EToastType.success,
+              duration: 2000,
+            });
+          }
         }
       });
   }

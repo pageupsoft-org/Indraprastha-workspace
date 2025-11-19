@@ -73,7 +73,7 @@ export class CustomerUpsert extends Base implements OnInit {
   public fetchCustomer(id: number) {
     console.log(id)
     if (id) {
-      this.httpGetPromise<any>(ApiRoutes.CUSTOMERS.GETBYID(id)).then((response) => {
+      this.httpGetPromise<any>(ApiRoutes.CUSTOMERS.GET_BY_ID(id)).then((response) => {
         if (response) {
           if (response.data) {
             this.customerRegisetr.patchValue(response.data)

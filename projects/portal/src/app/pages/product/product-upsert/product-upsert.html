@@ -161,7 +161,9 @@
 
               <div>
                 <label class="block text-sm font-medium text-gray-700 mb-1">Stock Quantity</label>
-                <input type="textr" min="0"
+                <input
+                  type="text"
+                  min="0"
                   class="w-full border border-gray-300 rounded-lg px-3 py-2 text-sm text-gray-700 focus:ring-2 focus:ring-blue-400 outline-none"
                   placeholder="Enter quantity" [formControl]="variant.controls.stocks.controls.quantity"
                   libValidateControl />
@@ -171,11 +173,24 @@
             <!-- RIGHT SIDE: IMAGE -->
             <div class="w-full md:w-[35%] flex justify-center items-center">
               <div
-                class="relative bg-gray-100 border border-dashed border-gray-400 rounded-xl overflow-hidden flex items-center justify-center aspect-[9/16] w-full max-w-[200px]">
-                <input type="file" accept="image/*" title="" class="absolute inset-0 opacity-0 cursor-pointer"
-                  (change)="onVariantImageChange($event, $index)" libValidateControl />
-                <img id="preview1" [ngClass]="variant.controls.variantBase64.value ? '' : 'hidden'"
-                  [src]="variant.controls.variantBase64.value" alt="Variant" class="object-cover w-full h-full" />
+                class="relative bg-gray-100 border border-dashed border-gray-400 rounded-xl overflow-hidden flex items-center justify-center aspect-[9/16] w-full max-w-[200px]"
+              >
+                <input
+                  type="file"
+                  accept="image/*"
+                  title=""
+                  class="absolute inset-0 opacity-0 cursor-pointer"
+                  (change)="onVariantImageChange($event, $index)"
+                  libValidateControl
+
+                />
+                <img
+                  id="preview1"
+                  [ngClass]="variant.controls.variantBase64.value ? '' : 'hidden'"
+                  [src]="variant.controls.variantBase64.value"
+                  alt="Variant"
+                  class="object-cover w-full h-full"
+                />
 
                 @if(variant.controls.variantBase64.value == null){
                 <span id="placeholder1" class="text-gray-500 text-center text-sm leading-tight">

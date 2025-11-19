@@ -3,3 +3,14 @@ export interface IConvertImageResult {
   invalidFiles: string[];
   message: string | null;
 }
+
+export interface IConvertImageParams {
+  event: Event;
+  allowedTypes: string[];
+  expectedImgHeight: number;
+  expectedImgWidth: number;
+}
+
+export const initialConvertImageParam = (data: IConvertImageParams) => ({ ...data });
+
+

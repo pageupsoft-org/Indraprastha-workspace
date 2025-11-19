@@ -24,3 +24,34 @@ export interface CartVariant {
   cartQuantity: number;
   variantId: number;
 }
+
+// initialization
+export function defaultCartVariant(): CartVariant {
+  return {
+    name: '',
+    mrp: 0,
+    variantURL: '',
+    stockId: 0,
+    stockQuantity: 0,
+    cartQuantity: 0,
+    variantId: 0,
+  };
+}
+
+export function defaultIRCartRoot(): IRCartRoot {
+  return {
+    name: '',
+    color: [],
+    mrp: 0,
+    gender: '',
+    productURL: [],
+    stockId: 0,
+    size: '',
+    stockQuantity: 0,
+    cartQuantity: 0,
+    cartId: 0,
+    productId: 0,
+    cartVariant: defaultCartVariant(), // Use the helper function for the nested object
+    _isDisable: false,
+  };
+}

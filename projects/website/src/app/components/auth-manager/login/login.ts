@@ -5,6 +5,7 @@ import { HttpErrorResponse } from '@angular/common/http';
 import { ButtonLoader } from "../../../core/component/button-loader/button-loader";
 import { ApiRoutes, ErrorHandler, EToastType, httpPost, ILoginForm, ILoginFormData, IRGeneric, IRLogin, localStorageEnum, setLocalStorageItem, ToastService } from '@shared';
 import { UtilityService } from '../../../core/services/utility-service';
+import { CartService } from '../../../core/services/cart-service';
 
 
 @Component({
@@ -25,7 +26,7 @@ export class Login {
     fcmToken: new FormControl(""),
   });
 
-  constructor(private _toastService: ToastService, private _utilityService: UtilityService) {}
+  constructor(private _toastService: ToastService, private _utilityService: UtilityService, private cartService: CartService) {}
 
   public openRegisterForm() {
     this.authType.set(EAuthManager.register);
@@ -52,6 +53,8 @@ export class Login {
               });
               this.closeForm.emit();
               this.loginForm.reset()
+
+              this.cartService.addLocalStorageCartToDb();
             }
             else{
                this._toastService.show({

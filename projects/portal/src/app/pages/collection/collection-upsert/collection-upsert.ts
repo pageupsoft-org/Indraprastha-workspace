@@ -63,7 +63,7 @@ export class CollectionUpsert extends Base {
 
   private getCollectionById(id: number) {
     if (id) {
-      this.httpGetPromise<IGenericResponse<ICollection>>(ApiRoutes.COLLECTION.GETBYID(id)).then((response) => {
+      this.httpGetPromise<IGenericResponse<ICollection>>(ApiRoutes.COLLECTION.GET_BY_ID(id)).then((response) => {
         if (response) {
           if (response.data) {
             this.collectionForm.patchValue(response.data)
