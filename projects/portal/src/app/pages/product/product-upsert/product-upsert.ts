@@ -389,7 +389,7 @@ export class ProductUpsert extends Base implements OnInit {
   public setAllSize() {
    if(this.setAllQtyInput.valid){
      const qty = this.setAllQtyInput.value || 0;
-    this.productForm.controls.stocks.controls.forEach((x) => {
+    this.productForm.controls.stocks.controls.filter((x) => x.controls.size.value !== EStockSize.FreeSize).forEach((x) => {
       x.controls.quantity.setValue(qty);
     });
     // this.productForm.controls.stocks.updateValueAndValidity();
