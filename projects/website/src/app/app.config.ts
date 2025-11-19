@@ -2,10 +2,10 @@ import {
   ApplicationConfig,
   provideBrowserGlobalErrorListeners,
   provideZoneChangeDetection,
-  LOCALE_ID
+  LOCALE_ID,
 } from '@angular/core';
 import { provideRouter } from '@angular/router';
-
+import { provideNgxSkeletonLoader } from 'ngx-skeleton-loader';
 import { routes } from './app.routes';
 import { provideClientHydration, withEventReplay } from '@angular/platform-browser';
 import { provideHttpClient, withInterceptorsFromDi, withInterceptors } from '@angular/common/http';
@@ -17,13 +17,16 @@ export const appConfig: ApplicationConfig = {
     provideZoneChangeDetection({ eventCoalescing: true }),
     provideRouter(routes),
     provideClientHydration(withEventReplay()),
-    provideHttpClient(
-      withInterceptorsFromDi(),
-      withInterceptors([authInterceptor])
-    ),
+    provideHttpClient(withInterceptorsFromDi(), withInterceptors([authInterceptor])),
     {
       provide: LOCALE_ID,
-      useValue: 'en-IN'
-    }
+      useValue: 'en-IN',
+    },
+    provideNgxSkeletonLoader({
+      theme: {
+        extendsFromRoot: true,
+        height: '30px',
+      },
+    }),
   ],
 };

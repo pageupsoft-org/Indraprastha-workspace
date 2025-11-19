@@ -151,6 +151,11 @@ export class ShoppingCart {
     this.router.navigate([appRoutes.HOME]);
   }
 
+  public routeToCheckout(){
+    this.hideCart();
+    this.router.navigate([appRoutes.CHECKOUT]);
+  }
+
   public removeItemFromCart(cartId: number, index: number) {
     this.objCOnfirmationUtil
       .getConfirmation(

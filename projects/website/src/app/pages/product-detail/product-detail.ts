@@ -11,6 +11,7 @@ import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { CommonModule } from '@angular/common';
 import { CartUpdateOperation } from '../../core/enum/cart.enum';
 import { ProductDetailBase } from '../../core/class/product-detail-base';
+import { NgxSkeletonLoaderModule } from 'ngx-skeleton-loader';
 
 @Component({
   selector: 'app-product-detail',
@@ -21,6 +22,7 @@ import { ProductDetailBase } from '../../core/class/product-detail-base';
     FormsModule,
     AppLoadingButton,
     Loader,
+    NgxSkeletonLoaderModule,
   ],
   templateUrl: './product-detail.html',
   styleUrl: './product-detail.scss',
@@ -31,11 +33,10 @@ export class ProductDetail extends ProductDetailBase implements OnInit {
 
   public DashboardProductTypeStringEnum = DashboardProductTypeStringEnum;
 
-toggleAccordion(i: number) {
-  const list = this.productDetail().descriptions;
-  list[i]._isAccordionOpen = !list[i]._isAccordionOpen;
-}
-
+  public toggleAccordion(i: number) {
+    const list = this.productDetail().descriptions;
+    list[i]._isAccordionOpen = !list[i]._isAccordionOpen;
+  }
 
   constructor(private activatedRoute: ActivatedRoute) {
     super();
@@ -44,10 +45,12 @@ toggleAccordion(i: number) {
   ngOnInit(): void {
     this.activatedRoute.queryParams.subscribe((param: Params) => {
       if (param && param['id']) {
+        window.scrollTo({ top: 0, behavior: 'smooth' });
         this.getProductDetail(+param['id']);
       }
     });
   }
+
   trackByStockId(index: number, item: any) {
     return item.stockId;
   }
