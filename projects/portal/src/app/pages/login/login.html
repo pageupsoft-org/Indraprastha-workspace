@@ -17,7 +17,7 @@
         </div>
 
         <!-- Form -->
-        <form [formGroup]="loginForm" (ngSubmit)="login()" class="space-y-6" novalidate>
+        <form [formGroup]="loginForm" class="space-y-6" novalidate>
 
             <!-- Username Field -->
             <div>
@@ -35,7 +35,7 @@
                     <input type="text" formControlName="username" libValidateControl placeholder="Enter your username"
                         class="w-full pl-10 pr-4 py-2.5 border border-gray-300 rounded-lg bg-gray-50 text-gray-700 
                    focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 
-                   dark:bg-gray-700 dark:border-gray-600 dark:text-white transition" minlength="3" maxlength="30"/>
+                   dark:bg-gray-700 dark:border-gray-600 dark:text-white transition" minlength="3" maxlength="30" />
                 </div>
             </div>
 
@@ -60,7 +60,7 @@
                     <!-- Toggle Password -->
                     <button type="button" (click)="togglePassword()"
                         class="absolute inset-y-0 right-3 flex items-center text-gray-400 hover:text-indigo-600 z-10 cursor-pointer">
-                         @if(showPassword){
+                        @if(showPassword){
                         <svg xmlns="http://www.w3.org/2000/svg" class="w-5 h-5" fill="none" viewBox="0 0 24 24"
                             stroke="currentColor">
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5"
@@ -90,15 +90,20 @@
             </div>
 
             <!-- Submit Button -->
-            <button type="submit" class="w-full bg-indigo-600 hover:bg-indigo-700 text-white font-semibold rounded-lg py-3 transition shadow-lg cursor-pointer
+            @if(isShowLoader()){
+            <app-button-loader></app-button-loader>
+            } @else {
+            <button type="submit" (click)="login()" class="w-full bg-indigo-600 hover:bg-indigo-700 text-white font-semibold rounded-lg py-3 transition shadow-lg cursor-pointer
                      focus:ring-4 focus:ring-indigo-300">
                 Sign In
             </button>
+            }
 
-            <p class="text-center text-sm text-gray-500 dark:text-gray-400">
+
+            <!-- <p class="text-center text-sm text-gray-500 dark:text-gray-400">
                 Don’t have an account?
                 <a class="font-medium text-indigo-600 hover:underline">Sign up</a>
-            </p>
+            </p> -->
         </form>
     </div>
 </section>
