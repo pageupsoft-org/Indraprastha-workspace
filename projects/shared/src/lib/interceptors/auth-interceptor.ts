@@ -5,11 +5,13 @@ import { Router } from '@angular/router';
 import { ToastService } from '../services/toast-service';
 import { getLocalStorageItem } from '../utils/utility.util';
 import { localStorageEnum } from '../enum/localStorage.enum';
+import { PlatformService } from '@shared';
 // import { getLocalStorageItem, localStorageEnum, ToastService } from '@shared';
 
 export const authInterceptor: HttpInterceptorFn = (req, next) => {
   const toastService = inject(ToastService);
   const router = inject(Router);
+  const platformService: PlatformService = inject(PlatformService);
 
   let token: string | null = null;
   try {
@@ -22,22 +24,21 @@ export const authInterceptor: HttpInterceptorFn = (req, next) => {
     req = req.clone({
       setHeaders: {
         Authorization: `Bearer ${token}`,
-        'Content-Type': 'application/json'
-      }
+        'Content-Type': 'application/json',
+      },
     });
     // console.log(req);
-    
   }
- 
 
   return next(req).pipe(
     catchError((error: HttpErrorResponse) => {
       let errorMessage = 'An unexpected error occurred';
-      console.log(error);
-      
-      if (error.error instanceof ErrorEvent) {
+
+      if (platformService.isBrowser && error.error instanceof ErrorEvent) {
+        // Browser-only client-side error
         errorMessage = `Error: ${error.error.message}`;
       } else {
+        // Server-side (SSR) or normal backend error
         switch (error.status) {
           case 400:
             errorMessage = getValidationErrorMessage(error) || 'Invalid request';
@@ -59,13 +60,48 @@ export const authInterceptor: HttpInterceptorFn = (req, next) => {
         }
       }
 
-      // toastService.error(errorMessage);
       return throwError(() => ({
         message: errorMessage,
         originalError: error,
       }));
     })
   );
+  // return next(req).pipe(
+  //   catchError((error: HttpErrorResponse) => {
+  //     let errorMessage = 'An unexpected error occurred';
+
+  //     // if (error.error instanceof ErrorEvent) {
+  //     if (platformService.isBrowser && typeof ErrorEvent !== 'undefined' && error.error instanceof ErrorEvent) {
+  //       errorMessage = `Error: ${error.error.message}`;
+  //     } else {
+  //       switch (error.status) {
+  //         case 400:
+  //           errorMessage = getValidationErrorMessage(error) || 'Invalid request';
+  //           break;
+  //         case 401:
+  //           refreshToken(toastService, router);
+  //           break;
+  //         case 403:
+  //           errorMessage = 'You are not authorized to perform this action';
+  //           break;
+  //         case 404:
+  //           errorMessage = 'The requested resource was not found';
+  //           break;
+  //         case 500:
+  //           errorMessage = 'A server error occurred. Please try again later.';
+  //           break;
+  //         default:
+  //           errorMessage = `Error: ${error.message}`;
+  //       }
+  //     }
+
+  //     // toastService.error(errorMessage);
+  //     return throwError(() => ({
+  //       message: errorMessage,
+  //       originalError: error,
+  //     }));
+  //   })
+  // );
 };
 
 // ✅ helper for validation errors
@@ -83,7 +119,7 @@ function getValidationErrorMessage(error: HttpErrorResponse): string | null {
 // ✅ helper for refresh token
 async function refreshToken(toastService: ToastService, router: Router) {
   try {
-    console.log("Refresh Token called")
+    console.log('Refresh Token called');
     // const res = await UseFetch(refreshTokenFn()); // ✅ correctly passes Observable
     return true;
     // if (res?.data) {
@@ -111,13 +147,13 @@ async function refreshToken(toastService: ToastService, router: Router) {
 }
 
 function refreshTokenFn() {
-  console.log("refreshTokenFn called")
+  console.log('refreshTokenFn called');
   const data = {
     token: getLocalStorageItem<string>(localStorageEnum.token),
     refreshToken: getLocalStorageItem<string>(localStorageEnum.refreshToken),
   };
-//   return httpPost<IResponse<ILoginResponse>, typeof data>(
-//     apiRoutes.login.silentLogin,
-//     data
-//   );
+  //   return httpPost<IResponse<ILoginResponse>, typeof data>(
+  //     apiRoutes.login.silentLogin,
+  //     data
+  //   );
 }
