@@ -5,11 +5,9 @@ import { WomenWear } from "./women-wear/women-wear";
 import { MensWear } from "./mens-wear/mens-wear";
 import { ApiRoutes, DashboardProductTypeStringEnum, GenderTypeEnum, httpPost, IBannerPagination, initializePagInationPayload, IRGeneric, PlatformService } from '@shared';
 import { Base } from '@portal/core';
-import { EBannerConnectionType } from '../../../../../shared/src/lib/enum/banner-connection-type.enum';
-import { EbannerTypes } from '../../../../../shared/src/lib/enum/banner-types.enum';
-import { IBanner, IBannerResponse } from '../../../../../shared/src/lib/interface/response/genericBanner.response';
-
-// import taos from 'taos';
+import { IBanner, IBannerResponse } from '@shared';
+import { EbannerTypes } from '@shared';
+import { EBannerConnectionType } from '@shared';
 
 @Component({
   selector: 'app-home',
