@@ -6,15 +6,16 @@ import { EmployeeList } from '../employee-list/employee-list';
 import { Base } from '../../../core/base/base';
 import { IGenericResponse } from '../../../core/interface/response/genericResponse';
 import { IEmployeeForm, IEmployee,  } from '../../../core/interface/request/employee.request';
-import { ApiRoutes, ErrorHandler, EToastType, ToastService } from '@shared';
-import { patternWithMessage } from '../../../../../../shared/src/public-api';
+import { ApiRoutes, ErrorHandler, EToastType, patternWithMessage, ToastService, ValidateControl } from '@shared';
+
+
 
 @Component({
   selector: 'app-employee-upsert',
   imports: [
     CommonModule,
     ReactiveFormsModule,
-    ErrorHandler
+    ValidateControl
   ],
   templateUrl: './employee-upsert.html',
   styleUrl: './employee-upsert.scss',
@@ -27,18 +28,19 @@ export class EmployeeUpsert extends Base implements OnInit {
   public employeeForm = new FormGroup<IEmployeeForm>({
     id: new FormControl(0),
     firstName: new FormControl('', [Validators.required, Validators.minLength(3), Validators.maxLength(30)]),
-    lastName: new FormControl(''),
+    lastName: new FormControl('', [Validators.minLength(3), Validators.maxLength(50)]),
     email: new FormControl('', [Validators.required, patternWithMessage(/^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/, 'Please enter a valid email address (e.g. example@domain.com).')]),
-    contact: new FormControl('', [Validators.required]),
+    contact: new FormControl('', [Validators.required, patternWithMessage(/^\+?[1-9]\d{1,14}$/, 'Please enter a valid contact number.')]),
     userType: new FormControl('', [Validators.required]),
-    address: new FormControl('', [Validators.required]),
-    username: new FormControl(null),
-    password: new FormControl(null),
+    address: new FormControl('', [Validators.required,  Validators.maxLength(200)]),
+    username: new FormControl(null, [Validators.minLength(3), Validators.maxLength(30)]),
+    password: new FormControl(null, [Validators.minLength(8), Validators.maxLength(8)]),
     isLogin: new FormControl(false),
   });
   public isLoginMode: boolean = false;
   public btn: string = '+ Add'
   public removeLoginMode: boolean = false
+  public passwordToggle: boolean = false;
 
 
   constructor(private toaster: ToastService) {
@@ -136,6 +138,7 @@ export class EmployeeUpsert extends Base implements OnInit {
     }
     else {
       this.employeeForm.markAllAsTouched();
+      // this.employeeForm.updateValueAndValidity({ emitEvent: true });
     }
   }
 

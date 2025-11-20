@@ -22,23 +22,28 @@ export class ValidateControl implements AfterViewInit, OnDestroy {
     private renderer: Renderer2,
     @Optional() private ngControl: NgControl,
     @Optional() private formGroupDir: FormGroupDirective
-  ) {}
+  ) {
+    // //console.log(ngControl, formGroupDir)
+  }
 
   ngAfterViewInit() {
-    if (!this.ngControl || !this.ngControl.control) return; // ← FIX
+
+    if (!this.ngControl || !this.ngControl.control) return;
 
     this.wrapInputInRelativeContainer();
     this.createErrorToast();
     this.registerListeners();
 
-    // When form is submitted, show errors
-    this.sub.add(
-      this.formGroupDir.ngSubmit.subscribe(() => {
-        this.ngControl.control?.markAsTouched();
-        this.updateMessage();
-      })
-    );
+    if (this.formGroupDir) {
+      this.sub.add(
+        this.formGroupDir.ngSubmit.subscribe(() => {
+          this.formGroupDir.control.markAllAsTouched();
+          this.updateMessage();
+        })
+      );
+    }
   }
+
 
   ngOnDestroy() {
     this.sub.unsubscribe();
@@ -100,7 +105,7 @@ export class ValidateControl implements AfterViewInit, OnDestroy {
     const control = this.ngControl.control;
     if (!control) return;
 
-    const shouldShow = control.invalid && control.touched;
+   const shouldShow = control.invalid && (control.touched || control.dirty);
 
     if (shouldShow) {
       const msg = this.getError(control);
