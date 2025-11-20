@@ -87,6 +87,7 @@ export class MensWear implements AfterViewInit {
       this.updateGallery();
     }
   }
+  
   public zoomImage(item: HTMLDivElement, index: number): void {
     if (index < 2) return; // cannot zoom first two images
     if (!(index + 2 <= this.mensWearList().length - 1)) return; // cannot zoom last two images

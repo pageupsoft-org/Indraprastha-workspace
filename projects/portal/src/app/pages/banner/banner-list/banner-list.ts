@@ -9,9 +9,9 @@ import { BannerUpsert } from '../banner-upsert/banner-upsert';
 import { Base } from '../../../core/base/base';
 import { IGenericResponse } from '../../../core/interface/response/genericResponse';
 import { CommonModule } from '@angular/common';
-import { ApiRoutes, EToastType, MConfirmationModalData, ToastService } from '@shared';
-import { IBannerPagination } from '../../../core/interface/request/banner.request';
-import { IBannerResponse } from '../../../core/interface/response/banner.response';
+import { ApiRoutes, EToastType, IBanner, IBannerPagination, IBannerResponse, MConfirmationModalData, ToastService } from '@shared';
+
+
 
 @Component({
   selector: 'app-banner-list',
@@ -27,7 +27,7 @@ export class BannerList extends Base implements OnInit {
     bannerType: null,
     gender: null,
   };
-  public banners: IBannerResponse[] = [];
+  public banners: IBanner[] = [];
 
   constructor(private toaster: ToastService) {
     super();

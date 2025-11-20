@@ -22,7 +22,9 @@ import {
   ApiRoutes,
   EDescriptionType,
   ErrorHandler,
+  EStockSize,
   EToastType,
+  GenderTypeEnum,
   IRGeneric,
   IRProductDetailRoot,
   jsonToArray,
@@ -32,9 +34,7 @@ import {
   ValidateControl,
 } from '@shared';
 import { IGenericComboResponse } from '../../../core/interface/response/banner.response';
-import { EGender } from '../../../core/enum/gender.enum';
 import { CommonModule } from '@angular/common';
-import { EStockSize } from '../../../../../../shared/src/lib/enum/size.enum';
 import { arrayToJson, convertImagesToBase64Array } from '../../../core/utils/portal-utility.util';
 import { IDropdownSettings, NgMultiSelectDropDownModule } from 'ng-multiselect-dropdown';
 import { ActivatedRoute, Params, Router } from '@angular/router';
@@ -60,7 +60,7 @@ import { IConvertImageResult } from '../../../core/interface/model/portal-util.m
 })
 export class ProductUpsert extends Base implements OnInit {
   public categoryCombo: IGenericComboResponse[] = [];
-  public genders: MStringEnumToArray[] = stringEnumToArray(EGender);
+  public genders: MStringEnumToArray[] = stringEnumToArray(GenderTypeEnum);
   public descriptionTypeEnumList: MStringEnumToArray[] = stringEnumToArray(EDescriptionType);
   public stockSize: MStringEnumToArray[] = stringEnumToArray(EStockSize);
   public ShowDiscription: boolean = false;
