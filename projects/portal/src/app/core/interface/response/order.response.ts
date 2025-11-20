@@ -1,6 +1,6 @@
 
-import { EOrderStatus, EStockSize } from "@shared";
-import { EGender } from "../../enum/gender.enum";
+import { EOrderStatus, EStockSize, GenderTypeEnum } from "@shared";
+
 
 export interface IOrderResponse {
     total: number;
@@ -52,7 +52,7 @@ export interface IOrderProductDto {
     quantity: number;
     mrp: number;
     total: number;
-    gender: EGender;
+    gender: GenderTypeEnum;
     size: EStockSize;
 }
 

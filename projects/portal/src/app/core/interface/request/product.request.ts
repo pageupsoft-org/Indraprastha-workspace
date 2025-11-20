@@ -1,10 +1,7 @@
 import { FormArray, FormControl, FormGroup, Validators } from '@angular/forms';
 import { IPaginationPayload } from './genericPayload';
-import { EGender } from '../../enum/gender.enum';
-import { EStockSize } from '../../../../../../shared/src/lib/enum/size.enum';
-import { EDescriptionType } from '../../../../../../shared/src/lib/enum/discriptionType.enum';
-import { patternWithMessage } from '../../../../../../shared/src/public-api';
-// import { EGender } from "../../enum/gender.enum";
+import { EDescriptionType, EStockSize, GenderTypeEnum, patternWithMessage } from '@shared';
+
 
 export interface IProductForm {
   id: FormControl<number | null>;
@@ -150,7 +147,7 @@ export const initializeIProductForm = (): FormGroup<IProductForm> =>
     customSizeName: new FormControl<string | null>(''),
     color: new FormArray<FormControl<string | null>>([]),
     mrp: new FormControl<number | null>(null, [Validators.required, patternWithMessage(/^\d+(\.\d{1,2})?$/, ' Please enter a valid price (only numbers, up to 2 decimal places).')]),
-    gender: new FormControl<EGender | null>(null, Validators.required),
+    gender: new FormControl<GenderTypeEnum | null>(null, Validators.required),
     variants: new FormArray<FormGroup<IVariantForm>>([]),
     stocks: new FormArray<FormGroup<stocks>>([]),
     descriptions: new FormArray<FormGroup<IDescriptionForm>>([]),
@@ -160,7 +157,7 @@ export const initializeIProductForm = (): FormGroup<IProductForm> =>
 
 export interface IProductPagination extends IPaginationPayload {
   categoryId: number | null;
-  gender: EGender | null;
+  gender: GenderTypeEnum | null;
 }
 
 // export interface

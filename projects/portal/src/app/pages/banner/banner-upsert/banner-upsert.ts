@@ -5,12 +5,9 @@ import { IGenericResponse } from '../../../core/interface/response/genericRespon
 import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
 import { BannerList } from '../banner-list/banner-list';
 import { CommonModule } from '@angular/common';
-import { EBannerConnectionType } from '../../../core/enum/banner-connection-type.enum';
-import { EGender } from '../../../core/enum/gender.enum';
-import { EbannerTypes } from '../../../core/enum/banner-types.enum';
-import { ApiRoutes, convertImageToBase64, ErrorHandler, EToastType, MStringEnumToArray, stringEnumToArray, ToastService, ValidateControl } from '@shared';
-import { IBannerResponse, IGenericComboResponse } from '../../../core/interface/response/banner.response';
-import { IBanner, IBannerForm } from '../../../core/interface/request/banner.request';
+import { ApiRoutes, convertImageToBase64, EBannerConnectionType, EbannerTypes, ErrorHandler, EToastType, GenderTypeEnum, IBanner, IBannerResponse, MStringEnumToArray, stringEnumToArray, ToastService, ValidateControl } from '@shared';
+import {  _IBanner, IGenericComboResponse } from '../../../core/interface/response/banner.response';
+import {  IBannerForm } from '../../../core/interface/request/banner.request';
 import { IConvertImageParams, IConvertImageResult, initialConvertImageParam } from '../../../core/interface/model/portal-util.model';
 import { ImageSizeConst, ImageTypeEnum } from '../../../core/enum/image.enum';
 import { convertImagesToBase64Array } from '../../../core/utils/portal-utility.util';
@@ -26,7 +23,7 @@ export class BannerUpsert extends Base implements OnInit {
   readonly data = inject(MAT_DIALOG_DATA);
   public bannerConnectionTypes: MStringEnumToArray[] = stringEnumToArray(EBannerConnectionType);
   public bannerTypes: MStringEnumToArray[] = stringEnumToArray(EbannerTypes);
-  public genders: MStringEnumToArray[] = stringEnumToArray(EGender);
+  public genders: MStringEnumToArray[] = stringEnumToArray(GenderTypeEnum);
   public combo: IGenericComboResponse[] = [];
   public selectConnectionType: string = 'None';
   public base64Image: string | ArrayBuffer | null = null;
@@ -150,7 +147,7 @@ export class BannerUpsert extends Base implements OnInit {
 
   private getBannerById(id: number) {
     if (id) {
-      this.httpGetPromise<IGenericResponse<IBannerResponse>>(ApiRoutes.BANNER.GET_BY_ID(id))
+      this.httpGetPromise<IGenericResponse<_IBanner>>(ApiRoutes.BANNER.GET_BY_ID(id))
         .then((response) => {
           if (response) {
             if (response.data) {

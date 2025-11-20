@@ -1,13 +1,7 @@
-import { IBanner } from "../request/banner.request";
+import { IBanner } from "@shared";
 
-export interface IBannerResponse{
-    total:number
-    banners:IBannerResponse[]
-}
-
-export interface IBannerResponse extends IBanner{
-    bannerURL:string;
-    isActive:string
+export interface _IBanner extends IBanner{
+  bannerValueId:number;
 }
 
 export interface IGenericComboResponse{

@@ -3,7 +3,8 @@
   <!-- Banner section with image -->
   <section>
     <div>
-      <img src="assets/images/banner-image.png" class="object-cover w-full" alt="Banner Image" />
+      <!-- <img src="assets/images/banner-image.png" class="object-cover w-full" alt="Banner Image" /> -->
+       <img [src]="this.topBanners[0]?.bannerURL" alt="">
     </div>
   </section>
 
@@ -38,9 +39,10 @@
   <!-- new arrivals -->
   <app-product-slider [title]="'NEW ARRIVALS'" [productType]="DashboardProductTypeStringEnum.NewArrival"></app-product-slider>
 
+  <!-- middle banner  -->
   <section class="middle-banner">
     <div class="imagemiddle-banner">
-      <img src="assets/images/middle-banner.png" class="w-full" alt="" />
+      <img [src]="this.middleBanners[0]?.bannerURL" class="w-full" alt=""/>
     </div>
   </section>
 
