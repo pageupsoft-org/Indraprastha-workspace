@@ -1,6 +1,5 @@
 import { Component, inject } from '@angular/core';
-import { ApiRoutes, EToastType, MStringEnumToArray, stringEnumToArray, ToastService, ValidateControl } from '@shared';
-import { EGender } from '../../../core/enum/gender.enum';
+import { ApiRoutes, EToastType, GenderTypeEnum, MStringEnumToArray, stringEnumToArray, ToastService, ValidateControl } from '@shared';
 import { CommonModule } from '@angular/common';
 import { FormControl, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 import { ICollectionForm } from '../../../core/interface/request/collection.request';
@@ -20,7 +19,7 @@ import { EmployeeList } from '../../employee/employee-list/employee-list';
 export class CollectionUpsert extends Base {
   public readonly dialogRef = inject(MatDialogRef<EmployeeList>);
   public readonly data = inject(MAT_DIALOG_DATA);
-  public genders: MStringEnumToArray[] = stringEnumToArray(EGender);
+  public genders: MStringEnumToArray[] = stringEnumToArray(GenderTypeEnum);
 
   constructor(private toaster: ToastService) {
     super()

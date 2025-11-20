@@ -1,4 +1,4 @@
-import { EGender } from "../../enum/gender.enum";
+import { GenderTypeEnum } from "@shared";
 
 export interface ICollectionResponse{
     total:number;
@@ -8,6 +8,6 @@ export interface ICollectionResponse{
 export interface ICollection {
     id: number;
     name: string;
-    gender: EGender;
+    gender: GenderTypeEnum;
     description:string;
 }

@@ -9,14 +9,15 @@ export * from './lib/const/apiRoutes.const';
 export * from './lib/directive/error-handler';
 export * from './lib/directive/validate-control';
 
+export * from './lib/enum/banner-connection-type.enum';
+export * from './lib/enum/banner-types.enum';
 export * from './lib/enum/toast-type.enum';
 export * from './lib/enum/variable.enum';
 export * from './lib/enum/localStorage.enum';
 export * from './lib/enum/dashboard.enum';
 export * from './lib/enum/gender-type.enum';
 export * from './lib/enum/discriptionType.enum';
-// export * from './lib/enum/size.enum';
-export * from './lib/enum/stock-size.enum';
+export * from './lib/enum/size.enum';
 export * from './lib/enum/description-type.enum';
 export * from './lib/enum/order-status.enum';
 export * from './lib/environments/dev.env';
@@ -28,12 +29,14 @@ export * from './lib/interface/model/toast.model';
 export * from './lib/interface/model/utility.model';
 export * from './lib/interface/model/confirmation.model';
 
+
 export * from './lib/interface/response/generic.response';
 export * from './lib/interface/response/login.response';
 export * from './lib/interface/response/newArrival.response';
 export * from './lib/interface/response/product-detail.response';
 export * from './lib/interface/response/shopping-cart.response';
 export * from './lib/interface/response/wishlist.response';
+export * from './lib/interface/response/genericBanner.response';
 
 export * from './lib/interface/request/pagination.request';
 

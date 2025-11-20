@@ -1,9 +1,10 @@
 import { FormControl } from "@angular/forms"
-import { EGender } from "../../enum/gender.enum"
+import { GenderTypeEnum } from "@shared"
+
 
 export interface ICollectionForm{
     id:FormControl<number|null>
     name : FormControl<string | null>
-    gender: FormControl<EGender | null>
+    gender: FormControl<GenderTypeEnum | null>
     description: FormControl<string | null>
 }

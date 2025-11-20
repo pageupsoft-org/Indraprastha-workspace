@@ -1,5 +1,5 @@
-import e from "express";
-import { EGender } from "../../../../../../portal/src/app/core/enum/gender.enum";
+import { GenderTypeEnum } from "@shared";
+
 
 export interface IBannerResponse{
     total:number;
@@ -13,6 +13,6 @@ export interface IBanner{
     bannerURL:string;
     bannerConnectionType:string;
     bannerType:string;
-    gender:EGender;
+    gender:GenderTypeEnum;
     isActive:boolean;
 }

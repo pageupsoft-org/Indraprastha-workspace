@@ -3,13 +3,12 @@ import AOS from 'aos';
 import { ProductSlider } from "./product-slider/product-slider";
 import { WomenWear } from "./women-wear/women-wear";
 import { MensWear } from "./mens-wear/mens-wear";
-import { ApiRoutes, DashboardProductTypeStringEnum, httpPost, initializePagInationPayload, IRGeneric, PlatformService } from '@shared';
+import { ApiRoutes, DashboardProductTypeStringEnum, GenderTypeEnum, httpPost, IBannerPagination, initializePagInationPayload, IRGeneric, PlatformService } from '@shared';
 import { Base } from '@portal/core';
-import { IBanner, IBannerResponse } from '../../core/interface/response/banner.response';
-import { EBannerConnectionType } from '../../../../../portal/src/app/core/enum/banner-connection-type.enum';
-import { EbannerTypes } from '../../../../../portal/src/app/core/enum/banner-types.enum';
-import { EGender } from '../../../../../portal/src/app/core/enum/gender.enum';
-import { IBannerRequest } from './home.request';
+import { EBannerConnectionType } from '../../../../../shared/src/lib/enum/banner-connection-type.enum';
+import { EbannerTypes } from '../../../../../shared/src/lib/enum/banner-types.enum';
+import { IBanner, IBannerResponse } from '../../../../../shared/src/lib/interface/response/genericBanner.response';
+
 // import taos from 'taos';
 
 @Component({
@@ -29,8 +28,7 @@ export class Home extends Base implements AfterViewInit, OnInit {
 
   // On Init
   ngOnInit(): void {
-   this.getTopBannerData();
-   this.getMiddleBannerData();
+   this.callAllBannerApis()
   }
 
   // Initialize AOS animations
@@ -43,35 +41,41 @@ export class Home extends Base implements AfterViewInit, OnInit {
     }
   }
 
-  // Get Top Banner Data
-  public getTopBannerData() {
-    const payload: IBannerRequest = {
+  public callAllBannerApis() {
+  const topPayload = this.buildBannerPayload(EbannerTypes.Top, EBannerConnectionType.Category, GenderTypeEnum.Women);
+  const middlePayload = this.buildBannerPayload(EbannerTypes.Middle, EBannerConnectionType.Category, GenderTypeEnum.Men);
+
+  this.getBannerData(topPayload, 'top');
+  this.getBannerData(middlePayload, 'middle');
+}
+
+  public buildBannerPayload(
+    bannerType: EbannerTypes,
+    bannerConnectionType: EBannerConnectionType,
+    gender: GenderTypeEnum,
+  ): IBannerPagination {
+    return {
       ...initializePagInationPayload(),
-      bannerType: EbannerTypes.Top,
-      bannerConnectionType: EBannerConnectionType.Category,
-      gender: EGender.Women,
-    };
-    httpPost<IRGeneric<IBannerResponse>, IBannerRequest>(ApiRoutes.BANNER.GET, payload).subscribe({
-      next: (response) => {
-        console.log(response.data.banners);
-        this.topBanners = response.data.banners[0] ? response.data.banners : [];
-      },
-    });
+      bannerType: bannerType,
+      bannerConnectionType: bannerConnectionType,
+      gender: gender,
+    }
   }
 
-  // Get Middle Banner Data
-  public getMiddleBannerData() {
-    const payload: IBannerRequest = {
-      ...initializePagInationPayload(),
-      bannerType: EbannerTypes.Middle,
-      bannerConnectionType: EBannerConnectionType.Category,
-      gender: EGender.Men,
-    };
-    httpPost<IRGeneric<IBannerResponse>, IBannerRequest>(ApiRoutes.BANNER.GET, payload).subscribe({
+  public getBannerData(payload: IBannerPagination, type: 'top' | 'middle') {
+  httpPost<IRGeneric<IBannerResponse>, IBannerPagination>(ApiRoutes.BANNER.GET, payload)
+    .subscribe({
       next: (response) => {
-        console.log(response.data.banners);
-        this.middleBanners = response.data.banners[0] ? response.data.banners : [];
-      },
+        console.log(response, "banner data")
+        const banners = response.data.banners?.length ? response.data.banners : [];
+
+        if (type === 'top') {
+          this.topBanners = banners;
+        } else {
+          this.middleBanners = banners;
+        }
+      }
     });
-  }
+}
+
 }
