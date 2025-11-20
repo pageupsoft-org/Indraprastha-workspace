@@ -1,4 +1,4 @@
-import { Component, signal, WritableSignal } from '@angular/core';
+import { Component, OnInit, signal, WritableSignal } from '@angular/core';
 import { RouterLink } from '@angular/router';
 import { appRoutes } from '../../core/const/appRoutes.const';
 import {
@@ -19,12 +19,16 @@ import { wishlistArray } from '../../../dummy-data';
   templateUrl: './wishlist.html',
   styleUrl: './wishlist.scss',
 })
-export class Wishlist {
+export class Wishlist implements OnInit {
   public readonly productDetailRoute: string = appRoutes.PRODUCT_DETAIL;
   private readonly objectCOnfirmationUtil: ConfirmationUtil = new ConfirmationUtil();
   public wishlistArray: WritableSignal<Product[]> = signal(wishlistArray.data);
 
   constructor(private toastService: ToastService) {}
+
+  ngOnInit(): void {
+    this.getWishlist();
+  }
 
   public addRedColorDeleteIcon(isEnter: boolean, index: number) {
     this.wishlistArray()[index].icon = isEnter
@@ -38,6 +42,7 @@ export class Wishlist {
     httpGet<IRGeneric<IRWishlistRoot>>(ApiRoutes.WISH.GET, false).subscribe({
       next: (response) => {
         if (response?.data) {
+          console.log(response, 'wishlist response');
           this.wishlistArray.set(response.data.products);
         } else {
           this.wishlistArray.set([]);
