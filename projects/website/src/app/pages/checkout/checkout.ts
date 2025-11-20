@@ -1,5 +1,6 @@
 import { Component } from '@angular/core';
 import { FormGroup } from '@angular/forms';
+import { ICheckoutForm, initializeICheckoutForm } from './checkout.model';
 
 @Component({
   selector: 'app-checkout',
@@ -8,7 +9,5 @@ import { FormGroup } from '@angular/forms';
   styleUrl: './checkout.scss',
 })
 export class Checkout {
-  public checkoutForm = new FormGroup({
-
-  })
+  public checkoutForm: FormGroup<ICheckoutForm> = initializeICheckoutForm();
 }

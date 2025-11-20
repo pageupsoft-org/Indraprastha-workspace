@@ -24,4 +24,6 @@ export class Home implements AfterViewInit {
       // AOS.refresh();
     }
   }
+
+  
 }
