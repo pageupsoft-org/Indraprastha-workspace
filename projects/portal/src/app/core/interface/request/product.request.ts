@@ -1,10 +1,7 @@
 import { FormArray, FormControl, FormGroup, Validators } from '@angular/forms';
 import { IPaginationPayload } from './genericPayload';
-import { EDescriptionType } from '@shared';
-import { EStockSize } from '@shared';
-import { patternWithMessage } from '@shared';
-import { GenderTypeEnum } from '@shared';
-// import { EGender } from "../../enum/gender.enum";
+import { EDescriptionType, EStockSize, GenderTypeEnum, patternWithMessage } from '@shared';
+
 
 export interface IProductForm {
   id: FormControl<number | null>;

@@ -3,11 +3,9 @@ import AOS from 'aos';
 import { ProductSlider } from "./product-slider/product-slider";
 import { WomenWear } from "./women-wear/women-wear";
 import { MensWear } from "./mens-wear/mens-wear";
-import { ApiRoutes, DashboardProductTypeStringEnum, GenderTypeEnum, httpPost, IBannerPagination, initializePagInationPayload, IRGeneric, PlatformService } from '@shared';
+import { ApiRoutes, DashboardProductTypeStringEnum, EBannerConnectionType, EbannerTypes, GenderTypeEnum, httpPost, IBanner, IBannerPagination, IBannerResponse, initializePagInationPayload, IRGeneric, PlatformService } from '@shared';
 import { Base } from '@portal/core';
-import { IBanner, IBannerResponse } from '@shared';
-import { EbannerTypes } from '@shared';
-import { EBannerConnectionType } from '@shared';
+
 
 @Component({
   selector: 'app-home',

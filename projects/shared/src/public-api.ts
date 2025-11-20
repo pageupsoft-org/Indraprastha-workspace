@@ -31,12 +31,12 @@ export * from './lib/interface/model/confirmation.model';
 
 
 export * from './lib/interface/response/generic.response';
+export * from './lib/interface/response/genericBanner.response';
 export * from './lib/interface/response/login.response';
 export * from './lib/interface/response/newArrival.response';
 export * from './lib/interface/response/product-detail.response';
 export * from './lib/interface/response/shopping-cart.response';
 export * from './lib/interface/response/wishlist.response';
-export * from './lib/interface/response/genericBanner.response';
 
 export * from './lib/interface/request/pagination.request';
 
