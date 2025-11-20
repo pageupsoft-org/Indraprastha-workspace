@@ -1,5 +1,5 @@
 import { Component, inject } from '@angular/core';
-import { ApiRoutes, EToastType, MStringEnumToArray, stringEnumToArray, ToastService } from '@shared';
+import { ApiRoutes, EToastType, MStringEnumToArray, stringEnumToArray, ToastService, ValidateControl } from '@shared';
 import { EGender } from '../../../core/enum/gender.enum';
 import { CommonModule } from '@angular/common';
 import { FormControl, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
@@ -13,7 +13,7 @@ import { EmployeeList } from '../../employee/employee-list/employee-list';
 
 @Component({
   selector: 'app-collection-upsert',
-  imports: [CommonModule, ReactiveFormsModule, ErrorHandler],
+  imports: [CommonModule, ReactiveFormsModule, ValidateControl],
   templateUrl: './collection-upsert.html',
   styleUrl: './collection-upsert.scss',
 })

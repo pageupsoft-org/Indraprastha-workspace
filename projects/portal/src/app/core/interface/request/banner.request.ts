@@ -13,7 +13,7 @@ export interface IBannerForm{
     gender : FormControl<string | null>;
     bannerValueId : FormControl<number | null>;
     bannerBase64 : FormControl<string | null>;
-    bType: FormControl<string | null>
+    
 }
 
 export interface IBanner{

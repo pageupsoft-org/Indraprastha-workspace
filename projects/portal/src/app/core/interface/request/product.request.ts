@@ -98,7 +98,7 @@ export const initializeDescriptionForm = (
   const form = new FormGroup<IDescriptionForm>({
     header: new FormControl<string | null>(null, Validators.required),
     descriptionType: new FormControl<EDescriptionType | null>(EDescriptionType.SingleText),
-    description: new FormControl<string | null>(null),
+    description: new FormControl<string | null>(null, Validators.required),
     shortDescription: new FormControl<string | null>(null),
     jsonText: new FormArray<FormGroup<IJsonTextForm>>([]),
   });
@@ -134,7 +134,7 @@ export const initializeStockForm = (
   size?: EStockSize | null
 ): FormGroup<stocks> =>
   new FormGroup<stocks>({
-    quantity: new FormControl<number | null>(quantity ?? null, [patternWithMessage(/^[1-9]\d*$/, 'Please enter a valid quantity')]),
+    quantity: new FormControl<number | null>(quantity ?? null, [Validators.required, patternWithMessage(/^[1-9]\d*$/, 'Please enter a valid quantity')]),
     size: new FormControl<EStockSize | null>(size ?? null),
   });
 

@@ -27,6 +27,7 @@ import {
   IRProductDetailRoot,
   jsonToArray,
   MStringEnumToArray,
+  patternWithMessage,
   stringEnumToArray,
   ValidateControl,
 } from '@shared';
@@ -39,10 +40,10 @@ import { IDropdownSettings, NgMultiSelectDropDownModule } from 'ng-multiselect-d
 import { ActivatedRoute, Params, Router } from '@angular/router';
 import {
   IConvertImageParams,
-  IConvertImageResult,
   initialConvertImageParam,
 } from '../../../core/interface/model/portal-util.model';
 import { ImageSizeConst, ImageTypeEnum } from '../../../core/enum/image.enum';
+import { IConvertImageResult } from '../../../core/interface/model/portal-util.model';
 
 @Component({
   selector: 'app-product-upsert',
@@ -64,10 +65,9 @@ export class ProductUpsert extends Base implements OnInit {
   public stockSize: MStringEnumToArray[] = stringEnumToArray(EStockSize);
   public ShowDiscription: boolean = false;
   public readonly EDiscriptionType = EDescriptionType;
-
+  public setAllQtyInput = new FormControl<number | null>(null, patternWithMessage(/^[0-9]+$/, 'Only numbers are allowed'));
   public setAllQty: WritableSignal<number> = signal(0);
   public productForm: FormGroup<IProductForm> = initializeIProductForm();
-
   public dropdownSettings: IDropdownSettings = {
     singleSelection: false,
     idField: 'id',
@@ -114,7 +114,7 @@ export class ProductUpsert extends Base implements OnInit {
           }
         }
       })
-      .catch((error) => {});
+      .catch((error) => { });
   }
 
   public mutateColorControl(index: number | null) {
@@ -255,6 +255,7 @@ export class ProductUpsert extends Base implements OnInit {
           });
           this.productForm = initializeIProductForm();
           this.router.navigate([this.appRoutes.PRODUCT]);
+          console.log(this.productForm.value)
         } else {
           this.toastService.show({
             message: res.errorMessage,
@@ -291,6 +292,7 @@ export class ProductUpsert extends Base implements OnInit {
       ApiRoutes.PRODUCT.GET_BY_ID(productId)
     ).then((res) => {
       if (res?.data) {
+        console.log(res.data)
         // this.patchProductData(res);
         const {
           id,
@@ -383,4 +385,15 @@ export class ProductUpsert extends Base implements OnInit {
       }
     });
   }
+
+  public setAllSize() {
+   if(this.setAllQtyInput.valid){
+     const qty = this.setAllQtyInput.value || 0;
+    this.productForm.controls.stocks.controls.filter((x) => x.controls.size.value !== EStockSize.FreeSize).forEach((x) => {
+      x.controls.quantity.setValue(qty);
+    });
+    // this.productForm.controls.stocks.updateValueAndValidity();
+    this.setAllQtyInput.reset();
+  }
+}
 }

@@ -5,12 +5,12 @@ import { IGenericResponse } from '../../../core/interface/response/genericRespon
 import { CategoryList } from '../category-list/category-list';
 import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
 import { ICategory, ICategoryForm } from '../../../core/interface/request/category.request';
-import { ApiRoutes, EToastType, ToastService } from '@shared';
+import { ApiRoutes, EToastType, ToastService, ValidateControl } from '@shared';
 import { IGenericComboResponse } from '../../../core/interface/response/banner.response';
 
 @Component({
   selector: 'app-category-upsert',
-  imports: [ReactiveFormsModule],
+  imports: [ReactiveFormsModule,  ValidateControl],
   templateUrl: './category-upsert.html',
   styleUrl: './category-upsert.scss',
 })
@@ -22,10 +22,10 @@ export class CategoryUpsert extends Base implements OnInit {
 
   public categoryForm = new FormGroup<ICategoryForm>({
     id: new FormControl(0),
-    name: new FormControl(''),
+    name: new FormControl('', [Validators.required, Validators.minLength(3), Validators.maxLength(50)]),
     gst: new FormControl(0),
     description: new FormControl(''),
-    collectionId: new FormControl(null)
+    collectionId: new FormControl(null, [Validators.required]),
   })
 
   constructor(private toaster: ToastService) {
@@ -45,9 +45,7 @@ export class CategoryUpsert extends Base implements OnInit {
   }
 
   public onCategorySubmit() {
-    console.log("category add", this.categoryForm.valid, this.categoryForm.value);
-    
-    // if (this.categoryForm.valid) {
+    if (this.categoryForm.valid) {
       this.httpPostPromise<IGenericResponse<boolean>, ICategory>(ApiRoutes.CATEGORY.BASE, this.categoryForm.value as ICategory).then(response => {
         if (response) {
           if (response.data) {
@@ -64,9 +62,9 @@ export class CategoryUpsert extends Base implements OnInit {
       }).catch(error => {
         // handle error 
       })
-    // } else {
-    //   this.categoryForm.markAsTouched()
-    // }
+    } else {
+      this.categoryForm.markAsTouched()
+    }
   }
 
   private getCollectionCombo() {

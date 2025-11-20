@@ -8,13 +8,16 @@ import { CommonModule } from '@angular/common';
 import { EBannerConnectionType } from '../../../core/enum/banner-connection-type.enum';
 import { EGender } from '../../../core/enum/gender.enum';
 import { EbannerTypes } from '../../../core/enum/banner-types.enum';
-import { ApiRoutes, convertImageToBase64, ErrorHandler, EToastType, MStringEnumToArray, stringEnumToArray, ToastService } from '@shared';
+import { ApiRoutes, convertImageToBase64, ErrorHandler, EToastType, MStringEnumToArray, stringEnumToArray, ToastService, ValidateControl } from '@shared';
 import { IBannerResponse, IGenericComboResponse } from '../../../core/interface/response/banner.response';
 import { IBanner, IBannerForm } from '../../../core/interface/request/banner.request';
+import { IConvertImageParams, IConvertImageResult, initialConvertImageParam } from '../../../core/interface/model/portal-util.model';
+import { ImageSizeConst, ImageTypeEnum } from '../../../core/enum/image.enum';
+import { convertImagesToBase64Array } from '../../../core/utils/portal-utility.util';
 
 @Component({
   selector: 'app-banner-upsert',
-  imports: [ReactiveFormsModule, CommonModule, ErrorHandler],
+  imports: [ReactiveFormsModule, CommonModule, ValidateControl],
   templateUrl: './banner-upsert.html',
   styleUrl: './banner-upsert.scss',
 })
@@ -30,14 +33,13 @@ export class BannerUpsert extends Base implements OnInit {
 
   public bannerForm = new FormGroup<IBannerForm>({
     id: new FormControl(0),
-    name: new FormControl(''),
-    description: new FormControl(''),
+    name: new FormControl('', [Validators.required, Validators.maxLength(100)]),
+    description: new FormControl('', [Validators.maxLength(250)]),
     bannerConnectionType: new FormControl('None'),
-    bannerType: new FormControl(''),
-    gender: new FormControl(''),
-    bannerValueId: new FormControl(0),
-    bannerBase64: new FormControl(''),
-    bType: new FormControl(''),
+    bannerType: new FormControl('', [Validators.required]),
+    gender: new FormControl('', [Validators.required]),
+    bannerValueId: new FormControl(0,),
+    bannerBase64: new FormControl('', [Validators.required]),
   });
 
   constructor(private toaster: ToastService) {
@@ -46,17 +48,16 @@ export class BannerUpsert extends Base implements OnInit {
   }
 
   ngOnInit(): void {
-    this.bannerForm.controls.bType.disable();
     this.bannerForm.controls.bannerValueId.disable();
     this.getCategoryCombo();
-    // this.getProductCombo()
+    this.getProductCombo()
     const id = this.data.id;
     if (id) {
       this.getBannerById(id);
     }
   }
 
-  public onCancel(isSuccess? : boolean) {
+  public onCancel(isSuccess?: boolean) {
     this.dialogRef.close(isSuccess);
   }
 
@@ -71,6 +72,10 @@ export class BannerUpsert extends Base implements OnInit {
 
   public onBannerSubmit() {
     console.log(this.bannerForm.value);
+    if(this.bannerForm.controls.bannerBase64.value === '' || this.bannerForm.controls.bannerBase64.value === null){
+      this.toaster.show({ message: 'Please upload banner image', duration: 3000, type: EToastType.error });
+      return;
+    }
     if (this.bannerForm.valid) {
       this.httpPostPromise<IGenericResponse<boolean>, IBanner>(
         ApiRoutes.BANNER.BASE,
@@ -80,7 +85,7 @@ export class BannerUpsert extends Base implements OnInit {
           if (response.data) {
             if (this.data.id === 0) {
               this.onCancel(true)
-              this.toaster.show({ message: 'Banner Add Successful', duration: 3000, type: EToastType.success})
+              this.toaster.show({ message: 'Banner Add Successful', duration: 3000, type: EToastType.success })
             }
             else {
               this.onCancel(true)
@@ -121,17 +126,25 @@ export class BannerUpsert extends Base implements OnInit {
   public selectBannerConnectionType() {
     const bannerConnectionValue = this.bannerForm.controls.bannerConnectionType.value;
     console.log(bannerConnectionValue);
-    if (bannerConnectionValue === 'Category' || bannerConnectionValue === 'Product') {
+    if (bannerConnectionValue === 'Category') {
+      this.bannerForm.controls.bannerValueId.reset();
       this.bannerForm.controls.bannerValueId.enable();
       this.selectConnectionType = bannerConnectionValue;
+      this.bannerForm.controls.bannerValueId.setValidators([Validators.required]);
+      this.bannerForm.controls.bannerValueId.updateValueAndValidity();
+    }else if ( bannerConnectionValue === 'Product'){
+      this.bannerForm.controls.bannerValueId.reset();
+      this.bannerForm.controls.bannerValueId.enable();
+      this.selectConnectionType = bannerConnectionValue;
+      this.bannerForm.controls.bannerValueId.setValidators([Validators.required]);
+      this.bannerForm.controls.bannerValueId.updateValueAndValidity();
     } else {
       this.bannerForm.controls.bannerValueId.reset();
       this.bannerForm.controls.bannerValueId.disable();
+      this.selectConnectionType = 'None';
+      this.bannerForm.controls.bannerValueId.setErrors(null);
+      this.bannerForm.controls.bannerValueId.updateValueAndValidity();
     }
-    console.log(this.bannerForm.value);
-  }
-
-  public setBannerValue() {
     console.log(this.bannerForm.value);
   }
 
@@ -142,7 +155,10 @@ export class BannerUpsert extends Base implements OnInit {
           if (response) {
             if (response.data) {
               console.log(response);
-              this.bannerForm.patchValue(response.data);
+              this.bannerForm.patchValue({
+                ...response.data,
+                bannerBase64: response.data.bannerURL,
+              });
               this.selectConnectionType = response.data.bannerConnectionType;
             }
           }
@@ -153,13 +169,37 @@ export class BannerUpsert extends Base implements OnInit {
     }
   }
 
-  // public
+  public onBannerImageChange(event: any) {
+    console.log(event)
+    const param: IConvertImageParams = initialConvertImageParam({
+      event,
+      allowedTypes: [ImageTypeEnum.jpeg, ImageTypeEnum.png],
+      expectedImgWidth: ImageSizeConst.banner.width,
+      expectedImgHeight: ImageSizeConst.banner.height,
+    });
 
-  // public getBannerByid(){
-  //   this.httpGetPromise<>(apiRoutes.BANNER.GETBYID(id)).then(response=>{
+    convertImagesToBase64Array(param).then((res: IConvertImageResult) => {
+      if (res) {
+        if (res.validBase64Files.length) {
+          this.bannerForm.controls.bannerBase64.setValue(res.validBase64Files[0] as string);
+        }
+        if (res.invalidFiles.length) {
+          this.toastService.show({
+            message: 'Some files were invalid or had incorrect dimensions and were skipped',
+            type: EToastType.warning,
+            duration: 2000,
+          });
+        }
+      }
+    });
 
-  //   }).catch(error=>{
+    event.target.value = null;
+  }
 
-  //   })
-  // }
+  public removeBannerImage() {
+    this.bannerForm.controls.bannerBase64.setValue('');
+  }
+
+
+
 }
