@@ -6,13 +6,13 @@ import { MensWear } from "./mens-wear/mens-wear";
 import { ApiRoutes, DashboardProductTypeStringEnum, EBannerConnectionType, EbannerTypes, GenderTypeEnum, httpPost, IBanner, IBannerPagination, IBannerResponse, initializePagInationPayload, IRGeneric, PlatformService } from '@shared';
 import { Base } from '@portal/core';
 
-
 @Component({
   selector: 'app-home',
   imports: [ProductSlider, WomenWear, MensWear],
   templateUrl: './home.html',
   styleUrl: './home.scss',
 })
+
 export class Home extends Base implements AfterViewInit, OnInit {
   public readonly DashboardProductTypeStringEnum = DashboardProductTypeStringEnum;
   public topBanners: IBanner[] = [];
