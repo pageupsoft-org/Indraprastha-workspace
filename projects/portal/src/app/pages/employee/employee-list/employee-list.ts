@@ -9,10 +9,11 @@ import { ReactiveFormsModule } from '@angular/forms';
 import { MatDialog } from '@angular/material/dialog';
 import { EmployeeUpsert } from '../employee-upsert/employee-upsert';
 import { ApiRoutes, EToastType, MConfirmationModalData, ToastService } from '@shared';
+import { handlePagination } from '@portal/core';
 
 @Component({
   selector: 'app-employee-list',
-  imports: [PaginationController, ReactiveFormsModule],
+  imports: [PaginationController, ReactiveFormsModule, PaginationController],
   templateUrl: './employee-list.html',
   styleUrl: './employee-list.scss',
 })
@@ -24,12 +25,14 @@ export class EmployeeList extends Base implements OnInit {
   public btn: string = '+ Add'
   public readonly dialog = inject(MatDialog);
 
+  public paginationMetaData: PaginationControlMetadata = createPaginationMetadata();
+
   constructor(private toaster: ToastService) {
     super()
   }
 
   ngOnInit(): void {
-    this.getEmployees()
+    this.getEmployees();
   }
 
   // Get Employees
@@ -38,6 +41,12 @@ export class EmployeeList extends Base implements OnInit {
       if (response) {
         if (response.data) {
           this.employees = response.data.employees;
+          handlePagination(
+            this.paginationMetaData,
+            response.data.total,
+            this.payLoad.pageIndex,
+            this.payLoad.top
+          )
         }
       }
     }).catch((error) => {
@@ -90,5 +99,16 @@ export class EmployeeList extends Base implements OnInit {
     }
   }
 
- 
+  public topChange(top: number) {
+    console.log("Top:", top);
+    this.payLoad.top = top;
+    this.getEmployees();
+  }
+
+  public pageChange(pageIndex: number) {
+    console.log("Page Index:", pageIndex);
+    this.payLoad.pageIndex = pageIndex;
+    this.getEmployees();
+   }
+
 }

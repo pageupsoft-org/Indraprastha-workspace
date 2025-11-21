@@ -2,8 +2,8 @@ export interface PaginationControlMetadata {
   totalPagesArray: number[];
   totalPages: number;
   recordCount: number;
-  fromCount: number;
-  toCount: number;
+  fromCount: number; // starting record number
+  toCount: number; // ending record number
 }
 
 export function createPaginationMetadata(

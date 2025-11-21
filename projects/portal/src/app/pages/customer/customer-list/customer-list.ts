@@ -9,11 +9,12 @@ import { CustomerResponse, ICustomerResponse } from '../../../core/interface/res
 import { MatDialog } from '@angular/material/dialog';
 import { CustomerUpsert } from '../customer-upsert/customer-upsert';
 import { ApiRoutes, EToastType, ToastService } from '@shared';
+import { PaginationController } from "../../../component/pagination-controller/pagination-controller";
 
 
 @Component({
   selector: 'app-customer-list',
-  imports: [],
+  imports: [PaginationController],
   templateUrl: './customer-list.html',
   styleUrl: './customer-list.scss',
 })

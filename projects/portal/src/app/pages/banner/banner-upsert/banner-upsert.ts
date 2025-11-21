@@ -30,13 +30,13 @@ export class BannerUpsert extends Base implements OnInit {
 
   public bannerForm = new FormGroup<IBannerForm>({
     id: new FormControl(0),
-    name: new FormControl('', [Validators.required, Validators.maxLength(100)]),
-    description: new FormControl('', [Validators.maxLength(250)]),
+    name: new FormControl(null, [Validators.required, Validators.maxLength(100)]),
+    description: new FormControl(null, [Validators.maxLength(250)]),
     bannerConnectionType: new FormControl('None'),
-    bannerType: new FormControl('', [Validators.required]),
-    gender: new FormControl('', [Validators.required]),
+    bannerType: new FormControl(null, [Validators.required]),
+    gender: new FormControl(null, [Validators.required]),
     bannerValueId: new FormControl(0,),
-    bannerBase64: new FormControl('', [Validators.required]),
+    bannerBase64: new FormControl(null, [Validators.required]),
   });
 
   constructor(private toaster: ToastService) {
