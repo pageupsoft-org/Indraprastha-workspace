@@ -1,16 +1,16 @@
 <aside
   id="logo-sidebar"
-  class="fixed top-0 left-0 z-40 w-[305px] h-screen pt-24 transition-transform -translate-x-full bg-white border-r border-gray-200 sm:translate-x-0 dark:bg-gray-800 dark:border-gray-700"
+  class="fixed top-0 left-0 z-40 w-[300px] h-screen pt-24 transition-transform -translate-x-full bg-[#fef5e0] border-r border-gray-200 sm:translate-x-0 dark:bg-gray-800 dark:border-gray-700"
   aria-label="Sidebar"
 >
-  <div class="h-full px-3 pb-4 overflow-y-auto bg-white dark:bg-gray-800 hide-scrollbar">
+  <div class="h-full px-3 pb-4 overflow-y-auto bg-[#fef5e0] dark:bg-gray-800 hide-scrollbar">
     <ul class="space-y-2 font-medium">
       @for (item of menuItems(); track $index; let i = $index) { 
       @if(item.child.length){
       <li>
         <button
           type="button"
-          class="flex items-center w-full p-2 text-base text-gray-900 cursor-pointer transition duration-75 rounded-lg group hover:bg-gray-100 dark:text-white dark:hover:bg-gray-700"
+          class="flex items-center w-full p-2 text-base text-gray-900 cursor-pointer transition duration-75 rounded-lg group hover:bg-[#82181A] dark:text-white dark:hover:bg-gray-700"
           [attr.aria-controls]="'dropdown-' + i"
           [attr.data-collapse-toggle]="'dropdown-' + i"
         >
@@ -54,11 +54,11 @@
       <li>
         <a
           [routerLink]="item.route"
-          routerLinkActive="bg-gray-200 text-blue-600 font-semibold"
-          class="flex items-center p-2 text-gray-900 rounded-lg dark:text-white hover:bg-gray-100 dark:hover:bg-gray-700 group"
+          routerLinkActive="bg-[#82181A] text-white font-semibold"
+          class="flex items-center p-2 text-white rounded-lg dark:text-white hover:bg-[#82181A] dark:hover:bg-[#82181A] group"
         >
-          <i class="text-xl" [ngClass]="item.icon"></i>
-          <span class="ms-3">{{ item.name }}</span>
+          <i class="text-xl " [ngClass]="item.icon"></i>
+          <span class="ms-3 group-hover:text-white">{{ item.name }}</span>
         </a>
       </li>
       } }
