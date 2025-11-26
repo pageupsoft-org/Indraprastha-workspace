@@ -1,5 +1,5 @@
 import { Component, inject, OnInit, signal, WritableSignal } from '@angular/core';
-import { Base } from '@portal/core';
+import { Base, handlePagination } from '@portal/core';
 import { ICollection, ICollectionResponse } from '../../../core/interface/response/collection.response';
 import { MAT_DIALOG_DATA, MatDialog } from '@angular/material/dialog';
 import { CollectionUpsert } from '../collection-upsert/collection-upsert';
@@ -7,10 +7,12 @@ import { initializePagInationPayload, IPaginationPayload } from '../../../core/i
 import { ApiRoutes, ConfirmationDialog, EToastType, MConfirmationModalData, ToastService } from '@shared';
 import { IGenericResponse } from '../../../core/interface/response/genericResponse';
 import { response } from 'express';
+import { PaginationController } from "../../../component/pagination-controller/pagination-controller";
+import { createPaginationMetadata, PaginationControlMetadata } from '../../../core/interface/model/pagination-detail.model';
 
 @Component({
   selector: 'app-collection-list',
-  imports: [],
+  imports: [PaginationController],
   templateUrl: './collection-list.html',
   styleUrl: './collection-list.scss',
 })
@@ -20,20 +22,27 @@ export class CollectionList extends Base implements OnInit {
   public collectionList: WritableSignal<ICollection[]> = signal([]);
   public payLoad: IPaginationPayload = initializePagInationPayload()
   public collections: ICollection[] = []
-
+  public paginationMetaData : PaginationControlMetadata = createPaginationMetadata()
   constructor(private toaster: ToastService) {
     super()
   }
 
   ngOnInit(): void {
-    this.getAllCollections();
+    this.getCollectionsData();
   }
 
-  private getAllCollections() {
+  private getCollectionsData() {
     this.httpPostPromise<IGenericResponse<ICollectionResponse>, IPaginationPayload>(ApiRoutes.COLLECTION.ALL, this.payLoad).then(response => {
       if (response) {
         if (response.data) {
           this.collectionList.set(response.data.collections);
+          handlePagination(
+            this.paginationMetaData,
+            response.data.total,
+            this.payLoad.pageIndex,
+            this.payLoad.top,
+            
+          )
         }
       }
     })
@@ -52,7 +61,7 @@ export class CollectionList extends Base implements OnInit {
 
     dialogRef.afterClosed().subscribe((result: boolean) => {
       if (result) {
-        this.getAllCollections()
+        this.getCollectionsData()
       }
     });
   }
@@ -77,7 +86,7 @@ export class CollectionList extends Base implements OnInit {
                   duration: 3000,
                   type: EToastType.success
                 });
-                this.getAllCollections();
+                this.getCollectionsData();
               }
             })
             .catch((error) => {
@@ -85,6 +94,18 @@ export class CollectionList extends Base implements OnInit {
         }
       })
     }
+  }
+
+  public topChange(top: number) {
+    console.log("Top:", top);
+    this.payLoad.top = top;
+    this.getCollectionsData();
+  }
+
+  public pageChange(pageIndex: number) {
+    console.log("Page Index:", pageIndex);
+    this.payLoad.pageIndex = pageIndex;
+    this.getCollectionsData();
   }
 
 }

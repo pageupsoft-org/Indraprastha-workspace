@@ -1,135 +1,119 @@
-<!-- Main content: Order List -->
-<section class="p-6 bg-gray-50 min-h-screen">
-  <!-- Header / controls -->
-  <div class="mb-6 flex flex-col md:flex-row md:items-center md:justify-between gap-4">
-    <div>
-      <h2 class="text-2xl font-semibold text-gray-800">Orders</h2>
-      <p class="text-sm text-gray-500">Manage and review recent orders</p>
+<div class="bg-gray-50 font-sans">
+
+  <div class="max-w-7xl mx-auto p-6 mt-12">
+
+    <!-- PAGE HEADING -->
+    <div class="mb-6">
+      <h1 class="text-3xl font-semibold text-gray-900">Orders</h1>
+      <p class="text-sm text-gray-500 mt-1">Manage and track all your orders here</p>
     </div>
 
-    <div class="flex flex-col sm:flex-row items-stretch sm:items-center gap-2">
-      <!-- Search -->
-      <div class="flex items-center bg-white border border-gray-300 rounded px-3 py-2 shadow-sm">
-        <svg class="w-5 h-5 text-gray-400 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24"
-          xmlns="http://www.w3.org/2000/svg">
-          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-            d="M21 21l-4.35-4.35M17 11a6 6 0 11-12 0 6 6 0 0112 0z"></path>
-        </svg>
-        <input type="text" placeholder="Search by order no, customer..." class="outline-none w-48 sm:w-64 text-sm" />
-      </div>
-
-      <!-- Status filter -->
-      <select class="bg-white border border-gray-300 rounded-lg px-3 py-2 text-sm shadow-sm">
-        <option value="">All statuses</option>
-        <option>Placed</option>
-        <option>Processing</option>
-        <option>Shipped</option>
-        <option>Delivered</option>
-        <option>Cancelled</option>
-      </select>
-
-      <!-- Date range -->
-      <div class="flex items-center gap-2 bg-white border border-gray-300 rounded-lg px-2 py-2 shadow-sm">
-        <input type="date" class="text-sm outline-none" />
-        <span class="text-gray-400">—</span>
-        <input type="date" class="text-sm outline-none" />
-      </div>
-
-      <!-- Actions -->
-      <div class="flex items-center gap-2">
-        <button class="bg-white border border-gray-300 rounded-lg px-3 py-2 text-sm shadow-sm hover:bg-gray-50">Export</button>
-      </div>
-    </div>
-  </div>
-
-  <!-- Summary cards -->
-  <div class="grid grid-cols-1 sm:grid-cols-3 gap-4 mb-6">
-    <div class="bg-white rounded-lg p-4 shadow flex items-center justify-between">
-      <div>
-        <p class="text-sm text-gray-500">Today's Orders</p>
-        <p class="text-2xl font-bold text-gray-800">24</p>
-      </div>
-      <div class="text-sm text-green-600">+12% ↑</div>
-    </div>
-
-    <div class="bg-white rounded-lg p-4 shadow flex items-center justify-between">
-      <div>
-        <p class="text-sm text-gray-500">Total Orders</p>
-        <p class="text-2xl font-bold text-gray-800">1,420</p>
-      </div>
-      <div class="text-sm text-gray-500">All time</div>
-    </div>
-
-    <div class="bg-white rounded-lg p-4 shadow">
-      <p class="text-sm text-gray-500">Total Revenue</p>
-      <p class="text-2xl font-bold text-gray-800">₹ 3,45,900</p>
-    </div>
-  </div>
-
-  <!-- Table -->
-  <div class="bg-white rounded-lg shadow overflow-x-auto">
-    <table class="min-w-full divide-y divide-gray-200">
-      <thead class="bg-gray-50">
-        <tr>
-          <th class="px-4 py-3 text-left text-sm font-medium text-gray-600">SN</th>
-          <th class="px-4 py-3 text-left text-sm font-medium text-gray-600">Order No</th>
-          <th class="px-4 py-3 text-left text-sm font-medium text-gray-600">Customer</th>
-          <th class="px-4 py-3 text-left text-sm font-medium text-gray-600">Order Date</th>
-          <th class="px-4 py-3 text-left text-sm font-medium text-gray-600">Status</th>
-          <th class="px-4 py-3 text-right text-sm font-medium text-gray-600">Total</th>
-          <th class="px-4 py-3 text-center text-sm font-medium text-gray-600">Actions</th>
-        </tr>
-      </thead>
-
-      <tbody class="bg-white divide-y divide-gray-100">
-        <!-- Row 1 -->
-        <tr class="hover:bg-gray-50">
-          <td class="px-4 py-4 text-sm text-gray-700">1</td>
-          <td class="px-4 py-4 text-sm text-indigo-600 font-medium">ORD-20251117-001</td>
-          <td class="px-4 py-4 text-sm text-gray-800">Asha Verma</td>
-          <td class="px-4 py-4 text-sm text-gray-600">17 Nov 2025, 11:29</td>
-          <td class="px-4 py-4">
-            <span class="inline-flex items-center px-3 py-1 rounded-full text-xs font-semibold bg-yellow-100 text-yellow-800">Processing</span>
-          </td>
-          <td class="px-4 py-4 text-right text-sm font-semibold text-gray-800">₹ 3,499.00</td>
-          <td class="px-4 py-4 text-sm text-center">
-            <!-- Blue "View" button -->
-            <button (click)="routeToUpsertPage(1)"
-              aria-label="View order ORD-20251117-001"
-              class="inline-flex items-center cursor-pointer justify-center bg-blue-600 text-white px-3 py-1 rounded-md text-sm font-medium hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-300">
-              View
-            </button>
-          </td>
-        </tr>
-
-      </tbody>
-    </table>
-  </div>
-
-  <!-- Mobile card list -->
-  <div class="mt-6 space-y-3 md:hidden">
-    <div class="bg-white rounded-lg p-4 shadow flex justify-between">
-      <div>
-        <div class="flex items-center gap-2">
-          <div class="text-indigo-600 font-medium">ORD-20251117-001</div>
-          <div class="text-xs text-gray-500">17 Nov</div>
+    <!-- TOP CARDS -->
+    <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-6 mb-6">
+      <div class="bg-white shadow-sm rounded-xl border border-gray-200 p-5 flex items-center justify-between">
+        <div>
+          <div class="text-xs text-gray-500 font-medium">Total Orders</div>
+          <div class="text-2xl font-bold text-gray-900 mt-1">{{totalOrders}}</div>
         </div>
-        <div class="text-sm text-gray-800">Asha Verma</div>
-        <div class="text-sm text-gray-600">₹ 3,499.00</div>
-      </div>
-      <div class="text-right">
-        <div class="inline-flex items-center px-2 py-1 rounded-full text-xs font-semibold bg-yellow-100 text-yellow-800">
-          Processing
-        </div>
-        <div class="mt-2" >
-          <!-- Mobile blue "View" button (keeps small footprint) -->
-          <button
-            aria-label="View order ORD-20251117-001"
-            class="inline-flex items-center justify-center bg-blue-600 text-white px-3 py-1 rounded-md text-sm font-medium hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-300r">
-            View
-          </button>
+        <div class="rounded-full bg-indigo-50 p-3">
+          <svg class="w-6 h-6 text-indigo-600" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" d="M3 3h18M3 7h18M5 11h14l-1 10H6l-1-10z" />
+          </svg>
         </div>
       </div>
+
     </div>
+
+    <!-- ORDERS TABLE CARD -->
+    <div class="bg-white rounded-xl shadow-sm border border-gray-200 overflow-hidden">
+      <div class="overflow-x-auto">
+        <table class="min-w-full w-full divide-y">
+          <thead class="bg-white">
+            <tr class="border-b">
+              <th class="px-6 py-4 text-left text-sm font-medium text-gray-600">Order No</th>
+              <th class="px-6 py-4 text-left text-sm font-medium text-gray-600">Customer</th>
+              <th class="px-6 py-4 text-left text-sm font-medium text-gray-600">Order Date</th>
+              <th class="px-6 py-4 text-left text-sm font-medium text-gray-600">Status</th>
+              <th class="px-6 py-4 text-right text-sm font-medium text-gray-600">Amount</th>
+              <th class="px-6 py-4 text-center text-sm font-medium text-gray-600">Action</th>
+            </tr>
+          </thead>
+
+          <tbody class="bg-white divide-y divide-gray-100">
+            @for (item of orders; track $index) {
+            <tr class="hover:bg-gray-50">
+              <td class="px-6 py-4 text-sm text-gray-800">{{item.orderNo}}</td>
+              <td class="px-6 py-4 text-sm text-gray-800">{{item.customerName}}</td>
+              <td class="px-6 py-4 text-sm text-gray-600">{{item.orderDate}}</td>
+              <td class="px-6 py-4">
+                <div class="space-y-1">
+                  <!-- <div class="text-xs text-gray-500">Status</div> -->
+
+                  <select (change)="updateStatus()" [formControl]="changeStatusForm.controls.orderStatus"
+                    class="px-3 py-1 text-xs font-medium rounded-full border bg-white" [ngClass]="{
+              'text-blue-700 bg-blue-50': orderStatus === 'InProcess',
+               'text-yellow-700 bg-yellow-50': orderStatus === 'Inshipment',
+               'text-purple-700 bg-purple-50': orderStatus === 'Placed',
+               'text-red-700 bg-red-50': orderStatus === 'Cancel',
+               'text-green-700 bg-green-50': orderStatus === 'Complete'
+    }">
+                    @for (item of statusValue; track $index) {
+                    <option [ngValue]="item.value">{{item.value}}</option>
+                    }
+                  </select>
+                </div>
+              </td>
+              <td class="px-6 py-4 text-right text-sm font-semibold text-gray-900">₹ {{item.totalAmount}}</td>
+              <td class="px-6 py-4 text-center">
+                <div class="inline-flex items-center gap-2">
+                  <button (click)="routeToUpsertPage(0)"
+                    class="px-3 py-1.5 bg-green-50 hover:bg-green-100 text-green-600 rounded-md text-sm font-medium shadow-sm transition">
+                    View
+                  </button>
+                </div>
+              </td>
+            </tr>
+            }
+            <tr class="hover:bg-gray-50">
+              <td class="px-6 py-4 text-sm text-gray-800">ORD-104</td>
+              <td class="px-6 py-4 text-sm text-gray-800">Neha Singh</td>
+              <td class="px-6 py-4 text-sm text-gray-600">23 Nov 2025, 12:00 PM</td>
+              <td class="px-6 py-4">
+                <div class="space-y-1">
+                  <!-- <div class="text-xs text-gray-500">Status</div> -->
+
+                  <select (change)="updateStatus()" [formControl]="changeStatusForm.controls.orderStatus"
+                    class="px-3 py-1 text-xs font-medium rounded-full border bg-white" [ngClass]="{
+              'text-blue-700 bg-blue-50': orderStatus === 'InProcess',
+               'text-yellow-700 bg-yellow-50': orderStatus === 'Inshipment',
+               'text-purple-700 bg-purple-50': orderStatus === 'Placed',
+               'text-red-700 bg-red-50': orderStatus === 'Cancel',
+               'text-green-700 bg-green-50': orderStatus === 'Complete'
+    }">
+                    @for (item of statusValue; track $index) {
+                    <option [ngValue]="item.value">{{item.value}}</option>
+                    }
+                  </select>
+                </div>
+              </td>
+              <td class="px-6 py-4 text-right text-sm font-semibold text-gray-900">₹ 0</td>
+              <td class="px-6 py-4 text-center">
+                <div class="inline-flex items-center gap-2">
+                  <button (click)="routeToUpsertPage(0)"
+                    class="px-3 py-1.5 bg-green-50 hover:bg-green-100 text-green-600 rounded-md text-sm font-medium shadow-sm transition">
+                    View
+                  </button>
+                </div>
+              </td>
+            </tr>
+          </tbody>
+        </table>
+
+        <app-pagination-controller [paginationControlMetaData]="paginationMetadata"
+                    (ETopChanged)="topChange($event)" (pageChanged)="pageChange($event)"></app-pagination-controller>
+      </div>
+    </div>
+
   </div>
-</section>
+
+</div>

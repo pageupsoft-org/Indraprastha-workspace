@@ -48,6 +48,15 @@
             </a>
           </li>
           }
+          <li class="mt-auto">
+    <a
+      routerLinkActive="bg-[#82181A] text-white font-semibold"
+      class="flex items-center p-2 text-white rounded-lg dark:text-white
+             hover:bg-[#82181A] dark:hover:bg-[#82181A] group"
+    >
+      <span class="ms-3 group-hover:text-white" (click)="logout()">Logout</span>
+    </a>
+  </li>
         </ul>
       </li>
       } @else {
@@ -70,7 +79,7 @@
           class="flex items-center p-2 text-white rounded-lg dark:text-white hover:bg-[#82181A] dark:hover:bg-[#82181A] group"
         >
           <!-- <i class="text-xl " [ngClass]="item.icon"></i> -->
-          <span class="ms-3 group-hover:text-white">Logout</span>
+          <!-- <span class="ms-3 group-hover:text-white" (click)="logout()">Logout</span> -->
         </a>
       </li>
     </ul>

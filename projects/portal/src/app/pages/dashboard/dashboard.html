@@ -1,146 +1,109 @@
 <!-- Dashboard fragment — paste into your page where Tailwind + icons are already loaded -->
-<div class="bg-[#EEF2FF] min-h-screen p-6 py-0">
+<div class="bg-[#EEF2FF] min-h-screen p-6 mt-[45px]">
   <div class="max-w-7xl mx-auto">
     <!-- Header -->
     <header class="flex items-center justify-between mb-6">
       <div>
         <h1 class="text-3xl font-semibold text-gray-800">Dashboard</h1>
-        <p class="text-sm text-gray-500 mt-1">Overview of store modules</p>
+      </div>
+      <div>
+        <app-daterang-picker (emitDateObject)="onChangeDate($event)"></app-daterang-picker>
       </div>
     </header>
 
     <!-- Top stats grid -->
-    <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6 mb-6">
+    <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-3 gap-6 mb-6">
       <!-- Card template -->
       <div class="bg-white rounded-[10px] shadow p-4 flex items-center justify-between">
         <div>
           <p class="text-sm text-gray-500 font-semibold">Total Orders</p>
-          <div class="text-2xl font-semibold text-gray-800 mt-3">1,250</div>
-          <div class="text-xs text-green-600 mt-1">+4.2% since last week</div>
+          <div class="text-2xl font-semibold text-gray-800 mt-3">0</div>
         </div>
         <div class="w-12 h-12 rounded-lg flex items-center justify-center" style="background:#FEEFEF">
           <!-- use Font Awesome or Heroicons -->
           <svg class="w-6 h-6 text-[#82181A]" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 3h18v4H3zM3 11h18v10H3z"/>
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 3h18v4H3zM3 11h18v10H3z" />
           </svg>
         </div>
       </div>
 
       <div class="bg-white rounded-[10px] shadow p-4 flex items-center justify-between">
         <div>
-          <p class="text-sm text-gray-500 font-semibold">Customers</p>
-          <div class="text-2xl font-semibold text-gray-800  mt-3">540</div>
-          <div class="text-xs text-gray-400 mt-1">Active now: 24</div>
+          <p class="text-sm text-gray-500 font-semibold">New Customers</p>
+          <div class="text-2xl font-semibold text-gray-800  mt-3">0</div>
         </div>
         <div class="w-12 h-12 rounded-lg flex items-center justify-center" style="background:#FEEFEF">
           <svg class="w-6 h-6 text-[#82181A]" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 20h5v-2a4 4 0 00-4-4h-1M7 20h5v-2a4 4 0 00-4-4H7M12 7a4 4 0 110-8 4 4 0 010 8z"/>
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+              d="M17 20h5v-2a4 4 0 00-4-4h-1M7 20h5v-2a4 4 0 00-4-4H7M12 7a4 4 0 110-8 4 4 0 010 8z" />
           </svg>
         </div>
       </div>
 
       <div class="bg-white rounded-[10px] shadow p-4 flex items-center justify-between">
         <div>
-          <p class="text-sm text-gray-500 font-semibold">Employees</p>
-          <div class="text-2xl font-semibold text-gray-800 mt-3">28</div>
-          <div class="text-xs text-gray-400 mt-1">On duty: 8</div>
+          <p class="text-sm text-gray-500 font-semibold">orders</p>
+          <div class="text-2xl font-semibold text-gray-800 mt-3">0</div>
         </div>
         <div class="w-12 h-12 rounded-lg flex items-center justify-center" style="background:#FEEFEF">
           <svg class="w-6 h-6 text-[#82181A]" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 20h5v-2a4 4 0 00-4-4h-1M7 20h5v-2a4 4 0 00-4-4H7M12 7a4 4 0 110-8 4 4 0 010 8z"/>
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+              d="M17 20h5v-2a4 4 0 00-4-4h-1M7 20h5v-2a4 4 0 00-4-4H7M12 7a4 4 0 110-8 4 4 0 010 8z" />
           </svg>
         </div>
       </div>
 
-      <div class="bg-white rounded-[10px] shadow p-4 flex items-center justify-between">
-        <div>
-          <p class="text-sm text-gray-500 font-semibold">Products</p>
-          <div class="text-2xl font-semibold text-gray-800 mt-3">320</div>
-          <div class="text-xs text-gray-400 mt-1">Active: 280</div>
-        </div>
-        <div class="w-12 h-12 rounded-lg flex items-center justify-center" style="background:#FEEFEF">
-          <svg class="w-6 h-6 text-[#82181A]" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 7v10a2 2 0 002 2h14a2 2 0 002-2V7M16 3H8v4h8V3z"/>
-          </svg>
+    </div>
+
+    <!--The content below is only a placeholder and can be replaced.-->
+    <div class="w-full bg-purple-100 h-[70%] flex gap-2">
+      <div class="w-[70%] bg-white rounded-[10px]">
+        <div id="chart">
+          <apx-chart #chart [series]="chartOptions.series!" [chart]="chartOptions.chart!" [xaxis]="chartOptions.xaxis!"
+            [stroke]="chartOptions.stroke!" [tooltip]="chartOptions.tooltip!"
+            [dataLabels]="chartOptions.dataLabels!"></apx-chart>
         </div>
       </div>
+      <div class="w-[30%] bg-white rounded-[10px]">
 
-      <!-- more cards: banners, collections, today's orders, monthly orders -->
-      <div class="bg-white rounded-[10px] shadow p-4 flex items-center justify-between">
-        <div>
-          <p class="text-sm text-gray-500 font-semibold">Banners</p>
-          <div class="text-2xl font-semibold text-gray-800 mt-3">15</div>
-        </div>
-        <div class="w-12 h-12 rounded-lg flex items-center justify-center" style="background:#FEEFEF">
-          <svg class="w-6 h-6 text-[#82181A]" viewBox="0 0 24 24" fill="none" stroke="currentColor">
-            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 7h18M3 12h18M3 17h18"/>
-          </svg>
-        </div>
-      </div>
+          <div id="chart" class="mt-[20px]">
+            <apx-chart [series]="pieOptions.series!" [chart]="pieOptions.chart!" [labels]="pieOptions.labels"
+              [responsive]="pieOptions.responsive!"></apx-chart>
+          </div>
 
-      <div class="bg-white rounded-[10px] shadow p-4 flex items-center justify-between">
-        <div>
-          <p class="text-sm text-gray-500 font-semibold">Collections</p>
-          <div class="text-2xl font-semibold text-gray-800 mt-3">92</div>
-        </div>
-        <div class="w-12 h-12 rounded-lg flex items-center justify-center" style="background:#FEEFEF">
-          <svg class="w-6 h-6 text-[#82181A]" viewBox="0 0 24 24" fill="none" stroke="currentColor">
-            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 7h16M4 12h16M4 17h16"/>
-          </svg>
-        </div>
-      </div>
 
-      <div class="bg-white rounded-[10px] shadow p-4 flex items-center justify-between">
-        <div>
-          <p class="text-sm text-gray-500 font-semibold">Today's Orders</p>
-          <div class="text-2xl font-semibold text-gray-800 mt-3">42</div>
-        </div>
-        <div class="w-12 h-12 rounded-lg flex items-center justify-center" style="background:#FEEFEF">
-          <svg class="w-6 h-6 text-[#82181A]" viewBox="0 0 24 24" fill="none" stroke="currentColor">
-            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3M16 7V3M3 11h18M5 21h14a2 2 0 002-2V11H3v8a2 2 0 002 2z"/>
-          </svg>
-        </div>
-      </div>
-
-      <div class="bg-white rounded-[10px] shadow p-4 flex items-center justify-between">
-        <div>
-          <p class="text-sm text-gray-500 font-semibold">Monthly Orders</p>
-          <div class="text-2xl font-semibold text-gray-800 mt-3">780</div>
-        </div>
-        <div class="w-12 h-12 rounded-lg flex items-center justify-center" style="background:#FEEFEF">
-          <svg class="w-6 h-6 text-[#82181A]" viewBox="0 0 24 24" fill="none" stroke="currentColor">
-            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 7h18M3 12h18M3 17h18"/>
-          </svg>
-        </div>
       </div>
     </div>
 
-    <!-- Orders & status area -->
-    <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
-      <!-- Sales chart card (placeholder) -->
+
+    <!-- <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
       <div class="lg:col-span-2 bg-white rounded-[10px] shadow p-6">
         <div class="flex items-center justify-between mb-4">
           <h3 class="font-semibold text-lg text-gray-800 mt-3">Sales Overview</h3>
           <div class="text-sm text-gray-500">+4% in 2022</div>
         </div>
-        <div class="h-56 rounded-xl bg-[#FBFDFF] border border-gray-100 flex items-center justify-center text-sm text-gray-400">
+        <div
+          class="h-56 rounded-xl bg-[#FBFDFF] border border-gray-100 flex items-center justify-center text-sm text-gray-400">
           Chart placeholder (use Chart.js / ApexCharts)
         </div>
       </div>
 
-      <!-- Orders breakdown -->
       <div class="bg-white rounded-[10px] shadow p-6">
         <h3 class="font-semibold text-lg text-gray-800 mt-3">Orders</h3>
         <ul class="space-y-3 text-sm text-gray-600">
           <li class="flex justify-between"><span>Today Orders</span><span class="font-semibold">142</span></li>
           <li class="flex justify-between"><span>Monthly Orders</span><span class="font-semibold">3,842</span></li>
-          <li class="flex justify-between"><span>Active Orders</span><span class="font-semibold text-green-600">63</span></li>
-          <li class="flex justify-between"><span>Pending Orders</span><span class="font-semibold text-amber-600">18</span></li>
-          <li class="flex justify-between"><span>Cancelled Orders</span><span class="font-semibold text-rose-600">7</span></li>
+          <li class="flex justify-between"><span>Active Orders</span><span
+              class="font-semibold text-green-600">63</span></li>
+          <li class="flex justify-between"><span>Pending Orders</span><span
+              class="font-semibold text-amber-600">18</span></li>
+          <li class="flex justify-between"><span>Cancelled Orders</span><span
+              class="font-semibold text-rose-600">7</span></li>
         </ul>
       </div>
-    </div>
+    </div> -->
 
-    <footer class="mt-6 text-sm text-gray-500">Designed with Tailwind • Use your modules to replace static numbers.</footer>
+    <footer class="mt-6 text-sm text-gray-500">Designed with Tailwind • Use your modules to replace static numbers.
+    </footer>
   </div>
 </div>

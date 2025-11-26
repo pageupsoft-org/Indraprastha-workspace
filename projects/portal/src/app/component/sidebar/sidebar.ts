@@ -2,7 +2,8 @@ import { CommonModule } from '@angular/common';
 import { Component, signal, WritableSignal } from '@angular/core';
 import { IMenuSideBarItem, MenuItems } from './sidebar.model';
 import { FormsModule } from '@angular/forms';
-import { RouterModule } from '@angular/router';
+import { Router, RouterModule } from '@angular/router';
+import { clearLocalStorageItems } from '@shared';
 
 @Component({
   selector: 'app-sidebar',
@@ -17,9 +18,16 @@ export class Sidebar {
 
   public menuItems: WritableSignal<IMenuSideBarItem[]> = signal(MenuItems);
 
+  constructor(private router:Router){}
   // constructor(private tokenService: TokenService) {
   //   this.loginUser = this.tokenService.getDecodedToken();
   //   this.loginUser.UserType =
   //     UserRoleStringEnum[this.loginUser.UserType as keyof typeof UserRoleStringEnum];
   // }
+
+   public logout(){
+    clearLocalStorageItems();
+    this.router.navigate(['login'])
+  }
+
 }
