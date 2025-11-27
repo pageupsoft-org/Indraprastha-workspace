@@ -7,14 +7,14 @@ import { Component, input, OnInit, output, signal, WritableSignal } from '@angul
   templateUrl: './app-loading-button.html',
   styleUrl: './app-loading-button.css',
 })
-export class AppLoadingButton{
+export class AppLoadingButton {
   public isLoading = input.required<boolean>();
   public label = input.required<string>();
   public isButtonDisabled = input<boolean>(false);
   public type = input<'button' | 'submit'>('submit');
 
   public btnClass = input<string>("bg-red-800 rounded-[5px] text-white font-semibold py-3 px-6 hover:bg-red-900 transition-colors duration-300 uppercase cursor-pointer");
-  
+
   public conditionalClass = input<string>();
   public addConditionClass = input<boolean>();
 

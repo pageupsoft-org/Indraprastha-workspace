@@ -1,4 +1,4 @@
-import { Component, model, OnInit, signal } from '@angular/core';
+import { Component, model, OnInit, signal, WritableSignal } from '@angular/core';
 import { FormControl, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 import { HttpErrorResponse } from '@angular/common/http';
 import { Router } from '@angular/router';
@@ -8,11 +8,12 @@ import { Base } from '@portal/core';
 import { ApiRoutes, ErrorHandler, EToastType, ILoginForm, ILoginFormData, localStorageEnum, setLocalStorageItem, ToastService, ValidateControl } from '@shared';
 import { CommonModule } from '@angular/common';
 import { ButtonLoader } from "../../../../../website/src/app/core/component/button-loader/button-loader";
+import { AppLoadingButton } from '@shared';
 
 
 @Component({
   selector: 'app-login',
-  imports: [ReactiveFormsModule, ValidateControl, CommonModule, ButtonLoader],
+  imports: [ReactiveFormsModule, ValidateControl, CommonModule, ButtonLoader, AppLoadingButton],
   templateUrl: './login.html',
   styleUrl: './login.scss',
 })
@@ -23,14 +24,12 @@ export class Login extends Base implements OnInit {
     fcmToken: new FormControl(''),
   });
   public showPassword: boolean = false
-  public isShowLoader = signal<boolean>(false);
-
+   public isBtnLoader: WritableSignal<boolean> = signal(false);
   constructor(private _toastService: ToastService, private router: Router) {
     super();
   }
 
   ngOnInit(): void {
-    console.log(this.isShowLoader())
   }
 
   public login() {
@@ -40,8 +39,7 @@ export class Login extends Base implements OnInit {
         password: this.loginForm.controls.password.value || '',
         fcmToken: ""
       };
-      this.isShowLoader.set(true);
-
+      this.isBtnLoader.set(true);
       this.httpPostPromise<IGenericResponse<LoginResponse>, ILoginFormData>(
         ApiRoutes.LOGIN.BASE,
         loginPayload
@@ -60,10 +58,10 @@ export class Login extends Base implements OnInit {
               duration: 2000,
             });
           }
-          this.isShowLoader.set(false);
+           this.isBtnLoader.set(true);
         })
         .catch(error => {
-          this.isShowLoader.set(false);
+         this.isBtnLoader.set(true);
           //  handle error 
         })
     } else {

@@ -89,21 +89,13 @@
                 <a href="#" class="text-indigo-600 hover:underline font-medium">Forgot password?</a>
             </div>
 
-            <!-- Submit Button -->
-            @if(isShowLoader()){
-            <app-button-loader></app-button-loader>
-            } @else {
-            <button type="submit" (click)="login()" class="w-full bg-indigo-600 hover:bg-indigo-700 text-white font-semibold rounded-lg py-3 transition shadow-lg cursor-pointer
-                     focus:ring-4 focus:ring-indigo-300">
-                Sign In
-            </button>
-            }
+            <lib-app-loading-button [isLoading]="isBtnLoader()" [type]="'submit'" (clicked)="login()" label="signin"
+            [conditionalClass]="'cursor-not-allowed!'"
+             [btnClass]="
+              'w-full cursor-pointer px-4 py-3 font-semibold text-black border border-gray-300 bg-white rounded-[5px] hover:bg-gray-300 transition-colors duration-200 focus:outline-none'
+            ">
+            </lib-app-loading-button>
 
-
-            <!-- <p class="text-center text-sm text-gray-500 dark:text-gray-400">
-                Don’t have an account?
-                <a class="font-medium text-indigo-600 hover:underline">Sign up</a>
-            </p> -->
         </form>
     </div>
 </section>
