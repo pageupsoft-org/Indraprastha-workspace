@@ -28,7 +28,7 @@ import {
   IResponseDynamicCatalogue,
 } from '../../core/interface/response/header.response';
 import { HttpErrorResponse } from '@angular/common/http';
-import { dynamicCatalogData } from '../../../dummy-data';
+
 
 @Component({
   selector: 'app-dynamic-catalog',
@@ -174,8 +174,6 @@ export class DynamicCatalog implements AfterViewInit {
       next: (res: IRGeneric<IResponseDynamicCatalogue>) => {
         if (res?.data) {
           this.dynamicData.set(res.data);
-
-          this.dynamicData.set(dynamicCatalogData);
           this.priceMax.set(this.dynamicData().filter.maxPrice);
           this.selectedPrice.set(this.dynamicData().filter.minPrice);
 
@@ -244,10 +242,15 @@ export class DynamicCatalog implements AfterViewInit {
 
     this.payloadGenderMenu().categoryIds = categoryIds;
     this.payloadGenderMenu().colors = colors;
+    console.log(this.payloadGenderMenu())
 
     // console.log(this.baseUrl());
     this.router.navigate([createUrlFromObject(this.payloadGenderMenu(), this.baseUrl())]);
 
     // this.getData();
   }
+
+
+
+
 }
