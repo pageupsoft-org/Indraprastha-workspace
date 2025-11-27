@@ -13,6 +13,7 @@ import {
 import { IRWishlistRoot, Product } from '../../core/interface/response/wishlist.response';
 import { wishlistArray } from '../../../dummy-data';
 
+
 @Component({
   selector: 'app-wishlist',
   imports: [RouterLink],
