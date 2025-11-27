@@ -49,7 +49,11 @@ export type pieOption = {
   styleUrl: './dashboard.scss',
 })
 export class Dashboard extends Base implements OnInit {
-  public totalPendingOrders: any
+  public totalPendingOrders : TotalPendings = {
+    totalOrder : 0,
+    order : 0,
+    newCustomer : 0
+  }
   @ViewChild("chart") chart: ChartComponent | undefined;
   public chartOptions: Partial<ChartOptions>;
 
@@ -143,10 +147,10 @@ export class Dashboard extends Base implements OnInit {
     this.httpPostPromise<IGenericResponse<IDashboardResponse>, IDateRange>(ApiRoutes.DASHBOARD.BASE, this.payload)
       .then(response => {
         if (!response || !response.data) return;
-
+         console.log(response)
         // keep total pending if needed
         this.totalPendingOrders = response.data.totalPendings;
-
+        
         const yearly = response.data.yearlyOrders;
         // month labels
         const monthLabels = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];

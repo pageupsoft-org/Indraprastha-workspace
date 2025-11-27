@@ -11,7 +11,7 @@ import { CartService } from '../../../website/src/app/core/services/cart-service
   templateUrl: './app.html',
   styleUrl: './app.scss',
 })
-export class App implements OnInit {
+export class App  {
   public currentRoute: string = '';
   protected readonly title = signal('Indraprastha-portal');
   constructor(
@@ -30,12 +30,5 @@ export class App implements OnInit {
     // }
   }
 
-  ngOnInit() {
-    this.router.events
-      .pipe(filter((event) => event instanceof NavigationEnd))
-      .subscribe((event: any) => {
-        this.currentRoute = event.url;
-        console.log('✅ Current route:', this.currentRoute);
-      });
-  }
+ 
 }
