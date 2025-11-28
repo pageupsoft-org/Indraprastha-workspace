@@ -1,5 +1,6 @@
 import { Observable } from 'rxjs';
 import { MStringEnumToArray } from '../interface/model/utility.model';
+import { IPaginationPayload } from '../interface/request/pagination.request';
 
 export function UseFetch<R>(ob: Observable<R>): Promise<R> {
   const postPromise = new Promise<R>((resolve, reject) => {
@@ -96,10 +97,54 @@ export function createUrlFromObject(object: Record<string, any>, baseUrl: string
   return `${baseUrl}?${params.toString()}`;
 }
 
+// export function getObjectFromUrl(
+//   url: string,
+//   arrayKeys: string[] = []
+// ): { baseUrl: string; params: Record<string, any> } {
+//   const result: Record<string, any> = {};
+
+//   const [baseUrl, queryString] = url.includes('?') ? url.split('?') : [url, ''];
+//   const params = new URLSearchParams(queryString);
+
+//   const parseValue = (value: string): any => {
+//     if (value === 'true') return true;
+//     if (value === 'false') return false;
+//     if (!isNaN(Number(value)) && value.trim() !== '') return Number(value);
+//     return value;
+//   };
+
+//   params.forEach((value, key) => {
+//     const parsed = parseValue(value);
+
+//     if (result[key]) {
+//       result[key] = Array.isArray(result[key]) ? [...result[key], parsed] : [result[key], parsed];
+//     } else {
+//       result[key] = arrayKeys.includes(key) ? [parsed] : parsed;
+//     }
+//   });
+
+//   // Ensure all arrayKeys exist, even if empty
+//   for (const key of arrayKeys) {
+//     if (!(key in result)) {
+//       result[key] = [];
+//     }
+//   }
+
+//   return { baseUrl, params: result };
+// }
 export function getObjectFromUrl(
   url: string,
   arrayKeys: string[] = []
-): { baseUrl: string; params: Record<string, any> } {
+): { baseUrl: string; params: IPaginationPayload } {
+  const DEFAULT_PAGINATION: IPaginationPayload = {
+    search: '',
+    pageIndex: 1,
+    top: 10,
+    showDeactivated: false,
+    isPaginate: true,
+    ordersBy: [],
+  };
+
   const result: Record<string, any> = {};
 
   const [baseUrl, queryString] = url.includes('?') ? url.split('?') : [url, ''];
@@ -122,16 +167,20 @@ export function getObjectFromUrl(
     }
   });
 
-  // Ensure all arrayKeys exist, even if empty
+  // Ensure all arrayKeys exist
   for (const key of arrayKeys) {
-    if (!(key in result)) {
-      result[key] = [];
-    }
+    if (!(key in result)) result[key] = [];
   }
 
-  return { baseUrl, params: result };
-}
+  // ✔ Merge defaults & parsed values
+  const finalParams: IPaginationPayload = {
+    ...DEFAULT_PAGINATION,
+    ...result,
+    ordersBy: result['ordersBy'] ?? [],
+  };
 
+  return { baseUrl, params: finalParams };
+}
 
 /**
  * Converts a single JSON object (key-value map) into an array of { key: string, value: string } objects.

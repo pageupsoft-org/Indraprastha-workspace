@@ -29,10 +29,11 @@ import {
 } from '../../core/interface/response/header.response';
 import { HttpErrorResponse } from '@angular/common/http';
 import { dynamicCatalogData } from '../../../dummy-data';
+import { NgxSkeletonLoaderModule } from 'ngx-skeleton-loader';
 
 @Component({
   selector: 'app-dynamic-catalog',
-  imports: [CommonModule, FormsModule],
+  imports: [CommonModule, FormsModule, NgxSkeletonLoaderModule],
   templateUrl: './dynamic-catalog.html',
   styleUrl: './dynamic-catalog.scss',
 })
