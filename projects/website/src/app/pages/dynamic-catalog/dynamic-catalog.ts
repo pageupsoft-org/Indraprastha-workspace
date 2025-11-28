@@ -173,10 +173,10 @@ export class DynamicCatalog implements AfterViewInit {
       false
     ).subscribe({
       next: (res: IRGeneric<IResponseDynamicCatalogue>) => {
-        if (res?.data) {
+        if (res?.data && res.data.total) {
           this.dynamicData.set(res.data);
 
-          this.dynamicData.set(dynamicCatalogData);
+          // this.dynamicData.set(dynamicCatalogData);
           this.priceMax.set(this.dynamicData().filter.maxPrice);
           this.selectedPrice.set(this.dynamicData().filter.minPrice);
 
