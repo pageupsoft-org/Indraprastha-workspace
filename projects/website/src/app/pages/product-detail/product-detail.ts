@@ -1,4 +1,4 @@
-import { Component, OnInit, signal } from '@angular/core';
+import { Component, OnInit} from '@angular/core';
 import { ProductSlider } from '../home/product-slider/product-slider';
 import {
   DashboardProductTypeStringEnum,
@@ -21,7 +21,6 @@ import { NgxSkeletonLoaderModule } from 'ngx-skeleton-loader';
     ReactiveFormsModule,
     FormsModule,
     AppLoadingButton,
-    Loader,
     NgxSkeletonLoaderModule,
   ],
   templateUrl: './product-detail.html',

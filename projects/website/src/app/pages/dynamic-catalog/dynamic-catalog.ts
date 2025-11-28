@@ -30,10 +30,12 @@ import {
 import { HttpErrorResponse } from '@angular/common/http';
 import { InfiniteScrollDirective } from 'ngx-infinite-scroll';
 
+import { dynamicCatalogData } from '../../../dummy-data';
+import { NgxSkeletonLoaderModule } from 'ngx-skeleton-loader';
 
 @Component({
   selector: 'app-dynamic-catalog',
-  imports: [CommonModule, FormsModule, InfiniteScrollDirective],
+  imports: [CommonModule, FormsModule, InfiniteScrollDirective, NgxSkeletonLoaderModule],
   templateUrl: './dynamic-catalog.html',
   styleUrl: './dynamic-catalog.scss',
 })
@@ -99,6 +101,10 @@ export class DynamicCatalog implements AfterViewInit {
 
   ngOnInit(): void {
     this.handleResize();
+
+    if (this.platformService.isBrowser) {
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+    }
   }
 
 
@@ -211,29 +217,31 @@ export class DynamicCatalog implements AfterViewInit {
       false
     ).subscribe({
       next: (res: IRGeneric<IResponseDynamicCatalogue>) => {
-        const data = res?.data;
-        if (this.payloadGenderMenu().pageIndex === 1) {
-          this.dynamicData.set(data);
+        if (res?.data && res.data.total) {
+          const data = res?.data;
+          if (this.payloadGenderMenu().pageIndex === 1) {
+            this.dynamicData.set(data);
 
-          this.priceMax.set(data.filter.maxPrice || this.priceMax());
-          this.selectedPrice.set(data.filter.minPrice || this.selectedPrice());
+            this.priceMax.set(data.filter.maxPrice || this.priceMax());
+            this.selectedPrice.set(data.filter.minPrice || this.selectedPrice());
 
-          this.payloadGenderMenu.update(p => ({
-            ...p,
-            minPrice: data.filter.minPrice || p.minPrice,
-            maxPrice: data.filter.maxPrice || p.maxPrice
-          }));
-        }
-        else {
-          this.dynamicData.update(old => {
-            const existing = old.products || [];
-            const incoming = data.products || [];
-            return {
-              ...old,
-              products: [...existing, ...incoming],
-              filter: data.filter || old.filter
-            };
-          });
+            this.payloadGenderMenu.update(p => ({
+              ...p,
+              minPrice: data.filter.minPrice || p.minPrice,
+              maxPrice: data.filter.maxPrice || p.maxPrice
+            }));
+          }
+          else {
+            this.dynamicData.update(old => {
+              const existing = old.products || [];
+              const incoming = data.products || [];
+              return {
+                ...old,
+                products: [...existing, ...incoming],
+                filter: data.filter || old.filter
+              };
+            });
+          }
         }
         this.isShowLoading.set(false);
         this.isLoading.set(false);
@@ -253,7 +261,7 @@ export class DynamicCatalog implements AfterViewInit {
     this.payloadGenderMenu.update(p => ({
       ...p,
       pageIndex: (p.pageIndex || 1) + 1
-  
+
     }));
 
     // fetch next page

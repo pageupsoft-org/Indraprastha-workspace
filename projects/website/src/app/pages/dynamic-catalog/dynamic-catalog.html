@@ -173,14 +173,23 @@
               @for (color of dynamicData().filter.color; track $index) {
               <label
                 class="relative w-8 h-8 rounded-full border shadow-sm hover:scale-110 transition-transform cursor-pointer inline-block"
-                [style.background-color]="color.name">
-                <input type="checkbox" class="absolute inset-0 opacity-0 cursor-pointer"
-                  [(ngModel)]="color.isSelected" />
+                [style.background-color]="color.name"
+              >
+                <input
+                  type="checkbox"
+                  class="absolute inset-0 opacity-0 cursor-pointer"
+                  [(ngModel)]="color.isSelected"
+                />
                 @if(color.isSelected){
-                <span class="absolute inset-0 flex items-center justify-center text-white text-sm font-bold">✓</span>
+                <span
+                  class="absolute inset-0 flex items-center justify-center text-white text-sm font-bold"
+                  >✓</span
+                >
+             
                 }
               </label>
               }
+            
             </div>
           </div>
 
@@ -193,11 +202,34 @@
     </aside>
 
     <!-- Product Grid -->
-    <section class="flex-grow overflow-y-auto h-screen pr-6 transition-all duration-500 ease-in-out" infiniteScroll
-      [infiniteScrollDistance]="3" [infiniteScrollThrottle]="3000" (scrolled)="onScrollDown()">
+    <section
+      class="flex-grow overflow-y-auto h-screen pr-6 transition-all duration-500 ease-in-out"
+    >
+      @if (isShowLoading()) {
+      <div class="grid grid-cols-2 sm:grid-cols-2 lg:grid-cols-3 gap-x-6 gap-y-10 pb-14">
+        @let dummyArr = [1, 2, 3]; @for (item of dummyArr; track $index) {
+        <div class="group m-2">
+          <!-- Image Skeleton -->
+          <ngx-skeleton-loader
+            count="1"
+            appearance="square"
+            class="rounded-md"
+            [theme]="{ height: '400px', width: '100%', margin: '0px' }"
+          ></ngx-skeleton-loader>
 
-      @if(dynamicData().products.length){
-      <div #productGrid class="grid grid-cols-2 sm:grid-cols-2 lg:grid-cols-3 gap-x-6 gap-y-10 pb-14">
+          <!-- Title + Price Skeleton -->
+          <ngx-skeleton-loader
+            count="2"
+            [theme]="{ height: '12px', width: '100%', 'margin-top': '4px' }"
+          ></ngx-skeleton-loader>
+        </div>
+        }
+      </div>
+      } @else {
+      <div
+        #productGrid
+        class="grid grid-cols-2 sm:grid-cols-2 lg:grid-cols-3 gap-x-6 gap-y-10 pb-14"
+      >
         @for (item of dynamicData().products; track $index) {
         <div class="group">
           <div class="aspect-w-1 aspect-h-1 h-[90%] w-full overflow-hidden rounded-lg bg-gray-200">
@@ -211,9 +243,11 @@
         </div>
         }
       </div>
-      }
-    
 
+      @if(!dynamicData().products.length){
+        <span>No data</span>
+      }
+      }
     </section>
   </main>
 </div>
