@@ -28,15 +28,18 @@ import {
   IResponseDynamicCatalogue,
 } from '../../core/interface/response/header.response';
 import { HttpErrorResponse } from '@angular/common/http';
+import { InfiniteScrollDirective } from 'ngx-infinite-scroll';
+
 import { dynamicCatalogData } from '../../../dummy-data';
 import { NgxSkeletonLoaderModule } from 'ngx-skeleton-loader';
 
 @Component({
   selector: 'app-dynamic-catalog',
-  imports: [CommonModule, FormsModule, NgxSkeletonLoaderModule],
+  imports: [CommonModule, FormsModule, InfiniteScrollDirective, NgxSkeletonLoaderModule],
   templateUrl: './dynamic-catalog.html',
   styleUrl: './dynamic-catalog.scss',
 })
+
 export class DynamicCatalog implements AfterViewInit {
   @ViewChild('filterSidebar', { static: true }) filterSidebar!: ElementRef<HTMLDivElement>;
   @ViewChild('filterToggleBtn', { static: true }) filterToggleBtn!: ElementRef<HTMLButtonElement>;
@@ -56,7 +59,7 @@ export class DynamicCatalog implements AfterViewInit {
   public isShowLoading: WritableSignal<boolean> = signal(false);
   public payloadGenderMenu: WritableSignal<IRequestProductMenu> = signal({
     ...initializePagInationPayload(),
-    gender: GenderTypeEnum.Men,
+    gender: GenderTypeEnum.Women,
     collectionIds: [],
     categoryIds: [],
     colors: [],
@@ -64,9 +67,11 @@ export class DynamicCatalog implements AfterViewInit {
     minPrice: 10000,
     maxPrice: 150000,
   });
-
+  public accumulatedProducts = signal<any[]>([]);
   public minLimit: WritableSignal<number> = signal(10000);
   public maxLimit: WritableSignal<number> = signal(150000);
+  public finished = signal(false); // true when no more pages
+  public isLoading = signal(false); // prevents duplicate calls
 
   public baseUrl: WritableSignal<string> = signal("");
 
@@ -97,10 +102,11 @@ export class DynamicCatalog implements AfterViewInit {
   ngOnInit(): void {
     this.handleResize();
 
-    if(this.platformService.isBrowser){
-      window.scrollTo({top:0,behavior:'smooth'});
+    if (this.platformService.isBrowser) {
+      window.scrollTo({ top: 0, behavior: 'smooth' });
     }
   }
+
 
   ngAfterViewInit(): void {
     // const gridViewControls = this.gridViewControls.nativeElement;
@@ -169,8 +175,42 @@ export class DynamicCatalog implements AfterViewInit {
     return !!this.activeSections[section];
   }
 
+  // private getData() {
+  //   console.log(this.payloadGenderMenu())
+  //   this.isShowLoading.set(true);
+  //   // this.isLo
+  //   httpPost<IRGeneric<IResponseDynamicCatalogue>, IRequestProductMenu>(
+  //     ApiRoutes.PRODUCT.MENU,
+  //     this.payloadGenderMenu(),
+  //     false
+  //   ).subscribe({
+  //     next: (res: IRGeneric<IResponseDynamicCatalogue>) => {
+  //       if (res?.data) {
+  //         console.log(res.data)
+  //         this.dynamicData.set(res.data);
+  //         this.priceMax.set(this.dynamicData().filter.maxPrice);
+  //         this.selectedPrice.set(this.dynamicData().filter.minPrice);
+
+  //         this.payloadGenderMenu().minPrice = this.dynamicData().filter.minPrice;
+  //         this.payloadGenderMenu().maxPrice = this.dynamicData().filter.maxPrice;
+
+  //         console.log(this.payloadGenderMenu);
+  //       } else {
+  //         this.dynamicData.set(initializeIResponseDynamicCatalogue());
+  //       }
+  //       this.isShowLoading.set(false);
+  //     },
+  //     error: (err: HttpErrorResponse) => {
+  //       this.dynamicData.set(initializeIResponseDynamicCatalogue());
+  //       this.isShowLoading.set(false);
+  //     },
+  //   });
+  // }
+
+
   private getData() {
-    this.isShowLoading.set(true);
+    this.isLoading.set(true);
+
     httpPost<IRGeneric<IResponseDynamicCatalogue>, IRequestProductMenu>(
       ApiRoutes.PRODUCT.MENU,
       this.payloadGenderMenu(),
@@ -178,26 +218,54 @@ export class DynamicCatalog implements AfterViewInit {
     ).subscribe({
       next: (res: IRGeneric<IResponseDynamicCatalogue>) => {
         if (res?.data && res.data.total) {
-          this.dynamicData.set(res.data);
+          const data = res?.data;
+          if (this.payloadGenderMenu().pageIndex === 1) {
+            this.dynamicData.set(data);
 
-          // this.dynamicData.set(dynamicCatalogData);
-          this.priceMax.set(this.dynamicData().filter.maxPrice);
-          this.selectedPrice.set(this.dynamicData().filter.minPrice);
+            this.priceMax.set(data.filter.maxPrice || this.priceMax());
+            this.selectedPrice.set(data.filter.minPrice || this.selectedPrice());
 
-          this.payloadGenderMenu().minPrice = this.dynamicData().filter.minPrice;
-          this.payloadGenderMenu().maxPrice = this.dynamicData().filter.maxPrice;
-
-          console.log(this.payloadGenderMenu);
-        } else {
-          this.dynamicData.set(initializeIResponseDynamicCatalogue());
+            this.payloadGenderMenu.update(p => ({
+              ...p,
+              minPrice: data.filter.minPrice || p.minPrice,
+              maxPrice: data.filter.maxPrice || p.maxPrice
+            }));
+          }
+          else {
+            this.dynamicData.update(old => {
+              const existing = old.products || [];
+              const incoming = data.products || [];
+              return {
+                ...old,
+                products: [...existing, ...incoming],
+                filter: data.filter || old.filter
+              };
+            });
+          }
         }
         this.isShowLoading.set(false);
+        this.isLoading.set(false);
       },
       error: (err: HttpErrorResponse) => {
-        this.dynamicData.set(initializeIResponseDynamicCatalogue());
-        this.isShowLoading.set(false);
-      },
+        this.isLoading.set(false);
+      }
     });
+  }
+
+  public onScrollDown() {
+    if (this.isLoading() || this.finished()) {
+      console.log(this.isLoading(), this.finished())
+      return;
+    }
+    // increment page
+    this.payloadGenderMenu.update(p => ({
+      ...p,
+      pageIndex: (p.pageIndex || 1) + 1
+
+    }));
+
+    // fetch next page
+    this.getData();
   }
 
   onMinChange(event: Event) {
@@ -249,10 +317,15 @@ export class DynamicCatalog implements AfterViewInit {
 
     this.payloadGenderMenu().categoryIds = categoryIds;
     this.payloadGenderMenu().colors = colors;
+    console.log(this.payloadGenderMenu())
 
     // console.log(this.baseUrl());
     this.router.navigate([createUrlFromObject(this.payloadGenderMenu(), this.baseUrl())]);
 
     // this.getData();
   }
+
+
+
+
 }

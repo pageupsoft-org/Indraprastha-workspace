@@ -7,13 +7,12 @@ import { LoginResponse } from '../../core/interface/response/login.response';
 import { Base } from '@portal/core';
 import { ApiRoutes, ErrorHandler, EToastType, ILoginForm, ILoginFormData, localStorageEnum, setLocalStorageItem, ToastService, ValidateControl } from '@shared';
 import { CommonModule } from '@angular/common';
-import { ButtonLoader } from "../../../../../website/src/app/core/component/button-loader/button-loader";
 import { AppLoadingButton } from '@shared';
 
 
 @Component({
   selector: 'app-login',
-  imports: [ReactiveFormsModule, ValidateControl, CommonModule, ButtonLoader, AppLoadingButton],
+  imports: [ReactiveFormsModule, ValidateControl, CommonModule,  AppLoadingButton],
   templateUrl: './login.html',
   styleUrl: './login.scss',
 })
@@ -61,7 +60,7 @@ export class Login extends Base implements OnInit {
            this.isBtnLoader.set(true);
         })
         .catch(error => {
-         this.isBtnLoader.set(true);
+         this.isBtnLoader.set(false);
           //  handle error 
         })
     } else {
