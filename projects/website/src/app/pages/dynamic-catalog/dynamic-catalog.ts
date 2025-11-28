@@ -72,6 +72,7 @@ export class DynamicCatalog implements AfterViewInit {
   public maxLimit: WritableSignal<number> = signal(150000);
   public finished = signal(false); // true when no more pages
   public isLoading = signal(false); // prevents duplicate calls
+  public selector: string = '.main-panel';
 
   public baseUrl: WritableSignal<string> = signal("");
 
@@ -253,6 +254,7 @@ export class DynamicCatalog implements AfterViewInit {
   }
 
   public onScrollDown() {
+    console.log("scroll trigger")
     if (this.isLoading() || this.finished()) {
       console.log(this.isLoading(), this.finished())
       return;
