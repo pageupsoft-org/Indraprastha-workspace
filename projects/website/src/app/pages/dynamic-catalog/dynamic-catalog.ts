@@ -96,6 +96,10 @@ export class DynamicCatalog implements AfterViewInit {
 
   ngOnInit(): void {
     this.handleResize();
+
+    if(this.platformService.isBrowser){
+      window.scrollTo({top:0,behavior:'smooth'});
+    }
   }
 
   ngAfterViewInit(): void {
