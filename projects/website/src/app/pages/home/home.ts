@@ -58,26 +58,28 @@ export class Home extends Base implements AfterViewInit, OnInit {
     }
   }
 
-  public getBannerData(payload: IBannerPagination, type: 'top' | 'middle') {
-    httpPost<IRGeneric<IBannerResponse>, IBannerPagination>(ApiRoutes.BANNER.GET, payload)
-      .subscribe({
-        next: (response) => {
-          const banners = response.data.banners?.length ? response.data.banners[0].bannerURL : '';
-          if (type === 'top') {
-            this.topBanners = banners
-          } else {
-            this.middleBanners = banners;
-          }
-        }
-      });
-  }
+    public getBannerData(payload: IBannerPagination, type: 'top' | 'middle') {
+      httpPost<IRGeneric<IBannerResponse>, IBannerPagination>(ApiRoutes.BANNER.GET, payload)
+        .subscribe({
+          next: (response) => {
+            const banners = response.data.banners?.length ? response.data.banners[0].bannerURL : '';
+            console.log(banners)
+            if (type === 'top') {
+              this.topBanners = banners
+            } else {
+              this.middleBanners = banners;
 
-  onBannerError(type: 'top' | 'middle') {
-    if (type === 'top') {
-      this.topBanners = 'assets/images/default-banner-image.png';
-    } else {
-      this.middleBanners = 'assets/images/default-banner-image.png';
+            }
+          }
+        });
     }
-  }
+
+    onBannerError(type: 'top' | 'middle') {
+      if (type === 'top') {
+        this.topBanners = 'assets/images/banner-image2.png';
+      } else {
+        this.middleBanners = 'assets/images/banner-image2.png';
+      }
+    }
 
 }

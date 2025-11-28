@@ -28,11 +28,12 @@ import {
   IResponseDynamicCatalogue,
 } from '../../core/interface/response/header.response';
 import { HttpErrorResponse } from '@angular/common/http';
+import { InfiniteScrollDirective } from 'ngx-infinite-scroll';
 
 
 @Component({
   selector: 'app-dynamic-catalog',
-  imports: [CommonModule, FormsModule],
+  imports: [CommonModule, FormsModule, InfiniteScrollDirective],
   templateUrl: './dynamic-catalog.html',
   styleUrl: './dynamic-catalog.scss',
 })
@@ -55,7 +56,7 @@ export class DynamicCatalog implements AfterViewInit {
   public isShowLoading: WritableSignal<boolean> = signal(false);
   public payloadGenderMenu: WritableSignal<IRequestProductMenu> = signal({
     ...initializePagInationPayload(),
-    gender: GenderTypeEnum.Men,
+    gender: GenderTypeEnum.Women,
     collectionIds: [],
     categoryIds: [],
     colors: [],
@@ -63,9 +64,11 @@ export class DynamicCatalog implements AfterViewInit {
     minPrice: 10000,
     maxPrice: 150000,
   });
-
+  public accumulatedProducts = signal<any[]>([]);
   public minLimit: WritableSignal<number> = signal(10000);
   public maxLimit: WritableSignal<number> = signal(150000);
+  public finished = signal(false); // true when no more pages
+  public isLoading = signal(false); // prevents duplicate calls
 
   public baseUrl: WritableSignal<string> = signal("");
 
@@ -96,6 +99,7 @@ export class DynamicCatalog implements AfterViewInit {
   ngOnInit(): void {
     this.handleResize();
   }
+
 
   ngAfterViewInit(): void {
     // const gridViewControls = this.gridViewControls.nativeElement;
@@ -165,7 +169,9 @@ export class DynamicCatalog implements AfterViewInit {
   }
 
   private getData() {
+    console.log(this.payloadGenderMenu())
     this.isShowLoading.set(true);
+    // this.isLo
     httpPost<IRGeneric<IResponseDynamicCatalogue>, IRequestProductMenu>(
       ApiRoutes.PRODUCT.MENU,
       this.payloadGenderMenu(),
@@ -173,6 +179,7 @@ export class DynamicCatalog implements AfterViewInit {
     ).subscribe({
       next: (res: IRGeneric<IResponseDynamicCatalogue>) => {
         if (res?.data) {
+          console.log(res.data)
           this.dynamicData.set(res.data);
           this.priceMax.set(this.dynamicData().filter.maxPrice);
           this.selectedPrice.set(this.dynamicData().filter.minPrice);
@@ -191,6 +198,77 @@ export class DynamicCatalog implements AfterViewInit {
         this.isShowLoading.set(false);
       },
     });
+  }
+
+
+// private getData() {
+//     // if (this.isLoading()) return;
+//     // if (this.finished()) return;
+
+//     console.log(this.isLoading(), this.finished())
+
+//     this.isLoading.set(true);
+//     this.isShowLoading.set(true);
+
+//     const payload = {
+//       ...this.payloadGenderMenu()
+//     }
+
+//     httpPost<IRGeneric<IResponseDynamicCatalogue>, IRequestProductMenu>(
+//       ApiRoutes.PRODUCT.MENU,
+//       payload,
+//       false
+//     ).subscribe({
+//       next: (res: IRGeneric<IResponseDynamicCatalogue>) => {
+//         if (res?.data) {
+//           if (payload.pageIndex === 1) {
+//             console.log(this.dynamicData.set(res.data))
+//             this.dynamicData.set(res.data);
+//             this.payloadGenderMenu.update(p => ({
+//               ...p,
+//               minPrice: res.data.filter.minPrice ?? p.minPrice,
+//               maxPrice: res.data.filter.maxPrice ?? p.maxPrice
+//             }));
+//           }
+
+//           const newProducts = res.data.products ?? [];
+
+//           if (newProducts.length) {
+//             this.accumulatedProducts.update(prev => prev.concat(newProducts));
+//           }
+
+//           if (newProducts.length < (payload.top)) {
+//             this.finished.set(true);
+//           }
+//         } 
+//         else {
+//           this.dynamicData.set(initializeIResponseDynamicCatalogue());
+//           this.finished.set(true);
+//         }
+
+//         this.isLoading.set(false);
+//         this.isShowLoading.set(false);
+//       },
+//       error: (err: HttpErrorResponse) => {
+//         console.error('Product load error', err);
+//         this.dynamicData.set(initializeIResponseDynamicCatalogue());
+//         this.isLoading.set(false);
+//         this.isShowLoading.set(false);
+//       }
+//     });
+//   }
+
+ 
+  public onScrollDown() {
+    console.log("call onscroll")
+    if (this.isLoading() || this.finished()) return;
+    this.payloadGenderMenu.update(p => ({
+      ...p,
+      pageIndex: p.pageIndex + 1,
+      top: p.top 
+    }));
+
+    this.getData();
   }
 
   onMinChange(event: Event) {

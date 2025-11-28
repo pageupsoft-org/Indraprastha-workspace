@@ -20,7 +20,7 @@ export function initializePagInationPayload(): IPaginationPayload {
     let payload: IPaginationPayload = {
         search: "",
         pageIndex: 1,
-        top: 10,
+        top: 50,
         showDeactivated: false,
         isPaginate: true,
         ordersBy: []
