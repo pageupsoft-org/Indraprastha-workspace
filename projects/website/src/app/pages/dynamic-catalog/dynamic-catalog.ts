@@ -168,106 +168,105 @@ export class DynamicCatalog implements AfterViewInit {
     return !!this.activeSections[section];
   }
 
+  // private getData() {
+  //   console.log(this.payloadGenderMenu())
+  //   this.isShowLoading.set(true);
+  //   // this.isLo
+  //   httpPost<IRGeneric<IResponseDynamicCatalogue>, IRequestProductMenu>(
+  //     ApiRoutes.PRODUCT.MENU,
+  //     this.payloadGenderMenu(),
+  //     false
+  //   ).subscribe({
+  //     next: (res: IRGeneric<IResponseDynamicCatalogue>) => {
+  //       if (res?.data) {
+  //         console.log(res.data)
+  //         this.dynamicData.set(res.data);
+  //         this.priceMax.set(this.dynamicData().filter.maxPrice);
+  //         this.selectedPrice.set(this.dynamicData().filter.minPrice);
+
+  //         this.payloadGenderMenu().minPrice = this.dynamicData().filter.minPrice;
+  //         this.payloadGenderMenu().maxPrice = this.dynamicData().filter.maxPrice;
+
+  //         console.log(this.payloadGenderMenu);
+  //       } else {
+  //         this.dynamicData.set(initializeIResponseDynamicCatalogue());
+  //       }
+  //       this.isShowLoading.set(false);
+  //     },
+  //     error: (err: HttpErrorResponse) => {
+  //       this.dynamicData.set(initializeIResponseDynamicCatalogue());
+  //       this.isShowLoading.set(false);
+  //     },
+  //   });
+  // }
+
+
   private getData() {
-    console.log(this.payloadGenderMenu())
+
+    console.log('payload before fetch', this.payloadGenderMenu());
     this.isShowLoading.set(true);
-    // this.isLo
+    this.isLoading.set(true);
+
     httpPost<IRGeneric<IResponseDynamicCatalogue>, IRequestProductMenu>(
       ApiRoutes.PRODUCT.MENU,
       this.payloadGenderMenu(),
       false
     ).subscribe({
       next: (res: IRGeneric<IResponseDynamicCatalogue>) => {
-        if (res?.data) {
-          console.log(res.data)
-          this.dynamicData.set(res.data);
-          this.priceMax.set(this.dynamicData().filter.maxPrice);
-          this.selectedPrice.set(this.dynamicData().filter.minPrice);
+        const data = res?.data;
+        console.log(data)
+        if (this.payloadGenderMenu().pageIndex === 1) {
+          this.dynamicData.set(data);
 
-          this.payloadGenderMenu().minPrice = this.dynamicData().filter.minPrice;
-          this.payloadGenderMenu().maxPrice = this.dynamicData().filter.maxPrice;
+          this.priceMax.set(data.filter.maxPrice || this.priceMax());
+          this.selectedPrice.set(data.filter.minPrice || this.selectedPrice());
 
-          console.log(this.payloadGenderMenu);
-        } else {
+          this.payloadGenderMenu.update(p => ({
+            ...p,
+            minPrice: data.filter.minPrice || p.minPrice,
+            maxPrice: data.filter.maxPrice || p.maxPrice
+          }));
+        }
+        else {
+          this.dynamicData.update(old => {
+            const existing = old.products || [];
+            const incoming = data.products || [];
+            return {
+              ...old,
+              products: [...existing, ...incoming],
+              filter: data.filter ?? old.filter
+            };
+          });
+        }
+
+        this.isShowLoading.set(false);
+        this.isLoading.set(false);
+      },
+      error: (err: HttpErrorResponse) => {
+        console.error('getData error', err);
+        if (this.payloadGenderMenu().pageIndex === 1) {
           this.dynamicData.set(initializeIResponseDynamicCatalogue());
         }
         this.isShowLoading.set(false);
-      },
-      error: (err: HttpErrorResponse) => {
-        this.dynamicData.set(initializeIResponseDynamicCatalogue());
-        this.isShowLoading.set(false);
-      },
+        this.isLoading.set(false);
+      
+      }
     });
   }
 
-
-// private getData() {
-//     // if (this.isLoading()) return;
-//     // if (this.finished()) return;
-
-//     console.log(this.isLoading(), this.finished())
-
-//     this.isLoading.set(true);
-//     this.isShowLoading.set(true);
-
-//     const payload = {
-//       ...this.payloadGenderMenu()
-//     }
-
-//     httpPost<IRGeneric<IResponseDynamicCatalogue>, IRequestProductMenu>(
-//       ApiRoutes.PRODUCT.MENU,
-//       payload,
-//       false
-//     ).subscribe({
-//       next: (res: IRGeneric<IResponseDynamicCatalogue>) => {
-//         if (res?.data) {
-//           if (payload.pageIndex === 1) {
-//             console.log(this.dynamicData.set(res.data))
-//             this.dynamicData.set(res.data);
-//             this.payloadGenderMenu.update(p => ({
-//               ...p,
-//               minPrice: res.data.filter.minPrice ?? p.minPrice,
-//               maxPrice: res.data.filter.maxPrice ?? p.maxPrice
-//             }));
-//           }
-
-//           const newProducts = res.data.products ?? [];
-
-//           if (newProducts.length) {
-//             this.accumulatedProducts.update(prev => prev.concat(newProducts));
-//           }
-
-//           if (newProducts.length < (payload.top)) {
-//             this.finished.set(true);
-//           }
-//         } 
-//         else {
-//           this.dynamicData.set(initializeIResponseDynamicCatalogue());
-//           this.finished.set(true);
-//         }
-
-//         this.isLoading.set(false);
-//         this.isShowLoading.set(false);
-//       },
-//       error: (err: HttpErrorResponse) => {
-//         console.error('Product load error', err);
-//         this.dynamicData.set(initializeIResponseDynamicCatalogue());
-//         this.isLoading.set(false);
-//         this.isShowLoading.set(false);
-//       }
-//     });
-//   }
-
- 
   public onScrollDown() {
-    console.log("call onscroll")
-    if (this.isLoading() || this.finished()) return;
+    if (this.isLoading() || this.finished()) {
+      console.log(this.isLoading(), this.finished())
+      return;
+    }
+    // increment page
     this.payloadGenderMenu.update(p => ({
       ...p,
-      pageIndex: p.pageIndex + 1,
-      top: p.top 
+      pageIndex: (p.pageIndex ?? 1) + 1
+  
     }));
 
+    // fetch next page
     this.getData();
   }
 

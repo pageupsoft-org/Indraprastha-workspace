@@ -2,13 +2,21 @@
 <main class="smooth-scroll">
   <!-- Banner section with image -->
   <section>
-    <div>
-      @if(topBanners){
+     @if(topBanners){
+       <div>
       <div class="banner">
         <img [src]="topBanners" alt="Top banner" (error)="onBannerError('top')" class="w-full" />
       </div>
-      }
+      
     </div>
+     }
+
+     <!-- <div>
+      <div class="banner">
+        <img [src]="topBanners" alt="Top banner" (error)="onBannerError('top')" class="w-full" />
+      </div>
+      
+    </div> -->
   </section>
 
   <section class="relative bg-[#680C01]">
@@ -48,8 +56,6 @@
   <!-- middle banner  -->
   <section class="middle-banner">
     <div class="imagemiddle-banner">
-      @if(middleBanners) {
-
       <div class="banner">
         <img
           [src]="middleBanners"
@@ -58,7 +64,6 @@
           class="w-full"
         />
       </div>
-      }
     </div>
   </section>
 
