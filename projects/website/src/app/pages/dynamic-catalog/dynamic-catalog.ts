@@ -37,6 +37,7 @@ import { InfiniteScrollDirective } from 'ngx-infinite-scroll';
   templateUrl: './dynamic-catalog.html',
   styleUrl: './dynamic-catalog.scss',
 })
+
 export class DynamicCatalog implements AfterViewInit {
   @ViewChild('filterSidebar', { static: true }) filterSidebar!: ElementRef<HTMLDivElement>;
   @ViewChild('filterToggleBtn', { static: true }) filterToggleBtn!: ElementRef<HTMLButtonElement>;
@@ -202,9 +203,6 @@ export class DynamicCatalog implements AfterViewInit {
 
 
   private getData() {
-
-    console.log('payload before fetch', this.payloadGenderMenu());
-    this.isShowLoading.set(true);
     this.isLoading.set(true);
 
     httpPost<IRGeneric<IResponseDynamicCatalogue>, IRequestProductMenu>(
@@ -214,7 +212,6 @@ export class DynamicCatalog implements AfterViewInit {
     ).subscribe({
       next: (res: IRGeneric<IResponseDynamicCatalogue>) => {
         const data = res?.data;
-        console.log(data)
         if (this.payloadGenderMenu().pageIndex === 1) {
           this.dynamicData.set(data);
 
@@ -234,22 +231,15 @@ export class DynamicCatalog implements AfterViewInit {
             return {
               ...old,
               products: [...existing, ...incoming],
-              filter: data.filter ?? old.filter
+              filter: data.filter || old.filter
             };
           });
         }
-
         this.isShowLoading.set(false);
         this.isLoading.set(false);
       },
       error: (err: HttpErrorResponse) => {
-        console.error('getData error', err);
-        if (this.payloadGenderMenu().pageIndex === 1) {
-          this.dynamicData.set(initializeIResponseDynamicCatalogue());
-        }
-        this.isShowLoading.set(false);
         this.isLoading.set(false);
-      
       }
     });
   }
@@ -262,7 +252,7 @@ export class DynamicCatalog implements AfterViewInit {
     // increment page
     this.payloadGenderMenu.update(p => ({
       ...p,
-      pageIndex: (p.pageIndex ?? 1) + 1
+      pageIndex: (p.pageIndex || 1) + 1
   
     }));
 
