@@ -204,6 +204,10 @@
     <!-- Product Grid -->
     <section
       class="flex-grow overflow-y-auto h-screen pr-6 transition-all duration-500 ease-in-out"
+      infiniteScroll
+      [infiniteScrollDistance]="2"
+      [infiniteScrollThrottle]="50"
+      (scrolled)="onScrollDown()"
     >
       @if (isShowLoading()) {
       <div class="grid grid-cols-2 sm:grid-cols-2 lg:grid-cols-3 gap-x-6 gap-y-10 pb-14">
