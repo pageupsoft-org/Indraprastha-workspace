@@ -1,18 +1,24 @@
-
 <!-- product LIST -->
 <div
-  class="min-h-screen mt-[50px] bg-gradient-to-br from-indigo-50 via-white to-blue-50 dark:from-gray-900 dark:to-gray-800 py-4 px-4">
+  class="min-h-screen mt-[70px] py-4 px-4">
 
   <div class="max-w-7xl mx-auto">
 
-    <!-- Search + Add Button Card -->
     <div class="flex justify-between items-center mb-8">
-      <!-- Search Bar with Directive (clean & reusable) -->
-      <div class="relative max-w-md w-full" libInputWrapper icon="search">
-        <input type="search" placeholder="Search items by name, email, contact..." class="w-full pl-11 pr-5 py-3.5 rounded-[5px] border border-slate-300 bg-white dark:bg-gray-800 
-             text-gray-900 dark:text-white placeholder-slate-400
-             focus:outline-none  focus:ring-[#82181A] focus:border-[#82181A] 
-             transition-all duration-200 shadow-sm hover:shadow-md text-sm font-medium" />
+      <!-- search bar -->
+      <div class="relative">
+        <input type="text" aria-label="Search by Order Number" placeholder="Search by Order Number..."
+          class="w-[400px] h-[40px] rounded-[23px] pl-4 pr-10 border border-gray-200 bg-white text-sm placeholder-[#808080] focus:outline-none focus:ring-2 focus:ring-indigo-200" />
+        <!-- Search icon -->
+        <button aria-hidden="true"
+          class="absolute right-1 top-1/2 -translate-y-1/2 w-8 h-8 rounded-full flex items-center justify-center hover:bg-gray-100 bg-gray-200">
+          <!-- magnifier SVG -->
+          <svg xmlns="http://www.w3.org/2000/svg" class="w-[16px] h-[16px] text-[#AC302F] cursor-pointer" fill="none"
+            viewBox="0 0 24 24" stroke="currentColor">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+              d="M21 21l-4.35-4.35M10.5 18A7.5 7.5 0 1 1 18 10.5 7.5 7.5 0 0 1 10.5 18z" />
+          </svg>
+        </button>
       </div>
 
       <!-- Add Button (your original color #82181A) -->
@@ -29,7 +35,7 @@
 
     <!-- item Table Card -->
     <div
-      class="bg-white dark:bg-gray-800 rounded-2xl shadow-xl border border-gray-200 dark:border-gray-700 overflow-hidden">
+      class="bg-white dark:bg-gray-800 rounded-[10px]  border border-gray-200 dark:border-gray-700 overflow-hidden">
 
       <div class="overflow-x-auto">
         <table class="w-full min-w-[800px]">
@@ -117,10 +123,10 @@
             }
           </tbody>
         </table>
-      
+
         <!-- pagination -->
 
-          <app-pagination-controller [paginationControlMetaData]="paginationMetaData"
-                    (ETopChanged)="topChange($event)" (pageChanged)="pageChange($event)"></app-pagination-controller>
+        <app-pagination-controller [paginationControlMetaData]="paginationMetaData" (ETopChanged)="topChange($event)"
+          (pageChanged)="pageChange($event)"></app-pagination-controller>
       </div>
     </div>

@@ -1,7 +1,5 @@
-<!-- Dashboard fragment — paste into your page where Tailwind + icons are already loaded -->
-<div class="bg-[#EEF2FF] min-h-screen p-6 mt-[45px]">
+<!-- <div class="bg-[#EEF2FF] min-h-screen p-6 mt-[45px]">
   <div class="max-w-7xl mx-auto">
-    <!-- Header -->
     <header class="flex items-center justify-between mb-6">
       <div>
         <h1 class="text-3xl font-semibold text-gray-800">Dashboard</h1>
@@ -11,16 +9,13 @@
       </div>
     </header>
 
-    <!-- Top stats grid -->
     <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-3 gap-6 mb-6">
-      <!-- Card template -->
       <div class="bg-white rounded-[10px] shadow p-4 flex items-center justify-between cursor-pointer">
         <div>
           <p class="text-sm text-gray-500 font-semibold">Total Orders</p>
           <div class="text-2xl font-semibold text-gray-800 mt-3">{{totalPendingOrders.totalOrder}}</div>
         </div>
         <div class="w-12 h-12 rounded-lg flex items-center justify-center" style="background:#FEEFEF">
-          <!-- use Font Awesome or Heroicons -->
           <svg class="w-6 h-6 text-[#82181A]" fill="none" stroke="currentColor" viewBox="0 0 24 24">
             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 3h18v4H3zM3 11h18v10H3z" />
           </svg>
@@ -55,7 +50,6 @@
 
     </div>
 
-    <!--The content below is only a placeholder and can be replaced.-->
     <div class="w-full bg-purple-100 h-[70%] flex gap-2">
       <div class="w-[70%] bg-white rounded-[10px]">
         <div id="chart">
@@ -76,34 +70,143 @@
     </div>
 
 
-    <!-- <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
-      <div class="lg:col-span-2 bg-white rounded-[10px] shadow p-6">
-        <div class="flex items-center justify-between mb-4">
-          <h3 class="font-semibold text-lg text-gray-800 mt-3">Sales Overview</h3>
-          <div class="text-sm text-gray-500">+4% in 2022</div>
-        </div>
-        <div
-          class="h-56 rounded-xl bg-[#FBFDFF] border border-gray-100 flex items-center justify-center text-sm text-gray-400">
-          Chart placeholder (use Chart.js / ApexCharts)
-        </div>
-      </div>
-
-      <div class="bg-white rounded-[10px] shadow p-6">
-        <h3 class="font-semibold text-lg text-gray-800 mt-3">Orders</h3>
-        <ul class="space-y-3 text-sm text-gray-600">
-          <li class="flex justify-between"><span>Today Orders</span><span class="font-semibold">142</span></li>
-          <li class="flex justify-between"><span>Monthly Orders</span><span class="font-semibold">3,842</span></li>
-          <li class="flex justify-between"><span>Active Orders</span><span
-              class="font-semibold text-green-600">63</span></li>
-          <li class="flex justify-between"><span>Pending Orders</span><span
-              class="font-semibold text-amber-600">18</span></li>
-          <li class="flex justify-between"><span>Cancelled Orders</span><span
-              class="font-semibold text-rose-600">7</span></li>
-        </ul>
-      </div>
-    </div> -->
+   
 
     <footer class="mt-6 text-sm text-gray-500">Designed with Tailwind • Use your modules to replace static numbers.
     </footer>
+  </div>
+</div> -->
+
+
+<div class="p-6 mt-[70px]">
+  <div class="max-w-7xl mx-auto">
+    <!-- 3-column responsive grid -->
+    <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+
+      <!-- Card 1 -->
+      <div class="bg-white rounded-[25px] p-6 flex items-center justify-between
+                    shadow-[0px_7.56px_47.88px_0px_rgba(0,0,0,0.04)]">
+        <!-- Left: icon + text -->
+        <div class="flex items-center gap-4">
+          <div class="w-16 h-16 rounded-xl flex items-center justify-center"
+            style="background: linear-gradient(180deg,#8b6bff 0%, #7c5cff 100%);">
+            <!-- money icon -->
+            <svg class="w-7 h-7 text-white" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+              <path d="M12 1v22" stroke="rgba(255,255,255,0.9)" stroke-width="1.5" stroke-linecap="round" />
+              <path d="M17 7a5 5 0 0 0-10 0v10a5 5 0 0 0 10 0V7z" stroke="rgba(255,255,255,0.9)" stroke-width="1.5"
+                stroke-linecap="round" stroke-linejoin="round" />
+            </svg>
+          </div>
+
+          <div>
+            <div class="text-xs text-gray-400">Total order</div>
+            <div class="text-2xl font-extrabold text-gray-900 mt-1">$13.000</div>
+            <div class="text-sm text-gray-400 mt-1">50% This Week</div>
+          </div>
+        </div>
+
+        <!-- Right: small chart preview -->
+        <div class="w-24 h-14 rounded-md flex items-end">
+          <!-- simple svg sparkline with gradient fade -->
+          <svg viewBox="0 0 100 50" class="w-full h-full">
+            <defs>
+              <linearGradient id="g1" x1="0" x2="0" y1="0" y2="1">
+                <stop offset="0%" stop-color="#7c5cff" stop-opacity="1" />
+                <stop offset="100%" stop-color="#7c5cff" stop-opacity="0" />
+              </linearGradient>
+            </defs>
+            <path d="M0 30 L20 28 L40 20 L60 18 L80 10 L100 6 L100 50 L0 50 Z" fill="url(#g1)" opacity="0.9" />
+            <polyline points="0,30 20,28 40,20 60,18 80,10 100,6" fill="none" stroke="#5b3bff" stroke-width="2"
+              stroke-linecap="round" stroke-linejoin="round" />
+          </svg>
+        </div>
+      </div>
+
+      <!-- Card 2 -->
+      <div class="bg-white rounded-[25px] p-6 flex items-center justify-between
+                    shadow-[0px_7.56px_47.88px_0px_rgba(0,0,0,0.04)]">
+        <div class="flex items-center gap-4">
+          <div class="w-16 h-16 rounded-xl flex items-center justify-center bg-[#7b6bff]/[0.12]">
+            <svg class="w-7 h-7 text-[#6b5cff]" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+              <rect x="6" y="6" width="12" height="12" rx="3" stroke="#6b5cff" stroke-width="1.5" />
+              <path d="M9 10h6" stroke="#6b5cff" stroke-width="1.5" stroke-linecap="round" />
+            </svg>
+          </div>
+
+          <div>
+            <div class="text-xs text-gray-400">New Customer</div>
+            <div class="text-2xl font-extrabold text-gray-900 mt-1">5000</div>
+            <div class="text-sm text-gray-400 mt-1">60% This Week</div>
+          </div>
+        </div>
+
+        <div class="w-24 h-14 rounded-md flex items-end">
+          <svg viewBox="0 0 100 50" class="w-full h-full">
+            <defs>
+              <linearGradient id="g2" x1="0" x2="0" y1="0" y2="1">
+                <stop offset="0%" stop-color="#ff6b6b" stop-opacity="1" />
+                <stop offset="100%" stop-color="#ff6b6b" stop-opacity="0" />
+              </linearGradient>
+            </defs>
+            <path d="M0 30 L20 26 L40 28 L60 22 L80 28 L100 18 L100 50 L0 50 Z" fill="url(#g2)" opacity="0.9" />
+            <polyline points="0,30 20,26 40,28 60,22 80,28 100,18" fill="none" stroke="#ff6b6b" stroke-width="2"
+              stroke-linecap="round" stroke-linejoin="round" />
+          </svg>
+        </div>
+      </div>
+
+      <!-- Card 3 -->
+      <div class="bg-white rounded-[25px] p-6 flex items-center justify-between
+                    shadow-[0px_7.56px_47.88px_0px_rgba(0,0,0,0.04)]">
+        <div class="flex items-center gap-4">
+          <div class="w-16 h-16 rounded-xl flex items-center justify-center bg-[#8c78ff]/[0.12]">
+            <svg class="w-7 h-7 text-[#7b5cff]" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+              <circle cx="12" cy="9" r="3" stroke="#7b5cff" stroke-width="1.5" />
+              <path d="M5 20c1.5-4 6-6 7-6s5.5 2 7 6" stroke="#7b5cff" stroke-width="1.5" stroke-linecap="round" />
+            </svg>
+          </div>
+
+          <div>
+            <div class="text-xs text-gray-400">Orders</div>
+            <div class="text-2xl font-extrabold text-gray-900 mt-1">600+</div>
+            <div class="text-sm text-gray-400 mt-1">50% This Week</div>
+          </div>
+        </div>
+
+        <div class="w-24 h-14 rounded-md flex items-end">
+          <svg viewBox="0 0 100 50" class="w-full h-full">
+            <defs>
+              <linearGradient id="g3" x1="0" x2="0" y1="0" y2="1">
+                <stop offset="0%" stop-color="#7c5cff" stop-opacity="1" />
+                <stop offset="100%" stop-color="#7c5cff" stop-opacity="0" />
+              </linearGradient>
+            </defs>
+            <path d="M0 30 L20 28 L40 30 L60 26 L80 20 L100 12 L100 50 L0 50 Z" fill="url(#g3)" opacity="0.9" />
+            <polyline points="0,30 20,28 40,30 60,26 80,20 100,12" fill="none" stroke="#7c5cff" stroke-width="2"
+              stroke-linecap="round" stroke-linejoin="round" />
+          </svg>
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+  <div class="w-full bg-purple-100 h-[70%] flex gap-2 mt-[20px]">
+    <div class="w-[70%] bg-white rounded-[10px]">
+      <div id="chart">
+        <apx-chart #chart [series]="chartOptions.series!" [chart]="chartOptions.chart!" [xaxis]="chartOptions.xaxis!"
+          [stroke]="chartOptions.stroke!" [tooltip]="chartOptions.tooltip!"
+          [dataLabels]="chartOptions.dataLabels!"></apx-chart>
+      </div>
+    </div>
+    <div class="w-[30%] bg-white rounded-[10px]">
+
+      <div id="chart" class="mt-[20px]">
+        <apx-chart [series]="pieOptions.series!" [chart]="pieOptions.chart!" [labels]="pieOptions.labels"
+          [responsive]="pieOptions.responsive!"></apx-chart>
+      </div>
+
+
+    </div>
   </div>
 </div>

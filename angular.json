@@ -130,7 +130,8 @@
             ],
             "styles": [
               "projects/portal/src/styles.scss",
-              "node_modules/daterangepicker/daterangepicker.css"
+              "node_modules/daterangepicker/daterangepicker.css",
+              "node_modules/boxicons/css/boxicons.min.css"
             ],
             "scripts": [
               "node_modules/jquery/dist/jquery.min.js",
