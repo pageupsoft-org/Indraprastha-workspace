@@ -29,13 +29,11 @@ export class OrderList extends Base implements OnInit {
     status: null
   };
   public changeStatusForm: FormGroup<IChangeStatusForm> = initializeIChangeStatusForm()
-  public totalOrders: number = 0;
+  public totalOrders: number = 0 
   public orders: IOrder[] = [];
   public statusValue: MStringEnumToArray[] = stringEnumToArray(EOrderStatus)
   public orderStatus: string | null = 'InProcess'
   public paginationMetadata: PaginationControlMetadata = createPaginationMetadata();
-;
-
   constructor(private _toaster: ToastService, private router: Router) {
     super()
   }

@@ -37,7 +37,6 @@ export class OrderDetails extends Base implements OnInit {
     });
     this.orderStatusIndex = this.statusList.indexOf(this.orderStatus);
     this.progressWidth = (this.orderStatusIndex / (this.statusList.length - 1)) * 100;
-    console.log(this.orderStatus,  this.progressWidth)
   }
 
   // GET ORDER BY ID  

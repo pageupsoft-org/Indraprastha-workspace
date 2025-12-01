@@ -1,6 +1,9 @@
 import { Component, inject, OnInit, signal, WritableSignal } from '@angular/core';
 import { Base, handlePagination } from '@portal/core';
-import { ICollection, ICollectionResponse } from '../../../core/interface/response/collection.response';
+import {
+  ICollection,
+  ICollectionResponse,
+} from '../../../core/interface/response/collection.response';
 import { MAT_DIALOG_DATA, MatDialog } from '@angular/material/dialog';
 import { CollectionUpsert } from '../collection-upsert/collection-upsert';
 import {
@@ -15,45 +18,60 @@ import {
   ToastService,
 } from '@shared';
 import { IGenericResponse } from '../../../core/interface/response/genericResponse';
-import { response } from 'express';
-import { PaginationController } from "../../../component/pagination-controller/pagination-controller";
-import { createPaginationMetadata, PaginationControlMetadata } from '../../../core/interface/model/pagination-detail.model';
+import { PaginationController } from '../../../component/pagination-controller/pagination-controller';
+import {
+  createPaginationMetadata,
+  PaginationControlMetadata,
+} from '../../../core/interface/model/pagination-detail.model';
+import { SearchBase } from '../../../core/base/search-base';
+import { Observable } from 'rxjs';
+import { SearchBar } from '../../../component/search-bar/search-bar';
 
 @Component({
   selector: 'app-collection-list',
-  imports: [PaginationController],
+  imports: [PaginationController, SearchBar],
   templateUrl: './collection-list.html',
   styleUrl: './collection-list.scss',
 })
-export class CollectionList extends Base implements OnInit {
+export class CollectionList
+  extends SearchBase<IGenericResponse<ICollectionResponse>>
+  implements OnInit
+{
   public readonly dialog = inject(MatDialog);
   public collectionList: WritableSignal<ICollection[]> = signal([]);
-  public payLoad: IPaginationPayload = initializePagInationPayload()
-  public collections: ICollection[] = []
-  public paginationMetaData : PaginationControlMetadata = createPaginationMetadata()
+  public payLoad: IPaginationPayload = initializePagInationPayload();
+  public collections: ICollection[] = [];
+  public paginationMetaData: PaginationControlMetadata = createPaginationMetadata();
   constructor(private toaster: ToastService) {
     super();
   }
 
-  ngOnInit(): void {
-    this.getCollectionsData();
+  protected override getData(): Observable<IGenericResponse<ICollectionResponse>> {
+    return this.httpPostObservable<IGenericResponse<ICollectionResponse>, IPaginationPayload>(
+      ApiRoutes.COLLECTION.ALL,
+      this.payLoad
+    );
   }
 
-  private getCollectionsData() {
-    this.httpPostPromise<IGenericResponse<ICollectionResponse>, IPaginationPayload>(ApiRoutes.COLLECTION.ALL, this.payLoad).then(response => {
-      if (response) {
-        if (response.data) {
-          this.collectionList.set(response.data.collections);
-          handlePagination(
-            this.paginationMetaData,
-            response.data.total,
-            this.payLoad.pageIndex,
-            this.payLoad.top,
-            
-          )
-        }
-      }
-    });
+  protected override dataLoadedHandler(response: IGenericResponse<ICollectionResponse>): void {
+    if (response?.data && response.data?.total) {
+      this.collectionList.set(response.data.collections);
+      handlePagination(
+        this.paginationMetaData,
+        response.data.total,
+        this.payLoad.pageIndex,
+        this.payLoad.top
+      );
+    } else {
+      this.collectionList.set([]);
+    }
+  }
+
+  public searchText(searchText: string) {
+    this.payLoad.search = searchText;
+    this.searchString$.next(searchText);
+    this.payLoad.pageIndex = 1;
+    this.search();
   }
 
   // Open PopUp
@@ -69,7 +87,7 @@ export class CollectionList extends Base implements OnInit {
 
     dialogRef.afterClosed().subscribe((result: boolean) => {
       if (result) {
-        this.getCollectionsData()
+        this.search();
       }
     });
   }
@@ -94,7 +112,7 @@ export class CollectionList extends Base implements OnInit {
                   duration: 3000,
                   type: EToastType.success,
                 });
-                this.getCollectionsData();
+                this.search();
               }
             })
             .catch((error) => {});
@@ -104,15 +122,13 @@ export class CollectionList extends Base implements OnInit {
   }
 
   public topChange(top: number) {
-    console.log("Top:", top);
     this.payLoad.top = top;
-    this.getCollectionsData();
+    this.payLoad.pageIndex = 1;
+    this.search();
   }
 
   public pageChange(pageIndex: number) {
-    console.log("Page Index:", pageIndex);
     this.payLoad.pageIndex = pageIndex;
-    this.getCollectionsData();
+    this.search();
   }
-
 }

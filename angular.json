@@ -21,6 +21,9 @@
             "polyfills": [
               "zone.js"
             ],
+            "polyfills": [
+              "zone.js"
+            ],
             "tsConfig": "projects/website/tsconfig.app.json",
             "inlineStyleLanguage": "scss",
             "assets": [

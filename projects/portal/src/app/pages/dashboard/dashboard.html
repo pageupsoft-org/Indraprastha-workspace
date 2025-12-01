@@ -3,8 +3,10 @@
     <header class="flex items-center justify-between mb-6">
       <div>
         <h1 class="text-3xl font-semibold text-gray-800">Dashboard</h1>
+        <h1 class="text-3xl font-semibold text-gray-800">Dashboard</h1>
       </div>
       <div>
+        <app-daterang-picker (emitDateObject)="onChangeDate($event)"></app-daterang-picker>
         <app-daterang-picker (emitDateObject)="onChangeDate($event)"></app-daterang-picker>
       </div>
     </header>
@@ -34,7 +36,31 @@
           </svg>
         </div>
       </div>
+      <div class="bg-white rounded-[10px] shadow p-4 flex items-center justify-between cursor-pointer">
+        <div>
+          <p class="text-sm text-gray-500 font-semibold">New Customers</p>
+          <div class="text-2xl font-semibold text-gray-800  mt-3">{{totalPendingOrders.newCustomer}}</div>
+        </div>
+        <div class="w-12 h-12 rounded-lg flex items-center justify-center" style="background:#FEEFEF">
+          <svg class="w-6 h-6 text-[#82181A]" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+              d="M17 20h5v-2a4 4 0 00-4-4h-1M7 20h5v-2a4 4 0 00-4-4H7M12 7a4 4 0 110-8 4 4 0 010 8z" />
+          </svg>
+        </div>
+      </div>
 
+      <div class="bg-white rounded-[10px] shadow p-4 flex items-center justify-between cursor-pointer">
+        <div>
+          <p class="text-sm text-gray-500 font-semibold">orders</p>
+          <div class="text-2xl font-semibold text-gray-800 mt-3">{{totalPendingOrders.order}}</div>
+        </div>
+        <div class="w-12 h-12 rounded-lg flex items-center justify-center" style="background:#FEEFEF">
+          <svg class="w-6 h-6 text-[#82181A]" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+              d="M17 20h5v-2a4 4 0 00-4-4h-1M7 20h5v-2a4 4 0 00-4-4H7M12 7a4 4 0 110-8 4 4 0 010 8z" />
+          </svg>
+        </div>
+      </div>
       <div class="bg-white rounded-[10px] shadow p-4 flex items-center justify-between cursor-pointer">
         <div>
           <p class="text-sm text-gray-500 font-semibold">orders</p>

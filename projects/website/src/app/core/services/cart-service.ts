@@ -16,9 +16,6 @@ export class CartService {
 
   constructor(private utilService: UtilityService) {
     effect(() => {
-      console.log('Cart count : ', this.cartCount());
-      console.log('Cart data : ', this.cartData());
-      console.log('Cart count : ', this.cartCount());
     });
 
     this.getCartProduct();
