@@ -1,135 +1,116 @@
-<!-- Main content: Order List -->
-<section class="p-6 bg-gray-50 min-h-screen">
-  <!-- Header / controls -->
-  <div class="mb-6 flex flex-col md:flex-row md:items-center md:justify-between gap-4">
-    <div>
-      <h2 class="text-2xl font-semibold text-gray-800">Orders</h2>
-      <p class="text-sm text-gray-500">Manage and review recent orders</p>
-    </div>
+<div class="bg-gray-50 text-slate-800 font-sans antialiased mt-[50px]">
+  <div class="px-4 py-10">
 
-    <div class="flex flex-col sm:flex-row items-stretch sm:items-center gap-2">
-      <!-- Search -->
-      <div class="flex items-center bg-white border border-gray-300 rounded px-3 py-2 shadow-sm">
-        <svg class="w-5 h-5 text-gray-400 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24"
-          xmlns="http://www.w3.org/2000/svg">
-          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-            d="M21 21l-4.35-4.35M17 11a6 6 0 11-12 0 6 6 0 0112 0z"></path>
-        </svg>
-        <input type="text" placeholder="Search by order no, customer..." class="outline-none w-48 sm:w-64 text-sm" />
+    <!-- Header -->
+    <div class="flex items-start justify-between mb-6 gap-6">
+      <div>
+        <div class="flex items-center gap-2">
+          <h3 class="text-sm font-medium text-slate-600">Order Stats</h3>
+          <button class="text-slate-400 text-lg leading-none">▾</button>
+        </div>
+        <h2 class="mt-2 text-2xl font-extrabold text-[#5A2C25]">
+          25+ Orders Ready to be Shipped
+        </h2>
       </div>
 
       <!-- Status filter -->
-      <select class="bg-white border border-gray-300 rounded-lg px-3 py-2 text-sm shadow-sm">
-        <option value="">All statuses</option>
-        <option>Placed</option>
-        <option>Processing</option>
-        <option>Shipped</option>
-        <option>Delivered</option>
-        <option>Cancelled</option>
-      </select>
-
-      <!-- Date range -->
-      <div class="flex items-center gap-2 bg-white border border-gray-300 rounded-lg px-2 py-2 shadow-sm">
-        <input type="date" class="text-sm outline-none" />
-        <span class="text-gray-400">—</span>
-        <input type="date" class="text-sm outline-none" />
-      </div>
-
-      <!-- Actions -->
-      <div class="flex items-center gap-2">
-        <button class="bg-white border border-gray-300 rounded-lg px-3 py-2 text-sm shadow-sm hover:bg-gray-50">Export</button>
+      <div class="relative inline-block">
+        <select
+          class="appearance-none border border-slate-200 bg-white py-2 px-3 rounded-lg shadow-sm pr-8 text-sm">
+          <option>All</option>
+          <option>Paid</option>
+          <option>Not yet paid</option>
+          <option>Cancelled</option>
+        </select>
+        <span
+          class="pointer-events-none absolute right-2 top-1/2 -translate-y-1/2 text-slate-400">▾</span>
       </div>
     </div>
+
+    <!-- Table Card -->
+    <div class="rounded-md bg-white shadow-sm overflow-x-auto">
+
+      <table class="min-w-full text-sm">
+        <!-- Table Header -->
+        <thead>
+          <tr class="bg-gray-100 border-b border-slate-200">
+            <th class="px-6 py-3 text-left font-medium text-slate-700 w-[300px]">Product</th>
+            <th class="px-6 py-3 text-center font-medium text-slate-700">Total</th>
+            <th class="px-6 py-3 text-center font-medium text-slate-700">Status</th>
+            <th class="px-6 py-3 text-center font-medium text-slate-700">Date</th>
+            <th class="px-6 py-3 text-center font-medium text-slate-700">Time</th>
+            <th class="px-6 py-3 text-center font-medium text-slate-700">Action</th>
+          </tr>
+        </thead>
+
+        <!-- Table Body -->
+        <tbody class="divide-y divide-slate-200">
+
+          <!-- Row 1 -->
+          <tr class="hover:bg-slate-50">
+            <!-- Product -->
+            <td class="px-6 py-4">
+              <div class="flex items-center gap-4">
+                <img
+                  src="assets/image/saree-13.png"
+                  class="w-[80px] h-[100px] rounded-md border"
+                  alt="product" />
+                <div>
+                  <div class="font-medium">Cozy Knit Sweater</div>
+                </div>
+              </div>
+            </td>
+
+            <!-- Total -->
+            <td class="px-6 py-4 text-center font-medium">1x</td>
+
+            <!-- Status -->
+            <td class="px-6 py-4 text-center">
+              <select
+                (change)="updateStatus()"
+                [formControl]="changeStatusForm.controls.orderStatus"
+                class="px-3 py-2 text-xs font-medium rounded-[3px] border focus-outline:none border-none"
+                [ngClass]="{
+                  'text-[#045A5E] bg-[#DEFDFF]': orderStatus === 'InProcess',
+                  'text-yellow-700 bg-yellow-100': orderStatus === 'InShipment',
+                  'text-purple-700 bg-purple-100': orderStatus === 'Placed',
+                  'text-red-800 bg-red-100': orderStatus === 'Cancel',
+                  'text-green-800 bg-green-100': orderStatus === 'Complete'
+                }"
+              >
+              
+                @for (item of statusValue; track $index) {
+                  <option [ngValue]="item.value">{{item.value}}</option>
+                }
+              </select>
+            </td>
+
+            <!-- Date -->
+            <td class="px-6 py-4 text-center font-medium">01/01/25</td>
+
+            <!-- Time -->
+            <td class="px-6 py-4 text-center text-slate-700">15:30</td>
+
+            <!-- Action -->
+            <td class="px-6 py-6 text-center">
+              <button
+                (click)="routeToViewtPage(0)"
+                class="w-[50%] py-2 text-white inline-block px-3 py-1 text-xs font-medium rounded-[4PX] border border-slate-200 bg-[#82181A]  cursor-pointer">
+                View
+              </button>
+            </td>
+          </tr>
+
+        </tbody>
+      </table>
+      <div class="mt-[20px]">
+            <app-pagination-controller
+          [paginationControlMetaData]="paginationMetadata"
+          (ETopChanged)="topChange($event)"
+          (pageChanged)="pageChange($event)"
+        ></app-pagination-controller>
+      </div>
+    </div>
+      
   </div>
-
-  <!-- Summary cards -->
-  <div class="grid grid-cols-1 sm:grid-cols-3 gap-4 mb-6">
-    <div class="bg-white rounded-lg p-4 shadow flex items-center justify-between">
-      <div>
-        <p class="text-sm text-gray-500">Today's Orders</p>
-        <p class="text-2xl font-bold text-gray-800">24</p>
-      </div>
-      <div class="text-sm text-green-600">+12% ↑</div>
-    </div>
-
-    <div class="bg-white rounded-lg p-4 shadow flex items-center justify-between">
-      <div>
-        <p class="text-sm text-gray-500">Total Orders</p>
-        <p class="text-2xl font-bold text-gray-800">1,420</p>
-      </div>
-      <div class="text-sm text-gray-500">All time</div>
-    </div>
-
-    <div class="bg-white rounded-lg p-4 shadow">
-      <p class="text-sm text-gray-500">Total Revenue</p>
-      <p class="text-2xl font-bold text-gray-800">₹ 3,45,900</p>
-    </div>
-  </div>
-
-  <!-- Table -->
-  <div class="bg-white rounded-lg shadow overflow-x-auto">
-    <table class="min-w-full divide-y divide-gray-200">
-      <thead class="bg-gray-50">
-        <tr>
-          <th class="px-4 py-3 text-left text-sm font-medium text-gray-600">SN</th>
-          <th class="px-4 py-3 text-left text-sm font-medium text-gray-600">Order No</th>
-          <th class="px-4 py-3 text-left text-sm font-medium text-gray-600">Customer</th>
-          <th class="px-4 py-3 text-left text-sm font-medium text-gray-600">Order Date</th>
-          <th class="px-4 py-3 text-left text-sm font-medium text-gray-600">Status</th>
-          <th class="px-4 py-3 text-right text-sm font-medium text-gray-600">Total</th>
-          <th class="px-4 py-3 text-center text-sm font-medium text-gray-600">Actions</th>
-        </tr>
-      </thead>
-
-      <tbody class="bg-white divide-y divide-gray-100">
-        <!-- Row 1 -->
-        <tr class="hover:bg-gray-50">
-          <td class="px-4 py-4 text-sm text-gray-700">1</td>
-          <td class="px-4 py-4 text-sm text-indigo-600 font-medium">ORD-20251117-001</td>
-          <td class="px-4 py-4 text-sm text-gray-800">Asha Verma</td>
-          <td class="px-4 py-4 text-sm text-gray-600">17 Nov 2025, 11:29</td>
-          <td class="px-4 py-4">
-            <span class="inline-flex items-center px-3 py-1 rounded-full text-xs font-semibold bg-yellow-100 text-yellow-800">Processing</span>
-          </td>
-          <td class="px-4 py-4 text-right text-sm font-semibold text-gray-800">₹ 3,499.00</td>
-          <td class="px-4 py-4 text-sm text-center">
-            <!-- Blue "View" button -->
-            <button (click)="routeToUpsertPage(1)"
-              aria-label="View order ORD-20251117-001"
-              class="inline-flex items-center cursor-pointer justify-center bg-blue-600 text-white px-3 py-1 rounded-md text-sm font-medium hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-300">
-              View
-            </button>
-          </td>
-        </tr>
-
-      </tbody>
-    </table>
-  </div>
-
-  <!-- Mobile card list -->
-  <div class="mt-6 space-y-3 md:hidden">
-    <div class="bg-white rounded-lg p-4 shadow flex justify-between">
-      <div>
-        <div class="flex items-center gap-2">
-          <div class="text-indigo-600 font-medium">ORD-20251117-001</div>
-          <div class="text-xs text-gray-500">17 Nov</div>
-        </div>
-        <div class="text-sm text-gray-800">Asha Verma</div>
-        <div class="text-sm text-gray-600">₹ 3,499.00</div>
-      </div>
-      <div class="text-right">
-        <div class="inline-flex items-center px-2 py-1 rounded-full text-xs font-semibold bg-yellow-100 text-yellow-800">
-          Processing
-        </div>
-        <div class="mt-2" >
-          <!-- Mobile blue "View" button (keeps small footprint) -->
-          <button
-            aria-label="View order ORD-20251117-001"
-            class="inline-flex items-center justify-center bg-blue-600 text-white px-3 py-1 rounded-md text-sm font-medium hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-300r">
-            View
-          </button>
-        </div>
-      </div>
-    </div>
-  </div>
-</section>
+</div>

@@ -1,17 +1,19 @@
 import { Component, inject, OnInit, signal, WritableSignal } from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
 import { Router, RouterLink } from '@angular/router';
-import { Base } from '@portal/core';
+import { Base, handlePagination } from '@portal/core';
 import { initializePagInationPayload } from '../../../core/interface/request/genericPayload';
 import { IProductPagination } from '../../../core/interface/request/product.request';
 import { IGenericResponse } from '../../../core/interface/response/genericResponse';
 
 import { ApiRoutes, EToastType, IRGeneric, MConfirmationModalData, ToastService } from '@shared';
 import { IProduct, IProductResponseRoot } from '../../../core/interface/response/product.response';
+import { PaginationController } from "../../../component/pagination-controller/pagination-controller";
+import { createPaginationMetadata, PaginationControlMetadata } from '../../../core/interface/model/pagination-detail.model';
 
 @Component({
   selector: 'app-product-list',
-  imports: [],
+  imports: [PaginationController],
   templateUrl: './product-list.html',
   styleUrl: './product-list.scss',
 })
@@ -22,7 +24,7 @@ export class ProductList extends Base implements OnInit {
     categoryId: null,
     gender: null,
   };
-
+  public paginationMetaData:PaginationControlMetadata = createPaginationMetadata()
   public productList: WritableSignal<IProduct[]> = signal([]);
 
   ngOnInit(): void {
@@ -41,6 +43,12 @@ export class ProductList extends Base implements OnInit {
       this.payLoad
     ).then((response) => {
       if (response?.data) {
+       handlePagination(
+                   this.paginationMetaData,
+                   response.data.total,
+                   this.payLoad.pageIndex,
+                   this.payLoad.top
+                 )
         this.productList.set(response.data.products);
       } else {
         this.productList.set([]);
@@ -84,6 +92,19 @@ export class ProductList extends Base implements OnInit {
         }
       })
     }
+  }
+
+
+  public topChange(top: number) {
+    console.log("Top:", top);
+    this.payLoad.top = top;
+    this.getProductData();
+  }
+
+  public pageChange(pageIndex: number) {
+    console.log("Page Index:", pageIndex);
+    this.payLoad.pageIndex = pageIndex;
+    this.getProductData();
   }
 }
 

@@ -1,5 +1,6 @@
 import { SafeHtml } from "@angular/platform-browser";
 import { AppRoutes } from "@portal/core";
+import 'boxicons'
 
 export interface IMenuItem {
     name: string;
@@ -24,50 +25,51 @@ export const MenuItems: IMenuSideBarItem[] = [
     {
         name: 'Employee',
         route: AppRoutes.EMPLOYEE,
-        icon: 'bx bxs-dashboard',
+        icon: 'bx bx-sun',
         userType: [],
         child: [],
     },
     {
         name: 'Customers',
         route: AppRoutes.CUSTOMER,
-        icon: 'bx bxs-dashboard',
+        icon: 'bx bx-user',
         userType: [],
         child: [],
     },
      {
         name: 'Collection',
         route: AppRoutes.COLLECTION,
-        icon: 'bx bxs-dashboard',
+        icon: 'bx bxs-store-alt',
         userType: [],
         child: [],
     },
       {
         name: 'Category',
         route: AppRoutes.CATEGORY,
-        icon: 'bx bxs-dashboard',
+        icon: 'bx bx-layer',
         userType: [],
         child: [],
     },
     {
         name: 'Banner',
         route: AppRoutes.BANNER,
-        icon: 'bx bxs-dashboard',
+        icon: 'bx bx-receipt',
         userType: [],
         child: [],
     },
      {
         name: 'Product',
         route: AppRoutes.PRODUCT,
-        icon: 'bx bxs-dashboard',
+        icon: 'bx bx-user-circle',
         userType: [],
         child: [],
     },
     {
         name: 'Orders',
         route: AppRoutes.ORDERS,
-        icon: 'bx bxs-dashboard',
+        icon: 'bx bx-coin-stack',
         userType: [],
         child: [],
     },
+   
 ]

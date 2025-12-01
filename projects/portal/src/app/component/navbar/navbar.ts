@@ -17,7 +17,7 @@ export class Navbar {
   public toggleDropDown(){
     this.dropDownOpen = !this.dropDownOpen
   }
-
+  
   public logout(){
     clearLocalStorageItems();
     this.router.navigate(['login'])

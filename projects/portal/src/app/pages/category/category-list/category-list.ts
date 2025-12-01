@@ -7,10 +7,13 @@ import { initializePagInationPayload, IPaginationPayload } from '../../../core/i
 import { ICategory } from '../../../core/interface/request/category.request';
 import { ApiRoutes, EToastType, MConfirmationModalData, ToastService } from '@shared';
 import { ICategoryResponse } from '../../../core/interface/response/category.response';
+import { PaginationController } from "../../../component/pagination-controller/pagination-controller";
+import { createPaginationMetadata, PaginationControlMetadata } from '../../../core/interface/model/pagination-detail.model';
+import { handlePagination } from '@portal/core';
 
 @Component({
   selector: 'app-category-list',
-  imports: [],
+  imports: [PaginationController],
   templateUrl: './category-list.html',
   styleUrl: './category-list.scss',
 })
@@ -19,6 +22,7 @@ export class CategoryList extends Base implements OnInit {
   public readonly dialog = inject(MatDialog);
   public payLoad: IPaginationPayload = initializePagInationPayload()
   public category: ICategory[] = []
+  public paginationMetaData : PaginationControlMetadata = createPaginationMetadata()
 
   ngOnInit(): void {
     this.getCategoryData()
@@ -49,6 +53,12 @@ export class CategoryList extends Base implements OnInit {
       if (response) {
         if (response.data) {
           this.category = response.data.categories
+           handlePagination(
+              this.paginationMetaData,
+              response.data.total,
+              this.payLoad.pageIndex,
+              this.payLoad.top
+            )
         }
       }
     }).catch(error => {
@@ -81,6 +91,18 @@ export class CategoryList extends Base implements OnInit {
         }
       })
     }
+  }
+
+  public topChange(top: number) {
+    console.log("Top:", top);
+    this.payLoad.top = top;
+    this.getCategoryData();
+  }
+
+  public pageChange(pageIndex: number) {
+    console.log("Page Index:", pageIndex);
+    this.payLoad.pageIndex = pageIndex;
+    this.getCategoryData();
   }
 
 }

@@ -9,36 +9,29 @@ import { CustomerResponse, ICustomerResponse } from '../../../core/interface/res
 import { MatDialog } from '@angular/material/dialog';
 import { CustomerUpsert } from '../customer-upsert/customer-upsert';
 import { ApiRoutes, EToastType, ToastService } from '@shared';
+import { PaginationController } from "../../../component/pagination-controller/pagination-controller";
 
 
 @Component({
   selector: 'app-customer-list',
-  imports: [],
+  imports: [PaginationController],
   templateUrl: './customer-list.html',
   styleUrl: './customer-list.scss',
 })
+
 export class CustomerList extends Base implements OnInit {
   public readonly dialog = inject(MatDialog);
   public searchInput = new FormControl('');
   public payload: IPaginationPayload = initializePagInationPayload();
-  public paginationMetadata: PaginationControlMetadata = createPaginationMetadata();
+  public paginationMetaData: PaginationControlMetadata = createPaginationMetadata();
   public customers: CustomerResponse[] = [];
-
   constructor(private toaster: ToastService) {
     super()
   }
 
   ngOnInit(): void {
     this.getCustomers()
-    handlePagination(
-      this.paginationMetadata,
-      100,
-      1,
-      10
-    )
-    // console.log(this.payload)
   }
-
 
   // Open PopUp
   public openModel(id: number = 0) {
@@ -64,6 +57,12 @@ export class CustomerList extends Base implements OnInit {
       if (response) {
         if (response.data) {
           this.customers = response.data.customers
+         handlePagination(
+              this.paginationMetaData,
+              response.data.total,
+              this.payload.pageIndex,
+              this.payload.top
+            )
         }
       }
     })
@@ -81,6 +80,18 @@ export class CustomerList extends Base implements OnInit {
     }).catch(error => {
       // handle error
     })
+  }
+
+  public topChange(top: number) {
+    console.log("Top:", top);
+    this.payload.top = top;
+    this.getCustomers();
+  }
+
+  public pageChange(pageIndex: number) {
+    console.log("Page Index:", pageIndex);
+    this.payload.pageIndex = pageIndex;
+    this.getCustomers();
   }
 
 }

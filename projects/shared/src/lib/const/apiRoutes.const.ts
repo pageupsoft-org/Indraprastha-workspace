@@ -74,6 +74,10 @@ export const ApiRoutes = {
   ORDERS:{
     BASE:'/api/Order',
     ALL: '/api/Order/All',
+    CHANGE_STATUS:'/api/Order/Status',
     GET_BY_ID: (id: number) => `/api/Order/${id}`,
+  },
+  DASHBOARD:{
+    BASE:'/api/Dashboard',
   }
 };
