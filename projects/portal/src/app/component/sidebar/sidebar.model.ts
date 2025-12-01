@@ -1,6 +1,6 @@
 import { SafeHtml } from "@angular/platform-browser";
 import { AppRoutes } from "@portal/core";
-import 'boxicons'
+// import 'boxicons'
 
 export interface IMenuItem {
     name: string;
