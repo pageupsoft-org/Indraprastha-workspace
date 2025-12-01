@@ -314,28 +314,12 @@
     <section
       class="flex-grow overflow-y-auto h-screen pr-6 transition-all duration-500 ease-in-out main-panel"
     >
-      @if (isShowLoading()) {
+      @if (isShowLoading() && payloadGenderMenu().pageIndex === 1) {
       <div class="grid grid-cols-2 sm:grid-cols-2 lg:grid-cols-3 gap-x-6 gap-y-10 pb-14">
-        @let dummyArr = [1, 2, 3]; @for (item of dummyArr; track $index) {
-        <div class="group m-2">
-          <!-- Image Skeleton -->
-          <ngx-skeleton-loader
-            count="1"
-            appearance="square"
-            class="rounded-md"
-            [theme]="{ height: '400px', width: '100%', margin: '0px' }"
-          ></ngx-skeleton-loader>
-
-          <!-- Title + Price Skeleton -->
-          <ngx-skeleton-loader
-            count="2"
-            [theme]="{ height: '12px', width: '100%', 'margin-top': '4px' }"
-          ></ngx-skeleton-loader>
-        </div>
-        }
+        <ng-container *ngTemplateOutlet="skeletonLoader"></ng-container>
       </div>
-      } 
-      @else {
+
+      } @else {
       <div
         #productGrid
         class="grid grid-cols-2 sm:grid-cols-2 lg:grid-cols-3 gap-x-6 gap-y-10 pb-14"
@@ -360,6 +344,8 @@
             <p class="mt-1 text-lg font-medium text-gray-900">Rs. {{ item.mrp }}</p>
           </div>
         </div>
+        } @if(isShowLoading() && payloadGenderMenu().pageIndex > 1){
+        <ng-container *ngTemplateOutlet="skeletonLoader"></ng-container>
         }
       </div>
 
@@ -369,3 +355,23 @@
     </section>
   </main>
 </div>
+
+<ng-template #skeletonLoader>
+  @let dummyArr = [1, 2, 3, 4, 5]; @for (item of dummyArr; track $index) {
+  <div class="group m-2">
+    <!-- Image Skeleton -->
+    <ngx-skeleton-loader
+      count="1"
+      appearance="square"
+      class="rounded-md"
+      [theme]="{ height: '400px', width: '100%', margin: '0px' }"
+    ></ngx-skeleton-loader>
+
+    <!-- Title + Price Skeleton -->
+    <ngx-skeleton-loader
+      count="2"
+      [theme]="{ height: '12px', width: '100%', 'margin-top': '4px' }"
+    ></ngx-skeleton-loader>
+  </div>
+  }
+</ng-template>

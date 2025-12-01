@@ -24,7 +24,11 @@ export class Home extends Base implements AfterViewInit, OnInit {
 
   // On Init
   ngOnInit(): void {
-    this.callAllBannerApis()
+    this.callAllBannerApis();
+
+    if(this.platformService.isBrowser){
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+    }
   }
 
   // Initialize AOS animations

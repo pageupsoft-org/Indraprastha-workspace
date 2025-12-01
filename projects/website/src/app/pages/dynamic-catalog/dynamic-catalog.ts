@@ -7,7 +7,7 @@ import {
   ViewChild,
   WritableSignal,
 } from '@angular/core';
-import { CommonModule } from '@angular/common';
+import { CommonModule, NgTemplateOutlet } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import {
   ApiRoutes,
@@ -35,7 +35,7 @@ import { NgxSkeletonLoaderModule } from 'ngx-skeleton-loader';
 
 @Component({
   selector: 'app-dynamic-catalog',
-  imports: [CommonModule, FormsModule, InfiniteScrollDirective, NgxSkeletonLoaderModule],
+  imports: [CommonModule, FormsModule, InfiniteScrollDirective, NgxSkeletonLoaderModule, NgTemplateOutlet],
   templateUrl: './dynamic-catalog.html',
   styleUrl: './dynamic-catalog.scss',
 })
@@ -71,7 +71,7 @@ export class DynamicCatalog implements AfterViewInit {
   public minLimit: WritableSignal<number> = signal(10000);
   public maxLimit: WritableSignal<number> = signal(150000);
   public finished = signal(false); // true when no more pages
-  public isLoading = signal(false); // prevents duplicate calls
+  // public isLoading = signal(false); // prevents duplicate calls
   public selector: string = '.main-panel';
 
   public baseUrl: WritableSignal<string> = signal("");
@@ -176,41 +176,9 @@ export class DynamicCatalog implements AfterViewInit {
     return !!this.activeSections[section];
   }
 
-  // private getData() {
-  //   console.log(this.payloadGenderMenu())
-  //   this.isShowLoading.set(true);
-  //   // this.isLo
-  //   httpPost<IRGeneric<IResponseDynamicCatalogue>, IRequestProductMenu>(
-  //     ApiRoutes.PRODUCT.MENU,
-  //     this.payloadGenderMenu(),
-  //     false
-  //   ).subscribe({
-  //     next: (res: IRGeneric<IResponseDynamicCatalogue>) => {
-  //       if (res?.data) {
-  //         console.log(res.data)
-  //         this.dynamicData.set(res.data);
-  //         this.priceMax.set(this.dynamicData().filter.maxPrice);
-  //         this.selectedPrice.set(this.dynamicData().filter.minPrice);
-
-  //         this.payloadGenderMenu().minPrice = this.dynamicData().filter.minPrice;
-  //         this.payloadGenderMenu().maxPrice = this.dynamicData().filter.maxPrice;
-
-  //         console.log(this.payloadGenderMenu);
-  //       } else {
-  //         this.dynamicData.set(initializeIResponseDynamicCatalogue());
-  //       }
-  //       this.isShowLoading.set(false);
-  //     },
-  //     error: (err: HttpErrorResponse) => {
-  //       this.dynamicData.set(initializeIResponseDynamicCatalogue());
-  //       this.isShowLoading.set(false);
-  //     },
-  //   });
-  // }
-
-
   private getData() {
-    this.isLoading.set(true);
+    // this.isLoading.set(true);
+    this.isShowLoading.set(true);
 
     httpPost<IRGeneric<IResponseDynamicCatalogue>, IRequestProductMenu>(
       ApiRoutes.PRODUCT.MENU,
@@ -245,18 +213,15 @@ export class DynamicCatalog implements AfterViewInit {
           }
         }
         this.isShowLoading.set(false);
-        this.isLoading.set(false);
       },
       error: (err: HttpErrorResponse) => {
-        this.isLoading.set(false);
+        this.isShowLoading.set(false);
       }
     });
   }
 
   public onScrollDown() {
-    console.log("scroll trigger")
-    if (this.isLoading() || this.finished()) {
-      console.log(this.isLoading(), this.finished())
+    if (this.isShowLoading() || this.finished()) {
       return;
     }
     // increment page
