@@ -59,8 +59,6 @@ export class EmployeeList
         this.payLoad.top
       );
     }
-
-    this.loaderService.hideLoader();
   }
 
   // Open PopUp

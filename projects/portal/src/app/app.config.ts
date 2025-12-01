@@ -4,6 +4,7 @@ import { provideRouter } from '@angular/router';
 import { routes } from './app.routes';
 import { provideHttpClient, withInterceptors, withInterceptorsFromDi } from '@angular/common/http';
 import { authInterceptor } from '@shared';
+import { loaderInterceptor } from './core';
 // import { authInterceptor, loaderInterceptor } from '@portal/core';
 
 export const appConfig: ApplicationConfig = {
@@ -15,7 +16,7 @@ export const appConfig: ApplicationConfig = {
     provideHttpClient(
       withInterceptorsFromDi(),
       // withInterceptors([loaderInterceptor]),
-      withInterceptors([authInterceptor])
+      withInterceptors([authInterceptor, loaderInterceptor])
     )
   ]
 };
