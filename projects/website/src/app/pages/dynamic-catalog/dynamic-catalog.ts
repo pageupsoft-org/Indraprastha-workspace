@@ -29,10 +29,11 @@ import {
 } from '../../core/interface/response/header.response';
 import { HttpErrorResponse } from '@angular/common/http';
 import { dynamicCatalogData } from '../../../dummy-data';
+import { NgxSkeletonLoaderModule } from 'ngx-skeleton-loader';
 
 @Component({
   selector: 'app-dynamic-catalog',
-  imports: [CommonModule, FormsModule],
+  imports: [CommonModule, FormsModule, NgxSkeletonLoaderModule],
   templateUrl: './dynamic-catalog.html',
   styleUrl: './dynamic-catalog.scss',
 })
@@ -95,6 +96,10 @@ export class DynamicCatalog implements AfterViewInit {
 
   ngOnInit(): void {
     this.handleResize();
+
+    if(this.platformService.isBrowser){
+      window.scrollTo({top:0,behavior:'smooth'});
+    }
   }
 
   ngAfterViewInit(): void {
@@ -172,10 +177,10 @@ export class DynamicCatalog implements AfterViewInit {
       false
     ).subscribe({
       next: (res: IRGeneric<IResponseDynamicCatalogue>) => {
-        if (res?.data) {
+        if (res?.data && res.data.total) {
           this.dynamicData.set(res.data);
 
-          this.dynamicData.set(dynamicCatalogData);
+          // this.dynamicData.set(dynamicCatalogData);
           this.priceMax.set(this.dynamicData().filter.maxPrice);
           this.selectedPrice.set(this.dynamicData().filter.minPrice);
 

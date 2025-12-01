@@ -2,6 +2,7 @@ import {
   Component,
   effect,
   input,
+  model,
   OnDestroy,
   OnInit,
   Signal,
@@ -30,7 +31,8 @@ export class GenderMenu implements OnInit, OnDestroy {
   public collectionList: WritableSignal<Collection[]> = signal([]);
   public categoryList: WritableSignal<Category[]> = signal([]);
 
-  public genderType = input.required<GenderTypeEnum | ''>();
+  // public genderType = input.required<GenderTypeEnum | ''>();
+  public genderType = model.required<GenderTypeEnum | ''>();
 
   private payloadGenderMenu: IRequestProductMenu = {
     ...initializePagInationPayload(),
@@ -114,6 +116,7 @@ export class GenderMenu implements OnInit, OnDestroy {
       );      
     }
     this.router.navigate([createUrlFromObject(this.payloadGenderMenu, this.genderType())]);
+    this.genderType.set('');
   }
 
   ngOnDestroy(): void {

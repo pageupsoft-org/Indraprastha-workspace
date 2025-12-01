@@ -2,12 +2,10 @@ import { Component } from '@angular/core';
 import { FormGroup, ReactiveFormsModule } from '@angular/forms';
 import { ICheckoutForm, initializeICheckoutForm } from './checkout.model';
 import { ValidateControl } from '@shared';
-import { MatDialogClose } from "@angular/material/dialog";
-
 
 @Component({
   selector: 'app-checkout',
-  imports: [ReactiveFormsModule, ValidateControl, MatDialogClose],
+  imports: [ReactiveFormsModule, ValidateControl],
   templateUrl: './checkout.html',
   styleUrl: './checkout.scss',
 })

@@ -291,7 +291,8 @@
                 @if(color.isSelected){
                 <span
                   class="absolute inset-0 flex items-center justify-center text-white text-sm font-bold"
-                  >✓</span>
+                  >✓</span
+                >
                 }
               </label>
               }
@@ -312,6 +313,27 @@
     <section
       class="flex-grow overflow-y-auto h-screen pr-6 transition-all duration-500 ease-in-out"
     >
+      @if (isShowLoading()) {
+      <div class="grid grid-cols-2 sm:grid-cols-2 lg:grid-cols-3 gap-x-6 gap-y-10 pb-14">
+        @let dummyArr = [1, 2, 3]; @for (item of dummyArr; track $index) {
+        <div class="group m-2">
+          <!-- Image Skeleton -->
+          <ngx-skeleton-loader
+            count="1"
+            appearance="square"
+            class="rounded-md"
+            [theme]="{ height: '400px', width: '100%', margin: '0px' }"
+          ></ngx-skeleton-loader>
+
+          <!-- Title + Price Skeleton -->
+          <ngx-skeleton-loader
+            count="2"
+            [theme]="{ height: '12px', width: '100%', 'margin-top': '4px' }"
+          ></ngx-skeleton-loader>
+        </div>
+        }
+      </div>
+      } @else {
       <div
         #productGrid
         class="grid grid-cols-2 sm:grid-cols-2 lg:grid-cols-3 gap-x-6 gap-y-10 pb-14"
@@ -332,6 +354,11 @@
         </div>
         }
       </div>
+
+      @if(!dynamicData().products.length){
+        <span>No data</span>
+      }
+      }
     </section>
   </main>
 </div>
