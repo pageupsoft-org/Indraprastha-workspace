@@ -56,18 +56,6 @@ export class BannerList extends Base implements OnInit {
     });
   }
 
-  // public getCategoryData() {
-  //   this.httpPostPromise<IPaginationPayload>(apiRoutes.CATEGORY.GET, this.payLoad).then(response => {
-  //     if (response) {
-  //       if (response.data) {
-  //         this.category = response.data.categories
-  //       }
-  //     }
-  //   }).catch(error => {
-  //     console.log(error)
-  //   })
-  // }
-
   public deleteBanner(id: number) {
     const modalData: MConfirmationModalData = {
       heading: 'Confirm Delete',
@@ -99,17 +87,15 @@ export class BannerList extends Base implements OnInit {
       this.payLoad
     )
       .then((response) => {
-        if (response) {
-          if (response.data) {
-            this.banners = response.data.banners;
-            console.log(this.banners);
-            handlePagination(
-              this.paginationMetaData,
-              response.data.total,
-              this.payLoad.pageIndex,
-              this.payLoad.top
-            )
-          }
+        if (response?.data && response.data.total) {
+          this.banners = response.data.banners;
+          console.log(this.banners);
+          handlePagination(
+            this.paginationMetaData,
+            response.data.total,
+            this.payLoad.pageIndex,
+            this.payLoad.top
+          )
         }
       })
       .catch((error) => {

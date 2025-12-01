@@ -44,7 +44,7 @@ export type pieOption = {
 
 @Component({
   selector: 'app-dashboard',
-  imports: [DaterangPicker, DaterangPicker, CommonModule, ChartComponent],
+  imports: [CommonModule, ChartComponent],
   templateUrl: './dashboard.html',
   styleUrl: './dashboard.scss',
 })

@@ -1,8 +1,6 @@
-<div class="bg-gray-50 font-sans text-gray-800 mt-[50px]">
+<div class="bg-gray-50 font-sans text-gray-800 mt-[70px]">
 
-  <div class="mx-auto py-5 mt-10 px-5">
-
-
+  <div class="mx-auto py-5 mt-[30px] px-5">
     <!-- Breadcrumb / heading -->
     <div class="mb-6">
       <h1 class="text-2xl md:text-2xl font-medium text-gray-900">Order Details</h1>
@@ -21,54 +19,45 @@
 
         <!-- Track line -->
         <div class="absolute top-1/2 left-0 w-full h-1 bg-gray-200 -translate-y-1/2"></div>
-
-        <!-- Animated progress line -->
         <div class="absolute top-1/2 h-1 bg-indigo-600 -translate-y-1/2 transition-all duration-500"
           [style.width.%]="progressWidth"></div>
 
         <!-- Step circles -->
         <div class="flex justify-between relative z-10">
-
-          <div class="flex flex-col items-center cursor-pointer" >
+          <div class="flex flex-col items-center cursor-pointer">
             <div class="w-6 h-6 rounded-full"
-             [ngClass]="orderStatus === 'InProceess' ? 'bg-indigo-600 text-white' : 'bg-gray-300'" >
-             <!--  [ngClass]="orderStatus === 'Placed' || orderStatusIndex > 0 ? 'bg-indigo-600 text-white' : 'bg-gray-300'" -->
+              [ngClass]="orderStatus === 'InProcess' ? 'bg-indigo-600 text-white' : 'bg-gray-300'">
             </div>
-            <p class="text-xs mt-2">InProceess</p>
+            <p class="text-xs mt-2">InProcess</p>
           </div>
 
-          <div class="flex flex-col items-center cursor-pointer" >
+            <div class="flex flex-col items-center cursor-pointer">
             <div class="w-6 h-6 rounded-full"
-             >
-              <!-- [ngClass]="orderStatusIndex >= 1 ? 'bg-indigo-600 text-white' : 'bg-gray-300'" -->
+              [ngClass]="orderStatus === 'InShipment' ? 'bg-indigo-600 text-white' : 'bg-gray-300'">
             </div>
-            <p class="text-xs mt-2">InShipping</p>
+            <p class="text-xs mt-2">Inshipment</p>
           </div>
 
-          <div class="flex flex-col items-center cursor-pointer" >
+            <div class="flex flex-col items-center cursor-pointer">
             <div class="w-6 h-6 rounded-full"
-             >
-             <!--  [ngClass]="orderStatusIndex >= 2 ? 'bg-indigo-600 text-white' : 'bg-gray-300'" -->
-            </div>
-            <p class="text-xs mt-2">Placed</p>
-          </div>
-
-          <div class="flex flex-col items-center cursor-pointer" >
-            <div class="w-6 h-6 rounded-full"
-             >
-             <!--  [ngClass]="orderStatusIndex >= 3 ? 'bg-indigo-600 text-white' : 'bg-gray-300'" -->
+              [ngClass]="orderStatus === 'Cancel' ? 'bg-indigo-600 text-white' : 'bg-gray-300'">
             </div>
             <p class="text-xs mt-2">Cancel</p>
           </div>
 
-            <div class="flex flex-col items-center cursor-pointer" >
+           <div class="flex flex-col items-center cursor-pointer">
             <div class="w-6 h-6 rounded-full"
-             >
-             <!--  [ngClass]="orderStatusIndex >= 3 ? 'bg-indigo-600 text-white' : 'bg-gray-300'" -->
+              [ngClass]="orderStatus === 'Placed' ? 'bg-indigo-600 text-white' : 'bg-gray-300'">
             </div>
-            <p class="text-xs mt-2">Done</p>
+            <p class="text-xs mt-2">Placed</p>
           </div>
 
+            <div class="flex flex-col items-center cursor-pointer">
+            <div class="w-6 h-6 rounded-full"
+              [ngClass]="orderStatus === 'Complete' ? 'bg-indigo-600 text-white' : 'bg-gray-300'">
+            </div>
+            <p class="text-xs mt-2">Complete</p>
+          </div>
         </div>
       </div>
     </div>
@@ -94,20 +83,18 @@
 
           <div class="space-y-1">
             <div class="text-xs text-gray-500">Status</div>
-
-            <select (change)="updateStatus()" [formControl]="changeStatusForm.controls.orderStatus" 
-            class="px-3 py-1 text-xs font-medium rounded-full border bg-white" 
-             [ngClass]="{
-              'text-blue-700 bg-blue-50': orderStatus === 'InProcess',
-               'text-yellow-700 bg-yellow-50': orderStatus === 'Inshipment',
-               'text-purple-700 bg-purple-50': orderStatus === 'Placed',
-               'text-red-700 bg-red-50': orderStatus === 'Cancel',
-               'text-green-700 bg-green-50': orderStatus === 'Complete'
-    }"
-            >
-             @for (item of statusValue; track $index) {
+            <select (change)="updateStatus()" [formControl]="changeStatusForm.controls.orderStatus"
+                class="px-3 py-2 text-xs font-medium rounded-[3px] border focus-outline:none border-none"
+                [ngClass]="{
+                  'text-[#045A5E] bg-[#DEFDFF]': orderStatus === 'InProcess',
+                  'text-yellow-700 bg-yellow-100': orderStatus === 'InShipment',
+                  'text-purple-700 bg-purple-100': orderStatus === 'Placed',
+                  'text-red-800 bg-red-100': orderStatus === 'Cancel',
+                  'text-green-800 bg-green-100': orderStatus === 'Complete'
+                }">
+              @for (item of statusValue; track $index) {
               <option [ngValue]="item.value">{{item.value}}</option>
-             }
+              }
             </select>
           </div>
 

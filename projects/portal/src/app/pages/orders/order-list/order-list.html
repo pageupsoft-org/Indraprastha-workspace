@@ -1,119 +1,116 @@
-<div class="bg-gray-50 font-sans">
+<div class="bg-gray-50 text-slate-800 font-sans antialiased mt-[50px]">
+  <div class="px-4 py-10">
 
-  <div class="max-w-7xl mx-auto p-6 mt-12">
-
-    <!-- PAGE HEADING -->
-    <div class="mb-6">
-      <h1 class="text-3xl font-semibold text-gray-900">Orders</h1>
-      <p class="text-sm text-gray-500 mt-1">Manage and track all your orders here</p>
-    </div>
-
-    <!-- TOP CARDS -->
-    <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-6 mb-6">
-      <div class="bg-white shadow-sm rounded-xl border border-gray-200 p-5 flex items-center justify-between">
-        <div>
-          <div class="text-xs text-gray-500 font-medium">Total Orders</div>
-          <div class="text-2xl font-bold text-gray-900 mt-1">{{totalOrders}}</div>
+    <!-- Header -->
+    <div class="flex items-start justify-between mb-6 gap-6">
+      <div>
+        <div class="flex items-center gap-2">
+          <h3 class="text-sm font-medium text-slate-600">Order Stats</h3>
+          <button class="text-slate-400 text-lg leading-none">▾</button>
         </div>
-        <div class="rounded-full bg-indigo-50 p-3">
-          <svg class="w-6 h-6 text-indigo-600" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24">
-            <path stroke-linecap="round" stroke-linejoin="round" d="M3 3h18M3 7h18M5 11h14l-1 10H6l-1-10z" />
-          </svg>
-        </div>
+        <h2 class="mt-2 text-2xl font-extrabold text-[#5A2C25]">
+          25+ Orders Ready to be Shipped
+        </h2>
       </div>
 
-    </div>
-
-    <!-- ORDERS TABLE CARD -->
-    <div class="bg-white rounded-xl shadow-sm border border-gray-200 overflow-hidden">
-      <div class="overflow-x-auto">
-        <table class="min-w-full w-full divide-y">
-          <thead class="bg-white">
-            <tr class="border-b">
-              <th class="px-6 py-4 text-left text-sm font-medium text-gray-600">Order No</th>
-              <th class="px-6 py-4 text-left text-sm font-medium text-gray-600">Customer</th>
-              <th class="px-6 py-4 text-left text-sm font-medium text-gray-600">Order Date</th>
-              <th class="px-6 py-4 text-left text-sm font-medium text-gray-600">Status</th>
-              <th class="px-6 py-4 text-right text-sm font-medium text-gray-600">Amount</th>
-              <th class="px-6 py-4 text-center text-sm font-medium text-gray-600">Action</th>
-            </tr>
-          </thead>
-
-          <tbody class="bg-white divide-y divide-gray-100">
-            @for (item of orders; track $index) {
-            <tr class="hover:bg-gray-50">
-              <td class="px-6 py-4 text-sm text-gray-800">{{item.orderNo}}</td>
-              <td class="px-6 py-4 text-sm text-gray-800">{{item.customerName}}</td>
-              <td class="px-6 py-4 text-sm text-gray-600">{{item.orderDate}}</td>
-              <td class="px-6 py-4">
-                <div class="space-y-1">
-                  <!-- <div class="text-xs text-gray-500">Status</div> -->
-
-                  <select (change)="updateStatus()" [formControl]="changeStatusForm.controls.orderStatus"
-                    class="px-3 py-1 text-xs font-medium rounded-full border bg-white" [ngClass]="{
-              'text-blue-700 bg-blue-50': orderStatus === 'InProcess',
-               'text-yellow-700 bg-yellow-50': orderStatus === 'Inshipment',
-               'text-purple-700 bg-purple-50': orderStatus === 'Placed',
-               'text-red-700 bg-red-50': orderStatus === 'Cancel',
-               'text-green-700 bg-green-50': orderStatus === 'Complete'
-    }">
-                    @for (item of statusValue; track $index) {
-                    <option [ngValue]="item.value">{{item.value}}</option>
-                    }
-                  </select>
-                </div>
-              </td>
-              <td class="px-6 py-4 text-right text-sm font-semibold text-gray-900">₹ {{item.totalAmount}}</td>
-              <td class="px-6 py-4 text-center">
-                <div class="inline-flex items-center gap-2">
-                  <button (click)="routeToUpsertPage(0)"
-                    class="px-3 py-1.5 bg-green-50 hover:bg-green-100 text-green-600 rounded-md text-sm font-medium shadow-sm transition">
-                    View
-                  </button>
-                </div>
-              </td>
-            </tr>
-            }
-            <tr class="hover:bg-gray-50">
-              <td class="px-6 py-4 text-sm text-gray-800">ORD-104</td>
-              <td class="px-6 py-4 text-sm text-gray-800">Neha Singh</td>
-              <td class="px-6 py-4 text-sm text-gray-600">23 Nov 2025, 12:00 PM</td>
-              <td class="px-6 py-4">
-                <div class="space-y-1">
-                  <!-- <div class="text-xs text-gray-500">Status</div> -->
-
-                  <select (change)="updateStatus()" [formControl]="changeStatusForm.controls.orderStatus"
-                    class="px-3 py-1 text-xs font-medium rounded-full border bg-white" [ngClass]="{
-              'text-blue-700 bg-blue-50': orderStatus === 'InProcess',
-               'text-yellow-700 bg-yellow-50': orderStatus === 'Inshipment',
-               'text-purple-700 bg-purple-50': orderStatus === 'Placed',
-               'text-red-700 bg-red-50': orderStatus === 'Cancel',
-               'text-green-700 bg-green-50': orderStatus === 'Complete'
-    }">
-                    @for (item of statusValue; track $index) {
-                    <option [ngValue]="item.value">{{item.value}}</option>
-                    }
-                  </select>
-                </div>
-              </td>
-              <td class="px-6 py-4 text-right text-sm font-semibold text-gray-900">₹ 0</td>
-              <td class="px-6 py-4 text-center">
-                <div class="inline-flex items-center gap-2">
-                  <button (click)="routeToUpsertPage(0)"
-                    class="px-3 py-1.5 bg-green-50 hover:bg-green-100 text-green-600 rounded-md text-sm font-medium shadow-sm transition">
-                    View
-                  </button>
-                </div>
-              </td>
-            </tr>
-          </tbody>
-        </table>
-
-        <app-pagination-controller [paginationControlMetaData]="paginationMetadata"
-                    (ETopChanged)="topChange($event)" (pageChanged)="pageChange($event)"></app-pagination-controller>
+      <!-- Status filter -->
+      <div class="relative inline-block">
+        <select
+          class="appearance-none border border-slate-200 bg-white py-2 px-3 rounded-lg shadow-sm pr-8 text-sm">
+          <option>All</option>
+          <option>Paid</option>
+          <option>Not yet paid</option>
+          <option>Cancelled</option>
+        </select>
+        <span
+          class="pointer-events-none absolute right-2 top-1/2 -translate-y-1/2 text-slate-400">▾</span>
       </div>
     </div>
 
+    <!-- Table Card -->
+    <div class="rounded-md bg-white shadow-sm overflow-x-auto">
+
+      <table class="min-w-full text-sm">
+        <!-- Table Header -->
+        <thead>
+          <tr class="bg-gray-100 border-b border-slate-200">
+            <th class="px-6 py-3 text-left font-medium text-slate-700 w-[300px]">Product</th>
+            <th class="px-6 py-3 text-center font-medium text-slate-700">Total</th>
+            <th class="px-6 py-3 text-center font-medium text-slate-700">Status</th>
+            <th class="px-6 py-3 text-center font-medium text-slate-700">Date</th>
+            <th class="px-6 py-3 text-center font-medium text-slate-700">Time</th>
+            <th class="px-6 py-3 text-center font-medium text-slate-700">Action</th>
+          </tr>
+        </thead>
+
+        <!-- Table Body -->
+        <tbody class="divide-y divide-slate-200">
+
+          <!-- Row 1 -->
+          <tr class="hover:bg-slate-50">
+            <!-- Product -->
+            <td class="px-6 py-4">
+              <div class="flex items-center gap-4">
+                <img
+                  src="assets/image/saree-13.png"
+                  class="w-[80px] h-[100px] rounded-md border"
+                  alt="product" />
+                <div>
+                  <div class="font-medium">Cozy Knit Sweater</div>
+                </div>
+              </div>
+            </td>
+
+            <!-- Total -->
+            <td class="px-6 py-4 text-center font-medium">1x</td>
+
+            <!-- Status -->
+            <td class="px-6 py-4 text-center">
+              <select
+                (change)="updateStatus()"
+                [formControl]="changeStatusForm.controls.orderStatus"
+                class="px-3 py-2 text-xs font-medium rounded-[3px] border focus-outline:none border-none"
+                [ngClass]="{
+                  'text-[#045A5E] bg-[#DEFDFF]': orderStatus === 'InProcess',
+                  'text-yellow-700 bg-yellow-100': orderStatus === 'InShipment',
+                  'text-purple-700 bg-purple-100': orderStatus === 'Placed',
+                  'text-red-800 bg-red-100': orderStatus === 'Cancel',
+                  'text-green-800 bg-green-100': orderStatus === 'Complete'
+                }"
+              >
+              
+                @for (item of statusValue; track $index) {
+                  <option [ngValue]="item.value">{{item.value}}</option>
+                }
+              </select>
+            </td>
+
+            <!-- Date -->
+            <td class="px-6 py-4 text-center font-medium">01/01/25</td>
+
+            <!-- Time -->
+            <td class="px-6 py-4 text-center text-slate-700">15:30</td>
+
+            <!-- Action -->
+            <td class="px-6 py-6 text-center">
+              <button
+                (click)="routeToViewtPage(0)"
+                class="w-[50%] py-2 text-white inline-block px-3 py-1 text-xs font-medium rounded-[4PX] border border-slate-200 bg-[#82181A]  cursor-pointer">
+                View
+              </button>
+            </td>
+          </tr>
+
+        </tbody>
+      </table>
+      <div class="mt-[20px]">
+            <app-pagination-controller
+          [paginationControlMetaData]="paginationMetadata"
+          (ETopChanged)="topChange($event)"
+          (pageChanged)="pageChange($event)"
+        ></app-pagination-controller>
+      </div>
+    </div>
+      
   </div>
-
 </div>

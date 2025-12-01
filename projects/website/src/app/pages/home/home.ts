@@ -15,8 +15,8 @@ import { Base } from '@portal/core';
 
 export class Home extends Base implements AfterViewInit, OnInit {
   public readonly DashboardProductTypeStringEnum = DashboardProductTypeStringEnum;
-  public topBanners: IBanner[] = [];
-  public middleBanners: IBanner[] = [];
+  public topBanners: string | null = null;
+  public middleBanners: string | null = null;
 
   constructor(private platformService: PlatformService) {
     super();
@@ -24,7 +24,11 @@ export class Home extends Base implements AfterViewInit, OnInit {
 
   // On Init
   ngOnInit(): void {
-   this.callAllBannerApis()
+    this.callAllBannerApis();
+
+    if(this.platformService.isBrowser){
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+    }
   }
 
   // Initialize AOS animations
@@ -38,12 +42,12 @@ export class Home extends Base implements AfterViewInit, OnInit {
   }
 
   public callAllBannerApis() {
-  const topPayload = this.buildBannerPayload(EbannerTypes.Top, EBannerConnectionType.Category, GenderTypeEnum.Women);
-  const middlePayload = this.buildBannerPayload(EbannerTypes.Middle, EBannerConnectionType.Category, GenderTypeEnum.Men);
+    const topPayload = this.buildBannerPayload(EbannerTypes.Top, EBannerConnectionType.Category, GenderTypeEnum.Women);
+    const middlePayload = this.buildBannerPayload(EbannerTypes.Middle, EBannerConnectionType.Category, GenderTypeEnum.Men);
 
-  this.getBannerData(topPayload, 'top');
-  this.getBannerData(middlePayload, 'middle');
-}
+    this.getBannerData(topPayload, 'top');
+    this.getBannerData(middlePayload, 'middle');
+  }
 
   public buildBannerPayload(
     bannerType: EbannerTypes,
@@ -59,18 +63,30 @@ export class Home extends Base implements AfterViewInit, OnInit {
   }
 
   public getBannerData(payload: IBannerPagination, type: 'top' | 'middle') {
-  httpPost<IRGeneric<IBannerResponse>, IBannerPagination>(ApiRoutes.BANNER.GET, payload)
-    .subscribe({
-      next: (response) => {
-        const banners = response.data.banners?.length ? response.data.banners : [];
-
-        if (type === 'top') {
-          this.topBanners = banners;
-        } else {
-          this.middleBanners = banners;
+    httpPost<IRGeneric<IBannerResponse>, IBannerPagination>(ApiRoutes.BANNER.GET, payload)
+      .subscribe({
+        next: (response) => {
+          if (response) {
+            if (response.data) {
+              const banners = response.data.banners?.length ? response.data.banners[0].bannerURL : '';
+              console.log(banners)
+              if (type === 'top') {
+                this.topBanners = banners
+              } else {
+                this.middleBanners = banners;
+              }
+            }
+          }
         }
-      }
-    });
-}
+      });
+  }
+
+  onBannerError(type: 'top' | 'middle') {
+    if (type === 'top') {
+      this.topBanners = 'assets/images/banner-image2.png';
+    } else {
+      this.middleBanners = 'assets/images/banner-image2.png';
+    }
+  }
 
 }
