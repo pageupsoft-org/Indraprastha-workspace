@@ -29,15 +29,14 @@ export class OrderList extends Base implements OnInit {
     status: null
   };
   public changeStatusForm: FormGroup<IChangeStatusForm> = initializeIChangeStatusForm()
-  public totalOrders: number = 0
+  public totalOrders: number = 0 
   public orders: IOrder[] = [];
   public statusValue: MStringEnumToArray[] = stringEnumToArray(EOrderStatus)
-  public orderStatus: string = 'InProcess'
+  public orderStatus: string | null = 'InProcess'
   public paginationMetadata: PaginationControlMetadata = createPaginationMetadata();
   constructor(private _toaster: ToastService, private router: Router) {
     super()
   }
-
 
   ngOnInit(): void {
     this.getAllOrders();
@@ -62,7 +61,7 @@ export class OrderList extends Base implements OnInit {
   }
 
   // ADD ID WHEN USER VIEW OR UPDATE
-  public routeToUpsertPage(orderId: number) {
+  public routeToViewtPage(orderId: number) {
     console.log(orderId, "orderid")
     this.router.navigate([this.appRoutes.ORDERS_UPSERT], {
       queryParams: {
@@ -103,12 +102,15 @@ export class OrderList extends Base implements OnInit {
 
   //change orderstatus
   public updateStatus() {
+    console.log(this.changeStatusForm.value)
     const modalData: MConfirmationModalData = {
       heading: 'Confirm Delete',
       body: 'Are you sure you want change order status?',
       yesText: 'Yes',
       noText: 'No'
     };
+    console.log(this.orderStatus)
+    this.orderStatus = this.changeStatusForm.controls.orderStatus.value
     this.objConfirmationUtil.getConfirmation(modalData).then((res: boolean) => {
       if (res) {
         const payload = {
@@ -131,6 +133,7 @@ export class OrderList extends Base implements OnInit {
       }
     })
   }
+
 
   public topChange(top: number) {
     console.log("Top:", top);

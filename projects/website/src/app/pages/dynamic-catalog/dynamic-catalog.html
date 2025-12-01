@@ -293,6 +293,7 @@
                   class="absolute inset-0 flex items-center justify-center text-white text-sm font-bold"
                   >✓</span
                 >
+
                 }
               </label>
               }
@@ -311,32 +312,23 @@
 
     <!-- Product Grid -->
     <section
-      class="flex-grow overflow-y-auto h-screen pr-6 transition-all duration-500 ease-in-out"
+      class="flex-grow overflow-y-auto h-screen pr-6 transition-all duration-500 ease-in-out main-panel"
     >
-      @if (isShowLoading()) {
+      @if (isShowLoading() && payloadGenderMenu().pageIndex === 1) {
       <div class="grid grid-cols-2 sm:grid-cols-2 lg:grid-cols-3 gap-x-6 gap-y-10 pb-14">
-        @let dummyArr = [1, 2, 3]; @for (item of dummyArr; track $index) {
-        <div class="group m-2">
-          <!-- Image Skeleton -->
-          <ngx-skeleton-loader
-            count="1"
-            appearance="square"
-            class="rounded-md"
-            [theme]="{ height: '400px', width: '100%', margin: '0px' }"
-          ></ngx-skeleton-loader>
-
-          <!-- Title + Price Skeleton -->
-          <ngx-skeleton-loader
-            count="2"
-            [theme]="{ height: '12px', width: '100%', 'margin-top': '4px' }"
-          ></ngx-skeleton-loader>
-        </div>
-        }
+        <ng-container *ngTemplateOutlet="skeletonLoader"></ng-container>
       </div>
+
       } @else {
       <div
         #productGrid
         class="grid grid-cols-2 sm:grid-cols-2 lg:grid-cols-3 gap-x-6 gap-y-10 pb-14"
+        infiniteScroll
+        [infiniteScrollDistance]="2"
+        [infiniteScrollThrottle]="50"
+        [infiniteScrollContainer]="selector"
+        [fromRoot]="true"
+        (scrolled)="onScrollDown()"
       >
         @for (item of dynamicData().products; track $index) {
         <div class="group">
@@ -352,13 +344,34 @@
             <p class="mt-1 text-lg font-medium text-gray-900">Rs. {{ item.mrp }}</p>
           </div>
         </div>
+        } @if(isShowLoading() && payloadGenderMenu().pageIndex > 1){
+        <ng-container *ngTemplateOutlet="skeletonLoader"></ng-container>
         }
       </div>
 
       @if(!dynamicData().products.length){
-        <span>No data</span>
-      }
-      }
+      <span>No data</span>
+      } }
     </section>
   </main>
 </div>
+
+<ng-template #skeletonLoader>
+  @let dummyArr = [1, 2, 3, 4, 5]; @for (item of dummyArr; track $index) {
+  <div class="group m-2">
+    <!-- Image Skeleton -->
+    <ngx-skeleton-loader
+      count="1"
+      appearance="square"
+      class="rounded-md"
+      [theme]="{ height: '400px', width: '100%', margin: '0px' }"
+    ></ngx-skeleton-loader>
+
+    <!-- Title + Price Skeleton -->
+    <ngx-skeleton-loader
+      count="2"
+      [theme]="{ height: '12px', width: '100%', 'margin-top': '4px' }"
+    ></ngx-skeleton-loader>
+  </div>
+  }
+</ng-template>

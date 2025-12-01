@@ -2,17 +2,22 @@
 <main class="smooth-scroll">
   <!-- Banner section with image -->
   <section>
-    <div class="h-[1000px]">
-      <img
-        [src]="topBanners[0]?.bannerURL"
-        fetchpriority="high"
-        loading="eager"
-        width="1920"
-        height="600"
-        class="w-full object-cover h-full"
-        alt="Banner"
-      />
+    @if(topBanners){
+    <div>
+      <div class="banner">
+        <img
+          [src]="topBanners"
+          alt="Top banner"
+          (error)="onBannerError('top')"
+          fetchpriority="high"
+          loading="eager"
+          width="1920"
+          height="600"
+          class="w-full object-cover h-full"
+        />
+      </div>
     </div>
+    }
   </section>
 
   <section class="relative bg-[#680C01]">
@@ -52,7 +57,16 @@
   <!-- middle banner  -->
   <section class="middle-banner">
     <div class="imagemiddle-banner">
-      <img [src]="this.middleBanners[0]?.bannerURL" class="w-full" alt="" />
+      <div class="banner">
+        @if(middleBanners){
+        <img
+          [src]="middleBanners"
+          alt="Top banner"
+          (error)="onBannerError('middle')"
+          class="w-full"
+        />
+        }
+      </div>
     </div>
   </section>
 
@@ -69,12 +83,11 @@
         <div
           class="block md:w-1/2 overflow-hidden aspect-w-16 aspect-h-9 md:aspect-w-1 md:aspect-h-1 md:h-auto"
         >
-          <img
+          <!-- <img
             src="https://assets/images.unsplash.com/photo-1617208447814-72750e3328e2?q=80&w=1974&auto=format&fit=crop"
             onerror="this.src='https://placehold.co/1000x1200/5a2226/ffffff?text=Image+Unavailable'"
             alt="A fashion model walking down a runway in a flowing red dress, showcasing a high-fashion look."
-            class="object-cover w-full h-full transform transition-transform duration-500 hover:scale-105"
-          />
+            class="object-cover w-full h-full transform transition-transform duration-500 hover:scale-105" /> -->
         </div>
 
         <!-- Right Section: Text and Button -->

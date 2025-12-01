@@ -18,10 +18,11 @@ import { handlePagination } from '@portal/core';
 import { SearchBar } from '../../../component/search-bar/search-bar';
 import { SearchBase } from '../../../core/base/search-base';
 import { Observable } from 'rxjs';
+import { CommonModule } from '@angular/common';
 
 @Component({
   selector: 'app-employee-list',
-  imports: [PaginationController, ReactiveFormsModule, PaginationController, SearchBar],
+  imports: [PaginationController, ReactiveFormsModule, PaginationController, SearchBar, CommonModule],
   templateUrl: './employee-list.html',
   styleUrl: './employee-list.scss',
 })
@@ -58,8 +59,6 @@ export class EmployeeList
         this.payLoad.top
       );
     }
-
-    this.loaderService.hideLoader();
   }
 
   // Open PopUp
