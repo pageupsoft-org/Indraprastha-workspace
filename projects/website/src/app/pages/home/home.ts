@@ -62,7 +62,6 @@ export class Home extends Base implements AfterViewInit, OnInit {
   httpPost<IRGeneric<IBannerResponse>, IBannerPagination>(ApiRoutes.BANNER.GET, payload)
     .subscribe({
       next: (response) => {
-        console.log(response, "banner data")
         const banners = response.data.banners?.length ? response.data.banners : [];
 
         if (type === 'top') {
