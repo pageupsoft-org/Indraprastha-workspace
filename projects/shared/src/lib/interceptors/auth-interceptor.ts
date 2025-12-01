@@ -6,6 +6,7 @@ import { ToastService } from '../services/toast-service';
 import { getLocalStorageItem } from '../utils/utility.util';
 import { localStorageEnum } from '../enum/localStorage.enum';
 import { PlatformService } from '../services/platform-service';
+
 // import { getLocalStorageItem, localStorageEnum, ToastService } from '@shared';
 
 export const authInterceptor: HttpInterceptorFn = (req, next) => {

@@ -10,12 +10,15 @@ import { Base } from '../../../core/base/base';
 import { IGenericResponse } from '../../../core/interface/response/genericResponse';
 import { CommonModule } from '@angular/common';
 import { ApiRoutes, EToastType, IBanner, IBannerPagination, IBannerResponse, MConfirmationModalData, ToastService } from '@shared';
+import { PaginationController } from "../../../component/pagination-controller/pagination-controller";
+import { createPaginationMetadata, PaginationControlMetadata } from '../../../core/interface/model/pagination-detail.model';
+import { handlePagination } from '@portal/core';
 
 
 
 @Component({
   selector: 'app-banner-list',
-  imports: [CommonModule],
+  imports: [CommonModule, PaginationController],
   templateUrl: './banner-list.html',
   styleUrl: './banner-list.scss',
 })
@@ -28,7 +31,7 @@ export class BannerList extends Base implements OnInit {
     gender: null,
   };
   public banners: IBanner[] = [];
-
+  public paginationMetaData: PaginationControlMetadata = createPaginationMetadata()
   constructor(private toaster: ToastService) {
     super();
   }
@@ -100,11 +103,29 @@ export class BannerList extends Base implements OnInit {
           if (response.data) {
             this.banners = response.data.banners;
             console.log(this.banners);
+            handlePagination(
+              this.paginationMetaData,
+              response.data.total,
+              this.payLoad.pageIndex,
+              this.payLoad.top
+            )
           }
         }
       })
       .catch((error) => {
         // error handle
       });
+  }
+
+  public topChange(top: number) {
+    console.log("Top:", top);
+    this.payLoad.top = top;
+    this.getBannerData();
+  }
+
+  public pageChange(pageIndex: number) {
+    console.log("Page Index:", pageIndex);
+    this.payLoad.pageIndex = pageIndex;
+    this.getBannerData();
   }
 }

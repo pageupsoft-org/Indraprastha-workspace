@@ -32,6 +32,7 @@ export class PaginationController {
     this.ETopChanged.emit(this.top.value ?? 10);
     this.currentPage.set(1);
   }
+  
   public getClickedPage(pageNumber: number) {
     this.currentPage.set(pageNumber);
     this.pageChanged.emit(pageNumber);

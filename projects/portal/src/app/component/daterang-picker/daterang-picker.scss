@@ -1,0 +1,7 @@
+.date-picker-wrapper {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+.input-text { width: 320px; padding: 8px; background-color: white; border-radius: 5px;}
+.picker-actions { display:flex; gap:8px; flex-wrap:wrap; }

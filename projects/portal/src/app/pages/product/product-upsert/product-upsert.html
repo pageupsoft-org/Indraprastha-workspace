@@ -1,10 +1,10 @@
 <!-- Product Upsert — final fixed layout (kept dynamic bindings; replaced Descriptions with original block) -->
-<div class="min-h-screen w-full bg-gray-100 p-6">
+<div class="min-h-screen w-full bg-[#EEF2Fe] p-6">
   <div class="max-w-6xl mx-auto">
     <!-- Header -->
     <div class="flex items-center gap-4 mb-6">
-      <div class="w-14 h-14 rounded-lg bg-indigo-50 flex items-center justify-center shadow-sm">
-        <svg class="w-8 h-8 text-indigo-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+      <div class="w-14 h-14 rounded-[5px] bg-[#fef5e0]  flex items-center justify-center shadow-sm">
+        <svg class="w-8 h-8 text-[#82181A]" fill="none" stroke="currentColor" viewBox="0 0 24 24">
           <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M3 7h4l3 9h6l3-12H6"></path>
         </svg>
       </div>
@@ -18,7 +18,7 @@
 
       <div class="ml-auto flex items-center gap-3">
         <button (click)="router.navigate([appRoutes.PRODUCT])" type="button"
-          class="px-4 py-2 rounded border bg-white hover:bg-gray-50 cursor-pointer">
+           class="px-6 py-2 rounded-[5px] border border-[#B89E70] text-[#82181A] hover:bg-slate-50 font-medium transition cursor-pointer">
           Cancel
         </button>
       </div>
@@ -28,41 +28,44 @@
     <form class="space-y-6" [formGroup]="productForm">
 
       <!-- Product Basics card -->
-      <div class="bg-white rounded-lg shadow-lg p-6">
+      <div class="bg-white rounded-[5px] shadow-xl p-6">
         <div class="flex items-center justify-between border-b border-gray-200 pb-3">
-          <h2 class="text-xl font-semibold text-gray-800">Product Basics</h2>
+          <h2 class="text-xl font-semibold text-gray-800">Product Details</h2>
         </div>
 
-        <div class="grid grid-cols-1 md:grid-cols-3 gap-4 mt-3">
+        <div class="grid grid-cols-1 md:grid-cols-4 gap-4 mt-3">
           <!-- Name -->
           <div>
             <label class="block text-sm font-medium text-slate-700 mb-1">Name</label>
             <input [formControl]="productForm.controls.name" libValidateControl type="text"
-              placeholder="Enter product name"
-              class="w-full border border-slate-200 rounded-lg px-3 py-2 text-sm placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-indigo-500" />
+              placeholder="Enter product name" class="w-full border border-slate-300 rounded-[5px] px-3 py-2 text-sm placeholder-slate-400 
+               focus:ring-[#82181A] focus:outline-none focus:border-[#82181A] 
+          transition duration-200 text-base" />
           </div>
 
           <!-- Category (single select) -->
           <div>
             <label class="block text-sm font-medium text-slate-700 mb-1">Category</label>
-            <ng-multiselect-dropdown [settings]="dropdownSettings" [data]="categoryCombo"
-              [formControl]="productForm.controls.categoryIdsList">
+            <ng-multiselect-dropdown [settings]="dropdownSettings" [data]="categoryCombo" class=" focus:ring-[#82181A] focus:outline-none focus:border-[#82181A] 
+          transition duration-200 text-base" [formControl]="productForm.controls.categoryIdsList">
             </ng-multiselect-dropdown>
           </div>
 
           <!-- MRP -->
           <div>
             <label class="block text-sm font-medium text-slate-700 mb-1">MRP</label>
-            <input [formControl]="productForm.controls.mrp" libValidateControl type="text" placeholder="0.00"
-              step="0.01"
-              class="w-full border border-slate-200 rounded-lg px-3 py-2 text-sm placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-indigo-500" />
+            <input [formControl]="productForm.controls.mrp" libValidateControl type="text" placeholder="Enter MRP"
+              step="0.01" class="w-full border border-slate-300 rounded-[5px] px-3 py-2 text-sm placeholder-slate-400 
+               focus:ring-[#82181A] focus:outline-none focus:border-[#82181A] 
+          transition duration-200 text-base" />
           </div>
 
           <!-- Gender -->
           <div>
             <label class="block text-sm font-medium text-slate-700 mb-1">Gender</label>
-            <select [formControl]="productForm.controls.gender" libValidateControl
-              class="w-full border border-slate-200 rounded-lg px-3 py-2 text-sm bg-white focus:outline-none focus:ring-2 focus:ring-indigo-500">
+            <select [formControl]="productForm.controls.gender" libValidateControl class="w-full border border-slate-200 rounded-[5px] px-3 py-2 text-sm bg-white 
+              focus:ring-[#82181A] focus:outline-none focus:border-[#82181A] 
+          transition duration-200 text-base">
               <option [ngValue]="null" disabled>— Select Gender —</option>
               @for (item of genders; track $index) {
               <option [ngValue]="item.key">{{ item.value }}</option>
@@ -78,7 +81,7 @@
             <label class="block text-sm font-medium text-slate-700">Color</label>
           </div>
           <div class="col-span-1 flex justify-end">
-            <button type="button" class="px-3 py-1 rounded bg-blue-600 text-white cursor-pointer"
+            <button type="button" class="px-3 py-1 rounded bg-[#82181A] text-white cursor-pointer"
               (click)="mutateColorControl(null)">
               Add Color
             </button>
@@ -89,10 +92,12 @@
           @for (color of productForm.controls.color.controls; track $index) {
           <div class="lg:col-span-3 md:col-span-6 sm:col-span-12">
             <div class="flex items-center gap-3 mt-2 relative">
-              <input type="color" [formControl]="color" class="w-10 h-10 p-0 m-0 border rounded-full cursor-pointer" />
+              <input type="color" [formControl]="color" class="w-15 h-10 rounded-full cursor-pointer
+              focus:ring-[#82181A] focus:outline-none focus:border-[#82181A] 
+          transition duration-200 text-base" />
               <div class="relative w-full">
                 <input type="text" readonly [value]="color.value"
-                  class="w-full rounded-lg px-3 py-2 text-sm bg-white border border-slate-200 text-gray-600 pr-8" />
+                  class="w-full rounded-[5px] px-3 py-2 text-sm bg-white border border-slate-200 text-gray-600 pr-8" />
                 @if(productForm.controls.color.length > 1){
                 <button (click)="mutateColorControl($index)" type="button"
                   class="absolute right-2 top-1/2 -translate-y-1/2 text-gray-400 hover:text-red-500 cursor-pointer">
@@ -107,11 +112,11 @@
       </div>
 
       <!-- varient section -->
-      <div class="bg-white border border-gray-200 rounded-2xl shadow-sm p-6 space-y-6">
+      <div class="bg-white border border-gray-200 rounded-[5px] shadow-lg p-6 space-y-6">
         <div class="flex items-center justify-between border-b border-gray-200 pb-3">
           <h2 class="text-xl font-semibold text-gray-800">Product Variants</h2>
           <button (click)="mutateVariantControl(null)"
-            class="px-3 py-1 bg-blue-600 text-white text-sm rounded-lg hover:bg-blue-700 transition cursor-pointer">
+            class="px-3 py-2 bg-[#82181A] text-white text-sm rounded-[5px] hover:bg-[#82181A] transition cursor-pointer">
             + Add Variant
           </button>
         </div>
@@ -140,57 +145,48 @@
 
               <div>
                 <label class="block text-sm font-medium text-gray-700 mb-1">Variant Name</label>
-                <input type="text"
-                  class="w-full border border-gray-300 rounded-lg px-3 py-2 text-sm text-gray-700 focus:ring-2 focus:ring-blue-400 outline-none"
-                  placeholder="Enter variant name" [formControl]="variant.controls.name" libValidateControl />
+                <input type="text" class="w-full border border-gray-300 rounded-[5px] px-3 py-2 text-sm text-gray-700 
+                  focus:ring-[#82181A] focus:outline-none focus:border-[#82181A] 
+          transition duration-200 text-base" placeholder="Enter variant name" [formControl]="variant.controls.name"
+                  libValidateControl />
               </div>
 
               <div>
                 <label class="block text-sm font-medium text-gray-700 mb-1">MRP</label>
-                <input type="text" min="0"
-                  class="w-full border border-gray-300 rounded-lg px-3 py-2 text-sm text-gray-700 focus:ring-2 focus:ring-blue-400 outline-none"
-                  placeholder="Enter price" [formControl]="variant.controls.mrp" libValidateControl />
+                <input type="text" min="0" class="w-full border border-gray-300 rounded-[5px] px-3 py-2 text-sm text-gray-700  
+                 rounded-[5px] px-3 py-2 text-sm text-gray-700 
+                  focus:ring-[#82181A] focus:outline-none focus:border-[#82181A] 
+          transition duration-200 text-base" placeholder="Enter price" [formControl]="variant.controls.mrp"
+                  libValidateControl />
               </div>
 
               <div>
                 <label class="block text-sm font-medium text-gray-700 mb-1">Description</label>
-                <textarea rows="3"
-                  class="w-full border border-gray-300 rounded-lg px-3 py-2 text-sm text-gray-700 focus:ring-2 focus:ring-blue-400 outline-none"
-                  placeholder="Enter variant description" [formControl]="variant.controls.description"></textarea>
+                <textarea rows="3" class="w-full border border-gray-300 rounded-[5px] px-3 py-2 text-sm text-gray-700 
+                  rounded-[5px] px-3 py-2 text-sm text-gray-700 
+                  focus:ring-[#82181A] focus:outline-none focus:border-[#82181A] 
+          transition duration-200 text-base" placeholder="Enter variant description"
+                  [formControl]="variant.controls.description"></textarea>
               </div>
 
               <div>
                 <label class="block text-sm font-medium text-gray-700 mb-1">Stock Quantity</label>
-                <input
-                  type="text"
-                  min="0"
-                  class="w-full border border-gray-300 rounded-lg px-3 py-2 text-sm text-gray-700 focus:ring-2 focus:ring-blue-400 outline-none"
-                  placeholder="Enter quantity" [formControl]="variant.controls.stocks.controls.quantity"
-                  libValidateControl />
+                <input type="text" min="0" class="w-full border border-gray-300 rounded-[5px] px-3 py-2 text-sm text-gray-700  
+                  rounded-[5px] px-3 py-2 text-sm text-gray-700 
+                  focus:ring-[#82181A] focus:outline-none focus:border-[#82181A] 
+          transition duration-200 text-base" placeholder="Enter quantity"
+                  [formControl]="variant.controls.stocks.controls.quantity" libValidateControl />
               </div>
             </div>
 
             <!-- RIGHT SIDE: IMAGE -->
             <div class="w-full md:w-[35%] flex justify-center items-center">
               <div
-                class="relative bg-gray-100 border border-dashed border-gray-400 rounded-xl overflow-hidden flex items-center justify-center aspect-[9/16] w-full max-w-[200px]"
-              >
-                <input
-                  type="file"
-                  accept="image/*"
-                  title=""
-                  class="absolute inset-0 opacity-0 cursor-pointer"
-                  (change)="onVariantImageChange($event, $index)"
-                  libValidateControl
-
-                />
-                <img
-                  id="preview1"
-                  [ngClass]="variant.controls.variantBase64.value ? '' : 'hidden'"
-                  [src]="variant.controls.variantBase64.value"
-                  alt="Variant"
-                  class="object-cover w-full h-full"
-                />
+                class="relative bg-gray-100 border border-dashed border-gray-400 rounded-xl overflow-hidden flex items-center justify-center aspect-[9/16] w-full max-w-[200px]">
+                <input type="file" accept="image/*" title="" class="absolute inset-0 opacity-0 cursor-pointer"
+                  (change)="onVariantImageChange($event, $index)" libValidateControl />
+                <img id="preview1" [ngClass]="variant.controls.variantBase64.value ? '' : 'hidden'"
+                  [src]="variant.controls.variantBase64.value" alt="Variant" class="object-cover w-full h-full" />
 
                 @if(variant.controls.variantBase64.value == null){
                 <span id="placeholder1" class="text-gray-500 text-center text-sm leading-tight">
@@ -205,19 +201,32 @@
       </div>
 
       <!-- Product Size And Quantity  -->
-      <div class="bg-white rounded-lg shadow-lg p-6">
-        <div class="space-y-3">
-          <div class="flex items-center justify-between border-b border-gray-200 pb-3">
+      <div class="bg-white rounded-[5px] shadow-lg p-6">
+        <div class="">
+          <!-- <div class="flex items-center justify-between border-b border-gray-200 pb-3">
             <h2 class="text-xl font-semibold text-gray-800">Stock by Size</h2>
             <div class="flex items-center gap-2">
               <input type="text" min="0" placeholder="Set all qty" [formControl]="setAllQtyInput" libValidateControl
-                class="w-28 border border-gray-300 rounded-lg p-2 text-sm text-gray-700 focus:ring-2 focus:ring-blue-400 outline-none" />
+                class="w-30 border border-gray-300 rounded-[5px] p-2 text-sm text-gray-700  focus:ring-blue-400 outline-none" />
               <button (click)="setAllSize()" type="button"
-                class="text-sm bg-blue-600 hover:bg-blue-700 text-white px-3 py-2 rounded-lg transition cursor-pointer">
+                class="text-sm bg-blue-600 hover:bg-blue-700 text-white px-3 py-2 rounded-[5px] transition cursor-pointer">
+                Apply to All
+              </button>
+            </div>
+          </div> -->
+
+          <div class="flex items-center justify-between border-b border-gray-200 pb-3">
+            <h2 class="text-xl font-semibold text-gray-800">Stock by Size</h2>
+            <div class="flex items-center">
+              <input type="text" min="0" placeholder="Set all qty" [formControl]="setAllQtyInput" libValidateControl
+                class=" border border-gray-300 rounded-[5px] p-2 ml-10 text-sm text-gray-700  focus:ring-blue-400 outline-none" />
+              <button (click)="setAllSize()" type="button"
+                class="w-40 text-sm bg-[#82181A] hover:bg-[#82181A] text-white py-2 rounded-[5px] transition cursor-pointer">
                 Apply to All
               </button>
             </div>
           </div>
+
 
           <!-- Stock grid -->
           <div class="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 xl:grid-cols-6 gap-4 pt-3">
@@ -231,7 +240,7 @@
                 </span>
 
                 <input type="text" min="0"
-                  class="mt-3 w-24 text-center text-sm border border-gray-300 rounded-lg py-2 px-2 text-gray-700 focus:ring-2 focus:ring-blue-400 outline-none"
+                  class="mt-3 w-24 text-center text-sm border border-gray-300 rounded-[5px] py-2 px-2 text-gray-700  focus:ring-blue-400 outline-none"
                   [formControl]="stock.controls.quantity" libValidateControl />
               </div>
 
@@ -243,13 +252,13 @@
       </div>
 
       <!-- Description Section -->
-      <div class="bg-white border border-gray-200 rounded-2xl shadow-sm p-6">
+      <div class="bg-white border border-gray-200 rounded-[5px] shadow-sm p-6">
         <!-- Header -->
         <div class="flex items-center justify-between border-b border-gray-200 pb-3">
           <h2 class="text-xl font-semibold text-gray-800">Product Descriptions</h2>
           <div class="flex items-center gap-2">
             <button (click)="mutateDescriptionControl(null)" type="button"
-              class="text-sm bg-blue-600 hover:bg-blue-700 text-white px-3 py-2 rounded-lg transition cursor-pointer">
+              class="text-sm bg-[#82181A] hover:bg-[#82181A] text-white px-3 py-2 rounded-[5px] transition cursor-pointer">
               Add Description
             </button>
           </div>
@@ -275,16 +284,18 @@
           <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mb-4">
             <div>
               <label class="block text-sm font-medium text-gray-700 mb-1">Header</label>
-              <input type="text"
-                class="w-full border border-gray-300 rounded-lg px-3 py-2 text-sm text-gray-700 focus:ring-2 focus:ring-blue-400 outline-none"
-                placeholder="Enter header" [formControl]="description.controls.header" libValidateControl />
+              <input type="text" class="w-full border border-gray-300 rounded-[5px] px-3 py-2 text-sm text-gray-700 
+                  focus:ring-[#82181A] focus:outline-none focus:border-[#82181A] 
+          transition duration-200 text-base" placeholder="Enter header" [formControl]="description.controls.header"
+                libValidateControl />
             </div>
 
             <div>
               <label class="block text-sm font-medium text-gray-700 mb-1">Type</label>
               <select (change)="onDescriptionTypeChange(description)"
-                [formControl]="description.controls.descriptionType"
-                class="w-full border border-gray-300 rounded-lg px-3 py-2 text-sm text-gray-700 focus:ring-2 focus:ring-blue-400 outline-none">
+                [formControl]="description.controls.descriptionType" class="w-full border border-gray-300 rounded-[5px] px-3 py-2 text-sm text-gray-700  
+                focus:ring-[#82181A] focus:outline-none focus:border-[#82181A] 
+          transition duration-200 text-base">
                 @for (item of descriptionTypeEnumList; track $index) {
                 <option [value]="item.key">{{ item.value }}</option>
                 }
@@ -296,9 +307,9 @@
           @if(description.controls.descriptionType.value == EDiscriptionType.SingleText){
           <div>
             <label class="block text-sm font-medium text-gray-700 mb-1">Description</label>
-            <textarea [formControl]="description.controls.description" libValidateControl rows="4"
-              class="w-full border border-gray-300 rounded-lg px-3 py-2 text-sm text-gray-700 focus:ring-2 focus:ring-blue-400 outline-none"
-              placeholder="Write detailed description..."></textarea>
+            <textarea [formControl]="description.controls.description" libValidateControl rows="4" class="w-full border border-gray-300 rounded-[5px] px-3 py-2 text-sm text-gray-700  
+              focus:ring-[#82181A] focus:outline-none focus:border-[#82181A] 
+          transition duration-200 text-base" placeholder="Write detailed description..."></textarea>
           </div>
           } @else {
           <!-- JSON Key-Value Description -->
@@ -314,10 +325,12 @@
             <!-- One key-value pair row -->
             @for (jsonText of description.controls.jsonText.controls; track $index) {
             <div class="flex items-center gap-2 mb-2">
-              <input type="text" placeholder="Key" [formControl]="jsonText.controls.key" libValidateControl
-                class="w-1/2 border border-gray-300 rounded-lg px-3 py-2 text-sm text-gray-700 focus:ring-2 focus:ring-blue-400 outline-none" />
-              <input type="text" placeholder="Value" [formControl]="jsonText.controls.value" libValidateControl
-                class="w-1/2 border border-gray-300 rounded-lg px-3 py-2 text-sm text-gray-700 focus:ring-2 focus:ring-blue-400 outline-none" />
+              <input type="text" placeholder="Key" [formControl]="jsonText.controls.key" libValidateControl class="w-1/2 border border-gray-300 rounded-[5px] px-3 py-2 text-sm text-gray-700 
+                focus:ring-[#82181A] focus:outline-none focus:border-[#82181A] 
+          transition duration-200 text-base">
+              <input type="text" placeholder="Value" [formControl]="jsonText.controls.value" libValidateControl class="w-1/2 border border-gray-300 rounded-[5px] px-3 py-2 text-sm text-gray-700  
+                focus:ring-[#82181A] focus:outline-none focus:border-[#82181A] 
+          transition duration-200 text-base" />
 
               @if(description.controls.jsonText.controls.length > 1){
               <button class="text-gray-400 hover:text-red-500 text-lg leading-none cursor-pointer"
@@ -333,22 +346,22 @@
           <!-- Short Description -->
           <div class="mt-4">
             <label class="block text-sm font-medium text-gray-700 mb-1">Short Description</label>
-            <input type="text" [formControl]="description.controls.shortDescription"
-              class="w-full border border-gray-300 rounded-lg px-3 py-2 text-sm text-gray-700 focus:ring-2 focus:ring-blue-400 outline-none"
-              placeholder="Enter short summary" />
+            <input type="text" [formControl]="description.controls.shortDescription" class="w-full border border-gray-300 rounded-[5px] px-3 py-2 text-sm text-gray-700  
+              focus:ring-[#82181A] focus:outline-none focus:border-[#82181A] 
+          transition duration-200 text-base" placeholder="Enter short summary" />
           </div>
         </div>
         }
       </div>
 
       <!-- Product Images Section -->
-      <div class="bg-white border border-gray-200 rounded-2xl shadow-sm p-6">
+      <div class="bg-white border border-gray-200 rounded-[5px] shadow-sm p-6">
         <!-- Header -->
         <div class="flex items-center justify-between border-b border-gray-200 pb-3">
           <h2 class="text-xl font-semibold text-gray-800">Product Images</h2>
           <div class="flex items-center gap-2">
             <button type="button" (click)="mutateImageControl(null)"
-              class="text-sm bg-blue-600 hover:bg-blue-700 text-white px-3 py-2 rounded-lg transition cursor-pointer">
+              class="text-sm bg-[#82181A] hover:bg-[#6f1416] text-white px-3 py-2 rounded-[5px] transition cursor-pointer">
               Add Image
             </button>
           </div>
@@ -366,7 +379,8 @@
             class="relative bg-gray-100 border border-dashed border-gray-400 rounded-xl overflow-hidden flex items-center justify-center aspect-[9/16] w-full max-w-[200px]">
             <!-- Delete Icon -->
             <button
-              class="absolute cursor-pointer top-2 right-2 bg-white/80 hover:bg-red-100 text-gray-500 hover:text-red-500 rounded-full p-1 shadow z-10"
+              class="absolute cursor-pointer top-2 right-2 bg-white/80 hover:bg-red-100 text-gray-500 w-10 h-10
+               hover:text-red-500 rounded-full p-1 shadow z-10"
               title="Remove Image" type="button" (click)="mutateImageControl($index)">
               ✕
             </button>
@@ -397,7 +411,7 @@
       <!-- Save buttons -->
       <div class="flex justify-end gap-3">
         <button type="submit" (click)="upsertProduct()"
-          class="px-4 py-2 rounded bg-green-600 text-white shadow cursor-pointer">
+          class="px-4 py-2 rounded bg-[#82181A] text-white shadow cursor-pointer">
           Save Product
         </button>
       </div>
