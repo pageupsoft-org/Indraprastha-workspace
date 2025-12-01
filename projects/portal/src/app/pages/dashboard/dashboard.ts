@@ -147,7 +147,6 @@ export class Dashboard extends Base implements OnInit {
     this.httpPostPromise<IGenericResponse<IDashboardResponse>, IDateRange>(ApiRoutes.DASHBOARD.BASE, this.payload)
       .then(response => {
         if (!response || !response.data) return;
-         console.log(response)
         // keep total pending if needed
         this.totalPendingOrders = response.data.totalPendings;
         
@@ -203,7 +202,6 @@ export class Dashboard extends Base implements OnInit {
         }
       })
       .catch(error => {
-        console.error('getDashboardData error', error);
         // optional: show fallback series
         const fallback = [{ name: 'Orders', data: new Array(12).fill(0) }];
         this.chartOptions = { ...this.chartOptions, series: fallback } as any;

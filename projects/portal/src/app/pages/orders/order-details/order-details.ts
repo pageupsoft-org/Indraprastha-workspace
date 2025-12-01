@@ -42,7 +42,6 @@ export class OrderDetails extends Base implements OnInit {
   // GET ORDER BY ID  
   public getOrderById(id: number) {
     this.httpGetPromise<IGenericResponse<IorderResponseById>>(ApiRoutes.ORDERS.GET_BY_ID(id)).then(response => {
-      console.log(response)
     }).catch(error => {
       // handle error
     })
@@ -56,7 +55,6 @@ export class OrderDetails extends Base implements OnInit {
   }
 
   public updateStatus() {
-    console.log("updateStatus change")
 
     const modalData: MConfirmationModalData = {
       heading: 'Confirm Delete',

@@ -49,7 +49,6 @@ export class EmployeeUpsert extends Base implements OnInit {
 
   ngOnInit(): void {
     const id = this.data.id
-    console.log(id)
     if (id === 0) {
       this.removeLoginMode = !this.removeLoginMode;
     }
@@ -98,16 +97,7 @@ export class EmployeeUpsert extends Base implements OnInit {
   }
 
   public onSubmitEmployee() {
-    // const updatePayload: updatePayload = {
-    //   id: this.employeeForm.controls.id.value || 0,
-    //   firstName: this.employeeForm.controls.firstName.value || '',
-    //   lastName: this.employeeForm.controls.lastName.value || '',
-    //   email: this.employeeForm.controls.email.value || '',
-    //   isLogin: this.employeeForm.controls.isLogin.value || false,
-    //   contact: this.employeeForm.controls.contact.value || '',
-    //   address: this.employeeForm.controls.address.value || '',
-    //   userType: this.employeeForm.controls.userType.value || ''
-    // }
+
     if (this.employeeForm.valid) {
       if (this.data.id === 0) {
         this.httpPostPromise<IGenericResponse<number>, IEmployee>(ApiRoutes.LOGIN.REGISTER_EMPLOYEE, this.employeeForm.value as IEmployee).then(response => {

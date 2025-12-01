@@ -76,7 +76,6 @@ export class CollectionList
 
   // Open PopUp
   public openModel(id: number = 0) {
-    console.log(id);
     const dialogRef = this.dialog.open(CollectionUpsert, {
       width: '80%',
       maxWidth: '900px',

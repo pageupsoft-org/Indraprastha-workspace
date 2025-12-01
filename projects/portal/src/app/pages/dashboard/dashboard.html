@@ -1,121 +1,14 @@
-<!-- <div class="bg-[#EEF2FF] min-h-screen p-6 mt-[45px]">
-  <div class="max-w-7xl mx-auto">
-    <header class="flex items-center justify-between mb-6">
-      <div>
-        <h1 class="text-3xl font-semibold text-gray-800">Dashboard</h1>
-        <h1 class="text-3xl font-semibold text-gray-800">Dashboard</h1>
-      </div>
-      <div>
-        <app-daterang-picker (emitDateObject)="onChangeDate($event)"></app-daterang-picker>
-        <app-daterang-picker (emitDateObject)="onChangeDate($event)"></app-daterang-picker>
-      </div>
-    </header>
-
-    <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-3 gap-6 mb-6">
-      <div class="bg-white rounded-[10px] shadow p-4 flex items-center justify-between cursor-pointer">
-        <div>
-          <p class="text-sm text-gray-500 font-semibold">Total Orders</p>
-          <div class="text-2xl font-semibold text-gray-800 mt-3">{{totalPendingOrders.totalOrder}}</div>
-        </div>
-        <div class="w-12 h-12 rounded-lg flex items-center justify-center" style="background:#FEEFEF">
-          <svg class="w-6 h-6 text-[#82181A]" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 3h18v4H3zM3 11h18v10H3z" />
-          </svg>
-        </div>
-      </div>
-
-      <div class="bg-white rounded-[10px] shadow p-4 flex items-center justify-between cursor-pointer">
-        <div>
-          <p class="text-sm text-gray-500 font-semibold">New Customers</p>
-          <div class="text-2xl font-semibold text-gray-800  mt-3">{{totalPendingOrders.newCustomer}}</div>
-        </div>
-        <div class="w-12 h-12 rounded-lg flex items-center justify-center" style="background:#FEEFEF">
-          <svg class="w-6 h-6 text-[#82181A]" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-              d="M17 20h5v-2a4 4 0 00-4-4h-1M7 20h5v-2a4 4 0 00-4-4H7M12 7a4 4 0 110-8 4 4 0 010 8z" />
-          </svg>
-        </div>
-      </div>
-      <div class="bg-white rounded-[10px] shadow p-4 flex items-center justify-between cursor-pointer">
-        <div>
-          <p class="text-sm text-gray-500 font-semibold">New Customers</p>
-          <div class="text-2xl font-semibold text-gray-800  mt-3">{{totalPendingOrders.newCustomer}}</div>
-        </div>
-        <div class="w-12 h-12 rounded-lg flex items-center justify-center" style="background:#FEEFEF">
-          <svg class="w-6 h-6 text-[#82181A]" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-              d="M17 20h5v-2a4 4 0 00-4-4h-1M7 20h5v-2a4 4 0 00-4-4H7M12 7a4 4 0 110-8 4 4 0 010 8z" />
-          </svg>
-        </div>
-      </div>
-
-      <div class="bg-white rounded-[10px] shadow p-4 flex items-center justify-between cursor-pointer">
-        <div>
-          <p class="text-sm text-gray-500 font-semibold">orders</p>
-          <div class="text-2xl font-semibold text-gray-800 mt-3">{{totalPendingOrders.order}}</div>
-        </div>
-        <div class="w-12 h-12 rounded-lg flex items-center justify-center" style="background:#FEEFEF">
-          <svg class="w-6 h-6 text-[#82181A]" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-              d="M17 20h5v-2a4 4 0 00-4-4h-1M7 20h5v-2a4 4 0 00-4-4H7M12 7a4 4 0 110-8 4 4 0 010 8z" />
-          </svg>
-        </div>
-      </div>
-      <div class="bg-white rounded-[10px] shadow p-4 flex items-center justify-between cursor-pointer">
-        <div>
-          <p class="text-sm text-gray-500 font-semibold">orders</p>
-          <div class="text-2xl font-semibold text-gray-800 mt-3">{{totalPendingOrders.order}}</div>
-        </div>
-        <div class="w-12 h-12 rounded-lg flex items-center justify-center" style="background:#FEEFEF">
-          <svg class="w-6 h-6 text-[#82181A]" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-              d="M17 20h5v-2a4 4 0 00-4-4h-1M7 20h5v-2a4 4 0 00-4-4H7M12 7a4 4 0 110-8 4 4 0 010 8z" />
-          </svg>
-        </div>
-      </div>
-
-    </div>
-
-    <div class="w-full bg-purple-100 h-[70%] flex gap-2">
-      <div class="w-[70%] bg-white rounded-[10px]">
-        <div id="chart">
-          <apx-chart #chart [series]="chartOptions.series!" [chart]="chartOptions.chart!" [xaxis]="chartOptions.xaxis!"
-            [stroke]="chartOptions.stroke!" [tooltip]="chartOptions.tooltip!"
-            [dataLabels]="chartOptions.dataLabels!"></apx-chart>
-        </div>
-      </div>
-      <div class="w-[30%] bg-white rounded-[10px]">
-
-          <div id="chart" class="mt-[20px]">
-            <apx-chart [series]="pieOptions.series!" [chart]="pieOptions.chart!" [labels]="pieOptions.labels"
-              [responsive]="pieOptions.responsive!"></apx-chart>
-          </div>
-
-
-      </div>
-    </div>
-
-
-   
-
-    <footer class="mt-6 text-sm text-gray-500">Designed with Tailwind • Use your modules to replace static numbers.
-    </footer>
-  </div>
-</div> -->
-
-
 <div class="p-6 mt-[70px]">
   <div class="max-w-7xl mx-auto">
     <!-- 3-column responsive grid -->
     <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
-
       <!-- Card 1 -->
-      <div class="bg-white rounded-[25px] p-6 flex items-center justify-between
-                    shadow-[0px_7.56px_47.88px_0px_rgba(0,0,0,0.04)]">
+      <div
+        class="bg-white rounded-[25px] p-6 flex items-center justify-between shadow-[0px_7.56px_47.88px_0px_rgba(0,0,0,0.04)]">
         <!-- Left: icon + text -->
         <div class="flex items-center gap-4">
           <div class="w-16 h-16 rounded-xl flex items-center justify-center"
-            style="background: linear-gradient(180deg,#8b6bff 0%, #7c5cff 100%);">
+            style="background: linear-gradient(180deg, #8b6bff 0%, #7c5cff 100%)">
             <!-- money icon -->
             <svg class="w-7 h-7 text-white" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
               <path d="M12 1v22" stroke="rgba(255,255,255,0.9)" stroke-width="1.5" stroke-linecap="round" />
@@ -125,9 +18,11 @@
           </div>
 
           <div>
-            <div class="text-xs text-gray-400">Total order</div>
-            <div class="text-2xl font-extrabold text-gray-900 mt-1">$13.000</div>
-            <div class="text-sm text-gray-400 mt-1">50% This Week</div>
+            <div class="text-xs text-gray-800">Total order</div>
+            <div class="text-2xl font-extrabold text-gray-900 mt-1">
+              {{ totalPendingOrders.totalOrder }}
+            </div>
+            <!-- <div class="text-sm text-gray-400 mt-1">50% This Week</div> -->
           </div>
         </div>
 
@@ -149,20 +44,22 @@
       </div>
 
       <!-- Card 2 -->
-      <div class="bg-white rounded-[25px] p-6 flex items-center justify-between
-                    shadow-[0px_7.56px_47.88px_0px_rgba(0,0,0,0.04)]">
+      <div
+        class="bg-white rounded-[25px] p-6 flex items-center justify-between shadow-[0px_7.56px_47.88px_0px_rgba(0,0,0,0.04)]">
         <div class="flex items-center gap-4">
           <div class="w-16 h-16 rounded-xl flex items-center justify-center bg-[#7b6bff]/[0.12]">
-            <svg class="w-7 h-7 text-[#6b5cff]" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-              <rect x="6" y="6" width="12" height="12" rx="3" stroke="#6b5cff" stroke-width="1.5" />
-              <path d="M9 10h6" stroke="#6b5cff" stroke-width="1.5" stroke-linecap="round" />
+            <svg class="w-7 h-7 text-[#7b5cff]" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+              <circle cx="12" cy="9" r="3" stroke="#7b5cff" stroke-width="1.5" />
+              <path d="M5 20c1.5-4 6-6 7-6s5.5 2 7 6" stroke="#7b5cff" stroke-width="1.5" stroke-linecap="round" />
             </svg>
           </div>
 
           <div>
-            <div class="text-xs text-gray-400">New Customer</div>
-            <div class="text-2xl font-extrabold text-gray-900 mt-1">5000</div>
-            <div class="text-sm text-gray-400 mt-1">60% This Week</div>
+            <div class="text-xs text-gray-800">New Customer</div>
+            <div class="text-2xl font-extrabold text-gray-900 mt-1">
+              {{ totalPendingOrders.newCustomer }}
+            </div>
+            <!-- <div class="text-sm text-gray-400 mt-1">60% This Week</div> -->
           </div>
         </div>
 
@@ -182,20 +79,21 @@
       </div>
 
       <!-- Card 3 -->
-      <div class="bg-white rounded-[25px] p-6 flex items-center justify-between
-                    shadow-[0px_7.56px_47.88px_0px_rgba(0,0,0,0.04)]">
+      <div
+        class="bg-white rounded-[25px] p-6 flex items-center justify-between shadow-[0px_7.56px_47.88px_0px_rgba(0,0,0,0.04)]">
         <div class="flex items-center gap-4">
           <div class="w-16 h-16 rounded-xl flex items-center justify-center bg-[#8c78ff]/[0.12]">
-            <svg class="w-7 h-7 text-[#7b5cff]" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-              <circle cx="12" cy="9" r="3" stroke="#7b5cff" stroke-width="1.5" />
-              <path d="M5 20c1.5-4 6-6 7-6s5.5 2 7 6" stroke="#7b5cff" stroke-width="1.5" stroke-linecap="round" />
+            <svg class="w-7 h-7 text-[#6b5cff]" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+              <rect x="6" y="6" width="12" height="12" rx="3" stroke="#6b5cff" stroke-width="1.5" />
+              <path d="M9 10h6" stroke="#6b5cff" stroke-width="1.5" stroke-linecap="round" />
             </svg>
           </div>
 
           <div>
-            <div class="text-xs text-gray-400">Orders</div>
-            <div class="text-2xl font-extrabold text-gray-900 mt-1">600+</div>
-            <div class="text-sm text-gray-400 mt-1">50% This Week</div>
+            <div class="text-xs text-gray-800">Orders</div>
+            <div class="text-2xl font-extrabold text-gray-900 mt-1">
+              {{ totalPendingOrders.order }}
+            </div>
           </div>
         </div>
 
@@ -213,26 +111,38 @@
           </svg>
         </div>
       </div>
-
     </div>
   </div>
 
-  <div class="w-full bg-purple-100 h-[70%] flex gap-2 mt-[20px]">
+  <div class="w-full h-[65%] flex gap-2 mt-[20px]">
+    <!-- Left Chart Box -->
     <div class="w-[70%] bg-white rounded-[10px]">
-      <div id="chart">
+      <!-- Header -->
+      <div class="px-4 py-2 border-b border-slate-200 flex items-center justify-between">
+        <h2 class="text-sm font-semibold text-slate-700">Sales Overview</h2>
+      </div>
+
+      <!-- Chart -->
+      <div id="chart" class="p-2">
         <apx-chart #chart [series]="chartOptions.series!" [chart]="chartOptions.chart!" [xaxis]="chartOptions.xaxis!"
-          [stroke]="chartOptions.stroke!" [tooltip]="chartOptions.tooltip!"
-          [dataLabels]="chartOptions.dataLabels!"></apx-chart>
+          [stroke]="chartOptions.stroke!" [tooltip]="chartOptions.tooltip!" [dataLabels]="chartOptions.dataLabels!">
+        </apx-chart>
       </div>
     </div>
-    <div class="w-[30%] bg-white rounded-[10px]">
 
-      <div id="chart" class="mt-[20px]">
-        <apx-chart [series]="pieOptions.series!" [chart]="pieOptions.chart!" [labels]="pieOptions.labels"
-          [responsive]="pieOptions.responsive!"></apx-chart>
+    <!-- Right Chart Box -->
+    <div class="w-[30%] bg-white rounded-[10px]">
+      <!-- Header -->
+      <div class="px-4 py-2 border-b border-slate-200 flex items-center justify-between">
+        <h2 class="text-sm font-semibold text-slate-700">Category Distribution</h2>
       </div>
 
-
+      <!-- Pie Chart -->
+      <div id="chart" class="mt-[20px] px-2">
+        <apx-chart [series]="pieOptions.series!" [chart]="pieOptions.chart!" [labels]="pieOptions.labels"
+          [responsive]="pieOptions.responsive!">
+        </apx-chart>
+      </div>
     </div>
   </div>
 </div>

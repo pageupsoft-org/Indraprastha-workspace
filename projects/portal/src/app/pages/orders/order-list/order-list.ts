@@ -62,7 +62,6 @@ export class OrderList extends Base implements OnInit {
 
   // ADD ID WHEN USER VIEW OR UPDATE
   public routeToViewtPage(orderId: number) {
-    console.log(orderId, "orderid")
     this.router.navigate([this.appRoutes.ORDERS_UPSERT], {
       queryParams: {
         id: orderId,
@@ -102,14 +101,12 @@ export class OrderList extends Base implements OnInit {
 
   //change orderstatus
   public updateStatus() {
-    console.log(this.changeStatusForm.value)
     const modalData: MConfirmationModalData = {
       heading: 'Confirm Delete',
       body: 'Are you sure you want change order status?',
       yesText: 'Yes',
       noText: 'No'
     };
-    console.log(this.orderStatus)
     this.orderStatus = this.changeStatusForm.controls.orderStatus.value
     this.objConfirmationUtil.getConfirmation(modalData).then((res: boolean) => {
       if (res) {
@@ -136,13 +133,11 @@ export class OrderList extends Base implements OnInit {
 
 
   public topChange(top: number) {
-    console.log("Top:", top);
     this.payLoad.top = top;
     this.getAllOrders();
   }
 
   public pageChange(pageIndex: number) {
-    console.log("Page Index:", pageIndex);
     this.payLoad.pageIndex = pageIndex;
     this.getAllOrders();
   }

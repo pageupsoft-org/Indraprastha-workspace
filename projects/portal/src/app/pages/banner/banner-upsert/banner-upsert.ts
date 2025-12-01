@@ -11,6 +11,7 @@ import {  IBannerForm } from '../../../core/interface/request/banner.request';
 import { IConvertImageParams, IConvertImageResult, initialConvertImageParam } from '../../../core/interface/model/portal-util.model';
 import { ImageSizeConst, ImageTypeEnum } from '../../../core/enum/image.enum';
 import { convertImagesToBase64Array } from '../../../core/utils/portal-utility.util';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-banner-upsert',
@@ -39,9 +40,8 @@ export class BannerUpsert extends Base implements OnInit {
     bannerBase64: new FormControl(null, [Validators.required]),
   });
 
-  constructor(private toaster: ToastService) {
+  constructor(private toaster: ToastService, private router:Router) {
     super();
-    console.log(this.bannerConnectionTypes);
   }
 
   ngOnInit(): void {
@@ -63,12 +63,10 @@ export class BannerUpsert extends Base implements OnInit {
       this.base64Image = await convertImageToBase64(event);
       this.bannerForm.controls.bannerBase64.setValue(this.base64Image as string);
     } catch (error) {
-      console.error('Error converting image:', error);
     }
   }
 
   public onBannerSubmit() {
-    console.log(this.bannerForm.value);
     if(this.bannerForm.controls.bannerBase64.value === '' || this.bannerForm.controls.bannerBase64.value === null){
       this.toaster.show({ message: 'Please upload banner image', duration: 3000, type: EToastType.error });
       return;
@@ -97,7 +95,6 @@ export class BannerUpsert extends Base implements OnInit {
   private getCategoryCombo() {
     this.httpGetPromise<IGenericResponse<IGenericComboResponse[]>>(ApiRoutes.CATEGORY.GET_COMBO)
       .then((response) => {
-        console.log(response);
         if (response) {
           if (response.data) {
             this.combo = response.data;
@@ -110,7 +107,6 @@ export class BannerUpsert extends Base implements OnInit {
   private getProductCombo() {
     this.httpGetPromise<IGenericResponse<IGenericComboResponse[]>>(ApiRoutes.PRODUCT.GET_COMBO)
       .then((response) => {
-        console.log(response);
         if (response) {
           if (response.data) {
             this.combo = response.data;
@@ -122,7 +118,6 @@ export class BannerUpsert extends Base implements OnInit {
 
   public selectBannerConnectionType() {
     const bannerConnectionValue = this.bannerForm.controls.bannerConnectionType.value;
-    console.log(bannerConnectionValue);
     if (bannerConnectionValue === 'Category') {
       this.bannerForm.controls.bannerValueId.reset();
       this.bannerForm.controls.bannerValueId.enable();
@@ -142,7 +137,6 @@ export class BannerUpsert extends Base implements OnInit {
       this.bannerForm.controls.bannerValueId.setErrors(null);
       this.bannerForm.controls.bannerValueId.updateValueAndValidity();
     }
-    console.log(this.bannerForm.value);
   }
 
   private getBannerById(id: number) {
@@ -151,10 +145,10 @@ export class BannerUpsert extends Base implements OnInit {
         .then((response) => {
           if (response) {
             if (response.data) {
-              console.log(response);
               this.bannerForm.patchValue({
                 ...response.data,
                 bannerBase64: response.data.bannerURL,
+                // bannerValueId:this.combo.
               });
               this.selectConnectionType = response.data.bannerConnectionType;
             }
@@ -167,7 +161,6 @@ export class BannerUpsert extends Base implements OnInit {
   }
 
   public onBannerImageChange(event: any) {
-    console.log(event)
     const param: IConvertImageParams = initialConvertImageParam({
       event,
       allowedTypes: [ImageTypeEnum.jpeg, ImageTypeEnum.png],

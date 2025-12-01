@@ -133,7 +133,7 @@
           </div>
 
           <select formControlName="bannerValueId" libValidateControl
-            [ngClass]="{ 'bg-slate-100 text-slate-500': bannerForm.get('bannerValueId')?.disabled }" class="w-full border border-slate-300 rounded-[5px] px-3 py-2 pl-10 pr-10 text-sm text-gray-800 
+            [ngClass]="{ 'bg-slate-100 text-slate-500': bannerForm.controls.bannerValueId }" class="w-full border border-slate-300 rounded-[5px] px-3 py-2 pl-10 pr-10 text-sm text-gray-800 
           placeholder-slate-400
                          focus:ring-[#82181A] focus:outline-none focus:border-[#82181A] 
                         transition duration-200 text-base">

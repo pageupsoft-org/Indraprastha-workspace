@@ -15,15 +15,13 @@
 
       <!-- Status filter -->
       <div class="relative inline-block">
-        <select
-          class="appearance-none border border-slate-200 bg-white py-2 px-3 rounded-lg shadow-sm pr-8 text-sm">
-          <option>All</option>
-          <option>Paid</option>
-          <option>Not yet paid</option>
-          <option>Cancelled</option>
+        <select class="appearance-none border border-slate-200 bg-white py-2 px-3 rounded-lg shadow-sm pr-8 text-sm">
+          <option value="">All</option>
+          @for (item of statusValue; track $index) {
+          <option [ngValue]="item.value">{{item.value}}</option>
+          }
         </select>
-        <span
-          class="pointer-events-none absolute right-2 top-1/2 -translate-y-1/2 text-slate-400">▾</span>
+        <span class="pointer-events-none absolute right-2 top-1/2 -translate-y-1/2 text-slate-400">▾</span>
       </div>
     </div>
 
@@ -51,10 +49,7 @@
             <!-- Product -->
             <td class="px-6 py-4">
               <div class="flex items-center gap-4">
-                <img
-                  src="assets/image/saree-13.png"
-                  class="w-[80px] h-[100px] rounded-md border"
-                  alt="product" />
+                <img src="assets/image/saree-13.png" class="w-[80px] h-[100px] rounded-md border" alt="product" />
                 <div>
                   <div class="font-medium">Cozy Knit Sweater</div>
                 </div>
@@ -66,21 +61,17 @@
 
             <!-- Status -->
             <td class="px-6 py-4 text-center">
-              <select
-                (change)="updateStatus()"
-                [formControl]="changeStatusForm.controls.orderStatus"
-                class="px-3 py-2 text-xs font-medium rounded-[3px] border focus-outline:none border-none"
-                [ngClass]="{
+              <select (change)="updateStatus()" [formControl]="changeStatusForm.controls.orderStatus"
+                class="px-3 py-2 text-xs font-medium rounded-[3px] border focus-outline:none border-none" [ngClass]="{
                   'text-[#045A5E] bg-[#DEFDFF]': orderStatus === 'InProcess',
                   'text-yellow-700 bg-yellow-100': orderStatus === 'InShipment',
                   'text-purple-700 bg-purple-100': orderStatus === 'Placed',
                   'text-red-800 bg-red-100': orderStatus === 'Cancel',
                   'text-green-800 bg-green-100': orderStatus === 'Complete'
-                }"
-              >
-              
+                }">
+
                 @for (item of statusValue; track $index) {
-                  <option [ngValue]="item.value">{{item.value}}</option>
+                <option [ngValue]="item.value">{{item.value}}</option>
                 }
               </select>
             </td>
@@ -93,8 +84,7 @@
 
             <!-- Action -->
             <td class="px-6 py-6 text-center">
-              <button
-                (click)="routeToViewtPage(0)"
+              <button (click)="routeToViewtPage(0)"
                 class="w-[50%] py-2 text-white inline-block px-3 py-1 text-xs font-medium rounded-[4PX] border border-slate-200 bg-[#82181A]  cursor-pointer">
                 View
               </button>
@@ -104,13 +94,10 @@
         </tbody>
       </table>
       <div class="mt-[20px]">
-            <app-pagination-controller
-          [paginationControlMetaData]="paginationMetadata"
-          (ETopChanged)="topChange($event)"
-          (pageChanged)="pageChange($event)"
-        ></app-pagination-controller>
+        <app-pagination-controller [paginationControlMetaData]="paginationMetadata" (ETopChanged)="topChange($event)"
+          (pageChanged)="pageChange($event)"></app-pagination-controller>
       </div>
     </div>
-      
+
   </div>
 </div>

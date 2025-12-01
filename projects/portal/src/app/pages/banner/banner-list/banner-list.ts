@@ -67,7 +67,6 @@ export class BannerList extends Base implements OnInit {
       if (res) {
         this.httpDeletePromise<IGenericResponse<boolean>>(ApiRoutes.BANNER.GET_BY_ID(id))
           .then((response) => {
-            console.log(response);
             if (response) {
               if (response.data) {
                 this.toaster.show({ message: 'Delete Successful', duration: 3000, type: EToastType.success });
@@ -89,7 +88,6 @@ export class BannerList extends Base implements OnInit {
       .then((response) => {
         if (response?.data && response.data.total) {
           this.banners = response.data.banners;
-          console.log(this.banners);
           handlePagination(
             this.paginationMetaData,
             response.data.total,
@@ -104,13 +102,11 @@ export class BannerList extends Base implements OnInit {
   }
 
   public topChange(top: number) {
-    console.log("Top:", top);
     this.payLoad.top = top;
     this.getBannerData();
   }
 
   public pageChange(pageIndex: number) {
-    console.log("Page Index:", pageIndex);
     this.payLoad.pageIndex = pageIndex;
     this.getBannerData();
   }
