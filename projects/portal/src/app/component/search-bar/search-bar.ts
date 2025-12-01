@@ -12,7 +12,6 @@ import { SearchBase } from '../../core/base/search-base';
 export class SearchBar {
   public placeholderText = input('Search items');
   public emitText = output<string>();
-  public searchString$: Subject<string> = new Subject<string>();
   public inputText: FormControl<string | null> = new FormControl<string | null>(null);
 
   constructor() {

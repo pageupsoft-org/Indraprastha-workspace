@@ -37,10 +37,6 @@ export class ProductList extends SearchBase<IRGeneric<IProductResponseRoot>> imp
     super();
   }
 
-  override ngOnInit(): void {
-    super.ngOnInit();
-  }
-
   protected override getData(): Observable<IRGeneric<IProductResponseRoot>> {
     return this.httpPostObservable<IRGeneric<IProductResponseRoot>, IProductPagination>(
       ApiRoutes.PRODUCT.ALL,
@@ -72,6 +68,7 @@ export class ProductList extends SearchBase<IRGeneric<IProductResponseRoot>> imp
 
   public emitText(searchText: string) {
     this.payLoad.search = searchText;
+    this.searchString$.next(searchText);
     this.payLoad.pageIndex = 1;
     this.search();
   }

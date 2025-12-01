@@ -72,7 +72,7 @@
           </thead>
 
           <tbody class="divide-y divide-gray-200 dark:divide-gray-700">
-            @for (product of data().data.products; track $index) {
+            @for (product of productList(); track $index) {
             <tr class="hover:bg-indigo-50/50 dark:hover:bg-gray-700/50 transition duration-200">
               <!-- Index -->
               <td class="px-6 py-5 text-sm text-gray-600 dark:text-gray-400 font-medium">
@@ -139,11 +139,13 @@
 
         <!-- pagination -->
 
-        <app-pagination-controller
+        @if(productList().length){
+          <app-pagination-controller
           [paginationControlMetaData]="paginationMetaData"
           (ETopChanged)="topChange($event)"
           (pageChanged)="pageChange($event)"
-        ></app-pagination-controller>
+          ></app-pagination-controller>
+        }
       </div>
     </div>
   </div>
