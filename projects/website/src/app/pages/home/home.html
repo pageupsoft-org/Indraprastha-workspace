@@ -2,9 +2,16 @@
 <main class="smooth-scroll">
   <!-- Banner section with image -->
   <section>
-    <div>
-      <!-- <img src="assets/images/banner-image.png" class="object-cover w-full" alt="Banner Image" /> -->
-       <img [src]="this.topBanners[0]?.bannerURL" alt="">
+    <div class="h-[1000px]">
+      <img
+        [src]="topBanners[0]?.bannerURL"
+        fetchpriority="high"
+        loading="eager"
+        width="1920"
+        height="600"
+        class="w-full object-cover h-full"
+        alt="Banner"
+      />
     </div>
   </section>
 
@@ -37,12 +44,15 @@
   </section>
 
   <!-- new arrivals -->
-  <app-product-slider [title]="'NEW ARRIVALS'" [productType]="DashboardProductTypeStringEnum.NewArrival"></app-product-slider>
+  <app-product-slider
+    [title]="'NEW ARRIVALS'"
+    [productType]="DashboardProductTypeStringEnum.NewArrival"
+  ></app-product-slider>
 
   <!-- middle banner  -->
   <section class="middle-banner">
     <div class="imagemiddle-banner">
-      <img [src]="this.middleBanners[0]?.bannerURL" class="w-full" alt=""/>
+      <img [src]="this.middleBanners[0]?.bannerURL" class="w-full" alt="" />
     </div>
   </section>
 
