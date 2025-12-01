@@ -1,168 +1,33 @@
-<!-- <nav class="fixed top-0 z-50 w-[70%] bg-[#82181A] border-b border-gray-200 dark:bg-gray-[#f9fafb] dark:border-gray-[#f9fafb]">
-  <div class="px-3 py-3 lg:px-5 lg:pl-3 bg-[#82181A]">
-    <div class="flex items-center justify-between">
-      <div class="flex items-center justify-start rtl:justify-end">
-        <button data-drawer-target="logo-sidebar" data-drawer-toggle="logo-sidebar" aria-controls="logo-sidebar"
-          type="button"
-          class="inline-flex items-center p-2 text-sm text-gray-500 rounded-lg sm:hidden hover:bg-gray-100 focus:outline-none focus:ring-2 focus:ring-gray-200 dark:text-gray-400 dark:hover:bg-gray-700 dark:focus:ring-gray-600">
-          <span class="sr-only">Open sidebar</span>
-          <svg class="w-6 h-6" aria-hidden="true" fill="currentColor" viewBox="0 0 20 20"
-            xmlns="http://www.w3.org/2000/svg">
-            <path clip-rule="evenodd" fill-rule="evenodd"
-              d="M2 4.75A.75.75 0 012.75 4h14.5a.75.75 0 010 1.5H2.75A.75.75 0 012 4.75zm0 10.5a.75.75 0 01.75-.75h7.5a.75.75 0 010 1.5h-7.5a.75.75 0 01-.75-.75zM2 10a.75.75 0 01.75-.75h14.5a.75.75 0 010 1.5H2.75A.75.75 0 012 10z">
-            </path>
-          </svg>
-        </button>
-        <a class="flex">
-          
-          <span class="self-center ml-[15px] text-[15px] font-semibold whitespace-nowrap dark:text-white text-[#f9fafb]">INDRAPRASTHA</span>
-        </a>
-      </div>
-      <div class="flex items-center" (click)="toggleDropDown()">
-        <div class="flex items-center ms-3">
-          <div>
-            <button type="button"
-              class="flex text-sm bg-gray-800 rounded-full focus:ring-4 focus:ring-gray-300 dark:focus:ring-gray-600"
-              aria-expanded="false" data-dropdown-toggle="dropdown-user">
-              <span class="sr-only">Open user menu</span>
-              <img class="w-8 h-8 rounded-full cursor-pointer" src="https://flowbite.com/docs/images/people/profile-picture-5.jpg"
-                alt="user photo" />
-            </button>
-          </div>
-          <div
-            class="z-50 hidden my-4 text-base list-none bg-white divide-y divide-gray-100 rounded-sm shadow-sm dark:bg-gray-700 dark:divide-gray-600"
-            id="dropdown-user">
-            <div class="px-4 py-3" role="none">
-              <p class="text-sm text-gray-900 dark:text-white" role="none">Neil Sims</p>
-              <p class="text-sm font-medium text-gray-900 truncate dark:text-gray-300" role="none">
-                neil.sims@flowbite.com
-              </p>
-            </div>
-            <ul class="py-1" role="none">
-              <li>
-                <a href="#"
-                  class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 dark:text-gray-300 dark:hover:bg-gray-600 dark:hover:text-white"
-                  role="menuitem">Dashboard</a>
-              </li>
-              <li>
-                <a href="#"
-                  class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 dark:text-gray-300 dark:hover:bg-gray-600 dark:hover:text-white"
-                  role="menuitem">Settings</a>
-              </li>
-              <li>
-                <a href="#"
-                  class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 dark:text-gray-300 dark:hover:bg-gray-600 dark:hover:text-white"
-                  role="menuitem">Earnings</a>
-              </li>
-              <li>
-                <a href="#"
-                  class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 dark:text-gray-300 dark:hover:bg-gray-600 dark:hover:text-white"
-                  role="menuitem">Sign out</a>
-              </li>
-            </ul>
-          </div>
-        </div>
-        @if(dropDownOpen){
-        <div class="absolute right-6 mt-[60px] w-40 bg-white border border-gray-200 rounded-lg shadow-lg z-50">
-          <a class="block px-4 py-2 text-gray-700 hover:bg-gray-100 rounded-t-lg cursor-pointer" (click)="logout()">Logout</a>
-        </div>
-        }
-      </div>
-    </div>
-  </div>
-</nav> -->
+<nav class="fixed top-0 z-50 w-full bg-white h-[70px]
+            flex justify-end items-center shadow-[-1px_6px_27px_-13px_rgba(0,0,0,0.15)] px-4">
 
-<nav class="fixed top-0 z-50 w-full bg-[#FFFFFF] h-[70px] 
-flex justify-between items-center shadow-[-1px_6px_27px_-13px_rgba(0,0,0,0.15)]">
-  <!-- <div class="flex justify-between">
-    <div class="ml-[350px]">
-      <img
-      class="w-15 h-15 rounded-full cursor-pointer"
-      src="https://flowbite.com/docs/images/people/profile-picture-5.jpg"
-      alt="user photo"
-    />
-    <div class="flex flex-col">
-      <p class="m-0">! Hi Homesh</p>
-      <h4 class="m-0 font-semibold">Welcome back</h4>
-    </div>
+  <!-- Right side (profile) -->
+  <div class="flex items-center space-x-4">
+
+    <!-- Greeting Text -->
+    <div class="leading-tight text-right">
+      <p class="text-sm text-gray-500 m-0">Hi, Homesh !</p>
+      <h4 class="text-lg font-bold text-gray-800 m-0">Welcome Back!</h4>
     </div>
 
-    <div class="flex justify-between">
-      <input type="search" name="" id="" />
-      <img src="assets/image/frame.png" alt="" class="w-[99.62px] h-[32.46px]" />
-    </div>
-  </div> -->
-
-  <!-- left side -->
-    <div class="flex items-center space-x-4 ml-[325px]">
-      <!-- Profile Picture -->
-      <div class="relative">
+    <div class="relative">
+      <button (click)="toggleDropDown()" class="rounded-full focus:outline-none focus:ring-0 p-0">
         <img
           class="w-12 h-12 rounded-full object-cover border-2 border-yellow-400 cursor-pointer hover:scale-105 transition-transform"
           src="https://flowbite.com/docs/images/people/profile-picture-5.jpg" alt="user photo" />
-        <!-- Optional online indicator -->
-        <span class="absolute bottom-0 right-0 w-3 h-3 bg-green-500 border-2 border-white rounded-full"></span>
-      </div>
+      </button>
 
-      <!-- Greeting Text -->
-      <div class="leading-tight">
-        <p class="text-sm text-gray-600">Hi, Homesh !</p>
-        <h4 class="text-lg font-bold text-gray-800">Welcome Back!</h4>
+      <!-- online indicator -->
+      <span class="absolute bottom-0 right-0 w-3 h-3 bg-green-500 border-2 border-white rounded-full"></span>
+
+      @if(dropDownOpen){
+      <div class="absolute right-0 top-full mt-2 w-40 bg-white border border-gray-200 rounded-lg shadow-lg z-50">
+        <a class="block px-4 py-2 text-gray-700 hover:bg-gray-100 rounded-t-lg cursor-pointer"
+          (click)="logout()">Logout</a>
       </div>
+      }
 
     </div>
 
-    <!-- right side -->
-    <div class="flex items-center space-x-5 mr-[20px]">
-      <!-- Search -->
-      <div class="relative">
-        <input type="text" aria-label="Search by Order Number" placeholder="Search by Order Number..."
-          class="w-[291px] h-[40px] rounded-[23px] pl-4 pr-10 border border-gray-200 bg-white text-sm placeholder-[#808080] focus:outline-none focus:ring-2 focus:ring-indigo-200" />
-        <!-- Search icon -->
-        <button aria-hidden="true"
-          class="absolute right-1 top-1/2 -translate-y-1/2 w-8 h-8 
-          rounded-full flex items-center justify-center hover:bg-gray-100 bg-gray-200">
-          <!-- magnifier SVG -->
-          <svg xmlns="http://www.w3.org/2000/svg" class="w-[16px] h-[16px] text-[#AC302F] cursor-pointer" fill="none" viewBox="0 0 24 24"
-            stroke="currentColor">
-            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-              d="M21 21l-4.35-4.35M10.5 18A7.5 7.5 0 1 1 18 10.5 7.5 7.5 0 0 1 10.5 18z" />
-          </svg>
-        </button>
-      </div>
-
-      <!-- Notifications -->
-      <!-- <button
-        class="relative w-10 h-10 rounded-full flex items-center justify-center bg-white border border-gray-200 hover:shadow-sm">
-      
-        <svg xmlns="http://www.w3.org/2000/svg" class="w-5 h-5 text-gray-700" fill="none" viewBox="0 0 24 24"
-          stroke="currentColor">
-          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-            d="M15 17h5l-1.405-1.405A2.032 2.032 0 0118 14.158V11a6 6 0 10-12 0v3.159c0 .538-.214 1.055-.595 1.436L4 17h11z" />
-        </svg>
-
-        <span class="absolute -top-1 -right-1 w-2.5 h-2.5 rounded-full bg-red-500 border-2 border-white"></span>
-      </button>  -->
-
-            <!-- Cart -->
-      <!-- <button
-        class="relative w-10 h-10 rounded-full flex items-center justify-center bg-white border border-gray-200 hover:shadow-sm">
-        <svg xmlns="http://www.w3.org/2000/svg" class="w-5 h-5 text-gray-700" fill="none" viewBox="0 0 24 24"
-          stroke="currentColor">
-          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-            d="M3 3h2l.4 2M7 13h10l4-8H5.4M7 13L5.4 6M7 13l-2 5h14l-2-5M10 21a1 1 0 11-2 0 1 1 0 012 0zm8 0a1 1 0 11-2 0 1 1 0 012 0z" />
-        </svg>
-
-        <span
-          class="absolute -top-1 -right-1 inline-flex items-center justify-center px-1.5 py-0.5 text-xs font-semibold leading-none text-white bg-red-600 rounded-full">2</span>
-      </button> -->
-
-   <div class="w-[70px]">
-    <img src="assets/image/frame.png" alt="">
-   </div>
-
-    </div>
-
-  <!-- </div> -->
-
+  </div>
 </nav>
