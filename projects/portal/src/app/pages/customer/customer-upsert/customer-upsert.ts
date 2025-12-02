@@ -38,13 +38,12 @@ export class CustomerUpsert extends Base implements OnInit {
   }
 
   // Close Model
-  public onCancel() {
-    this.dialogRef.close();
+  public onCancel(isSuccess?:boolean) {
+    this.dialogRef.close(isSuccess);
   }
 
   // Submit Customer Form
   public onSubmitCustomer() {
-    // console.log(this.customerRegisetr.value);
     const customerPayload: ICustomer = {
       firstName: this.customerRegisetr.controls.firstName.value || '',
       lastName: this.customerRegisetr.controls.lastName.value || '',
@@ -56,7 +55,7 @@ export class CustomerUpsert extends Base implements OnInit {
     if (this.customerRegisetr.valid) {
       this.httpPostPromise<IGenericResponse<boolean>, ICustomer>(ApiRoutes.LOGIN.REGISTER_CUSTOMER, customerPayload).then(response => {
         if (!response.errorMessage) {
-          this.onCancel()
+          this.onCancel(true)
           this.toster.show({ message: "Customer Registration Successful", duration: 3000, type: EToastType.success });
         }
       })
@@ -71,7 +70,6 @@ export class CustomerUpsert extends Base implements OnInit {
 
   // Fetch Customer Data
   public fetchCustomer(id: number) {
-    console.log(id)
     if (id) {
       this.httpGetPromise<any>(ApiRoutes.CUSTOMERS.GET_BY_ID(id)).then((response) => {
         if (response) {

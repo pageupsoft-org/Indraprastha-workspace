@@ -107,7 +107,6 @@ export class ProductUpsert extends Base implements OnInit {
   private getCategoryCombo() {
     this.httpGetPromise<IRGeneric<IGenericComboResponse[]>>(ApiRoutes.CATEGORY.GET_COMBO)
       .then((response) => {
-        console.log(response);
         if (response) {
           if (response.data) {
             this.categoryCombo = response.data;
@@ -220,7 +219,6 @@ export class ProductUpsert extends Base implements OnInit {
   }
 
   public upsertProduct() {
-    console.log(this.productForm.value);
     // if (this.productForm.valid) {
     const data = this.productForm.getRawValue();
     data.descriptions.forEach((desc: any) => {
@@ -255,7 +253,6 @@ export class ProductUpsert extends Base implements OnInit {
           });
           this.productForm = initializeIProductForm();
           this.router.navigate([this.appRoutes.PRODUCT]);
-          console.log(this.productForm.value)
         } else {
           this.toastService.show({
             message: res.errorMessage,
@@ -267,17 +264,14 @@ export class ProductUpsert extends Base implements OnInit {
     );
     // }
     // else {
-    //   this.productForm.markAllAsTouched();
-
-    //   console.log(this.productForm.controls.name);
-
-    //   this.productForm.updateValueAndValidity();
+      this.productForm.markAllAsTouched();
+      this.productForm.updateValueAndValidity();
 
     // }
   }
 
+
   public onDescriptionTypeChange(form: FormGroup<IDescriptionForm>) {
-    console.log(form);
     if (form.controls.descriptionType.value == EDescriptionType.Json) {
       this.mutateJsonValueControl(null, form);
     } else {
@@ -292,7 +286,6 @@ export class ProductUpsert extends Base implements OnInit {
       ApiRoutes.PRODUCT.GET_BY_ID(productId)
     ).then((res) => {
       if (res?.data) {
-        console.log(res.data)
         // this.patchProductData(res);
         const {
           id,

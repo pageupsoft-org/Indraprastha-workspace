@@ -4,17 +4,17 @@
 
   <div class="max-w-7xl mx-auto">
 
+
     <div class="flex justify-between items-center mb-8">
 <app-search-bar (emitText)="emitText($event)"></app-search-bar>
 
       <!-- Add Button (your original color #82181A) -->
       <div>
         <button type="button" (click)="routeToUpsertPage(0)" class="px-2 py-2 bg-[#82181A] hover:bg-[#6d1416] text-white rounded-[5px] 
-             shadow-md hover:shadow-lg transition-all duration-200 flex items-center gap-2">
+             shadow-md hover:shadow-lg transition-all duration-200 flex items-center gap-2 cursor-pointer">
           <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4" />
           </svg>
-          Add products
           Add products
         </button>
       </div>
@@ -54,9 +54,10 @@
             @for (product of productList(); track $index) {
             <tr class="hover:bg-indigo-50/50 dark:hover:bg-gray-700/50 transition duration-200">
 
+
               <!-- Index -->
               <td class="px-6 py-5 text-sm text-gray-600 dark:text-gray-400 font-medium">
-                {{ $index + 1 }}
+                {{ payLoad.top * (payLoad.pageIndex - 1) + $index + 1 }}
               </td>
 
               <!-- Name + Avatar + Email -->

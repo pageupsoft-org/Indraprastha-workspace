@@ -61,7 +61,7 @@ export class OrderList extends Base implements OnInit {
   }
 
   // ADD ID WHEN USER VIEW OR UPDATE
-  public routeToViewtPage(orderId: number) {
+  public routeToViewPage(orderId: number) {
     console.log(orderId, "orderid")
     this.router.navigate([this.appRoutes.ORDERS_UPSERT], {
       queryParams: {
@@ -136,16 +136,15 @@ export class OrderList extends Base implements OnInit {
 
 
   public topChange(top: number) {
-    console.log("Top:", top);
     this.payLoad.top = top;
     this.getAllOrders();
   }
 
   public pageChange(pageIndex: number) {
-    console.log("Page Index:", pageIndex);
     this.payLoad.pageIndex = pageIndex;
     this.getAllOrders();
   }
 
+  
 
 }

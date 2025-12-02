@@ -3,7 +3,6 @@
 
 <div class="bg-white rounded-4xl shadow-sm border border-slate-200 max-h-[80vh] md:max-h-[72vh] overflow-auto">
   <form [formGroup]="bannerForm" class="grid gap-3 grid-cols-1 md:grid-cols-3 p-6">
-
     <!-- Header -->
     <div class="md:col-span-3 flex items-center justify-between mb-2">
       <div class="flex items-center gap-3">
@@ -39,15 +38,13 @@
         </div>
 
         <input formControlName="name" libValidateControl type="text" placeholder="Enter banner name" minlength="3"
-          maxlength="60" class="w-full border border-slate-300 rounded-[5px] px-3 py-2 pl-10 pr-10 text-sm text-gray-800 
-            placeholder-slate-400
-                         focus:ring-[#82181A] focus:outline-none focus:border-[#82181A] 
-                        transition duration-200 text-base" />
+          maxlength="60"
+          class="w-full border border-slate-300 rounded-[5px] px-3 py-2 pl-10 pr-10 text-sm text-gray-800 placeholder-slate-400 focus:ring-[#82181A] focus:outline-none focus:border-[#82181A] transition duration-200 text-base" />
       </div>
     </div>
 
     <div>
-      <label class=" block text-sm font-medium text-slate-700 mb-1">Banner Connection Type</label>
+      <label class="block text-sm font-medium text-slate-700 mb-1">Banner Connection Type</label>
 
       <!-- wrapper + left icon -->
       <div class="relative">
@@ -58,10 +55,8 @@
           </svg>
         </div>
 
-        <select formControlName="bannerConnectionType" (change)="selectBannerConnectionType()" libValidateControl class="w-full border border-slate-300 rounded-[5px] px-3 py-2 pl-10 pr-10 text-sm text-gray-800 
-           placeholder-slate-400
-           focus:ring-[#82181A] focus:outline-none focus:border-[#82181A] 
-          transition duration-200 text-base">
+        <select formControlName="bannerConnectionType" (change)="selectBannerConnectionType()" libValidateControl
+          class="w-full border border-slate-300 rounded-[5px] px-3 py-2 pl-10 pr-10 text-sm text-gray-800 placeholder-slate-400 focus:ring-[#82181A] focus:outline-none focus:border-[#82181A] transition duration-200 text-base">
           <!-- options -->
           @for (item of bannerConnectionTypes; track $index) {
           <option [ngValue]="item.value">{{ item.value }}</option>
@@ -81,10 +76,8 @@
           </svg>
         </div>
 
-        <select formControlName="bannerType" libValidateControl class="w-full border border-slate-300 rounded-[5px] px-3 py-2 pl-10 pr-10 text-sm text-gray-800 
-          placeholder-slate-400
-          focus:ring-[#82181A] focus:outline-none focus:border-[#82181A] 
-          transition duration-200 text-base">
+        <select formControlName="bannerType" libValidateControl
+          class="w-full border border-slate-300 rounded-[5px] px-3 py-2 pl-10 pr-10 text-sm text-gray-800 placeholder-slate-400 focus:ring-[#82181A] focus:outline-none focus:border-[#82181A] transition duration-200 text-base">
           <option [ngValue]="null" selected disabled>Select Banner Type</option>
           @for (item of bannerTypes; track $index) {
           <option [ngValue]="item.key">{{ item.value }}</option>
@@ -107,10 +100,8 @@
             </svg>
           </div>
 
-          <select formControlName="gender" libValidateControl class="w-full border border-slate-300 rounded-[5px] px-3 py-2 pl-10 pr-10 text-sm text-gray-800 
-          placeholder-slate-400
-          focus:ring-[#82181A] focus:outline-none focus:border-[#82181A] 
-          transition duration-200 text-base">
+          <select formControlName="gender" libValidateControl
+            class="w-full border border-slate-300 rounded-[5px] px-3 py-2 pl-10 pr-10 text-sm text-gray-800 placeholder-slate-400 focus:ring-[#82181A] focus:outline-none focus:border-[#82181A] transition duration-200 text-base">
             <option [ngValue]="null" selected disabled>-- Select Gender --</option>
             @for (item of genders; track $index) {
             <option [ngValue]="item.key">{{ item.value }}</option>
@@ -122,7 +113,8 @@
       <!-- Category / Product selector -->
       <div>
         <label class="block text-sm font-medium text-slate-700 mb-1">{{
-          selectConnectionType || 'Select Connection'}}</label>
+          selectConnectionType || 'Select Connection'
+          }}</label>
 
         <div class="relative">
           <div class="absolute left-3 top-3 pointer-events-none">
@@ -133,36 +125,27 @@
           </div>
 
           <select formControlName="bannerValueId" libValidateControl
-            [ngClass]="{ 'bg-slate-100 text-slate-500': bannerForm.get('bannerValueId')?.disabled }" class="w-full border border-slate-300 rounded-[5px] px-3 py-2 pl-10 pr-10 text-sm text-gray-800 
-          placeholder-slate-400
-                         focus:ring-[#82181A] focus:outline-none focus:border-[#82181A] 
-                        transition duration-200 text-base">
+            [ngClass]="{ 'bg-slate-100 text-slate-500': bannerForm.controls.bannerValueId }"
+            class="w-full border border-slate-300 rounded-[5px] px-3 py-2 pl-10 pr-10 text-sm text-gray-800 placeholder-slate-400 focus:ring-[#82181A] focus:outline-none focus:border-[#82181A] transition duration-200 text-base">
             <!-- <option [ngValue]="null" selected disabled>-- Select BannerConnection Type --</option>
               @for (item of combo; track $index) {
               <option [ngValue]="item.id">{{ item.name }}</option>
               } -->
             @if(selectConnectionType === 'None'){
             <option [ngValue]="null" selected disabled>Choose BannerConnection</option>
-            }
-            @else if(selectConnectionType === 'Category'){
+            } @else if(selectConnectionType === 'Category'){
             <option [ngValue]="null" selected disabled>-- Select Category --</option>
             @for (item of combo; track item.id) {
             <option [ngValue]="item.id">{{ item.name }}</option>
-            }
-            }
-            @else if(selectConnectionType === 'Product'){
+            } } @else if(selectConnectionType === 'Product'){
             <option [ngValue]="null" selected disabled>-- Select Product --</option>
             @for (item of combo; track item.id) {
             <option [ngValue]="item.id">{{ item.name }}</option>
-            }
-            }
-
-
+            } }
           </select>
         </div>
       </div>
     </div>
-
 
     <!-- Description -->
     <div class="md:col-span-3">
@@ -176,10 +159,8 @@
           </svg>
         </div>
 
-        <textarea formControlName="description" rows="3" placeholder="Write short description..." maxlength="250" class="w-full border border-slate-300 rounded-[5px] px-3 py-2 pl-10 text-sm resize-none 
-          placeholder-slate-400
-                         focus:ring-[#82181A] focus:outline-none focus:border-[#82181A] 
-                        transition duration-200 text-base"></textarea>
+        <textarea formControlName="description" rows="3" placeholder="Write short description..." maxlength="250"
+          class="w-full border border-slate-300 rounded-[5px] px-3 py-2 pl-10 text-sm resize-none placeholder-slate-400 focus:ring-[#82181A] focus:outline-none focus:border-[#82181A] transition duration-200 text-base"></textarea>
       </div>
     </div>
 
@@ -205,9 +186,14 @@
           </button>
 
           <!-- image preview -->
-          <ng-container *ngIf="bannerForm.controls.bannerBase64.value">
+          @if(bannerForm.controls.bannerBase64.value){
+          <ng-container>
             <img [src]="bannerForm.controls.bannerBase64.value" class="absolute inset-0 w-full h-full object-cover" />
           </ng-container>
+          }
+          @else{
+            <h1>no image</h1>
+          }
         </div>
       </div>
     </div>
@@ -243,7 +229,7 @@
       </button>
 
       <button type="submit" (click)="onBannerSubmit()"
-        class="px-7 py-2 rounded-[5px] bg-[#82181A] hover:bg-[#A33A3C]  text-white font-medium shadow-lg transition cursor-pointer">
+        class="px-7 py-2 rounded-[5px] bg-[#82181A] hover:bg-[#A33A3C] text-white font-medium shadow-lg transition cursor-pointer">
         Save Banner
       </button>
     </div>

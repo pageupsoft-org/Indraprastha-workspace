@@ -16,7 +16,7 @@ import {
 } from '../../../core/interface/response/customer.response';
 import { MatDialog } from '@angular/material/dialog';
 import { CustomerUpsert } from '../customer-upsert/customer-upsert';
-import { ApiRoutes, EToastType, ToastService } from '@shared';
+import { ApiRoutes, EToastType, MConfirmationModalData, ToastService } from '@shared';
 import { PaginationController } from '../../../component/pagination-controller/pagination-controller';
 import { SearchBase } from '../../../core/base/search-base';
 import { Observable } from 'rxjs';
@@ -30,8 +30,7 @@ import { SearchBar } from '../../../component/search-bar/search-bar';
 })
 export class CustomerList
   extends SearchBase<IGenericResponse<ICustomerResponse>>
-  implements OnInit
-{
+  implements OnInit {
   public readonly dialog = inject(MatDialog);
   public searchInput = new FormControl('');
   public payload: IPaginationPayload = initializePagInationPayload();
@@ -43,7 +42,6 @@ export class CustomerList
 
   // Open PopUp
   public openModel(id: number = 0) {
-    console.log(id);
     const dialogRef = this.dialog.open(CustomerUpsert, {
       width: '80%',
       maxWidth: '900px',
@@ -52,9 +50,9 @@ export class CustomerList
       },
     });
 
-    dialogRef.afterClosed().subscribe((result) => {
+    dialogRef.afterClosed().subscribe((result: boolean) => {
       if (result) {
-        console.log('Form Submitted:', result);
+        this.search()
       }
     });
   }
@@ -89,22 +87,33 @@ export class CustomerList
 
   // Delete Customer
   public deleteCustomer(id: number) {
-    this.httpDeletePromise<IGenericResponse<boolean>>(ApiRoutes.CUSTOMERS.GET_BY_ID(id))
-      .then((response) => {
-        if (response) {
-          if (response.data) {
-            this.toaster.show({
-              message: 'Customer Delete Successful',
-              duration: 3000,
-              type: EToastType.success,
-            });
-            this.search();
-          }
-        }
-      })
-      .catch((error) => {
-        // handle error
-      });
+    const modalData: MConfirmationModalData = {
+      heading: 'Confirm Delete',
+      body: 'Are you sure you want to delete this Customer?',
+      yesText: 'Yes',
+      noText: 'No',
+    };
+    this.objConfirmationUtil.getConfirmation(modalData).then((res: boolean) => {
+      if (res) {
+        this.httpDeletePromise<IGenericResponse<boolean>>(ApiRoutes.CUSTOMERS.GET_BY_ID(id))
+          .then((response) => {
+            if (response) {
+              if (response.data) {
+                this.toaster.show({
+                  message: 'Customer Delete Successful',
+                  duration: 3000,
+                  type: EToastType.success,
+                });
+                this.search();
+              }
+            }
+          })
+          .catch((error) => {
+            // handle error
+          });
+      }
+    })
+
   }
 
   public topChange(top: number) {

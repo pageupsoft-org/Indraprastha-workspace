@@ -96,7 +96,6 @@ export class CategoryList
         if (res) {
           this.httpDeletePromise<IGenericResponse<boolean>>(ApiRoutes.CATEGORY.GET_BY_ID(id))
             .then((response) => {
-              console.log(response);
               if (response) {
                 if (response.data) {
                   this.toaster.show({

@@ -7,7 +7,7 @@ import { clearLocalStorageItems, PlatformService } from '@shared';
 
 @Component({
   selector: 'app-sidebar',
-  standalone: true,  
+  standalone: true,
   imports: [CommonModule, FormsModule, RouterModule],
   templateUrl: './sidebar.html',
   styleUrl: './sidebar.scss',
@@ -32,7 +32,7 @@ export class Sidebar implements OnInit {
   //     UserRoleStringEnum[this.loginUser.UserType as keyof typeof UserRoleStringEnum];
   // }
 
-   public logout(){
+  public logout() {
     clearLocalStorageItems();
     this.router.navigate(['login'])
   }

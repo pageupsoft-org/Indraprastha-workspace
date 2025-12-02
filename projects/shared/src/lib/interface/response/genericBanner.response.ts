@@ -12,17 +12,17 @@ export interface IBanner {
     id: number;
     name: string;
     description: string;
+    bannerURL: string;
     bannerConnectionType: string;
     bannerType: string;
     gender: string;
-    bannerBase64: string;
-    isActive: string;
-    bannerURL:string;
+    isActive: boolean;
+    bannerValueId: number;
 }
 
-export interface IBannerAddBannerValueId{
-    bannerValueId:number;
-}
+// export interface IBannerAddBannerValueId {
+
+// }
 
 export interface IBannerPagination extends IPaginationPayload {
     bannerType: EbannerTypes | null;

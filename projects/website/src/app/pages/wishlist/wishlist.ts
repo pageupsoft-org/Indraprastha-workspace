@@ -14,6 +14,7 @@ import { IRWishlistRoot, Product } from '../../core/interface/response/wishlist.
 import { wishlistArray } from '../../../dummy-data';
 import { WishlistService } from '../../core/services/wishlist-service';
 
+
 @Component({
   selector: 'app-wishlist',
   imports: [RouterLink],
