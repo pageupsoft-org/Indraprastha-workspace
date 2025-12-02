@@ -7,11 +7,13 @@
     "start-portal": "ng serve portal",
     "build": "ng build",
     "build-portal": "ng build portal --output-path=dist/portal",
-    "build-website": "ng build website --output-path=dist/website",
+    "build-portal:prod": "ng build portal --output-path=dist/portal --configuration=production",
+    "build-website:prod": "ng build website --output-path=dist/website --configuration=production",
     "watch": "ng build --watch --configuration development",
     "test": "ng test",
     "start-website": "ng serve website",
-    "serve-website": "node dist/website/server/server.mjs"
+    "serve-website": "node dist/website/server/server.mjs",
+    "build-shared:prod": "ng build shared"
   },
   "prettier": {
     "printWidth": 100,
