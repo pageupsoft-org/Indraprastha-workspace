@@ -16,5 +16,5 @@ export interface Product {
   size: string
   quantity: number
   id: number,
-  icon: string
+  icon: string | null
 }
