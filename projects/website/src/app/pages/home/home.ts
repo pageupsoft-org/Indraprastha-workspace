@@ -43,7 +43,7 @@ export class Home extends Base implements AfterViewInit, OnInit {
 
   public callAllBannerApis() {
     const topPayload = this.buildBannerPayload(EbannerTypes.Top, EBannerConnectionType.Category, GenderTypeEnum.Women);
-    const middlePayload = this.buildBannerPayload(EbannerTypes.Middle, EBannerConnectionType.Category, GenderTypeEnum.Men);
+    const middlePayload = this.buildBannerPayload(EbannerTypes.Middle, EBannerConnectionType.Category, GenderTypeEnum.Women);
 
     this.getBannerData(topPayload, 'top');
     this.getBannerData(middlePayload, 'middle');
