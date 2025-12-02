@@ -3,20 +3,16 @@
   <!-- Banner section with image -->
   <section>
     @if(topBanners){
-    <div>
-      <div class="banner">
-        <img
-          [src]="topBanners"
-          alt="Top banner"
-          (error)="onBannerError('top')"
-          fetchpriority="high"
-          loading="eager"
-          width="1920"
-          height="600"
-          class="w-full object-cover h-full"
-        />
-      </div>
-    </div>
+    <img
+      [src]="topBanners"
+      alt="Top banner"
+      (error)="onBannerError('top')"
+      fetchpriority="high"
+      loading="eager"
+      width="1920"
+      height="600"
+      class="w-full object-cover"
+    />
     }
   </section>
 

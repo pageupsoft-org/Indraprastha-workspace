@@ -14,6 +14,7 @@ import { UtilityService } from '../../core/services/utility-service';
 import { clearLocalStorageItems, EToastType, GenderTypeEnum } from '@shared';
 import { ToastService } from '@shared';
 import { CartService } from '../../core/services/cart-service';
+import { WishlistService } from '../../core/services/wishlist-service';
 
 
 @Component({
@@ -38,7 +39,7 @@ export class Header {
 
   constructor(
     public _utitlityService: UtilityService, private router: Router, private _toastService: ToastService,
-    public cartService: CartService
+    public cartService: CartService, public wishlistService: WishlistService
   ) {
     // _utitlityService.isUserLoggedIn.set(true); 
   }

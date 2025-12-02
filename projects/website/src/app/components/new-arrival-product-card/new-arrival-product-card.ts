@@ -2,6 +2,10 @@ import { Component, EventEmitter, input, Input, OnInit, Output } from '@angular/
 import { RNewArrivals } from '../../core/interface/response/newArrival.response';
 import { Router } from '@angular/router';
 import { appRoutes } from '../../core/const/appRoutes.const';
+import e from 'express';
+import { UtilityService } from '../../core/services/utility-service';
+import { WishlistService } from '../../core/services/wishlist-service';
+import { MConfirmationModalData } from '@shared';
 
 @Component({
   selector: 'app-new-arrival-product-card',
@@ -19,11 +23,16 @@ export class NewArrivalProductCard implements OnInit {
   };
   @Output() addButtonPressed: EventEmitter<null> = new EventEmitter<null>();
 
-  constructor(private router: Router) {}
+  constructor(
+    private router: Router,
+    private utilService: UtilityService,
+    private wishlistService: WishlistService
+  ) {}
 
   ngOnInit(): void {}
 
-  public addProduct() {
+  public addProduct(event: any) {
+    event.stopPropagation();
     this.addButtonPressed.emit();
   }
 
@@ -33,5 +42,27 @@ export class NewArrivalProductCard implements OnInit {
         id: this.product.productId,
       },
     });
+  }
+
+  public toggleWishList(event: any) {
+    event.stopPropagation();
+
+    if (this.utilService.isUserLoggedIn()) {
+      this.wishlistService.addToWishlist(this.product.productId);
+    } else {
+      const modalData: MConfirmationModalData = {
+        heading: 'Login',
+        body: 'To add items to your wishlist, please login first.',
+        yesText: 'Yes',
+        noText: 'No',
+      };
+      this.wishlistService.objectCOnfirmationUtil
+        .getConfirmation(modalData)
+        .then((res: boolean) => {
+          if (res) {
+            this.utilService.openLoginForm.emit();
+          }
+        });
+    }
   }
 }

@@ -1,10 +1,11 @@
-import { Component, OnInit} from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { ProductSlider } from '../home/product-slider/product-slider';
 import {
   DashboardProductTypeStringEnum,
   DescriptionTypeStringEnum,
   AppLoadingButton,
   Loader,
+  PlatformService,
 } from '@shared';
 import { ActivatedRoute, Params } from '@angular/router';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
@@ -37,14 +38,16 @@ export class ProductDetail extends ProductDetailBase implements OnInit {
     list[i]._isAccordionOpen = !list[i]._isAccordionOpen;
   }
 
-  constructor(private activatedRoute: ActivatedRoute) {
+  constructor(private activatedRoute: ActivatedRoute, private platformService: PlatformService) {
     super();
   }
 
   ngOnInit(): void {
     this.activatedRoute.queryParams.subscribe((param: Params) => {
       if (param && param['id']) {
-        window.scrollTo({ top: 0, behavior: 'smooth' });
+        if (this.platformService.isBrowser) {
+          window.scrollTo({ top: 0, behavior: 'smooth' });
+        }
         this.getProductDetail(+param['id']);
       }
     });

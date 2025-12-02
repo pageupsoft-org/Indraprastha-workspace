@@ -8,7 +8,7 @@
   <!-- The main container for the product cards. Flex-wrap allows the cards to wrap to a new row. -->
   <div class="justify-center flex flex-wrap grid md:grid-cols-5 gap-10">
     <!-- Product Card 1 -->
-    @for (wishlistItem of wishlistArray(); track $index) {
+    @for (wishlistItem of wishlistService.wishlistProducts(); track $index) {
     <div class="">
       <div class="image-wrapper">
         <img
@@ -22,21 +22,29 @@
           class="product-image image-secondary"
         />
 
-        <div class="absolute top-3 right-3 p-2 bg-white rounded-full shadow-md cursor-pointer" (click)="removeFromWishList(wishlistItem.id)">
-          <img [src]="wishlistItem.icon" alt="delete icon" class="w-[17px] h-[17px]"  (mouseenter)="addRedColorDeleteIcon(true, $index)" (mouseleave)="addRedColorDeleteIcon(false, $index)"/>
+        <div
+          class="absolute top-3 right-3 p-2 bg-white rounded-full shadow-md cursor-pointer"
+          (click)="wishlistService.removeFromWishList(wishlistItem.id, $index)"
+        >
+          <img
+            [src]="wishlistItem.icon"
+            alt="delete icon"
+            class="w-[17px] h-[17px]"
+            (mouseenter)="addRedColorDeleteIcon(true, $index)"
+            (mouseleave)="addRedColorDeleteIcon(false, $index)"
+          />
         </div>
       </div>
-      <a [routerLink]="['/' + productDetailRoute]" [queryParams]="{ id: wishlistItem.id}">
+      <a [routerLink]="['/' + productDetailRoute]" [queryParams]="{ id: wishlistItem.id }">
         <div class="py-4">
-          <p class="text-lg font-medium text-gray-800">{{wishlistItem.name}}</p>
-          <p class="text-2xl font-medium text-gray-500 mt-1">Rs. {{wishlistItem.mrp}}</p>
+          <p class="text-lg font-medium text-gray-800">{{ wishlistItem.name }}</p>
+          <p class="text-2xl font-medium text-gray-500 mt-1">Rs. {{ wishlistItem.mrp }}</p>
         </div>
       </a>
     </div>
     }
-
-    @if(wishlistArray().length === 0) {
-      <h2 class="font-bold">No data</h2>
-    }
   </div>
+  @if(wishlistService.wishlistProducts().length === 0) {
+  <span class="font-bold flex justify-center text-xl">Your wishlist is empty</span>
+  }
 </div>
