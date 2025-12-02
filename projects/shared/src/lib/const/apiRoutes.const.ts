@@ -80,5 +80,8 @@ export const ApiRoutes = {
   },
   DASHBOARD:{
     BASE:'/api/Dashboard',
+  },
+  ABOUT:{
+   GET:'/api/About'
   }
 };
