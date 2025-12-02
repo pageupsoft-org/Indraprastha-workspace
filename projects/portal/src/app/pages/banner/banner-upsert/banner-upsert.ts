@@ -6,8 +6,8 @@ import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
 import { BannerList } from '../banner-list/banner-list';
 import { CommonModule } from '@angular/common';
 import { ApiRoutes, convertImageToBase64, EBannerConnectionType, EbannerTypes, ErrorHandler, EToastType, GenderTypeEnum, IBanner, IBannerResponse, MStringEnumToArray, stringEnumToArray, ToastService, ValidateControl } from '@shared';
-import {  _IBanner, IGenericComboResponse } from '../../../core/interface/response/banner.response';
-import {  IBannerForm } from '../../../core/interface/request/banner.request';
+import { IGenericComboResponse } from '../../../core/interface/response/banner.response';
+import { IBannerForm, IBannerFormValue } from '../../../core/interface/request/banner.request';
 import { IConvertImageParams, IConvertImageResult, initialConvertImageParam } from '../../../core/interface/model/portal-util.model';
 import { ImageSizeConst, ImageTypeEnum } from '../../../core/enum/image.enum';
 import { convertImagesToBase64Array } from '../../../core/utils/portal-utility.util';
@@ -40,14 +40,14 @@ export class BannerUpsert extends Base implements OnInit {
     bannerBase64: new FormControl(null, [Validators.required]),
   });
 
-  constructor(private toaster: ToastService, private router:Router) {
+  constructor(private toaster: ToastService, private router: Router) {
     super();
+    this.getCategoryCombo();
+    this.getProductCombo()
   }
 
   ngOnInit(): void {
     this.bannerForm.controls.bannerValueId.disable();
-    this.getCategoryCombo();
-    this.getProductCombo()
     const id = this.data.id;
     if (id) {
       this.getBannerById(id);
@@ -67,14 +67,23 @@ export class BannerUpsert extends Base implements OnInit {
   }
 
   public onBannerSubmit() {
-    if(this.bannerForm.controls.bannerBase64.value === '' || this.bannerForm.controls.bannerBase64.value === null){
-      this.toaster.show({ message: 'Please upload banner image', duration: 3000, type: EToastType.error });
-      return;
-    }
     if (this.bannerForm.valid) {
-      this.httpPostPromise<IGenericResponse<boolean>, IBanner>(
+
+      if (this.bannerForm.controls.bannerBase64.value === null) {
+        this.toaster.show({ message: 'Please upload banner image', duration: 3000, type: EToastType.error });
+        return;
+      }
+
+      const payload = this.bannerForm.getRawValue();
+
+      const previousImage = payload.bannerBase64
+      if (previousImage && previousImage.startsWith('https')) {
+        payload.bannerBase64 = ""
+      }
+
+      this.httpPostPromise<IGenericResponse<boolean>, IBannerFormValue>(
         ApiRoutes.BANNER.BASE,
-        this.bannerForm.value as IBanner
+        payload
       ).then((response) => {
         if (response) {
           if (response.data) {
@@ -124,7 +133,7 @@ export class BannerUpsert extends Base implements OnInit {
       this.selectConnectionType = bannerConnectionValue;
       this.bannerForm.controls.bannerValueId.setValidators([Validators.required]);
       this.bannerForm.controls.bannerValueId.updateValueAndValidity();
-    }else if ( bannerConnectionValue === 'Product'){
+    } else if (bannerConnectionValue === 'Product') {
       this.bannerForm.controls.bannerValueId.reset();
       this.bannerForm.controls.bannerValueId.enable();
       this.selectConnectionType = bannerConnectionValue;
@@ -141,7 +150,7 @@ export class BannerUpsert extends Base implements OnInit {
 
   private getBannerById(id: number) {
     if (id) {
-      this.httpGetPromise<IGenericResponse<_IBanner>>(ApiRoutes.BANNER.GET_BY_ID(id))
+      this.httpGetPromise<IGenericResponse<IBanner>>(ApiRoutes.BANNER.GET_BY_ID(id))
         .then((response) => {
           if (response) {
             if (response.data) {
@@ -150,6 +159,7 @@ export class BannerUpsert extends Base implements OnInit {
                 bannerBase64: response.data.bannerURL,
                 // bannerValueId:this.combo.
               });
+              console.log(this.bannerForm.value, "get data")
               this.selectConnectionType = response.data.bannerConnectionType;
             }
           }
