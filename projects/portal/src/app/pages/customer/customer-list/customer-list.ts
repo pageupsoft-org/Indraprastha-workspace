@@ -10,10 +10,7 @@ import {
 } from '../../../core/interface/model/pagination-detail.model';
 import { handlePagination } from '../../../core/utils/pagination.util';
 import { IGenericResponse } from '../../../core/interface/response/genericResponse';
-import {
-  CustomerResponse,
-  ICustomerResponse,
-} from '../../../core/interface/response/customer.response';
+
 import { MatDialog } from '@angular/material/dialog';
 import { CustomerUpsert } from '../customer-upsert/customer-upsert';
 import { ApiRoutes, EToastType, MConfirmationModalData, ToastService } from '@shared';
@@ -21,6 +18,7 @@ import { PaginationController } from '../../../component/pagination-controller/p
 import { SearchBase } from '../../../core/base/search-base';
 import { Observable } from 'rxjs';
 import { SearchBar } from '../../../component/search-bar/search-bar';
+import { CustomerResponse, ICustomerResponse } from '../customer.model';
 
 @Component({
   selector: 'app-customer-list',

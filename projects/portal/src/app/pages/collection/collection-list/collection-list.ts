@@ -1,9 +1,6 @@
 import { Component, inject, OnInit, signal, WritableSignal } from '@angular/core';
 import { Base, handlePagination } from '@portal/core';
-import {
-  ICollection,
-  ICollectionResponse,
-} from '../../../core/interface/response/collection.response';
+
 import { MAT_DIALOG_DATA, MatDialog } from '@angular/material/dialog';
 import { CollectionUpsert } from '../collection-upsert/collection-upsert';
 import {
@@ -26,6 +23,7 @@ import {
 import { SearchBase } from '../../../core/base/search-base';
 import { Observable } from 'rxjs';
 import { SearchBar } from '../../../component/search-bar/search-bar';
+import { ICollection, ICollectionResponse } from '../collection.model';
 
 @Component({
   selector: 'app-collection-list',

@@ -6,12 +6,12 @@ import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
 import { BannerList } from '../banner-list/banner-list';
 import { CommonModule } from '@angular/common';
 import { ApiRoutes, convertImageToBase64, EBannerConnectionType, EbannerTypes, ErrorHandler, EToastType, GenderTypeEnum, IBanner, IBannerResponse, MStringEnumToArray, stringEnumToArray, ToastService, ValidateControl } from '@shared';
-import { IGenericComboResponse } from '../../../core/interface/response/banner.response';
-import { IBannerForm, IBannerFormValue } from '../../../core/interface/request/banner.request';
+
 import { IConvertImageParams, IConvertImageResult, initialConvertImageParam } from '../../../core/interface/model/portal-util.model';
 import { ImageSizeConst, ImageTypeEnum } from '../../../core/enum/image.enum';
 import { convertImagesToBase64Array } from '../../../core/utils/portal-utility.util';
 import { Router } from '@angular/router';
+import { IBannerForm, IBannerFormValue, IGenericComboResponse } from '../banner.model';
 
 @Component({
   selector: 'app-banner-upsert',
@@ -83,7 +83,7 @@ export class BannerUpsert extends Base implements OnInit {
 
       this.httpPostPromise<IGenericResponse<boolean>, IBannerFormValue>(
         ApiRoutes.BANNER.BASE,
-        payload
+        payload as IBannerFormValue
       ).then((response) => {
         if (response) {
           if (response.data) {

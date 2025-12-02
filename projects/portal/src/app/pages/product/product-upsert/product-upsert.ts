@@ -8,16 +8,7 @@ import {
   ReactiveFormsModule,
   Validators,
 } from '@angular/forms';
-import {
-  IDescriptionForm,
-  initializeDescriptionForm,
-  initializeIProductForm,
-  initializeJsonTextForm,
-  initializeStockForm,
-  initializeVariantForm,
-  IProductForm,
-  IVariantData,
-} from '../../../core/interface/request/product.request';
+
 import {
   ApiRoutes,
   EDescriptionType,
@@ -33,7 +24,6 @@ import {
   stringEnumToArray,
   ValidateControl,
 } from '@shared';
-import { IGenericComboResponse } from '../../../core/interface/response/banner.response';
 import { CommonModule } from '@angular/common';
 import { arrayToJson, convertImagesToBase64Array } from '../../../core/utils/portal-utility.util';
 import { IDropdownSettings, NgMultiSelectDropDownModule } from 'ng-multiselect-dropdown';
@@ -44,6 +34,8 @@ import {
 } from '../../../core/interface/model/portal-util.model';
 import { ImageSizeConst, ImageTypeEnum } from '../../../core/enum/image.enum';
 import { IConvertImageResult } from '../../../core/interface/model/portal-util.model';
+import { IGenericComboResponse } from '../../banner/banner.model';
+import { IDescriptionForm, initializeDescriptionForm, initializeIProductForm, initializeJsonTextForm, initializeStockForm, initializeVariantForm, IProductForm, IVariantData } from '../product.model';
 
 @Component({
   selector: 'app-product-upsert',

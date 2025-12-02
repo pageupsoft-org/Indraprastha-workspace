@@ -2,13 +2,13 @@ import { Component, inject } from '@angular/core';
 import { ApiRoutes, EToastType, GenderTypeEnum, MStringEnumToArray, stringEnumToArray, ToastService, ValidateControl } from '@shared';
 import { CommonModule } from '@angular/common';
 import { FormControl, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
-import { ICollectionForm } from '../../../core/interface/request/collection.request';
-import { ICollection } from '../../../core/interface/response/collection.response';
+
 import { IGenericResponse } from '../../../core/interface/response/genericResponse';
 import { Base } from '@portal/core';
 import { ErrorHandler } from '@shared';
 import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
 import { EmployeeList } from '../../employee/employee-list/employee-list';
+import { ICollection, ICollectionForm } from '../collection.model';
 
 @Component({
   selector: 'app-collection-upsert',

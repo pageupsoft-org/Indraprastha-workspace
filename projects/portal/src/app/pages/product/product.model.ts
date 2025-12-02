@@ -1,6 +1,5 @@
 import { FormArray, FormControl, FormGroup, Validators } from '@angular/forms';
-import { IPaginationPayload } from './genericPayload';
-import { EDescriptionType, EStockSize, GenderTypeEnum, patternWithMessage } from '@shared';
+import { EDescriptionType, EStockSize, GenderTypeEnum, IPaginationPayload, patternWithMessage } from '@shared';
 
 
 export interface IProductForm {
@@ -160,4 +159,23 @@ export interface IProductPagination extends IPaginationPayload {
   gender: GenderTypeEnum | null;
 }
 
-// export interface
+export interface IProductResponseRoot{
+    total:number;
+    products:IProduct[]
+}
+
+export interface IProduct {
+  name: string;
+  isCustomSize: boolean;
+  customSizeName: string;
+  color: string[];
+  mrp: number;
+  gender: string;
+  productURL: string[];
+  isActive: boolean;
+  stockId: number;
+  size: string;
+  quantity: number;
+  id: number;
+}
+

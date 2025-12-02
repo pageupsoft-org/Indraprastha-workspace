@@ -1,5 +1,6 @@
 import { FormControl } from "@angular/forms";
 
+
 export interface ICategoryForm{
     id:FormControl<number|null>
     name : FormControl<string | null>
@@ -15,3 +16,12 @@ export interface ICategory{
     description:string;
     collectionName:number;
 }
+
+
+
+export interface ICategoryResponse {
+    total: number;
+    categories: ICategory[];
+}
+
+

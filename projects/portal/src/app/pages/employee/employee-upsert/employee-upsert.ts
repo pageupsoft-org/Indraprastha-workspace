@@ -5,8 +5,8 @@ import { CommonModule } from '@angular/common';
 import { EmployeeList } from '../employee-list/employee-list';
 import { Base } from '../../../core/base/base';
 import { IGenericResponse } from '../../../core/interface/response/genericResponse';
-import { IEmployeeForm, IEmployee,  } from '../../../core/interface/request/employee.request';
 import { ApiRoutes, ErrorHandler, EToastType, patternWithMessage, ToastService, ValidateControl } from '@shared';
+import { IEmployee, IEmployeeForm } from '../employee.model';
 
 
 
