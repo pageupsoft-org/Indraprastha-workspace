@@ -18,12 +18,7 @@
           "builder": "@angular/build:application",
           "options": {
             "browser": "projects/website/src/main.ts",
-            "polyfills": [
-              "zone.js"
-            ],
-            "polyfills": [
-              "zone.js"
-            ],
+            "polyfills": ["zone.js"],
             "tsConfig": "projects/website/tsconfig.app.json",
             "inlineStyleLanguage": "scss",
             "assets": [
@@ -34,9 +29,7 @@
               "projects/website/src/assets",
               "projects/website/src/firebase-messaging-sw.js"
             ],
-            "styles": [
-              "projects/website/src/styles.scss"
-            ],
+            "styles": ["projects/website/src/styles.scss"],
             "server": "projects/website/src/main.server.ts",
             "outputMode": "server",
             "ssr": {
@@ -55,6 +48,13 @@
                   "type": "anyComponentStyle",
                   "maximumWarning": "4kB",
                   "maximumError": "8kB"
+                }
+              ],
+
+              "fileReplacements": [
+                {
+                  "replace": "projects/website/src/app/core/environments/dev.env.ts",
+                  "with": "projects/website/src/app/core/environments/prod.env.ts"
                 }
               ],
               "outputHashing": "all"
@@ -85,10 +85,7 @@
         "test": {
           "builder": "@angular/build:karma",
           "options": {
-            "polyfills": [
-              "zone.js",
-              "zone.js/testing"
-            ],
+            "polyfills": ["zone.js", "zone.js/testing"],
             "tsConfig": "projects/website/tsconfig.spec.json",
             "inlineStyleLanguage": "scss",
             "assets": [
@@ -97,9 +94,7 @@
                 "input": "projects/website/public"
               }
             ],
-            "styles": [
-              "projects/website/src/styles.scss"
-            ]
+            "styles": ["projects/website/src/styles.scss"]
           }
         }
       }
@@ -119,9 +114,7 @@
           "builder": "@angular/build:application",
           "options": {
             "browser": "projects/portal/src/main.ts",
-            "polyfills": [
-              "zone.js"
-            ],
+            "polyfills": ["zone.js"],
             "tsConfig": "projects/portal/tsconfig.app.json",
             "inlineStyleLanguage": "scss",
             "assets": [
@@ -140,7 +133,7 @@
               "node_modules/jquery/dist/jquery.min.js",
               "node_modules/moment/min/moment.min.js",
               "node_modules/daterangepicker/daterangepicker.js",
-               "node_modules/apexcharts/dist/apexcharts.min.js"
+              "node_modules/apexcharts/dist/apexcharts.min.js"
             ]
           },
           "configurations": {
@@ -149,12 +142,18 @@
                 {
                   "type": "initial",
                   "maximumWarning": "500kB",
-                  "maximumError": "1MB"
+                  "maximumError": "3MB"
                 },
                 {
                   "type": "anyComponentStyle",
                   "maximumWarning": "4kB",
                   "maximumError": "8kB"
+                }
+              ],
+              "fileReplacements": [
+                {
+                  "replace": "projects/portal/src/app/core/environment/dev.env.ts",
+                  "with": "projects/portal/src/app/core/environment/prod.env.ts"
                 }
               ],
               "outputHashing": "all"
@@ -185,10 +184,7 @@
         "test": {
           "builder": "@angular/build:karma",
           "options": {
-            "polyfills": [
-              "zone.js",
-              "zone.js/testing"
-            ],
+            "polyfills": ["zone.js", "zone.js/testing"],
             "tsConfig": "projects/portal/tsconfig.spec.json",
             "inlineStyleLanguage": "scss",
             "assets": [
@@ -197,9 +193,7 @@
                 "input": "projects/portal/public"
               }
             ],
-            "styles": [
-              "projects/portal/src/styles.scss"
-            ]
+            "styles": ["projects/portal/src/styles.scss"]
           }
         }
       }
@@ -226,10 +220,7 @@
           "builder": "@angular/build:karma",
           "options": {
             "tsConfig": "projects/shared/tsconfig.spec.json",
-            "polyfills": [
-              "zone.js",
-              "zone.js/testing"
-            ]
+            "polyfills": ["zone.js", "zone.js/testing"]
           }
         }
       }

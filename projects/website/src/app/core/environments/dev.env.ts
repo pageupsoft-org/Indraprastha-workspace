@@ -1,6 +1,6 @@
 export const environment = {
-  // baseUrl: 'https://wonderful-brattain.77-245-76-122.plesk.page',
-  baseUrl: 'http://indraprasth.runasp.net',
+  baseUrl: 'https://wonderful-brattain.77-245-76-122.plesk.page',
+  // baseUrl: 'http://indraprasth.runasp.net',
 
   firebase: {
     apiKey: 'AIzaSyCAH3JSPltdvmP-AaPG7pJaqlsFe1rCF9A',
@@ -14,10 +14,3 @@ export const environment = {
   vapidKey:
     'BGQTV_dtJpCHMOsXIyqHDM9kPUDEG-CkViSu55_BOAcdk2-ewp9EEdXRi4148uNjoNrJFn_X-Fo-uXjQeHGjFM8',
 };
-
-// export const environment = {
-//   // apiBaseUrl: 'https://localhost:7048/api/',
-//   apiBaseUrl: 'https://wonderful-brattain.77-245-76-122.plesk.page',
-//   // apiBaseUrl: 'https://eloquent-euclid.88-150-154-84.plesk.page/api/',
-//   // apiBaseUrl: 'https://sanskardhani-service-f2akdffnf8edeugy.centralindia-01.azurewebsites.net/api/',
-// };
