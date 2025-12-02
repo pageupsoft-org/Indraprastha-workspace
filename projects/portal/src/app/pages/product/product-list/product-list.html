@@ -4,6 +4,7 @@
 
   <div class="max-w-7xl mx-auto">
 
+
     <div class="flex justify-between items-center mb-8">
 <app-search-bar (emitText)="emitText($event)"></app-search-bar>
 
@@ -52,6 +53,7 @@
           <tbody class="divide-y divide-gray-200 dark:divide-gray-700">
             @for (product of productList(); track $index) {
             <tr class="hover:bg-indigo-50/50 dark:hover:bg-gray-700/50 transition duration-200">
+
 
               <!-- Index -->
               <td class="px-6 py-5 text-sm text-gray-600 dark:text-gray-400 font-medium">

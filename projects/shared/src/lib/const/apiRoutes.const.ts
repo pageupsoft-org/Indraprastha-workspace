@@ -67,6 +67,7 @@ export const ApiRoutes = {
   },
   WISH: {
     GET: '/api/Wish',
+    ADD: '/api/Wish',
     DELETE: (id: number) => `/api/Wish/${id}`,
     MENU: '/api/Product/Menu',
     DASHBOARD: '/api/Product/Dashboard',

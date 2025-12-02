@@ -1,8 +1,9 @@
 import { Component, ElementRef, signal, ViewChild } from '@angular/core';
-import { Login } from "./login/login";
+import { Login } from './login/login';
 import { EAuthManager } from '../../core/enum/auth-manager.enum';
-import { Register } from "./register/register";
+import { Register } from './register/register';
 import { CommonModule } from '@angular/common';
+import { UtilityService } from '../../core/services/utility-service';
 
 @Component({
   selector: 'app-auth-manager',
@@ -19,7 +20,10 @@ export class AuthManager {
 
   public readonly EAuthManager = EAuthManager;
 
-  constructor(){
+  constructor(private utilService: UtilityService) {
+    utilService.openLoginForm.subscribe(() => {
+      this.openForm();
+    });
   }
 
   public openForm() {

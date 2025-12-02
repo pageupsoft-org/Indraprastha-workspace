@@ -17,7 +17,7 @@ import {
 import AOS from 'aos';
 import { UtilityService } from './core/services/utility-service';
 import { IResponseGenderMenuRoot } from './core/interface/response/gender-menu.response';
-import { dummyDataGenderMenu } from '../dummy-data';
+
 
 @Component({
   selector: 'app-root',

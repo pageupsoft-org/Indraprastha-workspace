@@ -18,7 +18,14 @@ export class Sidebar implements OnInit {
 
   public menuItems: WritableSignal<IMenuSideBarItem[]> = signal(MenuItems);
 
-  constructor(private router: Router, private platformService: PlatformService) { }
+  constructor(private router:Router, private platformService: PlatformService){}
+
+  async ngOnInit(){
+    
+    if(this.platformService.isBrowser){
+      await import('boxicons');
+    }
+  }
   // constructor(private tokenService: TokenService) {
   //   this.loginUser = this.tokenService.getDecodedToken();
   //   this.loginUser.UserType =
@@ -28,12 +35,6 @@ export class Sidebar implements OnInit {
   public logout() {
     clearLocalStorageItems();
     this.router.navigate(['login'])
-  }
-
-  async ngOnInit() {
-    if (this.platformService.isBrowser) {
-      await import('boxicons');
-    }
   }
 
 }

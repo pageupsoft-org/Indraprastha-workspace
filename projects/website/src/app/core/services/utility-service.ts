@@ -1,4 +1,4 @@
-import { Injectable, signal, WritableSignal } from '@angular/core';
+import { EventEmitter, Injectable, signal, WritableSignal } from '@angular/core';
 import { IResponseGenderMenuRoot } from '../interface/response/gender-menu.response';
 
 @Injectable({
@@ -9,6 +9,7 @@ export class UtilityService {
 
   public genderMenuData: WritableSignal<IResponseGenderMenuRoot[]> = signal([]);
 
-  constructor(){
-  }
+  public openLoginForm: EventEmitter<void> = new EventEmitter<void>();
+
+  constructor() {}
 }

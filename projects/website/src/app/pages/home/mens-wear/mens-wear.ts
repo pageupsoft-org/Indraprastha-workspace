@@ -19,10 +19,12 @@ import {
 import { IDashboadRequest } from '../product-slider/dashboard.request';
 import { DashboardResponseRoot, Product } from '../product-slider/dashboard.response';
 import { CommonModule } from '@angular/common';
+import { RouterLink } from "@angular/router";
+import { appRoutes } from '../../../core/const/appRoutes.const';
 
 @Component({
   selector: 'app-mens-wear',
-  imports: [CommonModule],
+  imports: [CommonModule, RouterLink],
   templateUrl: './mens-wear.html',
   styleUrl: './mens-wear.scss',
 })
@@ -34,6 +36,7 @@ export class MensWear implements AfterViewInit {
   private readonly visibleCount = 5;
 
   public mensWearList: WritableSignal<Product[]> = signal([]);
+  public productDetailRoute = appRoutes.PRODUCT_DETAIL;
 
   private payload: IDashboadRequest = {
     ...initializePagInationPayload(),
