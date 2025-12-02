@@ -2,5 +2,6 @@ export const appRoutes = {
   HOME: 'home',
   WISHLIST: 'wishlist',
   PRODUCT_DETAIL: 'product-detail',
-  CHECKOUT: 'checkout'
+  CHECKOUT: 'checkout',
+  ABOUT_US: 'about-us'
 };
