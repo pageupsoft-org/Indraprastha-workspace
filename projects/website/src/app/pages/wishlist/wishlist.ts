@@ -22,7 +22,6 @@ import { WishlistService } from '../../core/services/wishlist-service';
 })
 export class Wishlist {
   public readonly productDetailRoute: string = appRoutes.PRODUCT_DETAIL;
-  private readonly objectCOnfirmationUtil: ConfirmationUtil = new ConfirmationUtil();
 
   constructor(public wishlistService: WishlistService) {
     wishlistService.getWishlistProduct();

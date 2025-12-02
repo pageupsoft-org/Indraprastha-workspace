@@ -48,7 +48,19 @@ export class NewArrivalProductCard implements OnInit {
     event.stopPropagation();
 
     if (this.utilService.isUserLoggedIn()) {
-      this.wishlistService.addToWishlist(this.product.productId);
+      if (this.product.wishList) {
+        this.wishlistService.removeFromWishList(this.product.productId).then((res: boolean) => {
+          if (res) {
+            this.product.wishList = false;
+          }
+        });
+      } else {
+        this.wishlistService.addToWishlist(this.product.productId).then((res: boolean) => {
+          if (res) {
+            this.product.wishList = true;
+          }
+        });
+      }
     } else {
       const modalData: MConfirmationModalData = {
         heading: 'Login',

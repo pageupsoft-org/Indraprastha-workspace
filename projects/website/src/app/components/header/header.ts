@@ -1,21 +1,15 @@
-import {
-  Component,
-  signal,
-  ViewChild,
-  WritableSignal,
-} from '@angular/core';
+import { Component, signal, ViewChild, WritableSignal } from '@angular/core';
 import { GenderMenu } from './gender-menu/gender-menu';
 import { Router, RouterLink } from '@angular/router';
 import { appRoutes } from '../../core/const/appRoutes.const';
 import { CommonModule } from '@angular/common';
 import { ShoppingCart } from '../shopping-cart/shopping-cart';
-import { AuthManager } from "../auth-manager/auth-manager";
+import { AuthManager } from '../auth-manager/auth-manager';
 import { UtilityService } from '../../core/services/utility-service';
 import { clearLocalStorageItems, EToastType, GenderTypeEnum } from '@shared';
 import { ToastService } from '@shared';
 import { CartService } from '../../core/services/cart-service';
 import { WishlistService } from '../../core/services/wishlist-service';
-
 
 @Component({
   selector: 'app-header',
@@ -38,10 +32,13 @@ export class Header {
   public dropdownOpen: boolean = false;
 
   constructor(
-    public _utitlityService: UtilityService, private router: Router, private _toastService: ToastService,
-    public cartService: CartService, public wishlistService: WishlistService
+    public _utitlityService: UtilityService,
+    private router: Router,
+    private _toastService: ToastService,
+    public cartService: CartService,
+    public wishlistService: WishlistService
   ) {
-    // _utitlityService.isUserLoggedIn.set(true); 
+    // _utitlityService.isUserLoggedIn.set(true);
   }
 
   public openCart() {
@@ -74,7 +71,8 @@ export class Header {
     this.dropdownOpen = false;
     // Your logout logic here
     clearLocalStorageItems();
-    this.cartService.cartData.set([]);
+    this.cartService.cartData.update(() => []);
+    this.wishlistService.wishlistProducts.update(() => []);
     this._utitlityService.isUserLoggedIn.set(false);
     this._toastService.show({
       message: 'Logout success',

@@ -24,10 +24,10 @@
 
         <div
           class="absolute top-3 right-3 p-2 bg-white rounded-full shadow-md cursor-pointer"
-          (click)="wishlistService.removeFromWishList(wishlistItem.id, $index)"
+          (click)="wishlistService.removeFromWishList(wishlistItem.id)"
         >
           <img
-            [src]="wishlistItem.icon"
+            [src]="wishlistItem.icon ?? 'assets/icons/delete-black.svg'"
             alt="delete icon"
             class="w-[17px] h-[17px]"
             (mouseenter)="addRedColorDeleteIcon(true, $index)"

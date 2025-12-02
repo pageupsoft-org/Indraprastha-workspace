@@ -2,11 +2,23 @@ import { Component, model, output } from '@angular/core';
 import { EAuthManager } from '../../../core/enum/auth-manager.enum';
 import { FormControl, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 import { HttpErrorResponse } from '@angular/common/http';
-import { ButtonLoader } from "../../../core/component/button-loader/button-loader";
-import { ApiRoutes, ErrorHandler, EToastType, httpPost, ILoginForm, ILoginFormData, IRGeneric, IRLogin, localStorageEnum, setLocalStorageItem, ToastService } from '@shared';
+import { ButtonLoader } from '../../../core/component/button-loader/button-loader';
+import {
+  ApiRoutes,
+  ErrorHandler,
+  EToastType,
+  httpPost,
+  ILoginForm,
+  ILoginFormData,
+  IRGeneric,
+  IRLogin,
+  localStorageEnum,
+  setLocalStorageItem,
+  ToastService,
+} from '@shared';
 import { UtilityService } from '../../../core/services/utility-service';
 import { CartService } from '../../../core/services/cart-service';
-
+import { WishlistService } from '../../../core/services/wishlist-service';
 
 @Component({
   selector: 'app-login',
@@ -23,10 +35,15 @@ export class Login {
   public loginForm: FormGroup<ILoginForm> = new FormGroup<ILoginForm>({
     username: new FormControl(null, [Validators.required]),
     password: new FormControl(null, [Validators.required, Validators.minLength(6)]),
-    fcmToken: new FormControl(""),
+    fcmToken: new FormControl(''),
   });
 
-  constructor(private _toastService: ToastService, private _utilityService: UtilityService, private cartService: CartService) {}
+  constructor(
+    private _toastService: ToastService,
+    private _utilityService: UtilityService,
+    private cartService: CartService,
+    private wishlistService: WishlistService
+  ) {}
 
   public openRegisterForm() {
     this.authType.set(EAuthManager.register);
@@ -52,12 +69,12 @@ export class Login {
                 duration: 2000,
               });
               this.closeForm.emit();
-              this.loginForm.reset()
+              this.loginForm.reset();
 
               this.cartService.addLocalStorageCartToDb();
-            }
-            else{
-               this._toastService.show({
+              this.wishlistService.getWishlistProduct();
+            } else {
+              this._toastService.show({
                 message: res.errorMessage,
                 type: EToastType.error,
                 duration: 2000,
@@ -74,6 +91,4 @@ export class Login {
       this.loginForm.markAllAsTouched();
     }
   }
-
-  
 }
