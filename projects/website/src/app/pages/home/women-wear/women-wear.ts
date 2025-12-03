@@ -19,8 +19,7 @@ import {
 import { IDashboadRequest } from '../product-slider/dashboard.request';
 import { DashboardResponseRoot, Product } from '../product-slider/dashboard.response';
 import { Router } from '@angular/router';
-import { appRoutes } from '../../../core/const/appRoutes.const';
-
+import { appRoutes } from '@website/core';
 @Component({
   selector: 'app-women-wear',
   imports: [],

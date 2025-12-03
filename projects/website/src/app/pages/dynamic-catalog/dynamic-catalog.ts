@@ -21,18 +21,11 @@ import {
   ToastService,
 } from '@shared';
 import { ActivatedRoute, Router, UrlSegment } from '@angular/router';
-import { IRequestProductMenu } from '../../core/interface/model/header.model';
-import {
-  Filter,
-  initializeIResponseDynamicCatalogue,
-  IResponseDynamicCatalogue,
-} from '../../core/interface/response/header.response';
 import { HttpErrorResponse } from '@angular/common/http';
 import { InfiniteScrollDirective } from 'ngx-infinite-scroll';
 
-import { dynamicCatalogData } from '../../../dummy-data';
 import { NgxSkeletonLoaderModule } from 'ngx-skeleton-loader';
-import { appRoutes } from '../../core/const/appRoutes.const';
+import { IRequestProductMenu, IResponseDynamicCatalogue, initializeIResponseDynamicCatalogue, appRoutes } from '@website/core';
 
 @Component({
   selector: 'app-dynamic-catalog',

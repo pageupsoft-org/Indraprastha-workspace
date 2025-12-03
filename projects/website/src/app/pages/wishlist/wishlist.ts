@@ -1,18 +1,7 @@
-import { Component, signal, WritableSignal } from '@angular/core';
+import { Component } from '@angular/core';
 import { RouterLink } from '@angular/router';
 import { appRoutes } from '../../core/const/appRoutes.const';
-import {
-  ApiRoutes,
-  ConfirmationUtil,
-  EToastType,
-  httpDelete,
-  httpGet,
-  IRGeneric,
-  ToastService,
-} from '@shared';
-import { IRWishlistRoot, Product } from '../../core/interface/response/wishlist.response';
-import { wishlistArray } from '../../../dummy-data';
-import { WishlistService } from '../../core/services/wishlist-service';
+import { WishlistService } from '@website/core';
 
 
 @Component({

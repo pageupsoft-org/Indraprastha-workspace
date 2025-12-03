@@ -1,11 +1,7 @@
 import { Component, EventEmitter, input, Input, OnInit, Output } from '@angular/core';
-import { RNewArrivals } from '../../core/interface/response/newArrival.response';
 import { Router } from '@angular/router';
-import { appRoutes } from '../../core/const/appRoutes.const';
-import e from 'express';
-import { UtilityService } from '../../core/services/utility-service';
-import { WishlistService } from '../../core/services/wishlist-service';
 import { MConfirmationModalData } from '@shared';
+import { appRoutes, RNewArrivals, UtilityService, WishlistService } from '@website/core';
 
 @Component({
   selector: 'app-new-arrival-product-card',

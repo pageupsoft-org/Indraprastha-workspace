@@ -1,8 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { FormGroup } from '@angular/forms';
-import { ApiRoutes, httpGet, httpPost, IRGeneric } from '@shared';
-import { error } from 'console';
-import { IAboutForm } from './aboutUs.model';
+import { ApiRoutes, httpGet } from '@shared';
 
 @Component({
   selector: 'app-about-us',

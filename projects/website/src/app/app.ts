@@ -15,8 +15,7 @@ import {
   Toast,
 } from '@shared';
 import AOS from 'aos';
-import { UtilityService } from './core/services/utility-service';
-import { IResponseGenderMenuRoot } from './core/interface/response/gender-menu.response';
+import { IResponseGenderMenuRoot, UtilityService } from '@website/core';
 
 
 @Component({

@@ -15,18 +15,18 @@ export const initializeIResponseDynamicCatalogue = () => {
 export interface IResponseDynamicCatalogue {
   total: number;
   filter: Filter;
-  products: Product[];
+  products: ProductHeader[];
 }
 
 export interface Filter {
-  category: Category[];
+  category: CategoryFilter[];
   color: Color[];
   size: Size[];
   minPrice: number;
   maxPrice: number;
 }
 
-export interface Category {
+export interface CategoryFilter {
   id: number;
   name: string;
   count: number;
@@ -50,7 +50,7 @@ export interface Size {
   count: number;
 }
 
-export interface Product {
+export interface ProductHeader {
   id: number;
   name: string;
   color: string[];

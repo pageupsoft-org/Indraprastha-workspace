@@ -10,9 +10,8 @@ import {
 import { ActivatedRoute, Params } from '@angular/router';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { CommonModule } from '@angular/common';
-import { CartUpdateOperation } from '../../core/enum/cart.enum';
-import { ProductDetailBase } from '../../core/class/product-detail-base';
 import { NgxSkeletonLoaderModule } from 'ngx-skeleton-loader';
+import { CartUpdateOperation, ProductDetailBase } from '@website/core';
 
 @Component({
   selector: 'app-product-detail',

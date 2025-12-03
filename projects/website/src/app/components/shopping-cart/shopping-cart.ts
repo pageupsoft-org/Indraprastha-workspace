@@ -20,15 +20,10 @@ import {
   setLocalStorageItem,
   ToastService,
 } from '@shared';
-import { IRCartRoot } from './shopping-cart.model';
-import { CartUpdateOperation } from '../../core/enum/cart.enum';
-import { CommonModule, CurrencyPipe, NgClass } from '@angular/common';
-import { UtilityService } from '../../core/services/utility-service';
+import { CommonModule, CurrencyPipe } from '@angular/common';
 import { ICartFormData } from '../../pages/product-detail/product-detail.model';
-import { CartService } from '../../core/services/cart-service';
-import { LocalStorageEnum } from '../../core/enum/local-storage.enum';
-import { Router, RouterModule } from '@angular/router';
-import { appRoutes } from '../../core/const/appRoutes.const';
+import { Router} from '@angular/router';
+import { CartUpdateOperation, appRoutes, UtilityService, CartService, LocalStorageEnum } from '@website/core';
 
 @Component({
   selector: 'app-shopping-cart',

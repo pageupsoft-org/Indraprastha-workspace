@@ -1,15 +1,12 @@
 import { Component, signal, ViewChild, WritableSignal } from '@angular/core';
 import { GenderMenu } from './gender-menu/gender-menu';
 import { Router, RouterLink } from '@angular/router';
-import { appRoutes } from '../../core/const/appRoutes.const';
 import { CommonModule } from '@angular/common';
 import { ShoppingCart } from '../shopping-cart/shopping-cart';
 import { AuthManager } from '../auth-manager/auth-manager';
-import { UtilityService } from '../../core/services/utility-service';
 import { clearLocalStorageItems, EToastType, GenderTypeEnum } from '@shared';
 import { ToastService } from '@shared';
-import { CartService } from '../../core/services/cart-service';
-import { WishlistService } from '../../core/services/wishlist-service';
+import { appRoutes, CartService, UtilityService, WishlistService } from '@website/core';
 
 @Component({
   selector: 'app-header',

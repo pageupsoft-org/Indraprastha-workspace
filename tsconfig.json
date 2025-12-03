@@ -25,6 +25,7 @@
         "./dist/shared"
       ],
       "@portal/core": ["./projects/portal/src/app/core"],
+      "@website/core": ["./projects/website/src/app/core"],
     },
     "importHelpers": true,
     "target": "ES2022",
