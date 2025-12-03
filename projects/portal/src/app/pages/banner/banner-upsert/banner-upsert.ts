@@ -6,12 +6,12 @@ import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
 import { BannerList } from '../banner-list/banner-list';
 import { CommonModule } from '@angular/common';
 import { ApiRoutes, convertImageToBase64, EBannerConnectionType, EbannerTypes, ErrorHandler, EToastType, GenderTypeEnum, IBanner, IBannerResponse, MStringEnumToArray, stringEnumToArray, ToastService, ValidateControl } from '@shared';
-import { IGenericComboResponse } from '../../../core/interface/response/banner.response';
-import { IBannerForm, IBannerFormValue } from '../../../core/interface/request/banner.request';
+
 import { IConvertImageParams, IConvertImageResult, initialConvertImageParam } from '../../../core/interface/model/portal-util.model';
 import { ImageSizeConst, ImageTypeEnum } from '../../../core/enum/image.enum';
 import { convertImagesToBase64Array } from '../../../core/utils/portal-utility.util';
 import { Router } from '@angular/router';
+import { IBannerForm, IBannerFormValue, IGenericComboResponse } from '../banner.model';
 
 @Component({
   selector: 'app-banner-upsert',
@@ -26,7 +26,7 @@ export class BannerUpsert extends Base implements OnInit {
   public bannerTypes: MStringEnumToArray[] = stringEnumToArray(EbannerTypes);
   public genders: MStringEnumToArray[] = stringEnumToArray(GenderTypeEnum);
   public combo: IGenericComboResponse[] = [];
-  public selectConnectionType: string = 'None';
+  public selectConnectionType: string | null = 'None';
   public base64Image: string | ArrayBuffer | null = null;
 
   public bannerForm = new FormGroup<IBannerForm>({
@@ -36,7 +36,7 @@ export class BannerUpsert extends Base implements OnInit {
     bannerConnectionType: new FormControl('None'),
     bannerType: new FormControl(null, [Validators.required]),
     gender: new FormControl(null, [Validators.required]),
-    bannerValueId: new FormControl(0,),
+    bannerValueId: new FormControl(0),
     bannerBase64: new FormControl(null, [Validators.required]),
   });
 
@@ -83,7 +83,7 @@ export class BannerUpsert extends Base implements OnInit {
 
       this.httpPostPromise<IGenericResponse<boolean>, IBannerFormValue>(
         ApiRoutes.BANNER.BASE,
-        payload
+        payload as IBannerFormValue
       ).then((response) => {
         if (response) {
           if (response.data) {
@@ -142,7 +142,7 @@ export class BannerUpsert extends Base implements OnInit {
     } else {
       this.bannerForm.controls.bannerValueId.reset();
       this.bannerForm.controls.bannerValueId.disable();
-      this.selectConnectionType = 'None';
+      this.selectConnectionType = bannerConnectionValue;
       this.bannerForm.controls.bannerValueId.setErrors(null);
       this.bannerForm.controls.bannerValueId.updateValueAndValidity();
     }
@@ -159,7 +159,6 @@ export class BannerUpsert extends Base implements OnInit {
                 bannerBase64: response.data.bannerURL,
                 // bannerValueId:this.combo.
               });
-              console.log(this.bannerForm.value, "get data")
               this.selectConnectionType = response.data.bannerConnectionType;
             }
           }

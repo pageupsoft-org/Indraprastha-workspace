@@ -20,9 +20,14 @@ export interface IBannerFormValue {
     description: string | null;
     bannerConnectionType: string | null;
     bannerType: string | null;
-    gender: string | null;
+    gender: GenderTypeEnum | null;
     bannerValueId: number | null;
     bannerBase64: string | null;
+}
+
+export interface IGenericComboResponse{
+    id:number;
+    name:string;
 }
 
 

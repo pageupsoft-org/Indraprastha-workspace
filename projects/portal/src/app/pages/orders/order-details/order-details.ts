@@ -1,13 +1,12 @@
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute, Params } from '@angular/router';
 import { Base } from '@portal/core';
-import { IorderResponseById } from '../../../core/interface/response/order.response';
 import { IGenericResponse } from '../../../core/interface/response/genericResponse';
 import { response } from 'express';
 import { ApiRoutes, EOrderStatus, MConfirmationModalData, MStringEnumToArray, stringEnumToArray } from '@shared';
 import { CommonModule, NgClass } from '@angular/common';
 import { FormControl, FormGroup, ReactiveFormsModule } from '@angular/forms';
-import { IChangeStatusForm, initializeIChangeStatusForm, IUpdateStatusRequest } from '../../../core/interface/request/order.request';
+import { IChangeStatusForm, initializeIChangeStatusForm, IorderResponseById, IUpdateStatusRequest } from '../order.model';
 
 @Component({
   selector: 'app-order-details',

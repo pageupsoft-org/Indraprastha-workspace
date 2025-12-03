@@ -1,4 +1,11 @@
+
+
 import { EOrderStatus } from "@shared";
+
+export interface IDashboardRequest{
+  startDate:string;
+  endDate:string;
+}
 
 export interface IDashboardResponse {
   totalPendings: TotalPendings;

@@ -12,6 +12,7 @@ import { clearLocalStorageItems, PlatformService } from '@shared';
   templateUrl: './sidebar.html',
   styleUrl: './sidebar.scss',
 })
+
 export class Sidebar implements OnInit {
   // public loginUser: IUserSession = {} as IUserSession;
   // public appRoutes = appRoutes;
@@ -26,6 +27,7 @@ export class Sidebar implements OnInit {
       await import('boxicons');
     }
   }
+
   // constructor(private tokenService: TokenService) {
   //   this.loginUser = this.tokenService.getDecodedToken();
   //   this.loginUser.UserType =

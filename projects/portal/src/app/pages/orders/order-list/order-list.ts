@@ -1,16 +1,16 @@
 import { Component, OnInit } from '@angular/core';
 import { IGenericResponse } from '../../../core/interface/response/genericResponse';
-import { IOrder, IOrderResponse } from '../../../core/interface/response/order.response';
 import { Base, handlePagination } from '@portal/core';
 import { initializePagInationPayload } from '../../../core/interface/request/genericPayload';
 // import { IOrderPagination } from '../../../core/interface/request/order.request';
 import { ApiRoutes, EOrderStatus, EToastType, MConfirmationModalData, MStringEnumToArray, stringEnumToArray, ToastService } from '@shared';
 import { Route, Router } from '@angular/router';
-import { IChangeStatusForm, initializeIChangeStatusForm, IOrderPagination, IUpdateStatusRequest } from '../../../core/interface/request/order.request';
+
 import { FormGroup, ReactiveFormsModule } from '@angular/forms';
 import { NgClass } from '@angular/common';
 import { createPaginationMetadata, PaginationControlMetadata } from '../../../core/interface/model/pagination-detail.model';
 import { PaginationController } from "../../../component/pagination-controller/pagination-controller";
+import { IChangeStatusForm, initializeIChangeStatusForm, IOrder, IOrderPagination, IOrderResponse, IUpdateStatusRequest } from '../order.model';
 
 
 @Component({

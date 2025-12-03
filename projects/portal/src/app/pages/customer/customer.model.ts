@@ -18,4 +18,12 @@ export interface ICustomer {
     password: string | null;
 }
 
+export interface ICustomerResponse{
+     total : number;
+     customers : CustomerResponse[]
+}
 
+export interface CustomerResponse extends ICustomer{
+    id:number
+    isActive:boolean;
+}

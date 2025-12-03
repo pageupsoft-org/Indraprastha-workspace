@@ -4,7 +4,6 @@ import { IDateRange } from '../../component/daterang-picker/daterange.model';
 import { Base } from '@portal/core';
 import { ApiRoutes } from '@shared';
 import { IGenericResponse } from '../../core/interface/response/genericResponse';
-import { IDashboardResponse, TotalPendings } from '../../core/interface/response/dashboard.response';
 import { CommonModule } from '@angular/common';
 import {
   ChartComponent,
@@ -17,6 +16,7 @@ import {
   ApexNonAxisChartSeries,
   ApexResponsive,
 } from "ng-apexcharts";
+import { IDashboardResponse, TotalPendings } from './dashboard.model';
 
 export type ChartOptions = {
   series: ApexAxisChartSeries;

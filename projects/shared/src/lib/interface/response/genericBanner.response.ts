@@ -20,10 +20,6 @@ export interface IBanner {
     bannerValueId: number;
 }
 
-// export interface IBannerAddBannerValueId {
-
-// }
-
 export interface IBannerPagination extends IPaginationPayload {
     bannerType: EbannerTypes | null;
     bannerConnectionType: EBannerConnectionType | null

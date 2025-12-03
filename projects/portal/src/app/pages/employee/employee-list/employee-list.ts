@@ -5,7 +5,7 @@ import {
   PaginationControlMetadata,
 } from '../../../core/interface/model/pagination-detail.model';
 import { IGenericResponse } from '../../../core/interface/response/genericResponse';
-import { IEmployee, IEmployeeResponse } from '../../../core/interface/response/employee.response';
+
 import {
   initializePagInationPayload,
   IPaginationPayload,
@@ -19,6 +19,7 @@ import { SearchBar } from '../../../component/search-bar/search-bar';
 import { SearchBase } from '../../../core/base/search-base';
 import { Observable } from 'rxjs';
 import { CommonModule } from '@angular/common';
+import { IEmployee, IEmployeeResponse } from '../employee.model';
 
 @Component({
   selector: 'app-employee-list',

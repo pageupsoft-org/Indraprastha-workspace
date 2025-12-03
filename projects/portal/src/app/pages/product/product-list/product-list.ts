@@ -3,11 +3,9 @@ import { MatDialog } from '@angular/material/dialog';
 import { Router, RouterLink } from '@angular/router';
 import { Base, handlePagination } from '@portal/core';
 import { initializePagInationPayload } from '../../../core/interface/request/genericPayload';
-import { IProductPagination } from '../../../core/interface/request/product.request';
 import { IGenericResponse } from '../../../core/interface/response/genericResponse';
 
 import { ApiRoutes, EToastType, IRGeneric, MConfirmationModalData, ToastService } from '@shared';
-import { IProduct, IProductResponseRoot } from '../../../core/interface/response/product.response';
 import { PaginationController } from '../../../component/pagination-controller/pagination-controller';
 import {
   createPaginationMetadata,
@@ -16,6 +14,7 @@ import {
 import { SearchBar } from '../../../component/search-bar/search-bar';
 import { SearchBase } from '../../../core/base/search-base';
 import { Observable } from 'rxjs';
+import { IProduct, IProductPagination, IProductResponseRoot } from '../product.model';
 
 @Component({
   selector: 'app-product-list',

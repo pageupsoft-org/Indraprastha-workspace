@@ -4,9 +4,9 @@ import { Base } from '../../../core/base/base';
 import { IGenericResponse } from '../../../core/interface/response/genericResponse';
 import { CategoryList } from '../category-list/category-list';
 import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
-import { ICategory, ICategoryForm } from '../../../core/interface/request/category.request';
-import { ApiRoutes, EToastType, ToastService, ValidateControl } from '@shared';
-import { IGenericComboResponse } from '../../../core/interface/response/banner.response';
+import { ApiRoutes, EToastType, ICategory, ToastService, ValidateControl } from '@shared';
+import { IGenericComboResponse } from '../../banner/banner.model';
+import { ICategoryForm } from '../category.model';
 
 @Component({
   selector: 'app-category-upsert',

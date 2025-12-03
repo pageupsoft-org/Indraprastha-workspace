@@ -2,10 +2,10 @@ import { Component, inject, OnInit } from '@angular/core';
 import { FormControl, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 import { Base } from '../../../core/base/base';
 import { IGenericResponse } from '../../../core/interface/response/genericResponse';
-import { ICustomer, ICustomerForm } from '../../../core/interface/request/customer.request';
 import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
 import { CustomerList } from '../customer-list/customer-list';
 import { ApiRoutes, ErrorHandler, EToastType, patternWithMessage, ToastService, ValidateControl } from '@shared';
+import { ICustomer, ICustomerForm } from '../customer.model';
 
 
 @Component({

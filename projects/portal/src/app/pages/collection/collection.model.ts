@@ -8,3 +8,17 @@ export interface ICollectionForm{
     gender: FormControl<GenderTypeEnum | null>
     description: FormControl<string | null>
 }
+
+export interface ICollectionResponse{
+    total:number;
+    collections: ICollection[]
+}
+
+export interface ICollection {
+    id: number;
+    name: string;
+    gender: GenderTypeEnum;
+    description:string;
+}
+
+

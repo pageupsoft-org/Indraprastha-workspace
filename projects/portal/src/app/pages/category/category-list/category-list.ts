@@ -7,9 +7,8 @@ import {
   initializePagInationPayload,
   IPaginationPayload,
 } from '../../../core/interface/request/genericPayload';
-import { ICategory } from '../../../core/interface/request/category.request';
 import { ApiRoutes, EToastType, MConfirmationModalData, ToastService } from '@shared';
-import { ICategoryResponse } from '../../../core/interface/response/category.response';
+
 import { PaginationController } from '../../../component/pagination-controller/pagination-controller';
 import {
   createPaginationMetadata,
@@ -19,6 +18,7 @@ import { handlePagination } from '@portal/core';
 import { SearchBase } from '../../../core/base/search-base';
 import { Observable } from 'rxjs';
 import { SearchBar } from '../../../component/search-bar/search-bar';
+import { ICategory, ICategoryResponse } from '../category.model';
 
 @Component({
   selector: 'app-category-list',

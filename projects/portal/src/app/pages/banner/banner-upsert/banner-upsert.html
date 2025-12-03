@@ -124,15 +124,12 @@
             </svg>
           </div>
 
-          <select formControlName="bannerValueId" libValidateControl
-            [ngClass]="{ 'bg-slate-100 text-slate-500': bannerForm.controls.bannerValueId }"
-            class="w-full border border-slate-300 rounded-[5px] px-3 py-2 pl-10 pr-10 text-sm text-gray-800 placeholder-slate-400 focus:ring-[#82181A] focus:outline-none focus:border-[#82181A] transition duration-200 text-base">
-            <!-- <option [ngValue]="null" selected disabled>-- Select BannerConnection Type --</option>
-              @for (item of combo; track $index) {
-              <option [ngValue]="item.id">{{ item.name }}</option>
-              } -->
+          <select formControlName="bannerValueId" libValidateControl [ngClass]="{
+              'bg-slate-100 text-slate-500 cursor-not-allowed': selectConnectionType === 'None'
+            }"
+            class="w-full border border-slate-300 rounded-[5px] px-3 py-2 pl-10 pr-10 text-sm focus:ring-[#82181A] focus:outline-none focus:border-[#82181A] transition duration-200 text-base">
             @if(selectConnectionType === 'None'){
-            <option [ngValue]="null" selected disabled>Choose BannerConnection</option>
+            <option>-- Choose BannerConnection --</option>
             } @else if(selectConnectionType === 'Category'){
             <option [ngValue]="null" selected disabled>-- Select Category --</option>
             @for (item of combo; track item.id) {
@@ -141,7 +138,8 @@
             <option [ngValue]="null" selected disabled>-- Select Product --</option>
             @for (item of combo; track item.id) {
             <option [ngValue]="item.id">{{ item.name }}</option>
-            } }
+            } } 
+            
           </select>
         </div>
       </div>
@@ -176,7 +174,7 @@
     @if(this.bannerForm.controls.bannerBase64.value) {
     <div class="md:col-span-3">
       <div class="bg-gray-100 border border-dashed border-gray-400 rounded-xl relative overflow-hidden">
-        <div class="w-full aspect-[3/1] relative">
+        <div class="w-full aspect-[3/2] relative">
           <button type="button" (click)="removeBannerImage()"
             class="absolute top-3 right-3 z-30 bg-white/90 shadow-md rounded-full p-1.5 hover:bg-white transition">
             <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor"
@@ -190,9 +188,8 @@
           <ng-container>
             <img [src]="bannerForm.controls.bannerBase64.value" class="absolute inset-0 w-full h-full object-cover" />
           </ng-container>
-          }
-          @else{
-            <h1>no image</h1>
+          } @else{
+          <h1>no image</h1>
           }
         </div>
       </div>
