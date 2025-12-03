@@ -122,7 +122,8 @@
                 "glob": "**/*",
                 "input": "projects/portal/public"
               },
-              "projects/portal/src/assets"
+              "projects/portal/src/assets",
+              "projects/portal/src/.htaccess"
             ],
             "styles": [
               "projects/portal/src/styles.scss",
