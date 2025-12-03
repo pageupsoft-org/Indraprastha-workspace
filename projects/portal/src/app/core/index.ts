@@ -4,6 +4,8 @@ export * from './base/base';
 export * from './const/appRoutes.const';
 //#endregion
 
+export * from './environment/dev.env';
+
 //#region Interceptor
 export * from './interceptor/auth-interceptor';
 export * from './interceptor/loader-interceptor';

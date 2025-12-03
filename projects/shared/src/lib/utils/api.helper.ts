@@ -1,14 +1,14 @@
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Observable } from 'rxjs';
-import { environment } from '../environments/dev.env';
 import { variable } from '../enum/variable.enum';
 
 let httpClient: HttpClient;
-const apiBaseUrl: string = environment.baseUrl;
+let apiBaseUrl: string = '';
 
 // call this function once from the app component to initialize the httpClient variable
-export const setHttpClient = (client: HttpClient) => {
+export const setHttpClient = (client: HttpClient, baseUrl: string) => {
   httpClient = client;
+  apiBaseUrl = baseUrl;
 };
 
 export const getHttpClient = (): HttpClient => {

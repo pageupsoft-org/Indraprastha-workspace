@@ -2,11 +2,11 @@ import { bootstrapApplication } from '@angular/platform-browser';
 import { appConfig } from './app/app.config';
 import { App } from './app/app';
 import { initializeApp } from 'firebase/app';
-import { environment } from './app/core/environments/dev.env';
 import { registerLocaleData } from '@angular/common';
 import localeIn from '@angular/common/locales/en-IN';
+import { firebaseKey } from '@shared';
 
-initializeApp(environment.firebase);
+initializeApp(firebaseKey.firebase);
 registerLocaleData(localeIn);
 
 bootstrapApplication(App, appConfig)

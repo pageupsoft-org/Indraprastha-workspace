@@ -15,7 +15,7 @@ import {
   Toast,
 } from '@shared';
 import AOS from 'aos';
-import { IResponseGenderMenuRoot, UtilityService } from '@website/core';
+import { environment, IResponseGenderMenuRoot, UtilityService } from '@website/core';
 
 
 @Component({
@@ -33,7 +33,7 @@ export class App {
     private platformService: PlatformService,
     private utilityService: UtilityService
   ) {
-    setHttpClient(httpClient);
+    setHttpClient(httpClient, environment.baseUrl);
 
     /* remove comment to use FCM, but first update keys in env file
     //  this.firebaseService.requestPermission();
