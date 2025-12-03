@@ -60,7 +60,7 @@ export const MenuItems: IMenuSideBarItem[] = [
      {
         name: 'Product',
         route: AppRoutes.PRODUCT,
-        icon: 'bx bx-user-circle',
+        icon: 'bx bxs-package',
         userType: [],
         child: [],
     },
