@@ -3,5 +3,6 @@ export const appRoutes = {
   WISHLIST: 'wishlist',
   PRODUCT_DETAIL: 'product-detail',
   CHECKOUT: 'checkout',
-  ABOUT_US: 'about-us'
+  ABOUT_US: 'about-us',
+  WHATS_NEW: 'whats-new'
 };
