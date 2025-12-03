@@ -64,6 +64,7 @@ export const ApiRoutes = {
     GET_COMBO: '/api/product/combo',
     MENU: '/api/Product/Menu',
     DASHBOARD: '/api/Product/Dashboard',
+    CART: '/api/Product/Cart'
   },
   WISH: {
     GET: '/api/Wish',

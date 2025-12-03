@@ -9,17 +9,11 @@ import {
   signal,
   WritableSignal,
 } from '@angular/core';
-import { ICategory, IRequestProductMenu } from '../../../core/interface/model/header.model';
-import { CategoryData, CollectionData } from '../header.data';
-import { convertToParamMap, Router } from '@angular/router';
+import { IRequestProductMenu } from '../../../core/interface/model/header.model';
+import { Router } from '@angular/router';
 import { FormsModule } from '@angular/forms';
-import { UtilityService } from '../../../core/services/utility-service';
-import {
-  Category,
-  Collection,
-  IResponseGenderMenuRoot,
-} from '../../../core/interface/response/gender-menu.response';
 import { createUrlFromObject, GenderTypeEnum, initializePagInationPayload} from '@shared';
+import { Category, Collection, IResponseGenderMenuRoot, UtilityService } from '@website/core';
 
 @Component({
   selector: 'app-gender-menu',
@@ -43,6 +37,7 @@ export class GenderMenu implements OnInit, OnDestroy {
     sizes: [],
     minPrice: 0,
     maxPrice: 0,
+    newlyAdded: false
   };
 
   // this will hold the collection id based on category id,

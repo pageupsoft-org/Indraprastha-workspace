@@ -4,16 +4,19 @@
   "scripts": {
     "ng": "ng",
     "start": "ng serve",
+    "clean:dist": "rimraf dist",
+    "build:shared": "ng build shared",
+
     "start-portal": "ng serve portal",
-    "build": "ng build",
-    "build-portal": "ng build portal --output-path=dist/portal",
-    "build-portal:prod": "ng build portal --output-path=dist/portal --configuration=production",
-    "build-website:prod": "ng build website --output-path=dist/website --configuration=production",
-    "watch": "ng build --watch --configuration development",
-    "test": "ng test",
     "start-website": "ng serve website",
+
+    "build-website":"ng build website --output-path=dist/website",
     "serve-website": "node dist/website/server/server.mjs",
-    "build-shared:prod": "ng build shared"
+
+    "build-portal": "ng build portal --output-path=dist/portal",
+
+    "build-website:prod": "npm run clean:dist && npm run build:shared && ng build website --output-path=dist/website --configuration=production",
+    "build-portal:prod": "npm run clean:dist && npm run build:shared && ng build portal --output-path=dist/portal --configuration=production"
   },
   "prettier": {
     "printWidth": 100,
@@ -42,8 +45,8 @@
     "@tailwindcss/postcss": "^4.1.17",
     "aos": "^2.3.4",
     "apexcharts": "^5.3.6",
-    "daterangepicker": "^3.1.0",
     "boxicons": "^2.1.4",
+    "daterangepicker": "^3.1.0",
     "express": "^5.1.0",
     "firebase": "^12.5.0",
     "jquery": "^3.7.1",
@@ -73,6 +76,7 @@
     "karma-jasmine": "~5.1.0",
     "karma-jasmine-html-reporter": "~2.1.0",
     "ng-packagr": "^20.3.0",
+    "rimraf": "^6.1.2",
     "typescript": "~5.8.2"
   }
 }

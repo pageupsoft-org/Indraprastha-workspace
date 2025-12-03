@@ -65,7 +65,7 @@
               "sourceMap": true
             }
           },
-          "defaultConfiguration": "production"
+          "defaultConfiguration": "development"
         },
         "serve": {
           "builder": "@angular/build:dev-server",
@@ -122,7 +122,8 @@
                 "glob": "**/*",
                 "input": "projects/portal/public"
               },
-              "projects/portal/src/assets"
+              "projects/portal/src/assets",
+              "projects/portal/src/.htaccess"
             ],
             "styles": [
               "projects/portal/src/styles.scss",

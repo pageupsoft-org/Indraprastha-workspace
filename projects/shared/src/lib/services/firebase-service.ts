@@ -2,8 +2,8 @@ import { Injectable } from '@angular/core';
 import { getMessaging, getToken, onMessage } from 'firebase/messaging';
 import { Router } from '@angular/router';
 import { ToastService } from './toast-service';
-import { environment } from '../environments/dev.env';
 import { EToastType } from '../enum/toast-type.enum';
+import { firebaseKey } from '../environments/firebase.env';
 
 @Injectable({
   providedIn: 'root',
@@ -14,7 +14,7 @@ export class FirebaseService {
 
   public requestPermission() {
     const messaging = getMessaging();
-    getToken(messaging, { vapidKey: environment.vapidKey })
+    getToken(messaging, { vapidKey: firebaseKey.vapidKey })
       .then((token) => {
         if (token) {
           // this._toasterService.success('Hurraaa!!! we got the token.....');

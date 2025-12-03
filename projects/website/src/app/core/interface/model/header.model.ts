@@ -12,4 +12,5 @@ export interface IRequestProductMenu extends IPaginationPayload {
   sizes: number[];
   minPrice: number;
   maxPrice: number;
+  newlyAdded: boolean;
 }

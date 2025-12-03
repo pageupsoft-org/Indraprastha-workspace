@@ -20,7 +20,7 @@ export * from './lib/enum/discriptionType.enum';
 export * from './lib/enum/size.enum';
 export * from './lib/enum/description-type.enum';
 export * from './lib/enum/order-status.enum';
-export * from './lib/environments/dev.env';
+export * from './lib/environments/firebase.env';
 
 export * from './lib/interface/model/header.model';
 export * from './lib/interface/model/login.model';

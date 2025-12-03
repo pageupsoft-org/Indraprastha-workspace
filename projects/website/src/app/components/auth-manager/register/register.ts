@@ -1,7 +1,5 @@
-import { Component, model, OnInit, signal, WritableSignal } from '@angular/core';
-import { EAuthManager } from '../../../core/enum/auth-manager.enum';
+import { Component, model, OnInit } from '@angular/core';
 import { FormControl, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
-import { ButtonLoader } from '../../../core/component/button-loader/button-loader';
 import { HttpErrorResponse } from '@angular/common/http';
 import {
   ApiRoutes,
@@ -14,6 +12,7 @@ import {
   patternWithMessage,
   ToastService,
 } from '@shared';
+import { ButtonLoader, EAuthManager } from '@website/core';
 
 @Component({
   selector: 'app-register',

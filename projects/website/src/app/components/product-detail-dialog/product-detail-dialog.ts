@@ -1,11 +1,9 @@
 import { CommonModule } from '@angular/common';
-import { Component, Inject, OnInit, signal, WritableSignal } from '@angular/core';
+import { Component, Inject, OnInit } from '@angular/core';
 import { MatDialogRef, MAT_DIALOG_DATA, MatDialogModule } from '@angular/material/dialog';
-import { CartUpdateOperation } from '../../core/enum/cart.enum';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
-import { ProductDetailBase } from '../../core/class/product-detail-base';
 import { AppLoadingButton } from '@shared';
-import { defaultIRCartRoot, IRCartRoot } from '../shopping-cart/shopping-cart.model';
+import { ProductDetailBase, CartUpdateOperation } from '@website/core';
 
 @Component({
   selector: 'app-product-detail-dialog',

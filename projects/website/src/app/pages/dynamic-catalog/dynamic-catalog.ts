@@ -21,18 +21,11 @@ import {
   ToastService,
 } from '@shared';
 import { ActivatedRoute, Router, UrlSegment } from '@angular/router';
-import { IRequestProductMenu } from '../../core/interface/model/header.model';
-import {
-  Filter,
-  initializeIResponseDynamicCatalogue,
-  IResponseDynamicCatalogue,
-} from '../../core/interface/response/header.response';
 import { HttpErrorResponse } from '@angular/common/http';
 import { InfiniteScrollDirective } from 'ngx-infinite-scroll';
 
-import { dynamicCatalogData } from '../../../dummy-data';
 import { NgxSkeletonLoaderModule } from 'ngx-skeleton-loader';
-import { appRoutes } from '../../core/const/appRoutes.const';
+import { IRequestProductMenu, IResponseDynamicCatalogue, initializeIResponseDynamicCatalogue, appRoutes } from '@website/core';
 
 @Component({
   selector: 'app-dynamic-catalog',
@@ -72,6 +65,7 @@ export class DynamicCatalog implements AfterViewInit {
     sizes: [],
     minPrice: 10000,
     maxPrice: 150000,
+    newlyAdded: false,
   });
   public accumulatedProducts = signal<any[]>([]);
   public minLimit: WritableSignal<number> = signal(10000);
@@ -103,13 +97,14 @@ export class DynamicCatalog implements AfterViewInit {
       this.baseUrl.set(baseUrl);
       this.payloadGenderMenu.set(params as IRequestProductMenu);
 
-      if (this.baseUrl() != appRoutes.WHATS_NEW) {
-        this.getData();
-      } else {
-        this.dynamicData.update(() => {
-          return initializeIResponseDynamicCatalogue();
-        });
-      }
+      this.payloadGenderMenu.update((payload) => {
+        return {
+          ...payload,
+          newlyAdded: this.baseUrl() == appRoutes.WHATS_NEW
+        };
+      });
+
+      this.getData();
     });
   }
 

@@ -1,8 +1,6 @@
 import { Component, model, output } from '@angular/core';
-import { EAuthManager } from '../../../core/enum/auth-manager.enum';
 import { FormControl, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 import { HttpErrorResponse } from '@angular/common/http';
-import { ButtonLoader } from '../../../core/component/button-loader/button-loader';
 import {
   ApiRoutes,
   ErrorHandler,
@@ -16,9 +14,8 @@ import {
   setLocalStorageItem,
   ToastService,
 } from '@shared';
-import { UtilityService } from '../../../core/services/utility-service';
-import { CartService } from '../../../core/services/cart-service';
-import { WishlistService } from '../../../core/services/wishlist-service';
+import { ButtonLoader, CartService, EAuthManager, UtilityService, WishlistService } from '@website/core';
+
 
 @Component({
   selector: 'app-login',
