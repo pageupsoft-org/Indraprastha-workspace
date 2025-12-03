@@ -68,16 +68,16 @@
         <div>
           <p class="font-semibold text-gray-800 mb-2">SIZE</p>
           <div class="flex flex-wrap gap-2">
-            @if(isShowloader()){
-              @for (item of dummyArr; track $index) {
-                <ngx-skeleton-loader
-                count="1"
-                appearance="square"
-                [theme]="{ height: '50px', width: '50' }"
-                />
-              }
-            }@else { @for (stockSize of stockSizeArrayWithIds; let i = $index ; track
+            @if(isShowloader()){ @for (item of dummyArr; track $index) {
+            <ngx-skeleton-loader
+              count="1"
+              appearance="square"
+              [theme]="{ height: '50px', width: '50' }"
+            />
+            } }@else { 
+              @for (stockSize of stockSizeArrayWithIds; let i = $index; track
             stockSize.value) { @let radioId = 'radio' + i;
+
             <input
               type="radio"
               name="stockSizeSelection"
@@ -86,18 +86,21 @@
               class="hidden peer"
               [formControl]="cartForm.controls.stockId"
             />
+
             <label
               [for]="radioId"
               class="cursor-pointer px-4 py-2 border rounded"
               [ngClass]="{
-                ' peer-checked:bg-[#680C01] peer-checked:text-white':
-                  stockSize.stockId == cartForm.value.stockId
+                'peer-checked:bg-[#680C01] peer-checked:text-white':
+                  stockSize.stockId == cartForm.value.stockId,
+                'cursor-not-allowed bg-gray-200 line-through pointer-events-none':
+                  !stockSize.quantity
               }"
-              [ngClass]="{ 'cursor-not-allowed! bg-gray-200 line-through': !stockSize.quantity }"
             >
               {{ stockSize.value }}
             </label>
-            } }
+            }
+           }
           </div>
         </div>
 
@@ -234,28 +237,28 @@
       <!-- Buttons -->
       <div class="mt-8 flex flex-col space-y-4 mb-8">
         @if(isShowloader()){
-          <ngx-skeleton-loader count="2" appearance="line" />
+        <ngx-skeleton-loader count="2" appearance="line" />
         }@else {
-          <lib-app-loading-button
-            [isLoading]="isBtnLoader()"
-            label="ADD TO CART"
-            type="submit"
-            (clicked)="addToCartWithDescription()"
-            [btnClass]="
-              'w-full cursor-pointer px-6 py-3 font-semibold text-black border border-gray-300 bg-white rounded-[5px] hover:bg-gray-300 transition-colors duration-200 focus:outline-none'
-            "
-            [conditionalClass]="'cursor-not-allowed!'"
-            [addConditionClass]="!cartForm.value.stockId"
-            [isButtonDisabled]="!cartForm.value.stockId"
-          ></lib-app-loading-button>
-  
-          <button
-            [disabled]="!cartForm.value.stockId"
-            class="cursor-pointer px-6 py-3 font-semibold text-white bg-[#680C01] rounded-[5px] focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-red-500"
-            [ngClass]="{ 'cursor-not-allowed!': !cartForm.value.stockId }"
-          >
-            BUY IT NOW
-          </button>
+        <lib-app-loading-button
+          [isLoading]="isBtnLoader()"
+          label="ADD TO CART"
+          type="submit"
+          (clicked)="addToCartWithDescription()"
+          [btnClass]="
+            'w-full cursor-pointer px-6 py-3 font-semibold text-black border border-gray-300 bg-white rounded-[5px] hover:bg-gray-300 transition-colors duration-200 focus:outline-none'
+          "
+          [conditionalClass]="'cursor-not-allowed!'"
+          [addConditionClass]="!cartForm.value.stockId"
+          [isButtonDisabled]="!cartForm.value.stockId"
+        ></lib-app-loading-button>
+
+        <button
+          [disabled]="!cartForm.value.stockId"
+          class="cursor-pointer px-6 py-3 font-semibold text-white bg-[#680C01] rounded-[5px] focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-red-500"
+          [ngClass]="{ 'cursor-not-allowed!': !cartForm.value.stockId }"
+        >
+          BUY IT NOW
+        </button>
         }
       </div>
 

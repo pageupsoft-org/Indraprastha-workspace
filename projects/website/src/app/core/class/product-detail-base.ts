@@ -43,6 +43,7 @@ export class ProductDetailBase {
   private cartService: CartService = inject(CartService);
 
   public getProductDetail(productId: number) {
+
     this.isShowloader.set(true);
     this.stockSizeArrayWithIds.splice(0, this.stockSizeArrayWithIds.length); 
     httpGet<IRGeneric<IRProductDetailRoot>>(ApiRoutes.PRODUCT.GET_BY_ID(productId), true).subscribe(

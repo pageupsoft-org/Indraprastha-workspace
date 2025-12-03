@@ -32,90 +32,20 @@
 
       <div class="flex flex-col space-y-4">
         <h2 class="text-xl md:text-4xl font-bold text-gray-900 leading-[1] mb-1">
-          {{productDetail().name}}
+          {{ productDetail().name }}
         </h2>
         <p class="text-sm md:text-xl text-[#0000008C] mb-1">
-            {{ productDetail().mrp | currency:'INR':'symbol':'1.0-0':'en-IN' }}
+          {{ productDetail().mrp | currency : 'INR' : 'symbol' : '1.0-0' : 'en-IN' }}
         </p>
         <p class="text-sm text-[#0000008C] mb-1">(MRP inclusive of all Taxes)</p>
 
-        <!-- <div class="space-y-2 mt-2">
-          <div>
-            <p class="font-semibold text-[#0000008C] mb-1 md:text-md text-sm">SIZE</p>
-            <div class="flex flex-wrap gap-2">
-              <button
-                [ngClass]="true ? ['bg-gray-200', 'border-2', 'border-[#737373]'] : []"
-                class="md:px-4 md:py-2 px-2 py-1 border border-gray-300 rounded-[5px] text-sm text-[#0000008C] hover:bg-gray-200 transition-colors duration-200 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-gray-500"
-              >
-                S
-              </button>
-              <button
-                class="md:px-4 md:py-2 px-2 py-1 border border-gray-300 rounded-[5px] text-sm text-[#0000008C] hover:bg-gray-200 transition-colors duration-200 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-gray-500"
-              >
-                M
-              </button>
-              <button
-                class="md:px-4 md:py-2 px-2 py-1 border border-gray-300 rounded-[5px] text-sm text-[#0000008C] hover:bg-gray-200 transition-colors duration-200 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-gray-500"
-              >
-                L
-              </button>
-              <button
-                class="md:px-4 md:py-2 px-2 py-1 border border-gray-300 rounded-[5px] text-sm text-[#0000008C] hover:bg-gray-200 transition-colors duration-200 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-gray-500"
-              >
-                XL
-              </button>
-              <button
-                class="md:px-4 md:py-2 px-2 py-1 border border-gray-300 rounded-[5px] text-sm text-[#0000008C] hover:bg-gray-200 transition-colors duration-200 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-gray-500"
-              >
-                XXL
-              </button>
-            </div>
-          </div>
-
-          <div>
-            <p class="font-semibold text-[#0000008C] mb-1 md:text-md text-sm">COLOR</p>
-            <div class="flex flex-wrap gap-2">
-              <button
-                class="px-4 py-2 border border-gray-300 rounded-[0px] text-sm text-[#0000008C] hover:bg-gray-200 transition-colors duration-200 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-gray-500 rounded-[5px]"
-              >
-                Ruby Red
-              </button>
-            </div>
-          </div>
-
-          <div>
-            <p class="font-semibold text-[#0000008C] mb-1 md:text-md text-sm">Blouse Piece</p>
-            <div class="flex flex-wrap gap-2">
-              <button
-                class="md:px-4 md:py-2 py-1 px-2 border border-gray-300 rounded-[5px] text-sm text-[#0000008C] hover:bg-gray-200 transition-colors duration-200 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-gray-500"
-              >
-                Blouse Piece
-              </button>
-              <button
-                class="md:px-4 md:py-2 py-1 px-2 border border-gray-300 rounded-[5px] text-sm text-[#0000008C] hover:bg-gray-200 transition-colors duration-200 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-gray-500"
-              >
-                Styled/Stitched Blouse
-              </button>
-            </div>
-          </div>
-
-          <div>
-            <p class="font-semibold text-[#0000008C] mb-1 md:text-md text-sm">Custom Tailor</p>
-            <div class="relative">
-              <select
-                class="block w-auto px-4 py-2 pr-8 border border-gray-300 rounded-[5px] text-sm text-[#0000008C] bg-white appearance-none focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-gray-500"
-              >
-                <option>Tailor Name</option>
-              </select>
-            </div>
-          </div>
-        </div> -->
         <div class="space-y-4 mt-6">
           <div>
             <p class="font-semibold text-gray-800 mb-2">SIZE</p>
             <div class="flex flex-wrap gap-2">
-              @for (stockSize of stockSizeArrayWithIds; let i = $index ; track stockSize.value) {
-              @let radioId = 'radio' + i;
+              @for (stockSize of stockSizeArrayWithIds; let i = $index; track stockSize.value) {
+              @let radioId = 'radio' + stockSize.value;
+
               <input
                 type="radio"
                 name="stockSizeSelection"
@@ -124,14 +54,16 @@
                 class="hidden peer"
                 [formControl]="cartForm.controls.stockId"
               />
+
               <label
                 [for]="radioId"
-                class="cursor-pointer text-md p-3 border rounded"
+                class="cursor-pointer px-4 py-2 border rounded"
                 [ngClass]="{
-                  ' peer-checked:bg-[#680C01] peer-checked:text-white':
-                    stockSize.stockId == cartForm.value.stockId
+                  'peer-checked:bg-[#680C01] peer-checked:text-white':
+                    stockSize.stockId == cartForm.value.stockId,
+                  'cursor-not-allowed bg-gray-200 line-through pointer-events-none':
+                    !stockSize.quantity
                 }"
-                [ngClass]="{ 'cursor-not-allowed! bg-gray-200 line-through': !stockSize.quantity }"
               >
                 {{ stockSize.value }}
               </label>
