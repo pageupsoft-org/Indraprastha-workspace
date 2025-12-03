@@ -1,8 +1,16 @@
 import { computed, effect, Injectable, Signal, signal, WritableSignal } from '@angular/core';
 import { CartVariant, IRCartRoot } from '../../components/shopping-cart/shopping-cart.model';
-import { ApiRoutes, getLocalStorageItem, httpGet, IRGeneric, setLocalStorageItem } from '@shared';
+import {
+  ApiRoutes,
+  getLocalStorageItem,
+  httpGet,
+  httpPost,
+  IRGeneric,
+  setLocalStorageItem,
+} from '@shared';
 import { UtilityService } from './utility-service';
 import { LocalStorageEnum } from '../enum/local-storage.enum';
+import { ICartFormData } from '../../pages/product-detail/product-detail.model';
 
 @Injectable({
   providedIn: 'root',
@@ -15,8 +23,7 @@ export class CartService {
   });
 
   constructor(private utilService: UtilityService) {
-    effect(() => {
-    });
+    effect(() => {});
 
     this.getCartProduct();
   }
@@ -47,7 +54,7 @@ export class CartService {
       } else {
         const cartList: IRCartRoot[] =
           getLocalStorageItem<IRCartRoot[]>(LocalStorageEnum.cartList) ?? [];
-        
+
         this.cartData.set(
           cartList.map((x) => {
             return {
@@ -117,13 +124,38 @@ export class CartService {
     }
   }
 
-  public addLocalStorageCartToDb(){
-    if(this.cartData().length){
-      throw "Method not defined";
-    }
-    else{
+  public addLocalStorageCartToDb() {
+    if (this.cartData().length) {
+      this.addProductArrToCart();
+    } else {
       this.getCartProduct();
     }
+  }
+
+  private addProductArrToCart() {
+    let localStorageProd: Array<ICartFormData> = [];
+
+    localStorageProd = this.cartData().map((data) => {
+      const { stockId, cartVariant, cartQuantity } = data;
+
+      return {
+        stockId: stockId,
+        variantId: cartVariant.variantId,
+        quantity: cartQuantity,
+      } as ICartFormData;
+    });
+
+    httpPost<IRGeneric<IRCartRoot[]>, Array<ICartFormData>>(
+      ApiRoutes.PRODUCT.CART,
+      localStorageProd
+    ).subscribe({
+      next: (res: IRGeneric<IRCartRoot[]>) => {
+        if (res?.data && res.data.length) {
+          this.cartData.set(res.data);
+          localStorage.removeItem(LocalStorageEnum.cartList);
+        }
+      },
+    });
   }
 
   // Define a helper function to create a new CartVariant object with updated quantity

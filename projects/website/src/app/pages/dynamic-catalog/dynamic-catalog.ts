@@ -72,6 +72,7 @@ export class DynamicCatalog implements AfterViewInit {
     sizes: [],
     minPrice: 10000,
     maxPrice: 150000,
+    newlyAdded: false,
   });
   public accumulatedProducts = signal<any[]>([]);
   public minLimit: WritableSignal<number> = signal(10000);
@@ -103,13 +104,14 @@ export class DynamicCatalog implements AfterViewInit {
       this.baseUrl.set(baseUrl);
       this.payloadGenderMenu.set(params as IRequestProductMenu);
 
-      if (this.baseUrl() != appRoutes.WHATS_NEW) {
-        this.getData();
-      } else {
-        this.dynamicData.update(() => {
-          return initializeIResponseDynamicCatalogue();
-        });
-      }
+      this.payloadGenderMenu.update((payload) => {
+        return {
+          ...payload,
+          newlyAdded: this.baseUrl() == appRoutes.WHATS_NEW
+        };
+      });
+
+      this.getData();
     });
   }
 

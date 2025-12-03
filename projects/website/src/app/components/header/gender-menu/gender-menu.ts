@@ -43,6 +43,7 @@ export class GenderMenu implements OnInit, OnDestroy {
     sizes: [],
     minPrice: 0,
     maxPrice: 0,
+    newlyAdded: false
   };
 
   // this will hold the collection id based on category id,
