@@ -9,6 +9,7 @@ export interface IConvertImageParams {
   allowedTypes: string[];
   expectedImgHeight: number;
   expectedImgWidth: number;
+  maxSize: number; //in mb
 }
 
 export const initialConvertImageParam = (data: IConvertImageParams) => ({ ...data });

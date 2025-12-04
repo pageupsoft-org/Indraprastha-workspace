@@ -1,10 +1,11 @@
 import { Component, OnInit, ViewChild } from '@angular/core';
-import { DaterangPicker } from "../../component/daterang-picker/daterang-picker";
+import { DaterangPicker } from '../../component/daterang-picker/daterang-picker';
 import { IDateRange } from '../../component/daterang-picker/daterange.model';
 import { Base } from '@portal/core';
 import { ApiRoutes } from '@shared';
 import { IGenericResponse } from '../../core/interface/response/genericResponse';
 import { CommonModule } from '@angular/common';
+import { ApexTheme } from 'ng-apexcharts';
 import {
   ChartComponent,
   ApexAxisChartSeries,
@@ -25,6 +26,7 @@ export type ChartOptions = {
   stroke: ApexStroke;
   tooltip: ApexTooltip;
   dataLabels: ApexDataLabels;
+  theme: ApexTheme;
 };
 
 export type pieOptions = {
@@ -32,7 +34,8 @@ export type pieOptions = {
   chart: ApexChart;
   responsive: ApexResponsive[];
   labels: any;
-}
+  theme: ApexTheme;
+};
 
 export type pieOption = {
   series: ApexNonAxisChartSeries;
@@ -41,7 +44,6 @@ export type pieOption = {
   labels: any;
 };
 
-
 @Component({
   selector: 'app-dashboard',
   imports: [CommonModule, ChartComponent],
@@ -49,113 +51,179 @@ export type pieOption = {
   styleUrl: './dashboard.scss',
 })
 export class Dashboard extends Base implements OnInit {
-  public totalPendingOrders : TotalPendings = {
-    totalOrder : 0,
-    order : 0,
-    newCustomer : 0
-  }
-  @ViewChild("chart") chart: ChartComponent | undefined;
+  public totalPendingOrders: TotalPendings = {
+    totalOrder: 0,
+    order: 0,
+    newCustomer: 0,
+  };
+  @ViewChild('chart') chart: ChartComponent | undefined;
   public chartOptions: Partial<ChartOptions>;
 
-  @ViewChild("pie") pie: ChartComponent | undefined;
+  @ViewChild('pie') pie: ChartComponent | undefined;
   public pieOptions: Partial<pieOptions>;
 
+  isDarkMode = document.documentElement.classList.contains('dark');
+
   constructor() {
-    super()
+    super();
     this.chartOptions = {
       series: [
         {
-          name: "series1",
-          data: [31, 40, 28, 51, 42, 109, 100]
+          name: 'series1',
+          data: [31, 40, 28, 51, 42, 109, 100],
         },
         {
-          name: "series2",
-          data: [11, 32, 45, 32, 34, 52, 41]
-        }
+          name: 'series2',
+          data: [11, 32, 45, 32, 34, 52, 41],
+        },
       ],
       chart: {
-        height: 350,
-        type: "area"
+        height: '400px',
+        type: 'area',
       },
       dataLabels: {
-        enabled: false
+        enabled: false,
       },
       stroke: {
-        curve: "smooth"
+        curve: 'smooth',
       },
       xaxis: {
-        type: "datetime",
+        type: 'datetime',
         categories: [
-          "2018-09-19T00:00:00.000Z",
-          "2018-09-19T01:30:00.000Z",
-          "2018-09-19T02:30:00.000Z",
-          "2018-09-19T03:30:00.000Z",
-          "2018-09-19T04:30:00.000Z",
-          "2018-09-19T05:30:00.000Z",
-          "2018-09-19T06:30:00.000Z"
-        ]
+          '2018-09-19T00:00:00.000Z',
+          '2018-09-19T01:30:00.000Z',
+          '2018-09-19T02:30:00.000Z',
+          '2018-09-19T03:30:00.000Z',
+          '2018-09-19T04:30:00.000Z',
+          '2018-09-19T05:30:00.000Z',
+          '2018-09-19T06:30:00.000Z',
+        ],
       },
       tooltip: {
         x: {
-          format: "dd/MM/yy HH:mm"
-        }
-      }
+          format: 'dd/MM/yy HH:mm',
+        },
+      },
+
+      theme: {
+        mode: 'dark',
+      },
     };
 
     this.pieOptions = {
       series: [44, 55, 13, 43, 22],
       chart: {
-        type: "donut"
+        type: 'donut',
+        height: '400px'
       },
-      labels: ["Team A", "Team B", "Team C", "Team D", "Team E"],
+      labels: ['Team A', 'Team B', 'Team C', 'Team D', 'Team E'],
       responsive: [
         {
           breakpoint: 480,
           options: {
             chart: {
-              width: 200
+              width: 200,
             },
             legend: {
-              position: "bottom"
-            }
-          }
-        }
-      ]
+              position: 'bottom',
+            },
+          },
+        },
+      ],
+      theme: {
+        mode: 'dark',
+      },
     };
-  
+
+    const observer = new MutationObserver(() => {
+      const isDark = document.documentElement.classList.contains('dark');
+      this.updateChartTheme(isDark);
+    });
+    observer.observe(document.documentElement, {
+      attributes: true,
+      attributeFilter: ['class'],
+    });
   }
 
+  updateChartTheme(isDark: boolean) {
+    const mode = isDark ? 'dark' : 'light';
+
+    const textColor = isDark ? '#ffffff' : '#000000';
+    const gridColor = isDark ? '#444' : '#e0e0e0';
+
+    const commonOptions = {
+      theme: { mode },
+      xaxis: {
+        labels: { style: { colors: textColor } },
+        axisBorder: { color: textColor },
+        axisTicks: { color: textColor },
+      },
+      yaxis: {
+        labels: { style: { colors: textColor } },
+      },
+      grid: {
+        borderColor: gridColor,
+      },
+      tooltip: {
+        theme: mode,
+      },
+    };
+
+    if (this.chart) {
+      this.chart.updateOptions(commonOptions, false, true);
+    }
+
+    if (this.pie) {
+      this.pie.updateOptions({ theme: { mode } }, false, true);
+    }
+  }
 
   ngOnInit(): void {
-    this.getDashboardData()
+    this.getDashboardData();
   }
 
   public payload: IDateRange = {
     startDate: null,
-    endDate: null
-  }
+    endDate: null,
+  };
 
   public onChangeDate(data: IDateRange) {
     if (data) {
-      this.payload.startDate = data.startDate
-      this.payload.endDate = data.endDate
+      this.payload.startDate = data.startDate;
+      this.payload.endDate = data.endDate;
       this.getDashboardData();
     }
   }
 
   private getDashboardData() {
-    this.httpPostPromise<IGenericResponse<IDashboardResponse>, IDateRange>(ApiRoutes.DASHBOARD.BASE, this.payload)
-      .then(response => {
+    this.httpPostPromise<IGenericResponse<IDashboardResponse>, IDateRange>(
+      ApiRoutes.DASHBOARD.BASE,
+      this.payload
+    )
+      .then((response) => {
         if (!response || !response.data) return;
         // keep total pending if needed
         this.totalPendingOrders = response.data.totalPendings;
-        
+
         const yearly = response.data.yearlyOrders;
         // month labels
-        const monthLabels = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
+        const monthLabels = [
+          'Jan',
+          'Feb',
+          'Mar',
+          'Apr',
+          'May',
+          'Jun',
+          'Jul',
+          'Aug',
+          'Sep',
+          'Oct',
+          'Nov',
+          'Dec',
+        ];
 
         // prepare series array for apex: [{ name: 'Placed', data: [..12 numbers..] }, ...]
-        const series: { name: string, data: number[] }[] = [];
+        const series: { name: string; data: number[] }[] = [];
 
         if (Array.isArray(yearly) && yearly.length) {
           yearly.forEach((statusObj: any) => {
@@ -182,7 +250,7 @@ export class Dashboard extends Base implements OnInit {
         // ensure xaxis contains month labels
         const xaxis = {
           type: 'category',
-          categories: monthLabels
+          categories: monthLabels,
         } as any;
 
         // update chart safely: prefer instance method
@@ -201,13 +269,10 @@ export class Dashboard extends Base implements OnInit {
           this.chartOptions = { ...this.chartOptions, series, xaxis } as any;
         }
       })
-      .catch(error => {
+      .catch((error) => {
         // optional: show fallback series
         const fallback = [{ name: 'Orders', data: new Array(12).fill(0) }];
         this.chartOptions = { ...this.chartOptions, series: fallback } as any;
       });
   }
-
-
 }
-

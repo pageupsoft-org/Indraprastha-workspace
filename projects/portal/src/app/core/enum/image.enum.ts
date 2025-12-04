@@ -1,6 +1,7 @@
 export enum ImageTypeEnum {
   png = 'image/png',
   jpeg = 'image/jpeg',
+  webp = 'image/webp'
 }
 
 export const ImageSizeConst = {

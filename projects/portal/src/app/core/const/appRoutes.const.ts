@@ -16,7 +16,8 @@ export const AppRoutes = {
   PRODUCT: 'product',
   PRODUCT_UPSERT: 'product-upsert',
   ORDERS: 'order-list',
-  ORDERS_UPSERT: 'order-upsert'
+  ORDERS_UPSERT: 'order-upsert',
+  FALLBACK: 'fallback'
 };
 
 // export const appRoutes = {

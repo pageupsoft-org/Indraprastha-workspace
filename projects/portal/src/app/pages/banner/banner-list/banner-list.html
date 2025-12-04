@@ -18,10 +18,10 @@
             />
           </svg>
 
-          Add Banner
-        </button>
-      </div>
+        Add Banner
+      </button>
     </div>
+  </div>
 
     <!-- item Table Card -->
     <div
@@ -66,13 +66,13 @@
             </tr>
           </thead>
 
-          <tbody class="divide-y divide-gray-200 dark:divide-gray-700">
-            @for (item of banners; track item.id || $index) {
-            <tr class="hover:bg-indigo-50/50 dark:hover:bg-gray-700/50 transition duration-200">
-              <!-- Index -->
-              <td class="px-6 py-5 text-sm text-gray-600 dark:text-gray-400 font-medium">
-                {{ $index + 1 }}
-              </td>
+        <tbody class="divide-y divide-gray-200 dark:divide-gray-700">
+          @for (item of banners; track item.id || $index) {
+          <tr class="hover:bg-indigo-50/50 dark:hover:bg-gray-700/50 transition duration-200">
+            <!-- Index -->
+            <td class="px-6 py-5 text-sm text-gray-600 dark:text-gray-400 font-medium">
+              {{ $index + 1 }}
+            </td>
 
               <!-- Name + Avatar + Email -->
               <td class="px-6 py-5">
@@ -85,56 +85,54 @@
                 </div>
               </td>
 
-              <!-- Contact -->
-              <td class="px-6 py-5 text-sm text-gray-700 dark:text-gray-300">
-                {{ item.bannerConnectionType }}
-              </td>
+            <!-- Contact -->
+            <td class="px-6 py-5 text-sm text-gray-700 dark:text-gray-300">
+              {{ item.bannerConnectionType }}
+            </td>
 
-              <td class="px-6 py-5 text-sm text-gray-700 dark:text-gray-300">
-                {{ item.bannerType }}
-              </td>
+            <td class="px-6 py-5 text-sm text-gray-700 dark:text-gray-300">
+              {{ item.bannerType }}
+            </td>
 
-              <td class="px-6 py-5 text-sm text-gray-700 dark:text-gray-300">
-                {{ item.gender }}
-              </td>
+            <td class="px-6 py-5 text-sm text-gray-700 dark:text-gray-300">
+              {{ item.gender }}
+            </td>
 
-              <!-- Actions -->
-              <td class="px-6 py-5 text-sm">
-                <div class="flex items-center gap-3">
-                  <button
-                    (click)="openModel(item.id)"
-                    class="px-4 py-2 bg-indigo-50 hover:bg-indigo-100 text-indigo-600 cursor-pointer font-medium rounded-lg transition shadow-sm"
-                  >
-                    Edit
-                  </button>
-                  <button
-                    (click)="deleteBanner(item.id)"
-                    class="px-4 py-2 bg-red-50 hover:bg-red-100 text-red-600 font-medium rounded-lg transition shadow-sm cursor-pointer"
-                  >
-                    Delete
-                  </button>
-                </div>
-              </td>
-            </tr>
-            } @empty {
-            <tr>
-              <td colspan="6" class="px-6 py-12 text-center text-gray-500 dark:text-gray-400">
-                <div class="text-lg">No items found</div>
-                <p class="mt-2 text-sm">Try adjusting your search or add a new item.</p>
-              </td>
-            </tr>
-            }
-          </tbody>
-        </table>
+            <!-- Actions -->
+            <td class="px-6 py-5 text-sm">
+              <div class="flex items-center gap-3">
+                <button
+                  (click)="openModel(item.id)"
+                  class="px-4 py-2 bg-indigo-50 hover:bg-indigo-100 text-indigo-600 cursor-pointer font-medium rounded-lg transition shadow-sm"
+                >
+                  Edit
+                </button>
+                <button
+                  (click)="deleteBanner(item.id)"
+                  class="px-4 py-2 bg-red-50 hover:bg-red-100 text-red-600 font-medium rounded-lg transition shadow-sm cursor-pointer"
+                >
+                  Delete
+                </button>
+              </div>
+            </td>
+          </tr>
+          } @empty {
+          <tr>
+            <td colspan="6" class="px-6 py-12 text-center text-gray-500 dark:text-gray-400">
+              <div class="text-lg">No items found</div>
+              <p class="mt-2 text-sm">Try adjusting your search or add a new item.</p>
+            </td>
+          </tr>
+          }
+        </tbody>
+      </table>
 
-       
-      </div>
-       <!-- Pagination -->
-        <app-pagination-controller class="bg-red-800"
-          [paginationControlMetaData]="paginationMetaData"
-          (ETopChanged)="topChange($event)"
-          (pageChanged)="pageChange($event)"
-        ></app-pagination-controller>
+      <!-- Pagination -->
+      <app-pagination-controller
+        [paginationControlMetaData]="paginationMetaData"
+        (ETopChanged)="topChange($event)"
+        (pageChanged)="pageChange($event)"
+      ></app-pagination-controller>
     </div>
   </div>
 </div>

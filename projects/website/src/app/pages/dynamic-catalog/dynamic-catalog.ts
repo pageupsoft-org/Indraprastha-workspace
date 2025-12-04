@@ -25,7 +25,12 @@ import { HttpErrorResponse } from '@angular/common/http';
 import { InfiniteScrollDirective } from 'ngx-infinite-scroll';
 
 import { NgxSkeletonLoaderModule } from 'ngx-skeleton-loader';
-import { IRequestProductMenu, IResponseDynamicCatalogue, initializeIResponseDynamicCatalogue, appRoutes } from '@website/core';
+import {
+  IRequestProductMenu,
+  IResponseDynamicCatalogue,
+  initializeIResponseDynamicCatalogue,
+  appRoutes,
+} from '@website/core';
 
 @Component({
   selector: 'app-dynamic-catalog',
@@ -100,7 +105,7 @@ export class DynamicCatalog implements AfterViewInit {
       this.payloadGenderMenu.update((payload) => {
         return {
           ...payload,
-          newlyAdded: this.baseUrl() == appRoutes.WHATS_NEW
+          newlyAdded: this.baseUrl() == appRoutes.WHATS_NEW,
         };
       });
 
@@ -114,6 +119,14 @@ export class DynamicCatalog implements AfterViewInit {
     if (this.platformService.isBrowser) {
       window.scrollTo({ top: 0, behavior: 'smooth' });
     }
+  }
+
+  public routeToProductDetail(productId: number) {
+    this.router.navigate([appRoutes.PRODUCT_DETAIL], {
+      queryParams: {
+        id: productId,
+      },
+    });
   }
 
   ngAfterViewInit(): void {
