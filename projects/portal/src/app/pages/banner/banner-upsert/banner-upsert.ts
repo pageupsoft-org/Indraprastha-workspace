@@ -172,9 +172,10 @@ export class BannerUpsert extends Base implements OnInit {
   public onBannerImageChange(event: any) {
     const param: IConvertImageParams = initialConvertImageParam({
       event,
-      allowedTypes: [ImageTypeEnum.jpeg, ImageTypeEnum.png],
+      allowedTypes: [ImageTypeEnum.jpeg, ImageTypeEnum.png, ImageTypeEnum.webp],
       expectedImgWidth: ImageSizeConst.banner.width,
       expectedImgHeight: ImageSizeConst.banner.height,
+      maxSize: 1.4
     });
 
     convertImagesToBase64Array(param).then((res: IConvertImageResult) => {

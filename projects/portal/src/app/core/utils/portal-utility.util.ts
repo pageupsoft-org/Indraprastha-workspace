@@ -20,15 +20,14 @@ export function convertImageInputToBase64(event: Event): Promise<string | ArrayB
 }
 
 // export function convertImagesToBase64Array(
-//   event: Event,
-//   allowedTypes: string[] = [ImageTypeEnum.jpeg, ImageTypeEnum.jpeg]
+//   param: IConvertImageParams
 // ): Promise<{
 //   validBase64Files: (string | ArrayBuffer | null)[];
 //   invalidFiles: string[];
 //   message: string | null;
 // }> {
 //   return new Promise((resolve, reject) => {
-//     const input = event.target as HTMLInputElement;
+//     const input = param.event.target as HTMLInputElement;
 //     const files = input.files;
 
 //     if (!files || files.length === 0) {
@@ -38,11 +37,11 @@ export function convertImageInputToBase64(event: Event): Promise<string | ArrayB
 
 //     const fileArray = Array.from(files);
 
-//     // Separate valid + invalid files
-//     const validFiles = fileArray.filter((f) => allowedTypes.includes(f.type));
-//     const invalidFiles = fileArray.filter((f) => !allowedTypes.includes(f.type)).map((f) => f.name);
+//     const validFiles = fileArray.filter((f) => param.allowedTypes.includes(f.type));
+//     const invalidFiles = fileArray
+//       .filter((f) => !param.allowedTypes.includes(f.type))
+//       .map((f) => f.name);
 
-//     // If no valid files
 //     if (validFiles.length === 0) {
 //       resolve({
 //         validBase64Files: [],
@@ -55,7 +54,41 @@ export function convertImageInputToBase64(event: Event): Promise<string | ArrayB
 //     const base64Promises = validFiles.map((file) => {
 //       return new Promise<string | ArrayBuffer | null>((resolveFile, rejectFile) => {
 //         const reader = new FileReader();
-//         reader.onload = () => resolveFile(reader.result);
+
+//         reader.onload = () => {
+//           const base64 = reader.result;
+
+//           // Image dimension check
+//           const img = new Image();
+//           img.onload = () => {
+//             const isExactMatch =
+//               (!param.expectedImgWidth || img.width === param.expectedImgWidth) &&
+//               (!param.expectedImgHeight || img.height === param.expectedImgHeight);
+
+//             if (!isExactMatch) {
+//               invalidFiles.push(file.name);
+//               console.log(
+//                 'Invalid dimensions for file:',
+//                 file.name,
+//                 'Expected:',
+//                 param.expectedImgWidth,
+//                 'x',
+//                 param.expectedImgHeight,
+//                 'Got:',
+//                 img.width,
+//                 'x',
+//                 img.height
+//               );
+//               resolveFile(null);
+//             } else {
+//               resolveFile(base64);
+//             }
+//           };
+
+//           img.onerror = () => rejectFile('Invalid image file');
+//           img.src = base64 as string;
+//         };
+
 //         reader.onerror = (error) => rejectFile(error);
 //         reader.readAsDataURL(file);
 //       });
@@ -63,23 +96,19 @@ export function convertImageInputToBase64(event: Event): Promise<string | ArrayB
 
 //     Promise.all(base64Promises)
 //       .then((result) => {
+//         const filteredResults = result.filter((r) => r !== null);
+
 //         resolve({
-//           validBase64Files: result,
+//           validBase64Files: filteredResults,
 //           invalidFiles,
-//           message: invalidFiles.length > 0 ? 'Some files were invalid and skipped' : null,
+//           message:
+//             invalidFiles.length > 0 ? 'Some files were invalid or had incorrect dimensions' : null,
 //         });
 //       })
 //       .catch(reject);
 //   });
 // }
-
-export function convertImagesToBase64Array(
-  // event: Event,
-  // allowedTypes: string[] = [ImageTypeEnum.jpeg, ImageTypeEnum.png],
-  // expectedWidth?: number,
-  // expectedHeight?: number
-  param: IConvertImageParams
-): Promise<{
+export function convertImagesToBase64Array(param: IConvertImageParams): Promise<{
   validBase64Files: (string | ArrayBuffer | null)[];
   invalidFiles: string[];
   message: string | null;
@@ -111,32 +140,27 @@ export function convertImagesToBase64Array(
 
     const base64Promises = validFiles.map((file) => {
       return new Promise<string | ArrayBuffer | null>((resolveFile, rejectFile) => {
+        // 🔹 File size validation
+        const fileSizeMB = file.size / (1024 * 1024);
+        if (param.maxSize && fileSizeMB > param.maxSize) {
+          invalidFiles.push(`${file.name} (File too large: ${fileSizeMB.toFixed(2)}MB)`);
+          resolveFile(null);
+          return;
+        }
+
         const reader = new FileReader();
 
         reader.onload = () => {
           const base64 = reader.result;
 
-          // Image dimension check
+          // 🔹 Image dimension check
           const img = new Image();
           img.onload = () => {
-            const isExactMatch =
-              (!param.expectedImgWidth || img.width === param.expectedImgWidth) &&
-              (!param.expectedImgHeight || img.height === param.expectedImgHeight);
+            const isWidthOk = !param.expectedImgWidth || img.width === param.expectedImgWidth;
+            const isHeightOk = !param.expectedImgHeight || img.height === param.expectedImgHeight;
 
-            if (!isExactMatch) {
-              invalidFiles.push(file.name);
-              console.log(
-                'Invalid dimensions for file:',
-                file.name,
-                'Expected:',
-                param.expectedImgWidth,
-                'x',
-                param.expectedImgHeight,
-                'Got:',
-                img.width,
-                'x',
-                img.height
-              );
+            if (!isWidthOk || !isHeightOk) {
+              invalidFiles.push(`${file.name} (Invalid dimensions: ${img.width}x${img.height})`);
               resolveFile(null);
             } else {
               resolveFile(base64);
@@ -153,14 +177,14 @@ export function convertImagesToBase64Array(
     });
 
     Promise.all(base64Promises)
-      .then((result) => {
-        const filteredResults = result.filter((r) => r !== null);
+      .then((results) => {
+        const filtered = results.filter((r) => r !== null);
 
         resolve({
-          validBase64Files: filteredResults,
+          validBase64Files: filtered,
           invalidFiles,
           message:
-            invalidFiles.length > 0 ? 'Some files were invalid or had incorrect dimensions' : null,
+            invalidFiles.length > 0 ? 'Some files were invalid (type, size, or dimensions)' : null,
         });
       })
       .catch(reject);
