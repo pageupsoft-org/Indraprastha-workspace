@@ -180,8 +180,37 @@
     </div>
   </div>
 
-  <div class="w-full flex gap-2 mt-[40px] h-[400px] items-end">
-    <div class="w-[70%] self-end" #chart>
+  <div class="mt-[100px] grid grid-cols-12 w-full h-[400px] hidden">
+    <div class="col-span-8 rounded-xl">
+      <div class="w-full self-end" #chart>
+        <apx-chart
+          #chart
+          [series]="chartOptions.series!"
+          [chart]="chartOptions.chart!"
+          [xaxis]="chartOptions.xaxis!"
+          [stroke]="chartOptions.stroke!"
+          [tooltip]="chartOptions.tooltip!"
+          [dataLabels]="chartOptions.dataLabels!"
+          [theme]="chartOptions.theme!"
+        ></apx-chart>
+      </div>
+    </div>
+    <div class="col-span-1"></div>
+    <div class="col-span-3 rounded-xl">
+      <div class="wfull self-end" #pie>
+        <apx-chart
+          [series]="pieOptions.series!"
+          [chart]="pieOptions.chart!"
+          [labels]="pieOptions.labels"
+          [responsive]="pieOptions.responsive!"
+          [theme]="pieOptions.theme!"
+        ></apx-chart>
+      </div>
+    </div>
+  </div>
+
+  <div class="w-full flex gap-2 mt-[40px] h-[400px]">
+    <div class="w-[70%]" #chart>
       <apx-chart
         #chart
         [series]="chartOptions.series!"
@@ -193,7 +222,7 @@
         [theme]="chartOptions.theme!"
       ></apx-chart>
     </div>
-    <div class="w-[30%] self-end" #pie>
+    <div class="w-[30%] flex justify-end items-end" #pie>
       <apx-chart
         [series]="pieOptions.series!"
         [chart]="pieOptions.chart!"

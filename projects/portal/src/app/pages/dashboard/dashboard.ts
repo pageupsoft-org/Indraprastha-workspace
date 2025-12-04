@@ -78,7 +78,7 @@ export class Dashboard extends Base implements OnInit {
         },
       ],
       chart: {
-        height: 350,
+        height: '400px',
         type: 'area',
       },
       dataLabels: {
@@ -114,6 +114,7 @@ export class Dashboard extends Base implements OnInit {
       series: [44, 55, 13, 43, 22],
       chart: {
         type: 'donut',
+        height: '400px'
       },
       labels: ['Team A', 'Team B', 'Team C', 'Team D', 'Team E'],
       responsive: [
