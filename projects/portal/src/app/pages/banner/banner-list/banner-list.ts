@@ -95,6 +95,9 @@ export class BannerList extends Base implements OnInit {
             this.payLoad.top
           )
         }
+        else{
+          this.banners =[]
+        }
       })
       .catch((error) => {
         // error handle

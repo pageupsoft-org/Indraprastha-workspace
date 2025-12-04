@@ -38,7 +38,7 @@
         </div>
 
         <input formControlName="name" libValidateControl type="text" placeholder="Enter banner name" minlength="3"
-          maxlength="60"
+          maxlength="30"
           class="w-full border border-slate-300 rounded-[5px] px-3 py-2 pl-10 pr-10 text-sm text-gray-800 placeholder-slate-400 focus:ring-[#82181A] focus:outline-none focus:border-[#82181A] transition duration-200 text-base" />
       </div>
     </div>
@@ -111,7 +111,8 @@
       </div>
 
       <!-- Category / Product selector -->
-      <div>
+      @if(selectConnectionType !== 'None'){
+          <div>
         <label class="block text-sm font-medium text-slate-700 mb-1">{{
           selectConnectionType || 'Select Connection'
           }}</label>
@@ -124,25 +125,24 @@
             </svg>
           </div>
 
-          <select formControlName="bannerValueId" libValidateControl [ngClass]="{
-              'bg-slate-100 text-slate-500 cursor-not-allowed': selectConnectionType === 'None'
-            }"
+          <select formControlName="bannerValueId" libValidateControl
             class="w-full border border-slate-300 rounded-[5px] px-3 py-2 pl-10 pr-10 text-sm focus:ring-[#82181A] focus:outline-none focus:border-[#82181A] transition duration-200 text-base">
-            @if(selectConnectionType === 'None'){
-            <option>-- Choose BannerConnection --</option>
-            } @else if(selectConnectionType === 'Category'){
+            @if(selectConnectionType === 'Category'){
             <option [ngValue]="null" selected disabled>-- Select Category --</option>
-            @for (item of combo; track item.id) {
+            @for (item of categoryCombo; track item.id) {
             <option [ngValue]="item.id">{{ item.name }}</option>
-            } } @else if(selectConnectionType === 'Product'){
+            }
+            }
+            @else{
             <option [ngValue]="null" selected disabled>-- Select Product --</option>
-            @for (item of combo; track item.id) {
+            @for (item of productCombo; track item.id) {
             <option [ngValue]="item.id">{{ item.name }}</option>
-            } } 
-            
+            } }
+
           </select>
         </div>
       </div>
+      }
     </div>
 
     <!-- Description -->
@@ -227,7 +227,7 @@
 
       <button type="submit" (click)="onBannerSubmit()"
         class="px-7 py-2 rounded-[5px] bg-[#82181A] hover:bg-[#A33A3C] text-white font-medium shadow-lg transition cursor-pointer">
-        Save Banner
+        {{bannerForm.controls.id.value === 0 ? 'Create Banner' : 'Edit Banner'}}
       </button>
     </div>
   </form>

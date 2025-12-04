@@ -23,7 +23,7 @@ import { IEmployee, IEmployeeResponse } from '../employee.model';
 
 @Component({
   selector: 'app-employee-list',
-  imports: [PaginationController, ReactiveFormsModule, PaginationController, SearchBar, CommonModule],
+  imports: [PaginationController, ReactiveFormsModule, SearchBar, CommonModule],
   templateUrl: './employee-list.html',
   styleUrl: './employee-list.scss',
 })
@@ -32,11 +32,9 @@ export class EmployeeList
   implements OnInit
 {
   public payLoad: IPaginationPayload = initializePagInationPayload();
-  public paginationMetadata: PaginationControlMetadata = createPaginationMetadata();
   public employees: IEmployee[] = [];
   public btn: string = '+ Add';
   public readonly dialog = inject(MatDialog);
-
   public paginationMetaData: PaginationControlMetadata = createPaginationMetadata();
 
   constructor(private toaster: ToastService) {
@@ -59,6 +57,9 @@ export class EmployeeList
         this.payLoad.pageIndex,
         this.payLoad.top
       );
+    }
+    else{
+      this.employees = []
     }
   }
 

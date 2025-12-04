@@ -57,7 +57,7 @@ export class ProductUpsert extends Base implements OnInit {
   public stockSize: MStringEnumToArray[] = stringEnumToArray(EStockSize);
   public ShowDiscription: boolean = false;
   public readonly EDiscriptionType = EDescriptionType;
-  public setAllQtyInput = new FormControl<number | null>(null, patternWithMessage(/^[0-9]+$/, 'Only numbers are allowed'));
+  public setAllQtyInput = new FormControl<number | null>(null, patternWithMessage(/^1\d*$/, 'Only numbers are allowed'));
   public setAllQty: WritableSignal<number> = signal(0);
   public productForm: FormGroup<IProductForm> = initializeIProductForm();
   public dropdownSettings: IDropdownSettings = {
@@ -142,7 +142,7 @@ export class ProductUpsert extends Base implements OnInit {
 
   public mutateImageControl(index: number | null) {
     if (index == null) {
-      this.productForm.controls.productBase64.push(new FormControl(null));
+      this.productForm.controls.productBase64.push(new FormControl(null, Validators.required));
     } else {
       this.productForm.controls.productBase64.removeAt(index);
     }
@@ -212,8 +212,8 @@ export class ProductUpsert extends Base implements OnInit {
     event.target.value = null;
   }
 
-  public upsertProduct() {
-    // if (this.productForm.valid) {
+  public upsertProduct() {   
+    if (this.productForm.valid) {
     const data = this.productForm.getRawValue();
     data.descriptions.forEach((desc: any) => {
       if (desc.descriptionType === EDescriptionType.Json) {
@@ -256,12 +256,12 @@ export class ProductUpsert extends Base implements OnInit {
         }
       }
     );
-    // }
-    // else {
+     }
+     else {
       this.productForm.markAllAsTouched();
       this.productForm.updateValueAndValidity();
 
-    // }
+     }
   }
 
 
@@ -375,7 +375,7 @@ export class ProductUpsert extends Base implements OnInit {
 
   public setAllSize() {
    if(this.setAllQtyInput.valid){
-     const qty = this.setAllQtyInput.value || 0;
+     const qty = this.setAllQtyInput.value
     this.productForm.controls.stocks.controls.filter((x) => x.controls.size.value !== EStockSize.FreeSize).forEach((x) => {
       x.controls.quantity.setValue(qty);
     });
