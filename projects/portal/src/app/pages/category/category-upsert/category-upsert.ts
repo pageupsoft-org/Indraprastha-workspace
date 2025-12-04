@@ -10,7 +10,7 @@ import { ICategoryForm } from '../category.model';
 
 @Component({
   selector: 'app-category-upsert',
-  imports: [ReactiveFormsModule,  ValidateControl],
+  imports: [ReactiveFormsModule, ValidateControl],
   templateUrl: './category-upsert.html',
   styleUrl: './category-upsert.scss',
 })
@@ -18,11 +18,11 @@ export class CategoryUpsert extends Base implements OnInit {
 
   public readonly dialogRef = inject(MatDialogRef<CategoryList>);
   public readonly data = inject(MAT_DIALOG_DATA);
-  public collectionCombo:IGenericComboResponse[] = [] 
+  public collectionCombo: IGenericComboResponse[] = []
 
   public categoryForm = new FormGroup<ICategoryForm>({
     id: new FormControl(0),
-    name: new FormControl('', [Validators.required, Validators.minLength(3), Validators.maxLength(50)]),
+    name: new FormControl('', [Validators.required, Validators.minLength(3), Validators.maxLength(30)]),
     gst: new FormControl(0),
     description: new FormControl(''),
     collectionId: new FormControl(null, [Validators.required]),
@@ -40,7 +40,7 @@ export class CategoryUpsert extends Base implements OnInit {
     }
   }
 
-  public onCancel(isSuccess?:boolean) {
+  public onCancel(isSuccess?: boolean) {
     this.dialogRef.close(isSuccess);
   }
 

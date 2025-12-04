@@ -526,7 +526,7 @@
               (click)="upsertProduct()"
               class="px-4 py-2 rounded bg-[#82181A] text-white shadow cursor-pointer"
             >
-              Save Product
+              {{productForm.controls.id.value === 0 ? 'Create Product' : 'Edit Product'}}
             </button>
           </div>
     </form>

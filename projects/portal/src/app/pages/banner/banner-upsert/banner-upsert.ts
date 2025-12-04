@@ -25,13 +25,14 @@ export class BannerUpsert extends Base implements OnInit {
   public bannerConnectionTypes: MStringEnumToArray[] = stringEnumToArray(EBannerConnectionType);
   public bannerTypes: MStringEnumToArray[] = stringEnumToArray(EbannerTypes);
   public genders: MStringEnumToArray[] = stringEnumToArray(GenderTypeEnum);
-  public combo: IGenericComboResponse[] = [];
+  public categoryCombo: IGenericComboResponse[] = [];
+  public productCombo: IGenericComboResponse[] = [];
   public selectConnectionType: string | null = 'None';
   public base64Image: string | ArrayBuffer | null = null;
 
   public bannerForm = new FormGroup<IBannerForm>({
     id: new FormControl(0),
-    name: new FormControl(null, [Validators.required, Validators.maxLength(100)]),
+    name: new FormControl(null, [Validators.required, Validators.maxLength(30)]),
     description: new FormControl(null, [Validators.maxLength(250)]),
     bannerConnectionType: new FormControl('None'),
     bannerType: new FormControl(null, [Validators.required]),
@@ -67,13 +68,12 @@ export class BannerUpsert extends Base implements OnInit {
   }
 
   public onBannerSubmit() {
+    if (this.bannerForm.controls.bannerBase64.value === null) {
+      this.toaster.show({ message: 'Please upload banner image', duration: 3000, type: EToastType.error });
+      return;
+    }
+
     if (this.bannerForm.valid) {
-
-      if (this.bannerForm.controls.bannerBase64.value === null) {
-        this.toaster.show({ message: 'Please upload banner image', duration: 3000, type: EToastType.error });
-        return;
-      }
-
       const payload = this.bannerForm.getRawValue();
 
       const previousImage = payload.bannerBase64
@@ -106,7 +106,7 @@ export class BannerUpsert extends Base implements OnInit {
       .then((response) => {
         if (response) {
           if (response.data) {
-            this.combo = response.data;
+            this.categoryCombo = response.data;
           }
         }
       })
@@ -118,7 +118,7 @@ export class BannerUpsert extends Base implements OnInit {
       .then((response) => {
         if (response) {
           if (response.data) {
-            this.combo = response.data;
+            this.productCombo = response.data;
           }
         }
       })
@@ -127,13 +127,7 @@ export class BannerUpsert extends Base implements OnInit {
 
   public selectBannerConnectionType() {
     const bannerConnectionValue = this.bannerForm.controls.bannerConnectionType.value;
-    if (bannerConnectionValue === 'Category') {
-      this.bannerForm.controls.bannerValueId.reset();
-      this.bannerForm.controls.bannerValueId.enable();
-      this.selectConnectionType = bannerConnectionValue;
-      this.bannerForm.controls.bannerValueId.setValidators([Validators.required]);
-      this.bannerForm.controls.bannerValueId.updateValueAndValidity();
-    } else if (bannerConnectionValue === 'Product') {
+    if (bannerConnectionValue === 'Category' || bannerConnectionValue === 'Product') {
       this.bannerForm.controls.bannerValueId.reset();
       this.bannerForm.controls.bannerValueId.enable();
       this.selectConnectionType = bannerConnectionValue;

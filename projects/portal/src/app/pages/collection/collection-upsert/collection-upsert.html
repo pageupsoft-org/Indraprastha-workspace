@@ -32,7 +32,7 @@
                 d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
             </svg>
           </span>
-          <input type="text" formControlName="name" libValidateControl placeholder="Enter collection name" 
+          <input type="text" formControlName="name" libValidateControl placeholder="Enter collection name" maxlength="30"
           class="w-full h-11 pl-9 pr-4 rounded-[5px] border bg-white text-slate-800 placeholder-slate-400
                          focus:ring-[#82181A] focus:outline-none focus:border-[#82181A] 
                         transition duration-200 text-base" />
@@ -76,7 +76,7 @@
             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16" />
           </svg>
         </div>
-        <textarea formControlName="description" rows="2" libValidateControl
+        <textarea formControlName="description" rows="2" libValidateControl maxlength="200"
           placeholder="Write a short description about this collection..." class="w-full pl-10 pr-5 py-3 rounded-[5px] border border-slate-300 bg-white text-slate-900
                          placeholder-slate-400  focus:ring-[#82181A] focus:outline-none focus:border-[#82181A]
                          resize-none transition duration-200 text-base leading-relaxed"></textarea>
@@ -94,7 +94,7 @@
       </button>
       <button type="submit" (click)="onCollectionSubmit()" 
       class="px-7 py-2 rounded-[5px] bg-[#82181A] hover:bg-[#A33A3C]  text-white font-medium shadow-lg transition cursor-pointer">
-        Save Collection
+        {{collectionForm.controls.id.value === 0 ? 'Create Collection' : 'Edit Collection'}}
       </button>
     </div>
   </form>
