@@ -20,6 +20,12 @@ export class CollectionUpsert extends Base {
   public readonly dialogRef = inject(MatDialogRef<EmployeeList>);
   public readonly data = inject(MAT_DIALOG_DATA);
   public genders: MStringEnumToArray[] = stringEnumToArray(GenderTypeEnum);
+    public collectionForm = new FormGroup<ICollectionForm>({
+    id: new FormControl(0),
+    name: new FormControl('', [Validators.required, Validators.maxLength(30), Validators.minLength(3)]),
+    gender: new FormControl(null, Validators.required),
+    description: new FormControl('', Validators.maxLength(200)),
+  });
 
   constructor(private toaster: ToastService) {
     super()
@@ -32,12 +38,7 @@ export class CollectionUpsert extends Base {
     }
   }
 
-  public collectionForm = new FormGroup<ICollectionForm>({
-    id: new FormControl(0),
-    name: new FormControl('', Validators.required),
-    gender: new FormControl(null, Validators.required),
-    description: new FormControl(''),
-  });
+
 
   public onCancel(isSuccess?: boolean) {
     this.dialogRef.close(isSuccess);

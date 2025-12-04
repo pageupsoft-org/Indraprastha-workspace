@@ -27,12 +27,12 @@ export class EmployeeUpsert extends Base implements OnInit {
 
   public employeeForm = new FormGroup<IEmployeeForm>({
     id: new FormControl(0),
-    firstName: new FormControl('', [Validators.required, Validators.minLength(3), Validators.maxLength(30)]),
-    lastName: new FormControl('', [Validators.minLength(3), Validators.maxLength(50)]),
+    firstName: new FormControl('', [Validators.required, Validators.minLength(3), Validators.maxLength(15)]),
+    lastName: new FormControl('', [Validators.required, Validators.minLength(3), Validators.maxLength(15)]),
     email: new FormControl('', [Validators.required, patternWithMessage(/^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/, 'Please enter a valid email address (e.g. example@domain.com).')]),
-    contact: new FormControl('', [Validators.required, patternWithMessage(/^\+?[1-9]\d{1,14}$/, 'Please enter a valid contact number.')]),
+    contact: new FormControl('', [Validators.required, patternWithMessage(/^[6-9]\d{9}$/, 'Please enter a valid contact number.')]),
     userType: new FormControl('', [Validators.required]),
-    address: new FormControl('', [Validators.required,  Validators.maxLength(200)]),
+    address: new FormControl('', [Validators.required,  Validators.maxLength(70)]),
     username: new FormControl(null, [Validators.minLength(3), Validators.maxLength(30)]),
     password: new FormControl(null, [Validators.minLength(8), Validators.maxLength(8)]),
     isLogin: new FormControl(false),

@@ -150,7 +150,7 @@ export const initializeIProductForm = (): FormGroup<IProductForm> =>
     variants: new FormArray<FormGroup<IVariantForm>>([]),
     stocks: new FormArray<FormGroup<stocks>>([]),
     descriptions: new FormArray<FormGroup<IDescriptionForm>>([]),
-    productBase64: new FormArray<FormControl<string | null>>([], Validators.required),
+    productBase64: new FormArray<FormControl<string | null>>([]),
     removeURL: new FormControl<string[]>([]),
   });
 

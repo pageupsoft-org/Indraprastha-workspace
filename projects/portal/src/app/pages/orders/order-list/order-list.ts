@@ -9,8 +9,9 @@ import { Route, Router } from '@angular/router';
 import { FormGroup, ReactiveFormsModule } from '@angular/forms';
 import { NgClass } from '@angular/common';
 import { createPaginationMetadata, PaginationControlMetadata } from '../../../core/interface/model/pagination-detail.model';
-import { PaginationController } from "../../../component/pagination-controller/pagination-controller";
+
 import { IChangeStatusForm, initializeIChangeStatusForm, IOrder, IOrderPagination, IOrderResponse, IUpdateStatusRequest } from '../order.model';
+import { PaginationController } from '../../../component/pagination-controller/pagination-controller';
 
 
 @Component({
@@ -29,7 +30,7 @@ export class OrderList extends Base implements OnInit {
     status: null
   };
   public changeStatusForm: FormGroup<IChangeStatusForm> = initializeIChangeStatusForm()
-  public totalOrders: number = 0 
+  public totalOrders: number = 0
   public orders: IOrder[] = [];
   public statusValue: MStringEnumToArray[] = stringEnumToArray(EOrderStatus)
   public orderStatus: string | null = 'InProcess'
@@ -57,7 +58,11 @@ export class OrderList extends Base implements OnInit {
           )
         }
       }
+      else {
+        this.orders = []
+      }
     })
+
   }
 
   // ADD ID WHEN USER VIEW OR UPDATE
@@ -134,7 +139,6 @@ export class OrderList extends Base implements OnInit {
     })
   }
 
-
   public topChange(top: number) {
     this.payLoad.top = top;
     this.getAllOrders();
@@ -145,6 +149,6 @@ export class OrderList extends Base implements OnInit {
     this.getAllOrders();
   }
 
-  
+
 
 }

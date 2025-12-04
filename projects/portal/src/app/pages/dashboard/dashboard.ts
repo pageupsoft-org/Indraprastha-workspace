@@ -16,7 +16,7 @@ import {
   ApexStroke,
   ApexNonAxisChartSeries,
   ApexResponsive,
-} from 'ng-apexcharts';
+} from "ng-apexcharts";
 import { IDashboardResponse, TotalPendings } from './dashboard.model';
 
 export type ChartOptions = {

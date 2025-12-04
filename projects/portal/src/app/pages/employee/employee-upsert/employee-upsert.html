@@ -65,7 +65,7 @@
             placeholder="Enter first name"
             formControlName="firstName"
             minlength="3"
-            maxlength="30"
+            maxlength="15"
             libValidateControl
           />
         </div>
@@ -98,6 +98,8 @@
             type="text"
             placeholder="Enter last name"
             formControlName="lastName"
+            maxlength="15"
+            libValidateControl
           />
         </div>
       </div>
@@ -232,7 +234,7 @@
           rows="3"
           placeholder="Enter address"
           formControlName="address"
-          maxlength="200"
+          maxlength="70"
           libValidateControl
         ></textarea>
       </div>
@@ -359,7 +361,7 @@
       </button>
       <button type="submit" (click)="onSubmitEmployee()"
               class="px-7 py-2 rounded-[5px] bg-[#82181A] hover:bg-[#A33A3C]  text-white font-medium shadow-lg transition cursor-pointer">
-        Create Account
+        {{employeeForm.controls.id.value === 0 ? 'Create Employee' : 'Edit Employee'}}
       </button>
     </div>
   </form>

@@ -37,7 +37,7 @@
                    formControlName="name" libValidateControl
                    placeholder="e.g. shirts, sarees"
                    minlength="3"
-                   maxlength="50"
+                   maxlength="30"
                       class="w-full h-11 pl-9 pr-4 rounded-[5px] border bg-white text-slate-800 placeholder-slate-400
                          focus:ring-[#82181A] focus:outline-none focus:border-[#82181A] 
                         transition duration-200 text-base" />
@@ -55,14 +55,14 @@
               </svg>
             </span>
             <select formControlName="gst" libValidateControl
-                class="w-full h-11 pl-9 pr-4 rounded-[5px] border bg-white text-slate-800 placeholder-slate-400
+                class="w-full appearance-none h-11 pl-9 pr-4 rounded-[5px] border bg-white text-slate-800 placeholder-slate-400
                          focus:ring-[#82181A] focus:outline-none focus:border-[#82181A] 
                         transition duration-200 text-base">
-              <option [ngValue]="null" disabled>Select GST Rate</option>
-              <option value="5">5%</option>
-              <option value="12">12% </option>
-              <option value="18">18%</option>
-              <option value="28">28%</option>
+              <option [ngValue]="0">0%</option>
+              <option [ngValue]="5">5%</option>
+              <option [ngValue]="12">12% </option>
+              <option [ngValue]="18">18%</option>
+              <option [ngValue]="28">28%</option>
             </select>
             <div class="absolute inset-y-0 right-3 flex items-center pointer-events-none text-slate-400">
               <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -83,7 +83,7 @@
               </svg>
             </span>
             <select formControlName="collectionId" libValidateControl
-                   class="w-full h-11 pl-9 pr-4 rounded-[5px] border bg-white text-slate-800 placeholder-slate-400
+                   class="w-full appearance-none   h-11 pl-9 pr-4 rounded-[5px] border bg-white text-slate-800 placeholder-slate-400
                          focus:ring-[#82181A] focus:outline-none focus:border-[#82181A] 
                         transition duration-200 text-base">
               <option [ngValue]="null" selected disabled>select collection</option>
@@ -130,7 +130,7 @@
         </button>
         <button type="submit" (click)="onCategorySubmit()"
                class="px-7 py-2 rounded-[5px] bg-[#82181A] hover:bg-[#A33A3C]  text-white font-medium shadow-lg transition cursor-pointer">
-          Save Category
+           {{categoryForm.controls.id.value === 0 ? 'Create Category' : 'Edit Category'}}
         </button>
       </div>
     </form>
