@@ -1,3 +1,4 @@
+import { AbstractControl, FormArray, FormControl, FormGroup } from '@angular/forms';
 import { ImageTypeEnum } from '../enum/image.enum';
 import { IConvertImageParams } from '../interface/model/portal-util.model';
 
@@ -214,4 +215,80 @@ export function arrayToJson(arr) {
     }
     return accumulator;
   }, {});
+}
+
+
+
+/**
+ * Walks a FormGroup/FormArray recursively and logs every invalid FormControl.
+ * - path: e.g. "variants[0].size" or "name"
+ * - errors: the control.errors object (JSON.stringified)
+ *
+ * @param root the root FormGroup (e.g. FormGroup<IProductForm>)
+ * @param options.optionalMarkTouched if true will mark invalid controls as touched
+ */
+export function logInvalidControls(
+  root: AbstractControl,
+  options: { markTouched?: boolean } = {}
+): void {
+  const results: { path: string; errors: any }[] = [];
+
+  function walk(control: AbstractControl, path: string) {
+    if (control instanceof FormGroup) {
+      Object.keys(control.controls).forEach((key) => {
+        const child = control.controls[key];
+        const childPath = path ? `${path}.${key}` : key;
+        walk(child, childPath);
+      });
+      return;
+    }
+
+    if (control instanceof FormArray) {
+      control.controls.forEach((child, index) => {
+        const childPath = `${path}[${index}]`;
+        walk(child, childPath);
+      });
+      return;
+    }
+
+    // it's a FormControl
+    if (control instanceof FormControl) {
+      if (control.invalid) {
+        if (options.markTouched) control.markAsTouched({ onlySelf: true });
+
+        // Clone the errors so we can safely stringify (avoid circular refs)
+        let errorsSafe: any = control.errors;
+        try {
+          errorsSafe = errorsSafe ? JSON.parse(JSON.stringify(errorsSafe)) : errorsSafe;
+        } catch {
+          // fallback if stringify fails
+          errorsSafe = control.errors;
+        }
+
+        results.push({ path, errors: errorsSafe });
+
+        // Log immediately as well (useful for console)
+        console.warn(`Invalid control -> ${path}`, errorsSafe);
+      }
+      return;
+    }
+
+    // Fallback for any other AbstractControl subtype (rare)
+    if (control && (control as any).invalid) {
+      const err = (control as any).errors;
+      console.warn(`Invalid control -> ${path}`, err);
+      results.push({ path, errors: err });
+    }
+  }
+
+  walk(root, '');
+
+  // Optionally: return or further process results
+  // For now we just log a summary
+  if (results.length === 0) {
+    console.info('No invalid controls found.');
+  } else {
+    console.info(`Total invalid controls: ${results.length}`);
+    results.forEach((r) => console.info(r.path, r.errors));
+  }
 }

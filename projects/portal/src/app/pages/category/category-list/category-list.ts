@@ -60,13 +60,13 @@ export class CategoryList
       this.category.set([]);
     }
   }
+
   public searchText(searchText: string) {
     this.payLoad.search = searchText;
     this.searchString$.next(searchText);
     this.payLoad.pageIndex = 1;
     this.search();
   }
-
 
   public openModel(id: number = 0) {
     const dialogRef = this.dialog.open(CategoryUpsert, {

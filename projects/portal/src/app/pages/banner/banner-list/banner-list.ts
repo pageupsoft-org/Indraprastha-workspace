@@ -13,15 +13,15 @@ import { ApiRoutes, EToastType, IBanner, IBannerPagination, IBannerResponse, MCo
 import { PaginationController } from "../../../component/pagination-controller/pagination-controller";
 import { createPaginationMetadata, PaginationControlMetadata } from '../../../core/interface/model/pagination-detail.model';
 import { handlePagination } from '@portal/core';
-
-
+import { SearchBar } from "../../../component/search-bar/search-bar";
 
 @Component({
   selector: 'app-banner-list',
-  imports: [CommonModule, PaginationController],
+  imports: [CommonModule, PaginationController, SearchBar],
   templateUrl: './banner-list.html',
   styleUrl: './banner-list.scss',
 })
+
 export class BannerList extends Base implements OnInit {
   readonly dialog = inject(MatDialog);
   public payLoad: IBannerPagination = {
@@ -63,6 +63,7 @@ export class BannerList extends Base implements OnInit {
       yesText: 'Yes',
       noText: 'No'
     };
+
     this.objConfirmationUtil.getConfirmation(modalData).then((res: boolean) => {
       if (res) {
         this.httpDeletePromise<IGenericResponse<boolean>>(ApiRoutes.BANNER.GET_BY_ID(id))
@@ -112,5 +113,12 @@ export class BannerList extends Base implements OnInit {
   public pageChange(pageIndex: number) {
     this.payLoad.pageIndex = pageIndex;
     this.getBannerData();
+  }
+
+  public search(value:string){
+    // debugger
+    this.payLoad.search = value;
+    // this.searchString$.next(searchText);
+    // this.
   }
 }

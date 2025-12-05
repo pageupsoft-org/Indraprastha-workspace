@@ -77,8 +77,8 @@ export const initializeJsonTextForm = (
   data: IJsonTextFormData | null
 ): FormGroup<IJsonTextForm> => {
   const form = new FormGroup<IJsonTextForm>({
-    key: new FormControl<string>('', Validators.required),
-    value: new FormControl<string>('', Validators.required),
+    key: new FormControl<string>('', [Validators.required, Validators.maxLength(40)]),
+    value: new FormControl<string>('', [Validators.required,  Validators.maxLength(100)]),
   });
 
   if (data) {
@@ -92,10 +92,10 @@ export const initializeDescriptionForm = (
   data: IDescriptionData | null
 ): FormGroup<IDescriptionForm> => {
   const form = new FormGroup<IDescriptionForm>({
-    header: new FormControl<string | null>(null, Validators.required),
+    header: new FormControl<string | null>(null, [Validators.required, Validators.maxLength(40)]),
     descriptionType: new FormControl<EDescriptionType | null>(EDescriptionType.SingleText),
-    description: new FormControl<string | null>(null, Validators.required),
-    shortDescription: new FormControl<string | null>(null),
+    description: new FormControl<string | null>(null, [Validators.required, Validators.maxLength(300)]),
+    shortDescription: new FormControl<string | null>(null, Validators.maxLength(70)),
     jsonText: new FormArray<FormGroup<IJsonTextForm>>([]),
   });
   if (data) {
@@ -109,11 +109,11 @@ export const initializeVariantForm = (data: IVariantData | null): FormGroup<IVar
   const form = new FormGroup<IVariantForm>({
     id: new FormControl<number | null>(0),
     productId: new FormControl<number | null>(0),
-    name: new FormControl<string | null>(null, Validators.required),
-    description: new FormControl<string | null>(null, Validators.required,),
-    mrp: new FormControl<number | null>(null, [Validators.required, patternWithMessage(/^\d+(\.\d{1,2})?$/, ' Please enter a valid price (only numbers, up to 2 decimal places).')]),
+    name: new FormControl<string | null>(null, [Validators.required, Validators.maxLength(40)]),
+    description: new FormControl<string | null>(null, Validators.maxLength(170)),
+    mrp: new FormControl<number | null>(null, [Validators.required, Validators.maxLength(10), patternWithMessage(/^\d+(\.\d{1,2})?$/, 'enter a valid price')]),
     stocks: new FormGroup({
-      quantity: new FormControl<number | null>(null, [Validators.required, patternWithMessage(/^[1-9]\d*$/, '  Please enter a valid quantity')]),
+      quantity: new FormControl<number | null>(null, [Validators.required, Validators.maxLength(4), patternWithMessage(/^[1-9]\d*$/, '  Please enter a valid quantity')]),
     }),
     variantBase64: new FormControl<string | null>(null, Validators.required,),
   });
@@ -130,7 +130,7 @@ export const initializeStockForm = (
   size?: EStockSize | null
 ): FormGroup<stocks> =>
   new FormGroup<stocks>({
-    quantity: new FormControl<number | null>(quantity ?? null, [Validators.required, patternWithMessage(/^[1-9]\d*$/, 'Please enter a valid quantity')]),
+    quantity: new FormControl<number | null>(quantity ?? null, [Validators.required, Validators.maxLength(4), patternWithMessage(/^[1-9]\d*$/, 'Please enter a valid quantity')]),
     size: new FormControl<EStockSize | null>(size ?? null),
   });
 
@@ -141,11 +141,11 @@ export const initializeIProductForm = (): FormGroup<IProductForm> =>
     id: new FormControl<number | null>(0),
     categoryIds: new FormControl<number[]>([]),
     categoryIdsList: new FormControl<Array<{ id: number; name: string }> | null>([]),
-    name: new FormControl<string | null>(null, Validators.required),
-    isCustomSize: new FormControl<boolean | null>(false),
+    name: new FormControl<string | null>(null, [Validators.required, Validators.maxLength(70)]),
+    isCustomSize: new FormControl<boolean | null>(false,),
     customSizeName: new FormControl<string | null>(''),
     color: new FormArray<FormControl<string | null>>([]),
-    mrp: new FormControl<number | null>(null, [Validators.required, patternWithMessage(/^\d+(\.\d{1,2})?$/, ' Please enter a valid price (only numbers, up to 2 decimal places).')]),
+    mrp: new FormControl<number | null>(null, [Validators.required, Validators.maxLength(10), patternWithMessage(/^\d+(\.\d{1,2})?$/, 'Enter a valid price')]),
     gender: new FormControl<GenderTypeEnum | null>(null, Validators.required),
     variants: new FormArray<FormGroup<IVariantForm>>([]),
     stocks: new FormArray<FormGroup<stocks>>([]),

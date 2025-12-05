@@ -57,10 +57,10 @@ export class Login extends Base implements OnInit {
               duration: 2000,
             });
           }
-           this.isBtnLoader.set(true);
+           this.isBtnLoader.update(() => false);
         })
         .catch(error => {
-         this.isBtnLoader.set(false);
+         this.isBtnLoader.update(() => false);
           //  handle error 
         })
     } else {

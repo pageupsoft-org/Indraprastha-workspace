@@ -48,7 +48,6 @@ export class BannerUpsert extends Base implements OnInit {
   }
 
   ngOnInit(): void {
-    this.bannerForm.controls.bannerValueId.disable();
     const id = this.data.id;
     if (id) {
       this.getBannerById(id);
@@ -128,7 +127,7 @@ export class BannerUpsert extends Base implements OnInit {
   public selectBannerConnectionType() {
     const bannerConnectionValue = this.bannerForm.controls.bannerConnectionType.value;
     if (bannerConnectionValue === 'Category' || bannerConnectionValue === 'Product') {
-      this.bannerForm.controls.bannerValueId.reset();
+      console.log(this.categoryCombo, this.productCombo)
       this.bannerForm.controls.bannerValueId.enable();
       this.selectConnectionType = bannerConnectionValue;
       this.bannerForm.controls.bannerValueId.setValidators([Validators.required]);
@@ -150,8 +149,8 @@ export class BannerUpsert extends Base implements OnInit {
             if (response.data) {
               this.bannerForm.patchValue({
                 ...response.data,
-                bannerBase64: response.data.bannerURL,
-                // bannerValueId:this.combo.
+                bannerBase64: response.data.bannerURL
+              
               });
               this.selectConnectionType = response.data.bannerConnectionType;
             }
@@ -166,7 +165,7 @@ export class BannerUpsert extends Base implements OnInit {
   public onBannerImageChange(event: any) {
     const param: IConvertImageParams = initialConvertImageParam({
       event,
-      allowedTypes: [ImageTypeEnum.jpeg, ImageTypeEnum.png, ImageTypeEnum.webp],
+      allowedTypes: [ImageTypeEnum.webp, ImageTypeEnum.png, ImageTypeEnum.jpeg],
       expectedImgWidth: ImageSizeConst.banner.width,
       expectedImgHeight: ImageSizeConst.banner.height,
       maxSize: 1.4

@@ -25,7 +25,7 @@ import {
   ValidateControl,
 } from '@shared';
 import { CommonModule } from '@angular/common';
-import { arrayToJson, convertImagesToBase64Array } from '../../../core/utils/portal-utility.util';
+import { arrayToJson, convertImagesToBase64Array, logInvalidControls } from '../../../core/utils/portal-utility.util';
 import { IDropdownSettings, NgMultiSelectDropDownModule } from 'ng-multiselect-dropdown';
 import { ActivatedRoute, Params, Router } from '@angular/router';
 import {
@@ -68,6 +68,7 @@ export class ProductUpsert extends Base implements OnInit {
     unSelectAllText: 'UnSelect All',
     itemsShowLimit: 3,
     allowSearchFilter: false,
+    defaultOpen: false
   };
 
   // public onCancel() {
@@ -87,6 +88,8 @@ export class ProductUpsert extends Base implements OnInit {
     this.stockSize.forEach((size) => {
       this.productForm.controls.stocks.push(initializeStockForm(0, size.key as EStockSize));
     });
+
+    this.mutateImageControl(null)
 
     this.activatedRoute.queryParams.subscribe((param: Params) => {
       if (param && param['id']) {
@@ -151,7 +154,7 @@ export class ProductUpsert extends Base implements OnInit {
   public onVariantImageChange(event: any, index: number) {
     const param: IConvertImageParams = initialConvertImageParam({
       event,
-      allowedTypes: [ImageTypeEnum.jpeg, ImageTypeEnum.png],
+      allowedTypes: [ImageTypeEnum.webp],
       expectedImgWidth: ImageSizeConst.productVariant.width,
       expectedImgHeight: ImageSizeConst.productVariant.height,
       maxSize: 1.2
@@ -180,7 +183,7 @@ export class ProductUpsert extends Base implements OnInit {
   public onProductImageChange(event: any, index: number) {
     const param: IConvertImageParams = initialConvertImageParam({
       event,
-      allowedTypes: [ImageTypeEnum.jpeg, ImageTypeEnum.png],
+      allowedTypes: [ImageTypeEnum.webp, ImageTypeEnum.png, ImageTypeEnum.jpeg],
       expectedImgWidth: ImageSizeConst.product.width,
       expectedImgHeight: ImageSizeConst.product.height,
       maxSize: 1.2
@@ -212,67 +215,88 @@ export class ProductUpsert extends Base implements OnInit {
     event.target.value = null;
   }
 
-  public upsertProduct() {   
+  public upsertProduct() {
+    console.log(this.productForm, this.productForm.valid);
+
+    console.log("logging");
+    logInvalidControls(this.productForm);
     if (this.productForm.valid) {
-    const data = this.productForm.getRawValue();
-    data.descriptions.forEach((desc: any) => {
-      if (desc.descriptionType === EDescriptionType.Json) {
-        desc.description = JSON.stringify(arrayToJson(desc.jsonText));
-      }
-      delete desc.jsonText; // ✅ deletes the key from the object
-    });
-
-    data.stocks = data.stocks.filter((x) => (x.quantity ?? 0) > 0);
-    data.categoryIds = data.categoryIdsList?.map((x) => x.id) || [];
-
-    data.productBase64 = data.productBase64.filter((x) => !x?.startsWith('https://'));
-    data.variants.forEach((v) => {
-      if (v.variantBase64?.startsWith('https://')) {
-        v.variantBase64 = '';
-      }
-    });
-
-    delete (data as any).categoryIdsList;
-
-    this.httpPostPromise<IRGeneric<number>, any>(ApiRoutes.PRODUCT.POST, data).then(
-      (res: IRGeneric<number>) => {
-        if (res?.data) {
-          const msg: string = this.productForm.controls.id.value
-            ? 'Product Updated'
-            : 'Product Added';
-          this.toastService.show({
-            message: msg,
-            type: EToastType.success,
-            duration: 3000,
-          });
-          this.productForm = initializeIProductForm();
-          this.router.navigate([this.appRoutes.PRODUCT]);
-        } else {
-          this.toastService.show({
-            message: res.errorMessage,
-            type: EToastType.error,
-            duration: 3000,
-          });
+      const data = this.productForm.getRawValue();
+      data.descriptions.forEach((desc: any) => {
+        if (desc.descriptionType === EDescriptionType.Json) {
+          desc.description = JSON.stringify(arrayToJson(desc.jsonText));
         }
-      }
-    );
-     }
-     else {
+        delete desc.jsonText; // ✅ deletes the key from the object
+      });
+
+      data.stocks = data.stocks.filter((x) => (x.quantity ?? 0) > 0);
+      data.categoryIds = data.categoryIdsList?.map((x) => x.id) || [];
+
+      data.productBase64 = data.productBase64.filter((x) => !x?.startsWith('https://'));
+      data.variants.forEach((v) => {
+        if (v.variantBase64?.startsWith('https://')) {
+          v.variantBase64 = '';
+        }
+      });
+
+      delete (data as any).categoryIdsList;
+
+      this.httpPostPromise<IRGeneric<number>, any>(ApiRoutes.PRODUCT.POST, data).then(
+        (res: IRGeneric<number>) => {
+          if (res?.data) {
+            const msg: string = this.productForm.controls.id.value
+              ? 'Product Updated'
+              : 'Product Added';
+            this.toastService.show({
+              message: msg,
+              type: EToastType.success,
+              duration: 3000,
+            });
+            this.productForm = initializeIProductForm();
+            this.router.navigate([this.appRoutes.PRODUCT]);
+          } else {
+            this.toastService.show({
+              message: res.errorMessage,
+              type: EToastType.error,
+              duration: 3000,
+            });
+          }
+        }
+      );
+    }
+    else {
       this.productForm.markAllAsTouched();
       this.productForm.updateValueAndValidity();
 
-     }
+    }
   }
 
 
   public onDescriptionTypeChange(form: FormGroup<IDescriptionForm>) {
-    if (form.controls.descriptionType.value == EDescriptionType.Json) {
-      this.mutateJsonValueControl(null, form);
+    if (form.controls.descriptionType.value === EDescriptionType.Json) {
+      this.mutateJsonValueControl(null, form)
+      // form.controls.description.disable();
+      // form.controls.description.setValue(null);
+      form.controls.description.clearValidators();
+      form.controls.description.updateValueAndValidity();
     } else {
-      form.controls.jsonText.clear();
-      form.controls.description.setErrors({ required: true });
+      // form.controls.description.enable();
+      form.controls.description.setValidators([Validators.required]);
       form.controls.description.updateValueAndValidity();
     }
+
+    // if (form.controls.descriptionType.value == EDescriptionType.Json) {
+    //   this.mutateJsonValueControl(null, form);
+    //   form.controls.description.setErrors(null);
+    //   form.controls.description.updateValueAndValidity();
+    // } else {
+    //   form.controls.jsonText.clear();
+    //   form.controls.description.setErrors({ required: true });
+    //   form.controls.description.updateValueAndValidity();
+    // }
+
+    console.log(form);
+
   }
 
   private getProductById(productId: number) {
@@ -366,6 +390,7 @@ export class ProductUpsert extends Base implements OnInit {
           }
 
           this.productForm.controls.descriptions.push(form);
+          console.log(this.productForm.controls.variants.value)
         });
 
         this.productForm.controls.stocks.disable();
@@ -374,13 +399,13 @@ export class ProductUpsert extends Base implements OnInit {
   }
 
   public setAllSize() {
-   if(this.setAllQtyInput.valid){
-     const qty = this.setAllQtyInput.value
-    this.productForm.controls.stocks.controls.filter((x) => x.controls.size.value !== EStockSize.FreeSize).forEach((x) => {
-      x.controls.quantity.setValue(qty);
-    });
-    // this.productForm.controls.stocks.updateValueAndValidity();
-    this.setAllQtyInput.reset();
+    if (this.setAllQtyInput.valid) {
+      const qty = this.setAllQtyInput.value
+      this.productForm.controls.stocks.controls.filter((x) => x.controls.size.value !== EStockSize.FreeSize).forEach((x) => {
+        x.controls.quantity.setValue(qty);
+      });
+      // this.productForm.controls.stocks.updateValueAndValidity();
+      this.setAllQtyInput.reset();
+    }
   }
-}
 }
