@@ -14,6 +14,8 @@ import { PaginationController } from "../../../component/pagination-controller/p
 import { createPaginationMetadata, PaginationControlMetadata } from '../../../core/interface/model/pagination-detail.model';
 import { handlePagination } from '@portal/core';
 import { SearchBar } from "../../../component/search-bar/search-bar";
+import { SearchBase } from '../../../core/base/search-base';
+import { Observable } from 'rxjs';
 
 @Component({
   selector: 'app-banner-list',
@@ -22,7 +24,7 @@ import { SearchBar } from "../../../component/search-bar/search-bar";
   styleUrl: './banner-list.scss',
 })
 
-export class BannerList extends Base implements OnInit {
+export class BannerList extends SearchBase<IGenericResponse<IBannerResponse>> {
   readonly dialog = inject(MatDialog);
   public payLoad: IBannerPagination = {
     ...initializePagInationPayload(),
@@ -36,9 +38,27 @@ export class BannerList extends Base implements OnInit {
     super();
   }
 
-  ngOnInit(): void {
-    this.getBannerData();
+  protected override getData(): Observable<IGenericResponse<IBannerResponse>> {
+    return this.httpPostObservable<IGenericResponse<IBannerResponse>, IBannerPagination>(
+      ApiRoutes.BANNER.GET,
+      this.payLoad
+    );
   }
+
+  protected override dataLoadedHandler(response: IGenericResponse<IBannerResponse>): void {
+    if (response.data && response.data.total) {
+      this.banners = response.data.banners
+      handlePagination(
+        this.paginationMetaData,
+        response.data.total,
+        this.payLoad.pageIndex,
+        this.payLoad.top
+      )
+    }else{
+      this.banners = []
+    }
+  }
+
 
   public openModel(id: number = 0) {
     const dialogRef = this.dialog.open(BannerUpsert, {
@@ -51,7 +71,7 @@ export class BannerList extends Base implements OnInit {
 
     dialogRef.afterClosed().subscribe((result: boolean) => {
       if (result) {
-        this.getBannerData()
+        this.search()
       }
     });
   }
@@ -71,7 +91,6 @@ export class BannerList extends Base implements OnInit {
             if (response) {
               if (response.data) {
                 this.toaster.show({ message: 'Delete Successful', duration: 3000, type: EToastType.success });
-                this.getBannerData();
               }
             }
           })
@@ -81,44 +100,22 @@ export class BannerList extends Base implements OnInit {
 
   }
 
-  public getBannerData() {
-    this.httpPostPromise<IGenericResponse<IBannerResponse>, IBannerPagination>(
-      ApiRoutes.BANNER.GET,
-      this.payLoad
-    )
-      .then((response) => {
-        if (response?.data && response.data.total) {
-          this.banners = response.data.banners;
-          handlePagination(
-            this.paginationMetaData,
-            response.data.total,
-            this.payLoad.pageIndex,
-            this.payLoad.top
-          )
-        }
-        else{
-          this.banners =[]
-        }
-      })
-      .catch((error) => {
-        // error handle
-      });
-  }
 
   public topChange(top: number) {
     this.payLoad.top = top;
-    this.getBannerData();
+    this.payLoad.pageIndex = 1
+    this.search();
   }
 
   public pageChange(pageIndex: number) {
     this.payLoad.pageIndex = pageIndex;
-    this.getBannerData();
+    this.search();
   }
 
-  public search(value:string){
-    // debugger
+  public searchValue(value: string) {
     this.payLoad.search = value;
-    // this.searchString$.next(searchText);
-    // this.
+    this.searchString$.next(value);
+    this.payLoad.pageIndex = 1;
+    this.search()
   }
 }

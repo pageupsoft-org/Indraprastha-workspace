@@ -1,5 +1,5 @@
 import { FormControl } from "@angular/forms";
-import { GenderTypeEnum } from "@shared";
+import { GenderTypeEnum,  } from "@shared";
 
 
 export interface IBannerForm {
