@@ -169,7 +169,7 @@ export class BannerUpsert extends Base implements OnInit {
       allowedTypes: [ImageTypeEnum.jpeg, ImageTypeEnum.png, ImageTypeEnum.webp],
       expectedImgWidth: ImageSizeConst.banner.width,
       expectedImgHeight: ImageSizeConst.banner.height,
-      maxSize: 1.4
+      maxSize: 2
     });
 
     convertImagesToBase64Array(param).then((res: IConvertImageResult) => {
@@ -179,7 +179,7 @@ export class BannerUpsert extends Base implements OnInit {
         }
         if (res.invalidFiles.length) {
           this.toastService.show({
-            message: 'Some files were invalid or had incorrect dimensions and were skipped',
+            message: 'Some files were invalid (type, size, or dimensions) and were skipped',
             type: EToastType.warning,
             duration: 2000,
           });
