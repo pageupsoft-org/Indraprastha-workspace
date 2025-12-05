@@ -114,6 +114,7 @@ export function convertImagesToBase64Array(param: IConvertImageParams): Promise<
   invalidFiles: string[];
   message: string | null;
 }> {
+  const webpQuality: number = 0.6;
   return new Promise((resolve, reject) => {
     const input = param.event.target as HTMLInputElement;
     const files = input.files;
@@ -143,6 +144,8 @@ export function convertImagesToBase64Array(param: IConvertImageParams): Promise<
       return new Promise<string | ArrayBuffer | null>((resolveFile, rejectFile) => {
         // 🔹 File size validation
         const fileSizeMB = file.size / (1024 * 1024);
+        console.log(fileSizeMB);
+
         if (param.maxSize && fileSizeMB > param.maxSize) {
           invalidFiles.push(`${file.name} (File too large: ${fileSizeMB.toFixed(2)}MB)`);
           resolveFile(null);
@@ -163,10 +166,48 @@ export function convertImagesToBase64Array(param: IConvertImageParams): Promise<
             if (!isWidthOk || !isHeightOk) {
               invalidFiles.push(`${file.name} (Invalid dimensions: ${img.width}x${img.height})`);
               resolveFile(null);
-            } else {
-              resolveFile(base64);
+              return;
             }
+
+            // 🌟 Convert to WebP + compress
+            const canvas = document.createElement('canvas');
+            canvas.width = img.width;
+            canvas.height = img.height;
+
+            const ctx = canvas.getContext('2d');
+            ctx?.drawImage(img, 0, 0);
+
+            // Convert to WebP Base64
+            const compressedBase64 = canvas.toDataURL('image/webp', webpQuality ?? 0.7);
+
+            // 🧮 Log size reduction
+            // const originalSizeKB = file.size / 1024;
+            // const compressedSizeKB = Math.round((compressedBase64.length * (3 / 4)) / 1024); // base64 -> bytes -> KB
+
+            // console.log(
+            //   `File: ${file.name}\n` +
+            //     `Original: ${originalSizeKB.toFixed(2)} KB\n` +
+            //     `Compressed: ${compressedSizeKB} KB\n` +
+            //     `Reduced: ${(originalSizeKB - compressedSizeKB).toFixed(2)} KB (${(
+            //       (1 - compressedSizeKB / originalSizeKB) *
+            //       100
+            //     ).toFixed(1)}%)`
+            // );
+
+            resolveFile(compressedBase64);
           };
+
+          // img.onload = () => {
+          //   const isWidthOk = !param.expectedImgWidth || img.width === param.expectedImgWidth;
+          //   const isHeightOk = !param.expectedImgHeight || img.height === param.expectedImgHeight;
+
+          //   if (!isWidthOk || !isHeightOk) {
+          //     invalidFiles.push(`${file.name} (Invalid dimensions: ${img.width}x${img.height})`);
+          //     resolveFile(null);
+          //   } else {
+          //     resolveFile(base64);
+          //   }
+          // };
 
           img.onerror = () => rejectFile('Invalid image file');
           img.src = base64 as string;

@@ -157,7 +157,7 @@ export class ProductUpsert extends Base implements OnInit {
       allowedTypes: [ImageTypeEnum.webp],
       expectedImgWidth: ImageSizeConst.productVariant.width,
       expectedImgHeight: ImageSizeConst.productVariant.height,
-      maxSize: 1.2
+      maxSize: 2
     });
 
     convertImagesToBase64Array(param).then((res: IConvertImageResult) => {
@@ -186,7 +186,7 @@ export class ProductUpsert extends Base implements OnInit {
       allowedTypes: [ImageTypeEnum.webp, ImageTypeEnum.png, ImageTypeEnum.jpeg],
       expectedImgWidth: ImageSizeConst.product.width,
       expectedImgHeight: ImageSizeConst.product.height,
-      maxSize: 1.2
+      maxSize: 2
     });
     convertImagesToBase64Array(param).then((res: IConvertImageResult) => {
       if (res) {

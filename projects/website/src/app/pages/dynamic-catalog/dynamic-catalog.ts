@@ -23,7 +23,7 @@ import {
 import { ActivatedRoute, Router, UrlSegment } from '@angular/router';
 import { HttpErrorResponse } from '@angular/common/http';
 import { InfiniteScrollDirective } from 'ngx-infinite-scroll';
-
+import { Location } from '@angular/common';
 import { NgxSkeletonLoaderModule } from 'ngx-skeleton-loader';
 import {
   IRequestProductMenu,
@@ -89,7 +89,8 @@ export class DynamicCatalog implements AfterViewInit {
     private platformService: PlatformService,
     private activatedRoute: ActivatedRoute,
     private toastService: ToastService,
-    private router: Router
+    private router: Router,
+    private location: Location
   ) {
     activatedRoute.url.subscribe((url: any) => {
       const { baseUrl, params } = getObjectFromUrl((url as Array<UrlSegment>)[0].path, [
@@ -230,6 +231,22 @@ export class DynamicCatalog implements AfterViewInit {
               };
             });
           }
+
+          this.dynamicData.update((data) => {
+            return {
+              ...data,
+              filter: {
+                ...data.filter,
+                category: data.filter.category.map((c) => ({
+                  ...c,
+                  isSelected: this.payloadGenderMenu().categoryIds.includes(c.id),
+                })),
+              },
+            };
+          });
+        }
+        else{
+          this.dynamicData.set(initializeIResponseDynamicCatalogue())
         }
         this.isShowLoading.set(false);
       },
@@ -302,11 +319,8 @@ export class DynamicCatalog implements AfterViewInit {
 
     this.payloadGenderMenu().categoryIds = categoryIds;
     this.payloadGenderMenu().colors = colors;
-    console.log(this.payloadGenderMenu());
-
-    // console.log(this.baseUrl());
-    this.router.navigate([createUrlFromObject(this.payloadGenderMenu(), this.baseUrl())]);
-
-    // this.getData();
+    this.getData();
+    const newUrl = createUrlFromObject(this.payloadGenderMenu(), this.baseUrl());
+    this.location.go(newUrl);
   }
 }
