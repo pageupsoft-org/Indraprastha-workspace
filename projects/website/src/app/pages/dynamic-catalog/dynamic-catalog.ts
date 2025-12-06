@@ -120,6 +120,8 @@ export class DynamicCatalog implements AfterViewInit {
     if (this.platformService.isBrowser) {
       window.scrollTo({ top: 0, behavior: 'smooth' });
     }
+
+    this.setFiltersOpen(false);
   }
 
   public routeToProductDetail(productId: number) {
