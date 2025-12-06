@@ -5,7 +5,7 @@ export interface ICategory {
 }
 
 export interface IRequestProductMenu extends IPaginationPayload {
-  gender: GenderTypeEnum;
+  gender: GenderTypeEnum | null;
   collectionIds: number[];
   categoryIds: number[];
   colors: string[];
