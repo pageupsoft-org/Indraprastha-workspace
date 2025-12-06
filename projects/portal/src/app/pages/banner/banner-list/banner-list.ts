@@ -26,7 +26,7 @@ import { Observable } from 'rxjs';
 
 export class BannerList extends SearchBase<IGenericResponse<IBannerResponse>> {
   readonly dialog = inject(MatDialog);
-  public payLoad: IBannerPagination = {
+  protected override payLoad: IBannerPagination = {
     ...initializePagInationPayload(),
     bannerConnectionType: null,
     bannerType: null,
@@ -34,6 +34,7 @@ export class BannerList extends SearchBase<IGenericResponse<IBannerResponse>> {
   };
   public banners: IBanner[] = [];
   public paginationMetaData: PaginationControlMetadata = createPaginationMetadata()
+
   constructor(private toaster: ToastService) {
     super();
   }
@@ -58,7 +59,6 @@ export class BannerList extends SearchBase<IGenericResponse<IBannerResponse>> {
       this.banners = []
     }
   }
-
 
   public openModel(id: number = 0) {
     const dialogRef = this.dialog.open(BannerUpsert, {
@@ -100,22 +100,4 @@ export class BannerList extends SearchBase<IGenericResponse<IBannerResponse>> {
 
   }
 
-
-  public topChange(top: number) {
-    this.payLoad.top = top;
-    this.payLoad.pageIndex = 1
-    this.search();
-  }
-
-  public pageChange(pageIndex: number) {
-    this.payLoad.pageIndex = pageIndex;
-    this.search();
-  }
-
-  public searchValue(value: string) {
-    this.payLoad.search = value;
-    this.searchString$.next(value);
-    this.payLoad.pageIndex = 1;
-    this.search()
-  }
 }

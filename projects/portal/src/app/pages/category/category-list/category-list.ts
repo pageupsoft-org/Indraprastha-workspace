@@ -31,7 +31,7 @@ export class CategoryList
   implements OnInit
 {
   public readonly dialog = inject(MatDialog);
-  public payLoad: IPaginationPayload = initializePagInationPayload();
+  protected override payLoad: IPaginationPayload = initializePagInationPayload();
   // public category: ICategory[] = []
   public category: WritableSignal<ICategory[]> = signal([]);
   public paginationMetaData: PaginationControlMetadata = createPaginationMetadata();
@@ -59,13 +59,6 @@ export class CategoryList
     } else {
       this.category.set([]);
     }
-  }
-
-  public searchText(searchText: string) {
-    this.payLoad.search = searchText;
-    this.searchString$.next(searchText);
-    this.payLoad.pageIndex = 1;
-    this.search();
   }
 
   public openModel(id: number = 0) {
@@ -115,14 +108,4 @@ export class CategoryList
     }
   }
 
-  public topChange(top: number) {
-    this.payLoad.top = top;
-    this.payLoad.pageIndex = 1;
-    this.search();
-  }
-
-  public pageChange(pageIndex: number) {
-    this.payLoad.pageIndex = pageIndex;
-    this.search();
-  }
 }

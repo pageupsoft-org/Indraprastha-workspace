@@ -24,7 +24,7 @@ import { IProduct, IProductPagination, IProductResponseRoot } from '../product.m
 })
 export class ProductList extends SearchBase<IRGeneric<IProductResponseRoot>> implements OnInit {
   public readonly dialog = inject(MatDialog);
-  public payLoad: IProductPagination = {
+  protected override payLoad: IProductPagination = {
     ...initializePagInationPayload(),
     categoryId: null,
     gender: null,
@@ -101,14 +101,4 @@ export class ProductList extends SearchBase<IRGeneric<IProductResponseRoot>> imp
     }
   }
 
-  public topChange(top: number) {
-    this.payLoad.top = top;
-    this.payLoad.pageIndex = 1;
-    this.search();
-  }
-
-  public pageChange(pageIndex: number) {
-    this.payLoad.pageIndex = pageIndex;
-    this.search();
-  }
 }

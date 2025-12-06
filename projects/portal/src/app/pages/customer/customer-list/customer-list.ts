@@ -30,8 +30,7 @@ export class CustomerList
   extends SearchBase<IGenericResponse<ICustomerResponse>>
   implements OnInit {
   public readonly dialog = inject(MatDialog);
-  public searchInput = new FormControl('');
-  public payload: IPaginationPayload = initializePagInationPayload();
+  protected override payLoad: IPaginationPayload = initializePagInationPayload();
   public paginationMetaData: PaginationControlMetadata = createPaginationMetadata();
   public customers: WritableSignal<CustomerResponse[]> = signal([]);
   constructor(private toaster: ToastService) {
@@ -58,7 +57,7 @@ export class CustomerList
   protected override getData(): Observable<IGenericResponse<ICustomerResponse>> {
     return this.httpPostObservable<IGenericResponse<ICustomerResponse>, IPaginationPayload>(
       ApiRoutes.CUSTOMERS.CUSTOMER_ALL,
-      this.payload
+      this.payLoad
     );
   }
 
@@ -68,19 +67,12 @@ export class CustomerList
       handlePagination(
         this.paginationMetaData,
         response.data.total,
-        this.payload.pageIndex,
-        this.payload.top
+        this.payLoad.pageIndex,
+        this.payLoad.top
       );
     } else {
       this.customers.set([]);
     }
-  }
-
-  public searchText(searchText: string) {
-    this.payload.search = searchText;
-    this.searchString$.next(searchText);
-    this.payload.pageIndex = 1;
-    this.search();
   }
 
   // Delete Customer
@@ -114,14 +106,4 @@ export class CustomerList
 
   }
 
-  public topChange(top: number) {
-    this.payload.top = top;
-    this.payload.pageIndex = 1;
-    this.search();
-  }
-
-  public pageChange(pageIndex: number) {
-    this.payload.pageIndex = pageIndex;
-    this.search();
-  }
 }

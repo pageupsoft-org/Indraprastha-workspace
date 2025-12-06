@@ -127,7 +127,6 @@ export class BannerUpsert extends Base implements OnInit {
   public selectBannerConnectionType() {
     const bannerConnectionValue = this.bannerForm.controls.bannerConnectionType.value;
     if (bannerConnectionValue === 'Category' || bannerConnectionValue === 'Product') {
-      console.log(this.categoryCombo, this.productCombo)
       this.bannerForm.controls.bannerValueId.enable();
       this.selectConnectionType = bannerConnectionValue;
       this.bannerForm.controls.bannerValueId.setValidators([Validators.required]);

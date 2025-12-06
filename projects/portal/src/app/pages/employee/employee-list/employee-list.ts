@@ -31,7 +31,7 @@ export class EmployeeList
   extends SearchBase<IGenericResponse<IEmployeeResponse>>
   implements OnInit
 {
-  public payLoad: IPaginationPayload = initializePagInationPayload();
+  protected override payLoad: IPaginationPayload = initializePagInationPayload();
   public employees: IEmployee[] = [];
   public btn: string = '+ Add';
   public readonly dialog = inject(MatDialog);
@@ -119,14 +119,4 @@ export class EmployeeList
     }
   }
 
-  public topChange(top: number) {
-    this.payLoad.top = top;
-    this.payLoad.pageIndex = 1;
-    this.search();
-  }
-
-  public pageChange(pageIndex: number) {
-    this.payLoad.pageIndex = pageIndex;
-    this.search();
-  }
 }

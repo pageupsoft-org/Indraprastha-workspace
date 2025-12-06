@@ -37,7 +37,7 @@ export class CollectionList
 {
   public readonly dialog = inject(MatDialog);
   public collectionList: WritableSignal<ICollection[]> = signal([]);
-  public payLoad: IPaginationPayload = initializePagInationPayload();
+  protected override payLoad: IPaginationPayload = initializePagInationPayload();
   public collections: ICollection[] = [];
   public paginationMetaData: PaginationControlMetadata = createPaginationMetadata();
   constructor(private toaster: ToastService) {
@@ -65,12 +65,6 @@ export class CollectionList
     }
   }
 
-  public searchText(searchText: string) {
-    this.payLoad.search = searchText;
-    this.searchString$.next(searchText);
-    this.payLoad.pageIndex = 1;
-    this.search();
-  }
 
   // Open PopUp
   public openModel(id: number = 0) {
@@ -118,14 +112,4 @@ export class CollectionList
     }
   }
 
-  public topChange(top: number) {
-    this.payLoad.top = top;
-    this.payLoad.pageIndex = 1;
-    this.search();
-  }
-
-  public pageChange(pageIndex: number) {
-    this.payLoad.pageIndex = pageIndex;
-    this.search();
-  }
 }

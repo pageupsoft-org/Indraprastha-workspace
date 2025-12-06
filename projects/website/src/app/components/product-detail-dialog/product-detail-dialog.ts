@@ -1,9 +1,10 @@
 import { CommonModule } from '@angular/common';
-import { Component, Inject, OnInit } from '@angular/core';
+import { Component, Inject, Input, OnInit } from '@angular/core';
 import { MatDialogRef, MAT_DIALOG_DATA, MatDialogModule } from '@angular/material/dialog';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { AppLoadingButton } from '@shared';
-import { ProductDetailBase, CartUpdateOperation } from '@website/core';
+import { ProductDetailBase, CartUpdateOperation, RNewArrivals, appRoutes } from '@website/core';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-product-detail-dialog',
@@ -14,15 +15,26 @@ import { ProductDetailBase, CartUpdateOperation } from '@website/core';
 export class ProductDetailDialog extends ProductDetailBase implements OnInit {
   public readonly CartAlterEnum = CartUpdateOperation;
 
+
   constructor(
     private dialogRef: MatDialogRef<ProductDetailDialog>,
     @Inject(MAT_DIALOG_DATA)
     public data: {
       productId: number;
-    }
+    },
+    private router: Router
   ) {
     super();
   }
+
+  @Input() product: RNewArrivals = {
+    name: '',
+    price: 0,
+    wishList: false,
+    imageUrl: [],
+    productId: 0,
+  };
+
 
   ngOnInit(): void {
     this.getProductDetail(this.data.productId);
@@ -43,4 +55,15 @@ export class ProductDetailDialog extends ProductDetailBase implements OnInit {
       }
     }
   }
+
+  public navigateToProductDetail() {
+    this.router.navigate([appRoutes.PRODUCT_DETAIL], {
+      queryParams: {
+        id: this.data.productId,
+      },
+    });
+    this.close()
+  }
+
+
 }

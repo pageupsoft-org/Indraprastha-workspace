@@ -71,10 +71,7 @@ export class ProductUpsert extends Base implements OnInit {
     defaultOpen: false
   };
 
-  // public onCancel() {
-  //   this.dialogRef.close();
-  // }
-
+  
   constructor(private activatedRoute: ActivatedRoute, public router: Router) {
     super();
   }
@@ -216,10 +213,6 @@ export class ProductUpsert extends Base implements OnInit {
   }
 
   public upsertProduct() {
-    console.log(this.productForm, this.productForm.valid);
-
-    console.log("logging");
-    logInvalidControls(this.productForm);
     if (this.productForm.valid) {
       const data = this.productForm.getRawValue();
       data.descriptions.forEach((desc: any) => {
@@ -271,32 +264,15 @@ export class ProductUpsert extends Base implements OnInit {
     }
   }
 
-
   public onDescriptionTypeChange(form: FormGroup<IDescriptionForm>) {
     if (form.controls.descriptionType.value === EDescriptionType.Json) {
       this.mutateJsonValueControl(null, form)
-      // form.controls.description.disable();
-      // form.controls.description.setValue(null);
       form.controls.description.clearValidators();
       form.controls.description.updateValueAndValidity();
     } else {
-      // form.controls.description.enable();
       form.controls.description.setValidators([Validators.required]);
       form.controls.description.updateValueAndValidity();
     }
-
-    // if (form.controls.descriptionType.value == EDescriptionType.Json) {
-    //   this.mutateJsonValueControl(null, form);
-    //   form.controls.description.setErrors(null);
-    //   form.controls.description.updateValueAndValidity();
-    // } else {
-    //   form.controls.jsonText.clear();
-    //   form.controls.description.setErrors({ required: true });
-    //   form.controls.description.updateValueAndValidity();
-    // }
-
-    console.log(form);
-
   }
 
   private getProductById(productId: number) {
@@ -390,7 +366,6 @@ export class ProductUpsert extends Base implements OnInit {
           }
 
           this.productForm.controls.descriptions.push(form);
-          console.log(this.productForm.controls.variants.value)
         });
 
         this.productForm.controls.stocks.disable();
