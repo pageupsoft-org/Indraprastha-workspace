@@ -7,6 +7,18 @@ export const serverRoutes: ServerRoute[] = [
     renderMode: RenderMode.Client,
   },
   {
+    path: appRoutes.ORDER,
+    renderMode: RenderMode.Client,
+  },
+  {
+    path: appRoutes.REVIEW_RATING,
+    renderMode: RenderMode.Client,
+  },
+  {
+    path: appRoutes.ORDER_DETAIL,
+    renderMode: RenderMode.Client,
+  },
+  {
     path: '**',
     renderMode: RenderMode.Server,
   },

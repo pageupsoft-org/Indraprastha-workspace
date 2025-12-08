@@ -16,9 +16,18 @@ export const routes: Routes = [
     loadComponent: () => import('./../app/pages/wishlist/wishlist').then((m) => m.Wishlist),
   },
   {
-    path: appRoutes.PRODUCT_DETAIL,
+    path: appRoutes.ORDER,
+    loadComponent: () => import('./../app/pages/order/order').then((m) => m.Order),
+  },
+  {
+    path: appRoutes.REVIEW_RATING,
     loadComponent: () =>
-      import('./../app/pages/product-detail/product-detail').then((m) => m.ProductDetail),
+      import('./../app/pages/review-and-rating/review-and-rating').then((m) => m.ReviewAndRating),
+  },
+  {
+    path: appRoutes.ORDER_DETAIL,
+    loadComponent: () =>
+      import('./../app/pages/order-detail/order-detail').then((m) => m.OrderDetail),
   },
   {
     path: appRoutes.CHECKOUT,
@@ -29,10 +38,9 @@ export const routes: Routes = [
     loadComponent: () =>
       import('./pages/dynamic-catalog/dynamic-catalog').then((m) => m.DynamicCatalog),
   },
-   {
+  {
     path: appRoutes.ABOUT_US,
-    loadComponent: () =>
-      import('./pages/about-us/about-us').then((m) => m.AboutUs),
+    loadComponent: () => import('./pages/about-us/about-us').then((m) => m.AboutUs),
   },
   {
     path: ':path',

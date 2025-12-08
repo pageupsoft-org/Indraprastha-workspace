@@ -1,4 +1,12 @@
-import { Component, effect, model, signal, ViewChild, WritableSignal } from '@angular/core';
+import {
+  Component,
+  effect,
+  HostListener,
+  model,
+  signal,
+  ViewChild,
+  WritableSignal,
+} from '@angular/core';
 import { GenderMenu } from './gender-menu/gender-menu';
 import { Router, RouterLink } from '@angular/router';
 import { CommonModule } from '@angular/common';
@@ -64,9 +72,7 @@ export class Header {
     private _toastService: ToastService,
     public cartService: CartService,
     public wishlistService: WishlistService
-  ) {
-
-  }
+  ) {}
 
   public openProfile() {
     this.isProfileMounted.update(() => true);
@@ -74,8 +80,8 @@ export class Header {
   }
 
   public removeFromDom() {
-    console.log("removeFromDom");
-    
+    console.log('removeFromDom');
+
     setTimeout(() => {
       this.isProfileMounted.update(() => false);
     }, 400); //THIS TIME SHOULD MATCH THE CLOSING ANIMATION TIME OF PROFILE
@@ -128,5 +134,10 @@ export class Header {
       type: EToastType.success,
       duration: 2000,
     });
+  }
+
+  @HostListener('document:click', ['$event'])
+  clickOutside(event: Event) {
+    this.dropdownOpen = false;
   }
 }

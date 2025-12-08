@@ -4,5 +4,8 @@ export const appRoutes = {
   PRODUCT_DETAIL: 'product-detail',
   CHECKOUT: 'checkout',
   ABOUT_US: 'about-us',
-  WHATS_NEW: 'whats-new'
+  WHATS_NEW: 'whats-new',
+  ORDER: 'order',
+  REVIEW_RATING: 'review-rating',
+  ORDER_DETAIL: 'order-detail'
 };
