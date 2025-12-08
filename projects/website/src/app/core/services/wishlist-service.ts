@@ -83,43 +83,72 @@ export class WishlistService {
 
   public removeFromWishList(id: number): Promise<boolean> {
     const promise = new Promise<boolean>((resolve, reject) => {
-      const modalData: MConfirmationModalData = {
-        heading: 'Confirm',
-        body: 'Are you sure you want to remove this item from wishlist?',
-        yesText: 'Yes',
-        noText: 'No',
-      };
-      this.objectCOnfirmationUtil.getConfirmation(modalData).then((res: boolean) => {
-        if (res) {
-          httpDelete<IRGeneric<IRWishlistRoot>>(ApiRoutes.WISH.DELETE(id), true).subscribe({
-            next: (response) => {
-              if (response?.data) {
-                this.toastService.show({
-                  message: 'Item removed from wishlist successfully',
-                  type: EToastType.success,
-                  duration: 3000,
-                });
+      httpDelete<IRGeneric<IRWishlistRoot>>(ApiRoutes.WISH.DELETE(id), true).subscribe({
+        next: (response) => {
+          if (response?.data) {
+            this.toastService.show({
+              message: 'Item removed from wishlist successfully',
+              type: EToastType.success,
+              duration: 3000,
+            });
 
-                this.wishlistProducts.update(() => {
-                  return this.wishlistProducts().filter((_) => _.id !== id);
-                });
-                resolve(true);
-              } else {
-                this.toastService.show({
-                  message: response.errorMessage || 'Failed to remove item from wishlist',
-                  type: EToastType.error,
-                  duration: 3000,
-                });
-                resolve(false);
-              }
-            },
-          });
-        } else {
-          resolve(false);
-        }
+            this.wishlistProducts.update(() => {
+              return this.wishlistProducts().filter((_) => _.id !== id);
+            });
+            resolve(true);
+          } else {
+            this.toastService.show({
+              message: response.errorMessage || 'Failed to remove item from wishlist',
+              type: EToastType.error,
+              duration: 3000,
+            });
+            resolve(false);
+          }
+        },
       });
     });
 
     return promise;
   }
+  // public removeFromWishList(id: number): Promise<boolean> {
+  //   const promise = new Promise<boolean>((resolve, reject) => {
+  //     const modalData: MConfirmationModalData = {
+  //       heading: 'Confirm',
+  //       body: 'Are you sure you want to remove this item from wishlist?',
+  //       yesText: 'Yes',
+  //       noText: 'No',
+  //     };
+  //     this.objectCOnfirmationUtil.getConfirmation(modalData).then((res: boolean) => {
+  //       if (res) {
+  //         httpDelete<IRGeneric<IRWishlistRoot>>(ApiRoutes.WISH.DELETE(id), true).subscribe({
+  //           next: (response) => {
+  //             if (response?.data) {
+  //               this.toastService.show({
+  //                 message: 'Item removed from wishlist successfully',
+  //                 type: EToastType.success,
+  //                 duration: 3000,
+  //               });
+
+  //               this.wishlistProducts.update(() => {
+  //                 return this.wishlistProducts().filter((_) => _.id !== id);
+  //               });
+  //               resolve(true);
+  //             } else {
+  //               this.toastService.show({
+  //                 message: response.errorMessage || 'Failed to remove item from wishlist',
+  //                 type: EToastType.error,
+  //                 duration: 3000,
+  //               });
+  //               resolve(false);
+  //             }
+  //           },
+  //         });
+  //       } else {
+  //         resolve(false);
+  //       }
+  //     });
+  //   });
+
+  //   return promise;
+  // }
 }
