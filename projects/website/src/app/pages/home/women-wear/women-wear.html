@@ -38,11 +38,11 @@
         <button
           id="prevBtn"
           (click)="scrollSlider('prev')"
-          class="cursor-pointer absolute left-0 top-1/2 -translate-y-1/2 z-10 p-2 md:p-[.5rem] bg-white/70 backdrop-blur-sm rounded-full shadow-lg transition-transform duration-300 hover:scale-110 focus:outline-none focus:ring-2 focus:ring-[#cdb29c] focus:ring-offset-2"
+          class="cursor-pointer absolute left-0 top-1/2 -translate-y-1/2 z-10 p-2 md:p-[.5rem] bg-white backdrop-blur-sm rounded-full shadow-lg transition-transform duration-300 hover:scale-110 focus:outline-none focus:ring-2 focus:ring-[#cdb29c] focus:ring-offset-2"
         >
           <svg
             xmlns="http://www.w3.org/20-00/svg"
-            class="md:h-6 md:w-6 h-3 w-3 text-gray-800"
+            class="md:h-4 md:w-4 h-3 w-3 text-gray-800"
             fill="none"
             viewBox="0 0 24 24"
             stroke="currentColor"
@@ -56,11 +56,11 @@
         <button
           (click)="scrollSlider('next')"
           id="nextBtn"
-          class="cursor-pointer absolute right-0 top-1/2 -translate-y-1/2 z-10 p-2 md:p-[.5rem] bg-white/70 backdrop-blur-sm rounded-full shadow-lg transition-transform duration-300 hover:scale-110 focus:outline-none focus:ring-2 focus:ring-[#cdb29c] focus:ring-offset-2"
+          class="cursor-pointer absolute right-0 top-1/2 -translate-y-1/2 z-10 p-2 md:p-[.5rem] bg-white backdrop-blur-sm rounded-full shadow-lg transition-transform duration-300 hover:scale-110 focus:outline-none focus:ring-2 focus:ring-[#cdb29c] focus:ring-offset-2"
         >
           <svg
             xmlns="http://www.w3.org/2000/svg"
-            class="md:h-6 md:w-6 h-3 w-3 text-gray-800"
+            class="md:h-4 md:w-4 h-3 w-3 text-gray-800"
             fill="none"
             viewBox="0 0 24 24"
             stroke="currentColor"
@@ -88,7 +88,7 @@
               alt=""
               class="w-full sm:h-[250px] lg:h-[420px] rounded-xl shadow-lg transition-colors duration-300 cursor-pointer object-cover"
             />
-            <p class="text-center mt-2 text-gray-700 font-semibold text-sm md:text-lg">
+            <p class="text-center mt-2 text-gray-700 font-medium text-sm md:text-md">
               {{ item.name }}
             </p>
           </div>
