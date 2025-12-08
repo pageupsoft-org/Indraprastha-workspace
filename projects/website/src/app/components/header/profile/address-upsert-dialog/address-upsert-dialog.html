@@ -1,0 +1,101 @@
+<div class="bg-white rounded-xl shadow-2xl w-full p-6">
+  <!-- Title -->
+  <p class="text-lg font-medium mb-4">Add Address</p>
+
+  <!-- Form -->
+  <form class="space-y-4">
+    <!-- Country / Region -->
+    <div>
+      <select
+        class="w-full border border-gray-300 rounded-lg p-2 focus:outline-none focus:ring-2 focus:ring-blue-400 placeholder-gray-300"
+      >
+        <option value="" disabled selected>Country / Region</option>
+      </select>
+    </div>
+
+    <!-- First & Last Name -->
+    <div class="flex gap-4">
+      <input
+        type="text"
+        placeholder="First Name"
+        class="flex-1 border border-gray-300 rounded-lg p-2 focus:outline-none focus:ring-2 focus:ring-blue-400 placeholder-gray-300"
+      />
+      <input
+        type="text"
+        placeholder="Last Name"
+        class="flex-1 border border-gray-300 rounded-lg p-2 focus:outline-none focus:ring-2 focus:ring-blue-400 placeholder-gray-300"
+      />
+    </div>
+
+    <!-- Address -->
+    <div>
+      <input
+        type="text"
+        placeholder="Address"
+        class="w-full border border-gray-300 rounded-lg p-2 focus:outline-none focus:ring-2 focus:ring-blue-400 placeholder-gray-300"
+      />
+    </div>
+
+    <!-- Apartment / Suite -->
+    <div>
+      <input
+        type="text"
+        placeholder="Apartment, suite"
+        class="w-full border border-gray-300 rounded-lg p-2 focus:outline-none focus:ring-2 focus:ring-blue-400 placeholder-gray-300"
+      />
+    </div>
+
+    <!-- City, State, PIN Code -->
+    <div class="flex gap-4">
+      <input
+        type="text"
+        placeholder="City"
+        class="flex-1 border border-gray-300 rounded-lg p-2 focus:outline-none focus:ring-2 focus:ring-blue-400 placeholder-gray-300"
+      />
+      <select
+        class="flex-1 border border-gray-300 rounded-lg p-2 focus:outline-none focus:ring-2 focus:ring-blue-400 placeholder-gray-300"
+      >
+        <option value="" disabled selected>State</option>
+      </select>
+      <input
+        type="text"
+        placeholder="PIN Code"
+        class="flex-1 border border-gray-300 rounded-lg p-2 focus:outline-none focus:ring-2 focus:ring-blue-400 placeholder-gray-300"
+      />
+    </div>
+
+    <!-- Phone Number -->
+    <div class="flex gap-2">
+      <button type="button" class="flex items-center gap-1 border border-gray-300 rounded-lg px-3">
+        <img
+          src="https://upload.wikimedia.org/wikipedia/en/4/41/Flag_of_India.svg"
+          alt="IN"
+          class="w-5 h-3"
+        />
+        <span>+91</span>
+      </button>
+      <input
+        type="text"
+        placeholder="Phone Number"
+        class="flex-1 border border-gray-300 rounded-lg p-2 focus:outline-none focus:ring-2 focus:ring-blue-400 placeholder-gray-300"
+      />
+    </div>
+
+    <!-- Buttons -->
+    <div class="flex justify-end gap-3 mt-4">
+      <button
+        type="submit"
+        class="border border-blue-400 bg-blue-50 text-blue-600 px-4 py-2 rounded-lg hover:bg-blue-100 cursor-pointer"
+      >
+        Save
+      </button>
+      <button
+        (click)="close()"
+        type="button"
+        class="border border-red-400 text-red-600 px-4 py-2 rounded-lg bg-red-50 hover:bg-red-100 cursor-pointer"
+      >
+        Cancel
+      </button>
+    </div>
+  </form>
+</div>

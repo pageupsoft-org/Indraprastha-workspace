@@ -46,6 +46,9 @@ body {
   font-style: normal;
 }
 
+p {
+  cursor: default;
+}
 body {
   font-family: 'TOMATOGROTESK';
 }
@@ -693,8 +696,7 @@ body {
   height: 100%;
 }
 
-
-.product-detail-dialog{
+.product-detail-dialog {
   height: 85vh;
   max-height: none;
   scrollbar-width: thin;

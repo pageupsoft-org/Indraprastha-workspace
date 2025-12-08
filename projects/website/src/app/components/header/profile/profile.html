@@ -1,0 +1,46 @@
+@if(showProfileBar()){
+<div
+  class="fixed top-0 left-0 w-full h-full z-[1000]"
+  animate.enter="slide-in"
+  animate.leave="slide-out"
+>
+  <div class="fixed inset-0 bg-white opacity-50 transition-opacity duration-500 z-40"></div>
+
+  <div
+    class="drawer fixed top-0 right-0 w-full md:w-[35%] h-full bg-white shadow-2xl flex flex-col z-50"
+  >
+    <div class="flex justify-between items-center p-6 border-b border-gray-200">
+      <h2 class="text-lg font-bold uppercase tracking-widest">PROFILE INFORMATION</h2>
+      <button class="text-gray-500 hover:text-gray-800 text-2xl cursor-pointer" (click)="close()">
+        &times;
+      </button>
+    </div>
+
+    <div class="flex-1 overflow-y-auto p-6 space-y-6">
+      <!-- Profile Card -->
+      <div class="bg-[#f7f7f7] rounded-2xl p-5 space-y-2">
+        <div class="flex justify-between items-start">
+          <p class="font-semibold text-[17px]">Om Bhandari</p>
+          <button class="cursor-pointer text-md" (click)="upsertInfo()">
+            <img src="assets/icons/bxs_edit.svg"/>
+          </button>
+        </div>
+
+        <p class="text-sm text-gray-500">Email</p>
+        <p class="text-[15px]">OmBhandari@Gmail.Com</p>
+      </div>
+
+      <!-- Address Card -->
+      <div class="bg-[#f7f7f7] rounded-2xl p-5 mt-4 space-y-1">
+        <div class="flex justify-between items-center">
+          <p class="font-semibold text-[17px]">Address</p>
+          <button class="text-red-600 font-medium text-sm cursor-pointer" (click)="upsertAddress()">+Add</button>
+        </div>
+
+        <p class="text-sm text-gray-400">Default Address</p>
+      </div>
+    </div>
+  </div>
+</div>
+
+}

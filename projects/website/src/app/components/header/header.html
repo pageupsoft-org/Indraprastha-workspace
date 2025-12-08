@@ -21,8 +21,8 @@
       </div>
 
       <div class="flex-1 top-right-icons flex justify-end items-center space-x-6">
-        <button (click)="updateSearchInputVisibility()" class="nav-link cursor-pointer"
-          ><svg
+        <button (click)="updateSearchInputVisibility()" class="nav-link cursor-pointer">
+          <svg
             xmlns="http://www.w3.org/2000/svg"
             class="sm:h-4 sm:w-4 lg:h-6 lg:w-6"
             fill="none"
@@ -88,6 +88,16 @@
               (click)="logout()"
               class="block px-4 py-2 text-gray-700 rounded-t-lg cursor-pointer relative before:content-[''] before:absolute before:w-0 before:h-0 before:border-l-[15px] before:border-l-transparent before:border-r-[15px] before:border-r-transparent before:border-b-[10px] before:border-b-[#ffff] before:top-[-5px] before:left-1/2 before:-translate-x-1/2 before:transform"
               >Logout</a
+            >
+            <button
+              (click)="openProfile()"
+              class="block px-4 py-2 text-gray-700 rounded-t-lg cursor-pointer relative before:content-[''] before:absolute before:w-0 before:h-0 before:border-l-[15px] before:border-l-transparent before:border-r-[15px] before:border-r-transparent before:border-b-[10px] before:border-b-[#ffff] before:top-[-5px] before:left-1/2 before:-translate-x-1/2 before:transform"
+            >
+              Profile
+            </button>
+            <a
+              class="block px-4 py-2 text-gray-700 rounded-t-lg cursor-pointer relative before:content-[''] before:absolute before:w-0 before:h-0 before:border-l-[15px] before:border-l-transparent before:border-r-[15px] before:border-r-transparent before:border-b-[10px] before:border-b-[#ffff] before:top-[-5px] before:left-1/2 before:-translate-x-1/2 before:transform"
+              >My Order</a
             >
           </div>
           <!-- } -->
@@ -170,10 +180,11 @@
 
         @if(activeGender()){
         <div
+          animate.enter="dropdown-menu"
+          animate.leave="close"
           (mouseenter)="setGender(activeGender())"
           (mouseleave)="clearGender()"
-          class="absolute z-10 left-1/2 transform -translate-x-1/2 mt-5 sm:w-[700px] lg:w-[1200px] bg-white rounded-lg shadow-2xl py-2 dropdown-menu"
-          [ngClass]="!isDropdownVisible() ? 'close' : ''"
+          class="absolute z-10 left-1/2 transform -translate-x-1/2 mt-[30px] sm:w-[700px] lg:w-[1200px] bg-white rounded-lg shadow-2xl py-2"
         >
           <!-- <app-gender-menu [genderType]="activeGender()"></app-gender-menu> -->
           <app-gender-menu [(genderType)]="activeGender"></app-gender-menu>
@@ -259,7 +270,7 @@
 
     <!-- Logo -->
     <a [routerLink]="appRoutes.HOME" class="flex justify-center">
-      <img src="assets/images/logo-indraprasth.png" alt="Indraprastha Logo" class="w-[70px]" />
+      <img src="assets/images/logo-indraprasth.svg" alt="Indraprastha Logo" class="w-[70px]" />
     </a>
 
     <!-- Right icons -->
@@ -378,3 +389,9 @@
 
 <app-shopping-cart #shoppingCartRef></app-shopping-cart>
 <app-auth-manager #authFormRef></app-auth-manager>
+
+@if(isProfileMounted()){
+<app-profile (removeFromDom)="removeFromDom()"></app-profile>
+}
+
+<!-- <app-profile [showProfileBar]="showProfileBar"></app-profile> -->
