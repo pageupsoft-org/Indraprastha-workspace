@@ -100,6 +100,8 @@ export class ProductDetailBase {
               this.stockSizeArrayWithIds.push(newStockWithIds);
             });
 
+            this.cartForm.controls.stockId.setValue(this.stockSizeArrayWithIds[0].stockId)
+
             if(this.productDetail().variants && this.productDetail().variants.length){
               this.cartForm.controls.variantStockId.setValue(this.productDetail().variants[0].stocks.id)
             }
