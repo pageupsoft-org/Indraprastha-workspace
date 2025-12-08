@@ -20,16 +20,22 @@ export class Profile {
     this.removeFromDom.emit(true);
   }
 
-  public upsertInfo() {
+  public upsertInfo(id:number) {
     this.matdialog.open(ProfileUpsertDialog, {
       width: '650px',
       maxWidth: '90vw',
+      data: {
+        id: id,
+      },
     });
   }
+
   public upsertAddress() {
     this.matdialog.open(AddressUpsertDialog, {
       width: '650px',
       maxWidth: '90vw',
     });
   }
+
+
 }

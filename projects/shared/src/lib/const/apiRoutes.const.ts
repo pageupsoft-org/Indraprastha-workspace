@@ -84,5 +84,12 @@ export const ApiRoutes = {
   },
   ABOUT:{
    GET:'/api/About'
+  },
+  PROFILE:{
+    BASE:'/api/Profile',
+    GET_BY_ID: (id:number) => `/api/Profile/${id}`
+  },
+  Address:{
+    BASE:'/api/Address',
   }
 };

@@ -3,13 +3,13 @@
   <p class="text-lg font-medium mb-4">Add Address</p>
 
   <!-- Form -->
-  <form class="space-y-4">
+  <form class="space-y-4" [formGroup]="addressForm">
     <!-- Country / Region -->
     <div>
-      <select
+      <select libValidateControl [formControl]="addressForm.controls.country"
         class="w-full border border-gray-300 rounded-lg p-2 focus:outline-none focus:ring-2 focus:ring-blue-400 placeholder-gray-300"
       >
-        <option value="" disabled selected>Country / Region</option>
+        <option [ngValue]="null" disabled selected>Country / Region</option>
       </select>
     </div>
 
@@ -17,12 +17,12 @@
     <div class="flex gap-4">
       <input
         type="text"
-        placeholder="First Name"
+        placeholder="First Name" libValidateControl [formControl]="addressForm.controls.firstName"
         class="flex-1 border border-gray-300 rounded-lg p-2 focus:outline-none focus:ring-2 focus:ring-blue-400 placeholder-gray-300"
       />
       <input
         type="text"
-        placeholder="Last Name"
+        placeholder="Last Name" libValidateControl [formControl]="addressForm.controls.lastName"
         class="flex-1 border border-gray-300 rounded-lg p-2 focus:outline-none focus:ring-2 focus:ring-blue-400 placeholder-gray-300"
       />
     </div>
@@ -31,7 +31,7 @@
     <div>
       <input
         type="text"
-        placeholder="Address"
+        placeholder="Address" libValidateControl [formControl]="addressForm.controls.address"
         class="w-full border border-gray-300 rounded-lg p-2 focus:outline-none focus:ring-2 focus:ring-blue-400 placeholder-gray-300"
       />
     </div>
@@ -40,7 +40,7 @@
     <div>
       <input
         type="text"
-        placeholder="Apartment, suite"
+        placeholder="Apartment, suite" libValidateControl [formControl]="addressForm.controls.appartMent"
         class="w-full border border-gray-300 rounded-lg p-2 focus:outline-none focus:ring-2 focus:ring-blue-400 placeholder-gray-300"
       />
     </div>
@@ -49,17 +49,17 @@
     <div class="flex gap-4">
       <input
         type="text"
-        placeholder="City"
+        placeholder="City" libValidateControl [formControl]="addressForm.controls.city"
         class="flex-1 border border-gray-300 rounded-lg p-2 focus:outline-none focus:ring-2 focus:ring-blue-400 placeholder-gray-300"
       />
-      <select
+      <select libValidateControl [formControl]="addressForm.controls.state"
         class="flex-1 border border-gray-300 rounded-lg p-2 focus:outline-none focus:ring-2 focus:ring-blue-400 placeholder-gray-300"
       >
         <option value="" disabled selected>State</option>
       </select>
       <input
         type="text"
-        placeholder="PIN Code"
+        placeholder="PIN Code" libValidateControl [formControl]="addressForm.controls.pinCode"
         class="flex-1 border border-gray-300 rounded-lg p-2 focus:outline-none focus:ring-2 focus:ring-blue-400 placeholder-gray-300"
       />
     </div>
@@ -75,7 +75,7 @@
         <span>+91</span>
       </button>
       <input
-        type="text"
+        type="text" libValidateControl [formControl]="addressForm.controls.contact"
         placeholder="Phone Number"
         class="flex-1 border border-gray-300 rounded-lg p-2 focus:outline-none focus:ring-2 focus:ring-blue-400 placeholder-gray-300"
       />
@@ -84,7 +84,7 @@
     <!-- Buttons -->
     <div class="flex justify-end gap-3 mt-4">
       <button
-        type="submit"
+        type="submit" (click)="onAddressSubmit()"
         class="border border-blue-400 bg-blue-50 text-blue-600 px-4 py-2 rounded-lg hover:bg-blue-100 cursor-pointer"
       >
         Save

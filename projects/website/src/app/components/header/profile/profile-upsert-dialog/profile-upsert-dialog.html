@@ -2,36 +2,38 @@
 <div class="bg-white w-full rounded-3xl p-8 shadow-xl">
   <p class="text-md font-semibold mb-6">Edit Profile</p>
 
-  <!-- Form Grid -->
+  <form action="" [formGroup]="profileForm">
+      <!-- Form Grid -->
   <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mb-6">
     <input
       type="text"
-      placeholder="First Name"
+      placeholder="First Name" libValidateControl  [formControl]="profileForm.controls.firstName" minlength="3" maxlength="15"
       class="w-full border border-gray-300 rounded-lg px-4 py-2 text-sm focus:ring-1 focus:ring-blue-400 focus:outline-none"
+
     />
 
     <input
       type="text"
-      placeholder="Last Name"
+      placeholder="Last Name" libValidateControl [formControl]="profileForm.controls.lastName" minlength="3" maxlength="15"
       class="w-full border border-gray-300 rounded-lg px-4 py-2 text-sm focus:ring-1 focus:ring-blue-400 focus:outline-none"
     />
 
     <input
       type="email"
-      placeholder="Email"
+      placeholder="Email" libValidateControl  [formControl]="profileForm.controls.email"
       class="w-full border border-gray-300 rounded-lg px-4 py-2 text-sm focus:ring-1 focus:ring-blue-400 focus:outline-none"
     />
 
     <input
       type="text"
-      placeholder="Phone No."
+      placeholder="Phone No." libValidateControl [formControl]="profileForm.controls.contact"
       class="w-full border border-gray-300 rounded-lg px-4 py-2 text-sm focus:ring-1 focus:ring-blue-400 focus:outline-none"
     />
   </div>
 
   <!-- Buttons -->
   <div class="flex items-center justify-center gap-6">
-    <button
+    <button (click)="onProfileSubmit()"
       class="px-8 py-2 rounded-lg border border-blue-400 text-blue-600 font-medium hover:bg-blue-50 transition cursor-pointer"
     >
       Save
@@ -44,4 +46,5 @@
       Cancel
     </button>
   </div>
+  </form>
 </div>
