@@ -57,7 +57,7 @@ export class ProductUpsert extends Base implements OnInit {
   public stockSize: MStringEnumToArray[] = stringEnumToArray(EStockSize);
   public ShowDiscription: boolean = false;
   public readonly EDiscriptionType = EDescriptionType;
-  public setAllQtyInput = new FormControl<number | null>(null, patternWithMessage(/^1\d*$/, 'Only numbers are allowed'));
+  public setAllQtyInput = new FormControl<number | null>(null, patternWithMessage(/^[1-9]\d*$/, 'Only numbers are allowed'));
   public setAllQty: WritableSignal<number> = signal(0);
   public productForm: FormGroup<IProductForm> = initializeIProductForm();
   public dropdownSettings: IDropdownSettings = {

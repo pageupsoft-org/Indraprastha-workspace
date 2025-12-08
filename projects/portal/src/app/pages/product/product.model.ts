@@ -77,8 +77,10 @@ export const initializeJsonTextForm = (
   data: IJsonTextFormData | null
 ): FormGroup<IJsonTextForm> => {
   const form = new FormGroup<IJsonTextForm>({
-    key: new FormControl<string>('', [Validators.required, Validators.maxLength(40)]),
-    value: new FormControl<string>('', [Validators.required,  Validators.maxLength(100)]),
+    key: new FormControl<string>('', [Validators.required, Validators.maxLength(40), 
+      patternWithMessage(/^\S(.*\S)?$/, 'starting and ending space not allowed')]),
+    value: new FormControl<string>('', [Validators.required,  Validators.maxLength(100), 
+      patternWithMessage(/^\S(.*\S)?$/, 'starting and ending space not allowed')]),
   });
 
   if (data) {
@@ -92,10 +94,12 @@ export const initializeDescriptionForm = (
   data: IDescriptionData | null
 ): FormGroup<IDescriptionForm> => {
   const form = new FormGroup<IDescriptionForm>({
-    header: new FormControl<string | null>(null, [Validators.required, Validators.maxLength(40)]),
+    header: new FormControl<string | null>(null, [Validators.required, Validators.maxLength(40), 
+       patternWithMessage(/^\S(.*\S)?$/, 'starting and ending space not allowed'), patternWithMessage(/^[A-Za-z ]*$/, 'No special characters and number allowed')]),
     descriptionType: new FormControl<EDescriptionType | null>(EDescriptionType.SingleText),
-    description: new FormControl<string | null>(null, [Validators.required, Validators.maxLength(300)]),
-    shortDescription: new FormControl<string | null>(null, Validators.maxLength(70)),
+    description: new FormControl<string | null>(null, [Validators.required, Validators.maxLength(300), 
+      patternWithMessage(/^\S(.*\S)?$/, 'starting and ending space not allowed')]),
+    shortDescription: new FormControl<string | null>(null, [Validators.maxLength(70),  patternWithMessage(/^\S(.*\S)?$/, 'starting and ending space not allowed')]),
     jsonText: new FormArray<FormGroup<IJsonTextForm>>([]),
   });
   if (data) {
@@ -109,11 +113,13 @@ export const initializeVariantForm = (data: IVariantData | null): FormGroup<IVar
   const form = new FormGroup<IVariantForm>({
     id: new FormControl<number | null>(0),
     productId: new FormControl<number | null>(0),
-    name: new FormControl<string | null>(null, [Validators.required, Validators.maxLength(40)]),
-    description: new FormControl<string | null>(null, Validators.maxLength(170)),
+    name: new FormControl<string | null>(null, [Validators.required, Validators.maxLength(40), 
+      patternWithMessage(/^\S(.*\S)?$/, 'starting and ending space not allowed'), patternWithMessage(/^[A-Za-z ]*$/, 'No special characters and number allowed')]),
+    description: new FormControl<string | null>(null,[Validators.maxLength(170), 
+      patternWithMessage(/^\S(.*\S)?$/, 'starting and ending space not allowed')]),
     mrp: new FormControl<number | null>(null, [Validators.required, Validators.maxLength(10), patternWithMessage(/^\d+(\.\d{1,2})?$/, 'enter a valid price')]),
     stocks: new FormGroup({
-      quantity: new FormControl<number | null>(null, [Validators.required, Validators.maxLength(4), patternWithMessage(/^[1-9]\d*$/, '  Please enter a valid quantity')]),
+      quantity: new FormControl<number | null>(null, [Validators.required, Validators.maxLength(4), patternWithMessage(/^[1-9]\d*$/, 'Please enter a valid quantity')]),
     }),
     variantBase64: new FormControl<string | null>(null, Validators.required,),
   });
@@ -141,7 +147,8 @@ export const initializeIProductForm = (): FormGroup<IProductForm> =>
     id: new FormControl<number | null>(0),
     categoryIds: new FormControl<number[]>([]),
     categoryIdsList: new FormControl<Array<{ id: number; name: string }> | null>([]),
-    name: new FormControl<string | null>(null, [Validators.required, Validators.maxLength(70)]),
+    name: new FormControl<string | null>(null, [Validators.required, Validators.maxLength(70), 
+       patternWithMessage(/^\S(.*\S)?$/, 'starting and ending space not allowed'), patternWithMessage(/^[A-Za-z ]*$/, 'No special characters and number allowed')]),
     isCustomSize: new FormControl<boolean | null>(false,),
     customSizeName: new FormControl<string | null>(''),
     color: new FormArray<FormControl<string | null>>([]),

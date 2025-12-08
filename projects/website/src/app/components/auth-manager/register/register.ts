@@ -31,14 +31,15 @@ export class Register implements OnInit {
     contact: new FormControl(null, [
       Validators.required,
       patternWithMessage(/^(?:\+91|91)?[6789]\d{9}$/, 'Enter a valid mobile number.'),
+      Validators.maxLength(10), Validators.minLength(10)
     ]),
     userName: new FormControl(null, [Validators.required]),
     password: new FormControl(null, [Validators.required, Validators.minLength(6)]),
   });
 
-  ngOnInit(): void {}
+  ngOnInit(): void { }
 
-  constructor(private _toastService: ToastService) {}
+  constructor(private _toastService: ToastService) { }
 
   public openLoginForm() {
     this.authType.set(EAuthManager.login);

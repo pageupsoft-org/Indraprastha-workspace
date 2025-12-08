@@ -5,7 +5,7 @@ import { IGenericResponse } from '../../../core/interface/response/genericRespon
 import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
 import { BannerList } from '../banner-list/banner-list';
 import { CommonModule } from '@angular/common';
-import { ApiRoutes, convertImageToBase64, EBannerConnectionType, EbannerTypes, ErrorHandler, EToastType, GenderTypeEnum, IBanner, IBannerResponse, MStringEnumToArray, stringEnumToArray, ToastService, ValidateControl } from '@shared';
+import { ApiRoutes, convertImageToBase64, EBannerConnectionType, EbannerTypes, ErrorHandler, EToastType, GenderTypeEnum, IBanner, IBannerResponse, MStringEnumToArray, patternWithMessage, stringEnumToArray, ToastService, ValidateControl } from '@shared';
 
 import { IConvertImageParams, IConvertImageResult, initialConvertImageParam } from '../../../core/interface/model/portal-util.model';
 import { ImageSizeConst, ImageTypeEnum } from '../../../core/enum/image.enum';
@@ -32,8 +32,10 @@ export class BannerUpsert extends Base implements OnInit {
 
   public bannerForm = new FormGroup<IBannerForm>({
     id: new FormControl(0),
-    name: new FormControl(null, [Validators.required, Validators.maxLength(30)]),
-    description: new FormControl(null, [Validators.maxLength(250)]),
+    name: new FormControl(null, [Validators.required, Validators.maxLength(30),
+       patternWithMessage(/^\S(.*\S)?$/, 'starting and ending space not allowed'), patternWithMessage(/^[A-Za-z ]*$/, 'No special characters and number allowed')]),
+    description: new FormControl(null, [Validators.maxLength(250), 
+       patternWithMessage(/^\S(.*\S)?$/, 'starting and ending space not allowed'),]),
     bannerConnectionType: new FormControl('None'),
     bannerType: new FormControl(null, [Validators.required]),
     gender: new FormControl(null, [Validators.required]),

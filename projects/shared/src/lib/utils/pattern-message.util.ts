@@ -5,6 +5,9 @@ export function patternWithMessage(pattern: RegExp, message: string): ValidatorF
         if (!control.value) {
             return null;
         }
+        const value = control.value.trim();
+        if (value !== control.value) {
+        }
         return pattern.test(control.value)
             ? null
             : { pattern: { message } };
