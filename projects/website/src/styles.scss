@@ -49,6 +49,9 @@ body {
 p {
   cursor: default;
 }
+span {
+  cursor: default;
+}
 body {
   font-family: 'TOMATOGROTESK';
 }
@@ -62,6 +65,7 @@ h5 {
   font-family: 'Alegreya', serif;
   font-optical-sizing: auto;
   font-style: normal;
+  cursor: default;
 }
 
 /* Slider container for smooth scrolling and snapping */

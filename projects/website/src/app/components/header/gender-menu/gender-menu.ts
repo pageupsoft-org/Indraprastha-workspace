@@ -10,14 +10,14 @@ import {
   WritableSignal,
 } from '@angular/core';
 import { IRequestProductMenu } from '../../../core/interface/model/header.model';
-import { Router } from '@angular/router';
+import { Router, RouterLink } from '@angular/router';
 import { FormsModule } from '@angular/forms';
-import { createUrlFromObject, GenderTypeEnum, initializePagInationPayload} from '@shared';
+import { createUrlFromObject, GenderTypeEnum, initializePagInationPayload } from '@shared';
 import { Category, Collection, IResponseGenderMenuRoot, UtilityService } from '@website/core';
 
 @Component({
   selector: 'app-gender-menu',
-  imports: [FormsModule],
+  imports: [FormsModule, RouterLink],
   templateUrl: './gender-menu.html',
   styleUrl: './gender-menu.scss',
 })
@@ -37,7 +37,7 @@ export class GenderMenu implements OnInit, OnDestroy {
     sizes: [],
     minPrice: 0,
     maxPrice: 0,
-    newlyAdded: false
+    newlyAdded: false,
   };
 
   // this will hold the collection id based on category id,
@@ -95,6 +95,25 @@ export class GenderMenu implements OnInit, OnDestroy {
     this.categoryList.set(menu);
   }
 
+  public getProductPageUrl(collection: Collection | null, category: Category | null): string {
+    this.payloadGenderMenu.categoryIds = [];
+    this.payloadGenderMenu.collectionIds = [];
+    this.payloadGenderMenu.gender = GenderTypeEnum[this.genderType()];
+
+    if (collection) {
+      this.payloadGenderMenu.collectionIds.push(collection.id);
+    }
+
+    if (category) {
+      this.payloadGenderMenu.categoryIds.push(category.id);
+      this.payloadGenderMenu.collectionIds.push(
+        this.categoriesCollectionMap().get(category.id)?.id ?? 0
+      );
+    }
+
+    return createUrlFromObject(this.payloadGenderMenu, this.genderType());
+  }
+
   public openProductPage(collection: Collection | null, category: Category | null) {
     this.payloadGenderMenu.categoryIds = [];
     this.payloadGenderMenu.collectionIds = [];
@@ -108,7 +127,7 @@ export class GenderMenu implements OnInit, OnDestroy {
       this.payloadGenderMenu.categoryIds.push(category.id);
       this.payloadGenderMenu.collectionIds.push(
         this.categoriesCollectionMap().get(category.id)?.id ?? 0
-      );      
+      );
     }
     this.router.navigate([createUrlFromObject(this.payloadGenderMenu, this.genderType())]);
     this.genderType.set('');
