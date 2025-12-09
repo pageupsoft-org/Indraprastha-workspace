@@ -28,6 +28,7 @@ export * from './lib/interface/model/register.model';
 export * from './lib/interface/model/toast.model';
 export * from './lib/interface/model/utility.model';
 export * from './lib/interface/model/confirmation.model';
+export * from './lib/interface/model/decode-token.model';
 
 
 export * from './lib/interface/response/generic.response';
@@ -43,6 +44,7 @@ export * from './lib/interface/request/pagination.request';
 export * from './lib/services/firebase-service';
 export * from './lib/services/platform-service';
 export * from './lib/services/toast-service';
+
 
 export * from './lib/utils/api.helper';
 export * from './lib/utils/pattern-message.util';

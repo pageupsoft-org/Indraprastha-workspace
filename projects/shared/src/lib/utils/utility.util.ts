@@ -1,6 +1,7 @@
 import { Observable } from 'rxjs';
 import { MStringEnumToArray } from '../interface/model/utility.model';
 import { IPaginationPayload } from '../interface/request/pagination.request';
+import { IDecodeTokenKey } from '../interface/model/decode-token.model';
 
 export function UseFetch<R>(ob: Observable<R>): Promise<R> {
   const postPromise = new Promise<R>((resolve, reject) => {
@@ -96,6 +97,35 @@ export function createUrlFromObject(object: Record<string, any>, baseUrl: string
 
   return `${baseUrl}?${params.toString()}`;
 }
+
+export function deCodeToken(): IDecodeTokenKey | null{
+  const token = getLocalStorageItem('token') as string;
+  console.log(token)
+  if (!token) return null;
+
+  try {
+    const payload = token.split('.')[1];
+    if (!payload) return null;
+
+    // Convert base64url → base64
+    let base64 = payload.replace(/-/g, '+').replace(/_/g, '/');
+
+    // Fix padding
+    const padding = base64.length % 4;
+    if (padding === 2) base64 += '==';
+    else if (padding === 3) base64 += '=';
+    else if (padding === 1) return null; // invalid token format
+
+    const decoded = atob(base64);
+    return JSON.parse(decoded);
+
+  } catch (e) {
+    console.error('Decode error:', e);
+    return null;
+  }
+}
+
+
 
 // export function getObjectFromUrl(
 //   url: string,

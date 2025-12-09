@@ -1,5 +1,7 @@
 import { EventEmitter, Injectable, signal, WritableSignal } from '@angular/core';
 import { IResponseGenderMenuRoot } from '../interface/response/gender-menu.response';
+import { IDecodeTokenKey } from '@shared';
+import { IProfileResponse } from '../../components/header/profile/profile-upsert-dialog/profile-upsert-dialog.models';
 
 @Injectable({
   providedIn: 'root',
@@ -10,6 +12,8 @@ export class UtilityService {
   public genderMenuData: WritableSignal<IResponseGenderMenuRoot[]> = signal([]);
 
   public openLoginForm: EventEmitter<void> = new EventEmitter<void>();
+
+  public profileData : WritableSignal<IProfileResponse[]> = signal([]);
 
   constructor() {}
 }

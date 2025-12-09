@@ -20,14 +20,14 @@
       <!-- Profile Card -->
       <div class="bg-[#f7f7f7] rounded-2xl p-5 space-y-2">
         <div class="flex justify-between items-start">
-          <p class="font-semibold text-[17px]">Om Bhandari</p>
+          <p class="font-semibold text-[17px]">{{ProfileData.firstName}} {{ProfileData.lastName}}</p>
           <button class="cursor-pointer text-md" (click)="upsertInfo(0)">
             <img src="assets/icons/bxs_edit.svg"/>
           </button>
         </div>
 
         <p class="text-sm text-gray-500">Email</p>
-        <p class="text-[15px]">OmBhandari@Gmail.Com</p>
+        <p class="text-[15px]">{{ProfileData.email}}</p>
       </div>
 
       <!-- Address Card -->

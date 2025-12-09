@@ -140,4 +140,7 @@ export class Header {
   clickOutside(event: Event) {
     this.dropdownOpen = false;
   }
+
+ 
+
 }

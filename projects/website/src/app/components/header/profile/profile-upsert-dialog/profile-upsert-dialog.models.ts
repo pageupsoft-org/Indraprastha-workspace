@@ -17,6 +17,23 @@ export const initializeProfileForm = (): FormGroup<IProfileForm> =>
         contact: new FormControl<string | null>(null, Validators.required)
     })
 
+export interface IProfileResponse {
+    id: number;
+    firstName: string;
+    lastName: string;
+    isLogin: boolean;
+    isActive: boolean;
+    email: string;
+    contact: string;
+}
+
+export interface IProfilePayload {
+    firstName: string;
+    lastName: string;
+    email: string;
+    contact: string;
+}
+
 
 export interface IAddresseForm {
     id: FormControl<number | null>
@@ -34,7 +51,7 @@ export interface IAddresseForm {
 export const initializeAddressForm = (): FormGroup<IAddresseForm> =>
     new FormGroup<IAddresseForm>({
         id: new FormControl<number | null>(null),
-        country : new FormControl<string | null>(null, [Validators.required]),
+        country: new FormControl<string | null>(null, [Validators.required]),
         firstName: new FormControl<string | null>(null, [Validators.required, Validators.minLength(3), Validators.maxLength(15)]),
         lastName: new FormControl<string | null>(null, [Validators.required, Validators.minLength(3), Validators.maxLength(15)]),
         address: new FormControl<string | null>(null, [Validators.required]),

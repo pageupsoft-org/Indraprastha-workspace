@@ -1,10 +1,11 @@
-import { Component, signal } from '@angular/core';
+import { Component, OnInit, signal } from '@angular/core';
 import { RouterOutlet } from '@angular/router';
 import { Header } from './components/header/header';
 import { Footer } from './components/footer/footer';
 import { HttpClient } from '@angular/common/http';
 import {
   ApiRoutes,
+  deCodeToken,
   FirebaseService,
   getLocalStorageItem,
   httpGet,
@@ -16,6 +17,7 @@ import {
 } from '@shared';
 import AOS from 'aos';
 import { environment, IResponseGenderMenuRoot, UtilityService } from '@website/core';
+import { IProfileResponse } from './components/header/profile/profile-upsert-dialog/profile-upsert-dialog.models';
 
 
 @Component({
@@ -24,7 +26,7 @@ import { environment, IResponseGenderMenuRoot, UtilityService } from '@website/c
   templateUrl: './app.html',
   styleUrl: './app.scss',
 })
-export class App {
+export class App implements OnInit{
   protected readonly title = signal('Indraprastha-website');
 
   constructor(
@@ -42,6 +44,13 @@ export class App {
 
     this.checkUserLoginStatus();
     this.getGenderMenu();
+  }
+  ngOnInit(): void {
+    const tokenData = deCodeToken()
+    if(tokenData?.Id){
+      const id = parseInt(tokenData?.Id)
+      this.getProfileData(id)
+    }
   }
 
   ngAfterViewInit(): void {
@@ -79,4 +88,17 @@ export class App {
       error: (error) => {},
     });
   }
+
+ public getProfileData(id:number){
+    httpGet<IRGeneric<IProfileResponse[]>>(ApiRoutes.CUSTOMERS.GET_BY_ID(id), false).subscribe({
+      next: (response) => {
+        if(response){
+          if(response.data){
+            this.utilityService.profileData.set(response.data);
+          }
+        }
+      }
+    })
+  }
+
 }
