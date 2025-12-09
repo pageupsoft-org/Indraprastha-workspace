@@ -4,6 +4,15 @@ export * from './base/base';
 export * from './const/appRoutes.const';
 //#endregion
 
+//#region Enum
+export * from './enum/image.enum';
+//#endregion
+
+//#region Base
+export * from './base/base';
+export * from './base/search-base';
+//#endregion
+
 export * from './environment/dev.env';
 
 //#region Interceptor
@@ -21,4 +30,12 @@ export * from './services/loader-service';
 
 //#region Utility
 export * from './utils/pagination.util';
+export * from './utils/portal-utility.util';
+//#endregion
+
+//#region Interface
+// export * from './interface/model/pagination-detail.model';
+// export * from './interface/model/portal-util.model';
+export * from './interface/model/pagination-detail.model';
+export * from './interface/model/portal-util.model';
 //#endregion

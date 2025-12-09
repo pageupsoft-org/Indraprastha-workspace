@@ -1,7 +1,5 @@
-import { Component, inject, OnInit, signal, WritableSignal } from '@angular/core';
-import { Base } from '../../../core/base/base';
+import { Component, OnInit, signal, WritableSignal } from '@angular/core';
 import {
-  FormArray,
   FormControl,
   FormGroup,
   FormsModule,
@@ -12,7 +10,6 @@ import {
 import {
   ApiRoutes,
   EDescriptionType,
-  ErrorHandler,
   EStockSize,
   EToastType,
   GenderTypeEnum,
@@ -25,19 +22,10 @@ import {
   ValidateControl,
 } from '@shared';
 import { CommonModule } from '@angular/common';
-import {
-  arrayToJson,
-  convertImagesToBase64Array,
-  logInvalidControls,
-} from '../../../core/utils/portal-utility.util';
 import { IDropdownSettings, NgMultiSelectDropDownModule } from 'ng-multiselect-dropdown';
 import { ActivatedRoute, Params, Router } from '@angular/router';
-import {
-  IConvertImageParams,
-  initialConvertImageParam,
-} from '../../../core/interface/model/portal-util.model';
-import { ImageSizeConst, ImageTypeEnum } from '../../../core/enum/image.enum';
-import { IConvertImageResult } from '../../../core/interface/model/portal-util.model';
+import { Base, IConvertImageParams, ImageSizeConst, ImageTypeEnum, initialConvertImageParam } from '@portal/core';
+import { IConvertImageResult } from '@portal/core';
 import { IGenericComboResponse } from '../../banner/banner.model';
 import {
   IDescriptionForm,
@@ -49,6 +37,7 @@ import {
   IProductForm,
   IVariantData,
 } from '../product.model';
+import { arrayToJson, convertImagesToBase64Array, logInvalidControls } from '@portal/core';
 
 @Component({
   selector: 'app-product-upsert',
@@ -274,17 +263,22 @@ export class ProductUpsert extends Base implements OnInit {
       );
     } else {
       console.log(invalidControls);
-      
+
       invalidControls.forEach((ic: { path: string; errors: any }) => {
         if (ic.path.includes('variantBase64') || ic.path.includes('productBase64')) {
+          const pType: string = ic.path.includes('variantBase64')
+            ? 'Variant'
+            : ic.path.includes('productBase64')
+            ? 'Product'
+            : '';
           this.toastService.show({
-            message: 'Image is required',
+            message: `${pType} image is required`,
             type: EToastType.error,
             duration: 2000,
           });
         } else {
           this.toastService.show({
-            message: 'Please fill in required fields',
+            message: 'Enter valid data',
             type: EToastType.error,
             duration: 2000,
           });
