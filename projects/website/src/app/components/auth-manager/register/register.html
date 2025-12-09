@@ -11,66 +11,45 @@
           <input
             type="text"
             [formControl]="registerForm.controls.firstName"
-        
             [appErrorHandler]="registerForm.controls.firstName"
             class="w-full rounded-[5px] p-2 border border-gray-400 focus:outline-none focus:border-red-800 transition-colors duration-200"
           />
         </div>
-        <div class="col-span-12">
-          <label class="block text-sm font-bold text-gray-700 uppercase tracking-widest mb-1"
-            >Last name</label
-          >
-          <input
-            type="text"
-            [formControl]="registerForm.controls.lastName"
-            [appErrorHandler]="registerForm.controls.lastName"
-            class="w-full rounded-[5px] p-2 border border-gray-400 focus:outline-none focus:border-red-800 transition-colors duration-200"
-          />
-        </div>
       </div>
+
       <div class="grid grid-cols-12 w-full gap-4 mb-3">
-        <div class="col-span-12">
-          <label class="block text-sm font-bold text-gray-700 uppercase tracking-widest mb-1"
-            >Email</label
-          >
-          <input
-            type="email"
-            [formControl]="registerForm.controls.email"
-            [appErrorHandler]="registerForm.controls.email"
-            class="w-full rounded-[5px] p-2 border border-gray-400 focus:outline-none focus:border-red-800 transition-colors duration-200"
-          />
-        </div>
         <div class="col-span-12">
           <label class="block text-sm font-bold text-gray-700 uppercase tracking-widest mb-1"
             >Contact</label
           >
           <input
-            type="text" 
+            type="text"
             [formControl]="registerForm.controls.contact"
             [appErrorHandler]="registerForm.controls.contact"
             class="w-full rounded-[5px] p-2 border border-gray-400 focus:outline-none focus:border-red-800 transition-colors duration-200"
           />
         </div>
       </div>
+
       <div class="grid grid-cols-12 w-full gap-4 mb-3">
-        <div class="col-span-12">
-          <label class="block text-sm font-bold text-gray-700 uppercase tracking-widest mb-1"
-            >Username</label
-          >
-          <input
-            type="text"
-            [formControl]="registerForm.controls.userName"
-            [appErrorHandler]="registerForm.controls.userName" 
-            class="w-full rounded-[5px] p-2 border border-gray-400 focus:outline-none focus:border-red-800 transition-colors duration-200"
-          />
-        </div>
         <div class="col-span-12">
           <label class="block text-sm font-bold text-gray-700 uppercase tracking-widest mb-1"
             >Password</label
           >
           <input
             type="text"
-            [formControl]="registerForm.controls.password" 
+            [formControl]="registerForm.controls.password"
+            [appErrorHandler]="registerForm.controls.password"
+            class="w-full rounded-[5px] p-2 border border-gray-400 focus:outline-none focus:border-red-800 transition-colors duration-200"
+          />
+        </div>
+        <div class="col-span-12 hidden">
+          <label class="block text-sm font-bold text-gray-700 uppercase tracking-widest mb-1"
+            >Confirm Password</label
+          >
+          <input
+            type="text"
+            [formControl]="registerForm.controls.password"
             [appErrorHandler]="registerForm.controls.password"
             class="w-full rounded-[5px] p-2 border border-gray-400 focus:outline-none focus:border-red-800 transition-colors duration-200"
           />
@@ -88,7 +67,7 @@
           Register
         </button>
         }
-        
+
         <span
           href="#"
           class="text-sm font-medium text-gray-600 transition-colors duration-300 uppercase tracking-widest"

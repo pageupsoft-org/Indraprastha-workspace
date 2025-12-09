@@ -132,24 +132,24 @@
           <div
             class="absolute w-40 bg-white border border-gray-200 rounded-lg shadow-lg z-50 duration-500 ease-in-out right-[-70px]"
             [ngClass]="
-              dropdownOpen ? 'visible opacity-100 top-[30px]' : 'opacity-0 invisible top-[70px]'
+              dropdownOpen ? 'visible opacity-100 top-[40px]' : 'opacity-0 invisible top-[70px]'
             "
           >
             <button
               (click)="logout()"
-              class="block px-4 py-2 text-gray-700 rounded-t-lg cursor-pointer relative before:content-[''] before:absolute before:w-0 before:h-0 before:border-l-[15px] before:border-l-transparent before:border-r-[15px] before:border-r-transparent before:border-b-[10px] before:border-b-[#ffff] before:top-[-5px] before:left-1/2 before:-translate-x-1/2 before:transform"
+              class="block px-4 py-2 text-gray-700 rounded-t-lg cursor-pointer relative before:content-[''] before:absolute before:w-0 before:h-0 before:border-l-[15px] before:border-l-transparent before:border-r-[15px] before:border-r-transparent before:border-b-[10px] before:border-b-[#ffff] before:top-[-5px] before:left-[100%] before:-translate-x-1/2 before:transform"
             >
               Logout
             </button>
             <button
               (click)="openProfile()"
-              class="block px-4 py-2 text-gray-700 rounded-t-lg cursor-pointer relative before:content-[''] before:absolute before:w-0 before:h-0 before:border-l-[15px] before:border-l-transparent before:border-r-[15px] before:border-r-transparent before:border-b-[10px] before:border-b-[#ffff] before:top-[-5px] before:left-1/2 before:-translate-x-1/2 before:transform"
+              class="block px-4 py-2 text-gray-700 rounded-t-lg cursor-pointer relative before:content-[''] before:absolute before:w-0 before:h-0 before:border-l-[15px] before:border-l-transparent before:border-r-[15px] before:border-r-transparent before:border-b-[10px] before:border-b-[#ffff] before:top-[-5px] before:-translate-x-1/2 before:transform"
             >
               Profile
             </button>
             <a
               [routerLink]="'/' + appRoutes.ORDER"
-              class="block px-4 py-2 text-gray-700 rounded-t-lg cursor-pointer relative before:content-[''] before:absolute before:w-0 before:h-0 before:border-l-[15px] before:border-l-transparent before:border-r-[15px] before:border-r-transparent before:border-b-[10px] before:border-b-[#ffff] before:top-[-5px] before:left-1/2 before:-translate-x-1/2 before:transform"
+              class="block px-4 py-2 text-gray-700 rounded-t-lg cursor-pointer relative before:content-[''] before:absolute before:w-0 before:h-0 before:border-l-[15px] before:border-l-transparent before:border-r-[15px] before:border-r-transparent before:border-b-[10px] before:border-b-[#ffff] before:top-[-5px] before:-translate-x-1/2 before:transform"
               >My Order</a
             >
           </div>
