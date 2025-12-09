@@ -9,16 +9,12 @@
 @import 'aos/dist/aos.css';
 
 html {
-  @include mat.theme(
-    (
-      color: (
-        primary: mat.$azure-palette,
+  @include mat.theme((color: (primary: mat.$azure-palette,
         tertiary: mat.$blue-palette,
       ),
       typography: Roboto,
       density: 0,
-    )
-  );
+    ));
 }
 
 body {
@@ -49,9 +45,11 @@ body {
 p {
   cursor: default;
 }
+
 span {
   cursor: default;
 }
+
 body {
   font-family: 'TOMATOGROTESK';
 }
@@ -128,7 +126,7 @@ h5 {
 }
 
 /* Slider navigation buttons */
-.slider-container + button {
+.slider-container+button {
   padding: 0.75rem;
   background-color: #ffffff;
   border-radius: 50%;
@@ -136,12 +134,12 @@ h5 {
   transition: background-color 0.3s ease, transform 0.2s ease;
 }
 
-.slider-container + button:hover {
+.slider-container+button:hover {
   background-color: #e5e7eb;
   transform: scale(1.15);
 }
 
-.slider-container + button svg {
+.slider-container+button svg {
   width: 1.5rem;
   height: 1.5rem;
   color: #4b5563;
@@ -427,7 +425,7 @@ h3.brand-name {
   position: relative;
   overflow: hidden;
   margin: 0 auto;
-  height: 600px;
+  height: 750px;
   overflow-x: hidden;
   display: flex;
   justify-content: center;
@@ -451,8 +449,8 @@ h3.brand-name {
 .item.active {
   transform: scale(1.2);
   width: calc(20% + 2rem);
-  margin-right: 30px;
-  margin-left: 30px;
+  margin-right: 50px;
+  margin-left: 50px;
 }
 
 .item img {
@@ -568,9 +566,14 @@ h3.brand-name {
   border-color: #1f2937;
 }
 
-.thumbnail-img.selected-thumb {
-  outline: 2px solid #680c01;
-  outline-offset: 2px;
+// .thumbnail-img.selected-thumb {
+//   outline: 2px solid #680c01;
+//   outline-offset: 2px;
+// }
+.watermark-bg {
+  background-color: #ffffff;
+  background-image: url('../src/assets/images/bg-indraprasth.png');
+  background-size: contain;
 }
 
 /*Wishlist*/
@@ -678,9 +681,11 @@ input[type='range']::-moz-range-thumb {
     left: 0px;
     padding-left: 20px;
   }
+
   .gallery-container {
     height: 350px;
   }
+
   .btn-close {
     float: right;
     top: 0 !important;
@@ -690,6 +695,7 @@ input[type='range']::-moz-range-thumb {
     border: solid thin #ccc;
     margin-bottom: 10px;
   }
+
   .item.active {
     transform: scale(1.55);
   }

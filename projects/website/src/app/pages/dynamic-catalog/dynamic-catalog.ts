@@ -55,7 +55,7 @@ export class DynamicCatalog implements AfterViewInit {
 
   filtersOpen = true;
   sortOpen = false;
-  public currentCols: WritableSignal<number> = signal(3);
+  public currentCols: WritableSignal<number> = signal(6);
 
   public priceMax: WritableSignal<number> = signal(0);
   public selectedPrice: WritableSignal<number> = signal(0);
@@ -247,7 +247,7 @@ export class DynamicCatalog implements AfterViewInit {
             };
           });
         }
-        else{
+        else {
           this.dynamicData.set(initializeIResponseDynamicCatalogue())
         }
         this.isShowLoading.set(false);

@@ -1,9 +1,9 @@
-<section class="bg-white pt-8 pb-12" data-aos="fade-up" data-aos-duration="1000">
+<section class="bg-white pt-8 pb-12 w-full px-32" data-aos="fade-up" data-aos-duration="1000">
   <div class="w-full block">
     <h1 class="text-3xl md:text-4xl lg:text-5xl text-gray-800 text-center">MEN'S WEAR</h1>
   </div>
 
-  <div class="gallery-container max-w-7xl">
+  <div class="gallery-container w-full px-32">
     @if(mensWearList().length > 5){
     <button
       (click)="prev()"
@@ -29,7 +29,7 @@
         <a
           [routerLink]="['/' + productDetailRoute]"
           [queryParams]="{ id: mensWear.id }"
-          class="text-center mt-4 text-sm"
+          class="text-center mt-2 text-sm uppercase w-full inline-block"
           >{{ mensWear.name }}</a
         >
       </div>
