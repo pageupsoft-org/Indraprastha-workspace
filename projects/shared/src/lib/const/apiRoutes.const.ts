@@ -27,6 +27,7 @@ export const ApiRoutes = {
     BASE: '/api/Customer',
     CUSTOMER_ALL: '/api/Customer/All',
     GET_BY_ID: (id: number) => `/api/Customer/${id}`,
+    SHIPPING_ADDRESS : '/api/Customer/ShippingAddress'
   },
   EMPLOYEE: {
     BASE: '/api/Employee',
@@ -89,7 +90,5 @@ export const ApiRoutes = {
     BASE:'/api/Profile',
     GET_BY_ID: (id:number) => `/api/Profile/${id}`
   },
-  Address:{
-    BASE:'/api/Address',
-  }
+  
 };

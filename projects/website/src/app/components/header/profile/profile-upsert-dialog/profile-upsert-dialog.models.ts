@@ -28,6 +28,7 @@ export interface IProfileResponse {
 }
 
 export interface IProfilePayload {
+    id:number
     firstName: string;
     lastName: string;
     email: string;
@@ -46,6 +47,21 @@ export interface IAddresseForm {
     state: FormControl<string | null>;
     pinCode: FormControl<number | null>;
     contact: FormControl<string | null>;
+    region : FormControl<string | null>;
+}
+
+export interface IAddressPayload{
+    id:number;
+    country:string;
+    firstName:string;
+    lastName:string;
+    address:string;
+    appartMent:string;
+    city:string;
+    state:string;
+    pinCode:number;
+    contact:string;
+    region : string;
 }
 
 export const initializeAddressForm = (): FormGroup<IAddresseForm> =>
@@ -60,4 +76,5 @@ export const initializeAddressForm = (): FormGroup<IAddresseForm> =>
         state: new FormControl<string | null>(null, Validators.required),
         pinCode: new FormControl<number | null>(null, Validators.required),
         contact: new FormControl<string | null>(null, Validators.required),
+        region : new FormControl<string | null>(null),
     })

@@ -90,11 +90,12 @@ export class App implements OnInit{
   }
 
  public getProfileData(id:number){
-    httpGet<IRGeneric<IProfileResponse[]>>(ApiRoutes.CUSTOMERS.GET_BY_ID(id), false).subscribe({
+    httpGet<IRGeneric<IProfileResponse>>(ApiRoutes.CUSTOMERS.GET_BY_ID(id), false).subscribe({
       next: (response) => {
         if(response){
           if(response.data){
             this.utilityService.profileData.set(response.data);
+            console.log( this.utilityService.profileData())
           }
         }
       }

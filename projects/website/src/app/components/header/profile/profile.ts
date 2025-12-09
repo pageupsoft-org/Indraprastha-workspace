@@ -12,25 +12,21 @@ import { UtilityService } from '@website/core';
   templateUrl: './profile.html',
   styleUrl: './profile.scss',
 })
-export class Profile implements OnInit{
+export class Profile {
   public showProfileBar = signal(true);
   @Output() removeFromDom: EventEmitter<boolean> = new EventEmitter<boolean>();
-  public ProfileData:any; 
 
-
-  constructor(private matdialog: MatDialog, private utilityService:UtilityService) {}
-
-  
-  ngOnInit(): void {
-   this.ProfileData = this.utilityService.profileData();
+  constructor(private matdialog: MatDialog, public utilityService: UtilityService) {
   }
+
 
   public close() {
     this.showProfileBar.set(false);
     this.removeFromDom.emit(true);
+
   }
 
-  public upsertInfo(id:number) {
+  public upsertInfo(id: number) {
     this.matdialog.open(ProfileUpsertDialog, {
       width: '650px',
       maxWidth: '90vw',
@@ -44,10 +40,13 @@ export class Profile implements OnInit{
     this.matdialog.open(AddressUpsertDialog, {
       width: '650px',
       maxWidth: '90vw',
+      data: {
+        id: this.utilityService.profileData()?.id,
+      },
     });
   }
 
- 
+
 
 
 }

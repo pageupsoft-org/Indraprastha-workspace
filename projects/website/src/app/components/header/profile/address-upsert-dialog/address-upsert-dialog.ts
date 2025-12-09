@@ -1,8 +1,9 @@
-import { Component } from '@angular/core';
+import { Component, inject, OnInit } from '@angular/core';
 import { FormGroup, ReactiveFormsModule, ɵInternalFormsSharedModule } from '@angular/forms';
-import { MatDialogRef } from '@angular/material/dialog';
-import { IAddresseForm, initializeAddressForm } from '../profile-upsert-dialog/profile-upsert-dialog.models';
-import { ApiRoutes, EToastType, httpPost, ToastService, ValidateControl } from '@shared';
+import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
+import { IAddresseForm, IAddressPayload, initializeAddressForm } from '../profile-upsert-dialog/profile-upsert-dialog.models';
+import { ApiRoutes, EToastType, httpPost, IRGeneric, ToastService, ValidateControl } from '@shared';
+import { COUNTRIES } from './static-country-data';
 
 @Component({
   selector: 'app-address-upsert-dialog',
@@ -10,10 +11,19 @@ import { ApiRoutes, EToastType, httpPost, ToastService, ValidateControl } from '
   templateUrl: './address-upsert-dialog.html',
   styleUrl: './address-upsert-dialog.scss',
 })
-export class AddressUpsertDialog {
-
+export class AddressUpsertDialog implements OnInit {
+  readonly data = inject(MAT_DIALOG_DATA);
   public addressForm: FormGroup<IAddresseForm> = initializeAddressForm()
-  constructor(private matDialogRef: MatDialogRef<AddressUpsertDialog>, private _toaster: ToastService) {}
+  constructor(private matDialogRef: MatDialogRef<AddressUpsertDialog>, private _toaster: ToastService) { }
+
+  public countries = COUNTRIES;
+  public states: string[] = [];
+  public cities: string[] = [];
+
+
+  ngOnInit(): void {
+    this.addressForm.controls.id.setValue(this.data.id)
+  }
 
   // CLOSE POPUP
   public close() {
@@ -22,11 +32,18 @@ export class AddressUpsertDialog {
 
   // ON ADDRESS SUBMIT
   public onAddressSubmit() {
+    console.log(this.addressForm.getRawValue())
     const payLoad = this.addressForm.getRawValue()
+
     if (this.addressForm.valid) {
-      httpPost<any, any>(ApiRoutes.Address.BASE, payLoad).subscribe({
+      httpPost<IRGeneric<Boolean>, IAddressPayload>(ApiRoutes.CUSTOMERS.SHIPPING_ADDRESS, payLoad as IAddressPayload).subscribe({
         next: (res) => {
-          this._toaster.show({ message: 'Address Add Successfully', duration: 3000, type: EToastType.success })
+          if (res) {
+            if (res.data) {
+              this._toaster.show({ message: 'Address Add Successfully', duration: 3000, type: EToastType.success })
+              this.close()
+            }
+          }
         },
         error: (error) => {
           // handle error
@@ -36,5 +53,17 @@ export class AddressUpsertDialog {
     else {
       this.addressForm.markAllAsDirty()
     }
+  }
+
+  public onCountryChange() {
+    const country = this.countries.find(c => c.name === this.addressForm.controls.country.value);
+    this.states = country ? country.states.map(s => s.name) : [];
+  }
+
+  onStateChange() {
+    const country = this.countries.find(c => c.name === this.addressForm.controls.country.value);
+    const state = country?.states.find(s => s.name === this.addressForm.controls.state.value);
+    this.cities = state ? state.cities : [];
+    console.log(this.cities)
   }
 }

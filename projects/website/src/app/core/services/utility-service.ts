@@ -13,7 +13,7 @@ export class UtilityService {
 
   public openLoginForm: EventEmitter<void> = new EventEmitter<void>();
 
-  public profileData : WritableSignal<IProfileResponse[]> = signal([]);
+  public profileData : WritableSignal<IProfileResponse | null> = signal<IProfileResponse | null>(null);
 
   constructor() {}
 }

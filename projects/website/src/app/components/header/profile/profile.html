@@ -18,16 +18,17 @@
 
     <div class="flex-1 overflow-y-auto p-6 space-y-6">
       <!-- Profile Card -->
-      <div class="bg-[#f7f7f7] rounded-2xl p-5 space-y-2">
+      <div class="bg-[#f7f7f7] rounded-2xl p-5 space-y-2" >
         <div class="flex justify-between items-start">
-          <p class="font-semibold text-[17px]">{{ProfileData.firstName}} {{ProfileData.lastName}}</p>
+          <p class="font-semibold text-[17px]">{{utilityService.profileData()?.firstName}} {{utilityService.profileData()?.lastName}}</p>
           <button class="cursor-pointer text-md" (click)="upsertInfo(0)">
             <img src="assets/icons/bxs_edit.svg"/>
           </button>
         </div>
 
         <p class="text-sm text-gray-500">Email</p>
-        <p class="text-[15px]">{{ProfileData.email}}</p>
+        <p class="text-[15px]">{{utilityService.profileData()?.email}}</p>
+
       </div>
 
       <!-- Address Card -->
