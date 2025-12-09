@@ -258,8 +258,6 @@ export function arrayToJson(arr) {
   }, {});
 }
 
-
-
 /**
  * Walks a FormGroup/FormArray recursively and logs every invalid FormControl.
  * - path: e.g. "variants[0].size" or "name"
@@ -271,7 +269,7 @@ export function arrayToJson(arr) {
 export function logInvalidControls(
   root: AbstractControl,
   options: { markTouched?: boolean } = {}
-): void {
+): { path: string; errors: any }[] {
   const results: { path: string; errors: any }[] = [];
 
   function walk(control: AbstractControl, path: string) {
@@ -332,4 +330,6 @@ export function logInvalidControls(
     console.info(`Total invalid controls: ${results.length}`);
     results.forEach((r) => console.info(r.path, r.errors));
   }
+
+  return results;
 }

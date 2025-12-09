@@ -1,4 +1,12 @@
-import { Component, model, signal, ViewChild, WritableSignal } from '@angular/core';
+import {
+  Component,
+  effect,
+  HostListener,
+  model,
+  signal,
+  ViewChild,
+  WritableSignal,
+} from '@angular/core';
 import { GenderMenu } from './gender-menu/gender-menu';
 import { Router, RouterLink } from '@angular/router';
 import { CommonModule } from '@angular/common';
@@ -20,10 +28,11 @@ import {
   WishlistService,
 } from '@website/core';
 import { FormsModule } from '@angular/forms';
+import { Profile } from './profile/profile';
 
 @Component({
   selector: 'app-header',
-  imports: [GenderMenu, RouterLink, CommonModule, ShoppingCart, AuthManager, FormsModule],
+  imports: [GenderMenu, RouterLink, CommonModule, ShoppingCart, AuthManager, FormsModule, Profile],
   templateUrl: './header.html',
   styleUrl: './header.scss',
 })
@@ -36,10 +45,12 @@ export class Header {
 
   public activeGender: WritableSignal<GenderTypeEnum | ''> = signal('');
   private timeout: any;
-  public isDropdownVisible: WritableSignal<boolean> = signal(false);
 
   public isCartOpen: WritableSignal<boolean> = signal(false);
   public dropdownOpen: boolean = false;
+
+  // public isProfileMounted: WritableSignal<boolean> = signal<boolean>(false);
+  public isProfileMounted: WritableSignal<boolean> = signal<boolean>(false);
 
   public isSearchInputVisible: WritableSignal<boolean> = signal(false);
   public searchText = model<string | null>();
@@ -61,8 +72,19 @@ export class Header {
     private _toastService: ToastService,
     public cartService: CartService,
     public wishlistService: WishlistService
-  ) {
-    // _utitlityService.isUserLoggedIn.set(true);
+  ) {}
+
+  public openProfile() {
+    this.isProfileMounted.update(() => true);
+    this.dropdownOpen = false;
+  }
+
+  public removeFromDom() {
+    console.log('removeFromDom');
+
+    setTimeout(() => {
+      this.isProfileMounted.update(() => false);
+    }, 400); //THIS TIME SHOULD MATCH THE CLOSING ANIMATION TIME OF PROFILE
   }
 
   public updateSearchInputVisibility() {
@@ -78,7 +100,7 @@ export class Header {
   }
   public search(event: any) {
     if (event.key === 'Enter') {
-      this.payloadGenderMenu.search = this.searchText() ?? "";
+      this.payloadGenderMenu.search = this.searchText() ?? '';
       this.router.navigate([createUrlFromObject(this.payloadGenderMenu, '')]);
       this.isSearchInputVisible.update(() => false);
       this.searchText.set(null);
@@ -87,16 +109,13 @@ export class Header {
 
   public setGender(type: GenderTypeEnum | ''): void {
     clearTimeout(this.timeout);
-    this.isDropdownVisible.set(true);
     this.activeGender.set(type);
   }
 
   public clearGender(): void {
-    this.isDropdownVisible.set(false);
     this.timeout = setTimeout(() => {
       this.activeGender.set('');
-      this.isDropdownVisible.set(false);
-    }, 400);
+    }, 110);
   }
 
   toggleDropdown() {
@@ -115,5 +134,10 @@ export class Header {
       type: EToastType.success,
       duration: 2000,
     });
+  }
+
+  @HostListener('document:click', ['$event'])
+  clickOutside(event: Event) {
+    this.dropdownOpen = false;
   }
 }

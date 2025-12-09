@@ -8,7 +8,7 @@
 
   <!-- Like button: ensure it's above overlay too -->
   <div (click)="toggleWishList($event)"
-    class="like-btn absolute top-3 right-3 p-2 text-black bg-white rounded-[50%] cursor-pointer hover:bg-opacity-90 transition-all duration-300 z-20"
+    class="w-[30] h-[32px] like-btn absolute top-3 right-3 p-2 text-black bg-white rounded-[50%] cursor-pointer hover:bg-opacity-90 transition-all duration-300 z-20"
   >
     <button  class="cursor-pointer">
       @if(product.wishList){
@@ -75,6 +75,6 @@
 
 <div class="mt-4">
   <p class="cursor-pointer" (click)="navigateToProductDetail()">{{ product.name }}</p>
-  <p class="sm:text-lg lg:text-2xl text-[#8f8f8f]">Rs. {{ product.price }}</p>
+  <p class="text-lg text-[#8f8f8f]">Rs. {{ product.price }}</p>
 </div>
 <!-- </div> -->

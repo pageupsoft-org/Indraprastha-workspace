@@ -7,11 +7,11 @@
     @if(mensWearList().length > 5){
     <button
       (click)="prev()"
-      class="prev absolute left-0 top-1/2 -translate-y-1/2 z-10 p-2 md:p-[.5rem] bg-white/70 backdrop-blur-sm rounded-full shadow-lg transition-transform duration-300 hover:scale-110 focus:outline-none focus:ring-2 focus:ring-[#cdb29c] focus:ring-offset-2"
+      class="prev absolute left-0 top-1/2 -translate-y-1/2 z-10 p-2 md:p-[.5rem] bg-white backdrop-blur-sm rounded-full shadow-lg transition-transform duration-300 hover:scale-110 focus:outline-none focus:ring-2 focus:ring-[#cdb29c] focus:ring-offset-2"
     >
       <svg
         xmlns="http://www.w3.org/20-00/svg"
-        class="md:h-6 md:w-6 h-3 w-3 text-gray-800"
+        class="md:h-4 md:w-4 h-3 w-3 text-gray-800"
         fill="none"
         viewBox="0 0 24 24"
         stroke="currentColor"
@@ -29,7 +29,7 @@
         <a
           [routerLink]="['/' + productDetailRoute]"
           [queryParams]="{ id: mensWear.id }"
-          class="text-center font-bold mt-2 text-sm md:text-lg"
+          class="text-center mt-4 text-sm"
           >{{ mensWear.name }}</a
         >
       </div>
@@ -40,11 +40,11 @@
     @if(mensWearList().length > 5){
     <button
       (click)="next()"
-      class="next absolute right-0 top-1/2 -translate-y-1/2 z-10 p-2 md:p-2 bg-white/70 backdrop-blur-sm rounded-full shadow-lg transition-transform duration-300 hover:scale-110 focus:outline-none focus:ring-2 focus:ring-[#cdb29c] focus:ring-offset-2"
+      class="next absolute right-0 top-1/2 -translate-y-1/2 z-10 p-2 md:p-2 bg-white backdrop-blur-sm rounded-full shadow-lg transition-transform duration-300 hover:scale-110 focus:outline-none focus:ring-2 focus:ring-[#cdb29c] focus:ring-offset-2"
     >
       <svg
         xmlns="http://www.w3.org/2000/svg"
-        class="md:h-6 md:w-6 h-3 w-3 text-gray-800"
+        class="md:h-4 md:w-4 h-3 w-3 text-gray-800"
         fill="none"
         viewBox="0 0 24 24"
         stroke="currentColor"

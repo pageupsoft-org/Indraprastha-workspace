@@ -6,7 +6,7 @@
     <!-- Product Image Gallery and Main Image -->
     <div class="flex col-span-2 lg:flex-row lg:space-x-4 w-full sticky top-[150px] max-h-[80%]">
       <!-- Left Image Gallery (Thumbnails) -->
-      <div class="flex flex-row lg:flex-col space-x-3 lg:space-x-0 lg:space-y-4 mb-8 lg:mb-0">
+      <div class="flex flex-row lg:flex-col space-x-3 lg:space-x-0 lg:space-y-4 mb-8 lg:mb-0 overflow-y-auto scrollbar-thin">
         @let dummyArr = [1, 2, 3, 4]; @if(isShowloader()){ @for (item of dummyArr; track $index) {
         <ngx-skeleton-loader
           count="1"

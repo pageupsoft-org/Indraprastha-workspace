@@ -69,7 +69,6 @@ export class Home extends Base implements AfterViewInit, OnInit {
           if (response) {
             if (response.data) {
               const banners = response.data.banners?.length ? response.data.banners[0].bannerURL : '';
-              console.log(banners)
               if (type === 'top') {
                 this.topBanners = banners
               } else {
