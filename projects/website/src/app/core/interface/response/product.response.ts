@@ -1,3 +1,5 @@
+import { ProductComboUrl } from './gender-menu.response';
+
 export interface IRProductDetailRoot {
   id: number;
   name: string;
@@ -13,6 +15,7 @@ export interface IRProductDetailRoot {
   variants: Variant[];
   stocks: Stock2[];
   descriptions: Description[];
+  relatedProducts: ProductComboUrl[];
 }
 export interface Variant {
   id: number;
@@ -70,5 +73,6 @@ export const initializeIRProductDetailRoot = () => {
     variants: [],
     stocks: [],
     descriptions: [],
+    relatedProducts: [],
   };
 };

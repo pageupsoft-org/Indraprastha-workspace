@@ -44,6 +44,10 @@ export const routes: Routes = [
       import('./pages/dynamic-catalog/dynamic-catalog').then((m) => m.DynamicCatalog),
   },
   {
+    path: appRoutes.COLLECTION,
+    loadComponent: () => import('./pages/collections/collections').then((m) => m.Collections),
+  },
+  {
     path: appRoutes.ABOUT_US,
     loadComponent: () => import('./pages/about-us/about-us').then((m) => m.AboutUs),
   },

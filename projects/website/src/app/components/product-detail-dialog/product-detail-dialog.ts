@@ -5,10 +5,11 @@ import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { AppLoadingButton } from '@shared';
 import { ProductDetailBase, CartUpdateOperation, RNewArrivals, appRoutes } from '@website/core';
 import { Router } from '@angular/router';
+import { NgxSkeletonLoaderModule } from 'ngx-skeleton-loader';
 
 @Component({
   selector: 'app-product-detail-dialog',
-  imports: [CommonModule, MatDialogModule, ReactiveFormsModule, AppLoadingButton, FormsModule],
+  imports: [CommonModule, MatDialogModule, ReactiveFormsModule, AppLoadingButton, FormsModule, NgxSkeletonLoaderModule],
   templateUrl: './product-detail-dialog.html',
   styleUrl: './product-detail-dialog.scss',
 })

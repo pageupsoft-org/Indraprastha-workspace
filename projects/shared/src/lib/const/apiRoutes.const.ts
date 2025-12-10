@@ -1,21 +1,4 @@
 export const ApiRoutes = {
-  // LOGIN: {
-  //   BASE: '/api/Login',
-  //   SILENT_LOGIN: '/api/Login/SilentLogin',
-  //   CHANGE_PASSWORD: '/api/Login/ChangePassword',
-  //   REGISTER_EMPLOYEE: '/api/Login/Register/Employee',
-  //   REGISTER_CUSTOMER: '/api/Login/Register/Customer',
-  // },
-  // CUSTOMERS: {
-  //   BASE: '/api/Customer',
-  //   CUSTOMER_ALL: '/api/Customer/All'
-  // },
-  // EMPLOYEE: {
-  //  BASE: '/api/Employee',
-  // GET: '/api/Employee/All',
-  // GETBYID: (id: number) => `/api/Employee/${id}`
-
-  // }
   LOGIN: {
     BASE: '/api/Login',
     SILENT_LOGIN: '/api/Login/SilentLogin',
@@ -34,11 +17,12 @@ export const ApiRoutes = {
     GET_BY_ID: (id: number) => `/api/Employee/${id}`,
   },
   COLLECTION: {
-    BASE: "/api/Collection",
+    BASE: '/api/Collection',
     MENU: '/api/Collection/Menu',
-    ALL: "/api/Collection/ALL",
+    ALL: '/api/Collection/ALL',
     GET_COMBO: '/api/Collection/combo',
     GET_BY_ID: (id: number) => `/api/Collection/${id}`,
+    GET_BY_GENDER: (gender: string) => `/api/Collection/Menu/${gender}`,
   },
   CART: {
     POST: '/api/Cart',
@@ -59,12 +43,13 @@ export const ApiRoutes = {
   },
   PRODUCT: {
     POST: '/api/product',
+    DETAIL_INFO: '/api/product/Info',
     ALL: '/api/product/All',
     GET_BY_ID: (productId: number) => `/api/Product/${productId}`,
     GET_COMBO: '/api/product/combo',
     MENU: '/api/Product/Menu',
     DASHBOARD: '/api/Product/Dashboard',
-    CART: '/api/Product/Cart'
+    CART: '/api/Product/Cart',
   },
   WISH: {
     GET: '/api/Wish',
@@ -73,16 +58,16 @@ export const ApiRoutes = {
     MENU: '/api/Product/Menu',
     DASHBOARD: '/api/Product/Dashboard',
   },
-  ORDERS:{
-    BASE:'/api/Order',
+  ORDERS: {
+    BASE: '/api/Order',
     ALL: '/api/Order/All',
-    CHANGE_STATUS:'/api/Order/Status',
+    CHANGE_STATUS: '/api/Order/Status',
     GET_BY_ID: (id: number) => `/api/Order/${id}`,
   },
-  DASHBOARD:{
-    BASE:'/api/Dashboard',
+  DASHBOARD: {
+    BASE: '/api/Dashboard',
   },
-  ABOUT:{
-   GET:'/api/About'
-  }
+  ABOUT: {
+    GET: '/api/About',
+  },
 };

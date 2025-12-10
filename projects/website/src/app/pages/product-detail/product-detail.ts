@@ -30,8 +30,6 @@ export class ProductDetail extends ProductDetailBase implements OnInit {
   public readonly DescriptionTypeStringEnum = DescriptionTypeStringEnum;
   public readonly CartAlterEnum = CartUpdateOperation;
 
-  public DashboardProductTypeStringEnum = DashboardProductTypeStringEnum;
-
   public toggleAccordion(i: number) {
     const list = this.productDetail().descriptions;
     list[i]._isAccordionOpen = !list[i]._isAccordionOpen;

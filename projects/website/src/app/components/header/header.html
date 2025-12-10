@@ -31,7 +31,7 @@
             >WHAT'S NEW</a
           >
         </li>
-        <li><a href="#" class="nav-link hover:text-gray-900 transition-colors">COLLECTIONS</a></li>
+        <li><a [routerLink]="appRoutes.COLLECTION" class="nav-link hover:text-gray-900 transition-colors">COLLECTIONS</a></li>
 
         <li
           class="relative group cursor-pointer"
@@ -349,10 +349,10 @@
       </div>
 
       <!-- Normal Links -->
-      <a href="#" class="block px-2 py-2 border-b">COLLECTIONS</a>
+      <a [routerLink]="appRoutes.COLLECTION" class="block px-2 py-2 border-b">COLLECTIONS</a>
       <a href="#" class="block px-2 py-2 border-b">WOMEN'S WEAR</a>
       <a href="#" class="block px-2 py-2 border-b">MAN'S WEAR</a>
-      <a href="#" class="block px-2 py-2">ABOUT US</a>
+      <a [routerLink]="appRoutes.ABOUT_US" class="block px-2 py-2">ABOUT US</a>
     </div>
   </aside>
 </header>

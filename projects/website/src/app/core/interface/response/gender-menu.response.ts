@@ -22,4 +22,6 @@ export interface Category {
 export interface ProductComboUrl {
   id: number;
   productURL: string;
+  isWishList: boolean;
+  mrp: number;
 }

@@ -10,16 +10,18 @@ import {
 } from '@angular/core';
 import {
   ApiRoutes,
+  createUrlFromObject,
   DashboardProductTypeStringEnum,
-  httpPost,
+  GenderTypeEnum,
+  httpGet,
   initializePagInationPayload,
   IRGeneric,
   PlatformService,
 } from '@shared';
 import { IDashboadRequest } from '../product-slider/dashboard.request';
-import { DashboardResponseRoot, Product } from '../product-slider/dashboard.response';
 import { Router } from '@angular/router';
-import { appRoutes } from '@website/core';
+import { IResponseCollection } from '../../../core/interface/response/collection.response';
+import { Collection } from '../../../core/services/collection';
 @Component({
   selector: 'app-women-wear',
   imports: [],
@@ -30,18 +32,13 @@ export class WomenWear implements AfterViewInit {
   @ViewChild('slider', { static: true }) sliderRef!: ElementRef<HTMLDivElement>;
   @ViewChildren('slide') slidesRef!: QueryList<ElementRef<HTMLDivElement>>;
 
-  private payload: IDashboadRequest = {
-    ...initializePagInationPayload(),
-    type: DashboardProductTypeStringEnum.Women,
-  };
-
-  public womemsWearList: WritableSignal<Product[]> = signal([]);
+  public womemsWearList: WritableSignal<IResponseCollection[]> = signal([]);
 
   slideWidth = 0;
   slideMargin = 16; // matches your 16px margin
 
-  constructor(private platformService: PlatformService, private router: Router) {
-    this.getDashboardProduct();
+  constructor(private platformService: PlatformService, private collectionService: Collection) {
+    this.collectionService.getCollection(GenderTypeEnum.Women, this.womemsWearList);
   }
 
   ngAfterViewInit(): void {
@@ -51,6 +48,10 @@ export class WomenWear implements AfterViewInit {
         this.slideWidth = slides[0].nativeElement.offsetWidth;
       }
     }
+  }
+
+  public openProductPage(collectionId: number) {
+    this.collectionService.openProductPage(collectionId);
   }
 
   public scrollSlider(direction: 'next' | 'prev'): void {
@@ -73,30 +74,5 @@ export class WomenWear implements AfterViewInit {
       }
       // Else do nothing to prevent jump to end
     }
-  }
-
-  public routeToProductDetail(productId: number){
-    this.router.navigate([appRoutes.PRODUCT_DETAIL], {
-      queryParams: {
-        id: productId
-      }
-    })
-  }
-
-  private getDashboardProduct() {
-    httpPost<IRGeneric<DashboardResponseRoot>, IDashboadRequest>(
-      ApiRoutes.PRODUCT.DASHBOARD,
-      this.payload,
-      false
-    ).subscribe({
-      next: (response) => {
-        if (response?.data) {
-          this.womemsWearList.set(response.data.products);
-        }
-      },
-      error: (error) => {
-        console.error('Dashboard Product Error: ', error);
-      },
-    });
   }
 }
