@@ -1,36 +1,36 @@
 <!-- Modal -->
 <div class="bg-white w-full rounded-3xl p-8 shadow-xl">
-  <p class="text-md font-semibold mb-6">Edit Profile</p>
+  <p class="lg:text-xl md:text-lg sm:text-md text-black font-semibold mb-6">Edit Profile</p>
 
   <!-- Form Grid -->
   <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mb-6">
     <input
       type="text"
       placeholder="First Name"
-      class="w-full border border-gray-300 rounded-lg px-4 py-2 text-sm focus:ring-1 focus:ring-blue-400 focus:outline-none"
+      class="w-full border border-gray-200 rounded-lg px-4 py-3 text-sm focus:ring-1 focus:ring-blue-400 focus:outline-none"
     />
 
     <input
       type="text"
       placeholder="Last Name"
-      class="w-full border border-gray-300 rounded-lg px-4 py-2 text-sm focus:ring-1 focus:ring-blue-400 focus:outline-none"
+      class="w-full border border-gray-200 rounded-lg px-4 py-3 text-sm focus:ring-1 focus:ring-blue-400 focus:outline-none"
     />
 
     <input
       type="email"
       placeholder="Email"
-      class="w-full border border-gray-300 rounded-lg px-4 py-2 text-sm focus:ring-1 focus:ring-blue-400 focus:outline-none"
+      class="w-full border border-gray-200 rounded-lg px-4 py-3 text-sm focus:ring-1 focus:ring-blue-400 focus:outline-none"
     />
 
     <input
       type="text"
       placeholder="Phone No."
-      class="w-full border border-gray-300 rounded-lg px-4 py-2 text-sm focus:ring-1 focus:ring-blue-400 focus:outline-none"
+      class="w-full border border-gray-200 rounded-lg px-4 py-3 text-sm focus:ring-1 focus:ring-blue-400 focus:outline-none"
     />
   </div>
 
   <!-- Buttons -->
-  <div class="flex items-center justify-center gap-6">
+  <div class="flex items-center justify-center gap-6 mt-8">
     <lib-generic-cancel-button (cancel)="close()"></lib-generic-cancel-button>
     <lib-app-loading-button [isLoading]="false" [label]="'Save'" [isButtonDisabled]="false"></lib-app-loading-button>
   </div>
