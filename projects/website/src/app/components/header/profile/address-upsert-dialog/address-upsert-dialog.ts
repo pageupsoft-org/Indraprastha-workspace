@@ -2,8 +2,9 @@ import { Component, inject, OnInit } from '@angular/core';
 import { FormGroup, ReactiveFormsModule, ɵInternalFormsSharedModule } from '@angular/forms';
 import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
 import { IAddresseForm, IAddressPayload, initializeAddressForm } from '../profile-upsert-dialog/profile-upsert-dialog.models';
-import { ApiRoutes, EToastType, httpPost, IRGeneric, ToastService, ValidateControl } from '@shared';
+import { ApiRoutes, EToastType, httpGet, httpPost, IRGeneric, ToastService, ValidateControl } from '@shared';
 import { COUNTRIES } from './static-country-data';
+import { UtilityService } from '@website/core';
 
 @Component({
   selector: 'app-address-upsert-dialog',
@@ -22,7 +23,6 @@ export class AddressUpsertDialog implements OnInit {
 
 
   ngOnInit(): void {
-    this.addressForm.controls.id.setValue(this.data.id)
   }
 
   // CLOSE POPUP
@@ -60,10 +60,14 @@ export class AddressUpsertDialog implements OnInit {
     this.states = country ? country.states.map(s => s.name) : [];
   }
 
-  onStateChange() {
+  public onStateChange() {
     const country = this.countries.find(c => c.name === this.addressForm.controls.country.value);
     const state = country?.states.find(s => s.name === this.addressForm.controls.state.value);
     this.cities = state ? state.cities : [];
     console.log(this.cities)
   }
+
+   
+
 }
+

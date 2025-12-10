@@ -66,7 +66,7 @@ export interface IAddressPayload{
 
 export const initializeAddressForm = (): FormGroup<IAddresseForm> =>
     new FormGroup<IAddresseForm>({
-        id: new FormControl<number | null>(null),
+        id: new FormControl<number | null>(0),
         country: new FormControl<string | null>(null, [Validators.required]),
         firstName: new FormControl<string | null>(null, [Validators.required, Validators.minLength(3), Validators.maxLength(15)]),
         lastName: new FormControl<string | null>(null, [Validators.required, Validators.minLength(3), Validators.maxLength(15)]),
@@ -76,5 +76,22 @@ export const initializeAddressForm = (): FormGroup<IAddresseForm> =>
         state: new FormControl<string | null>(null, Validators.required),
         pinCode: new FormControl<number | null>(null, Validators.required),
         contact: new FormControl<string | null>(null, Validators.required),
-        region : new FormControl<string | null>(null),
+        region : new FormControl<string | null>(''),
     })
+
+
+export interface IAddressPayload{
+    id:number;
+    address:string;
+    state:string
+    city:string
+    pinCode:number;
+    email:string;
+    contact:string;
+    country:string;
+    region:string;
+    apartment:string;
+    firstName:string
+    lastName:string
+    _isAccordionOpen: boolean
+}

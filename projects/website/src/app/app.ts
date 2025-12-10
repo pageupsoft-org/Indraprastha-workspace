@@ -17,7 +17,7 @@ import {
 } from '@shared';
 import AOS from 'aos';
 import { environment, IResponseGenderMenuRoot, UtilityService } from '@website/core';
-import { IProfileResponse } from './components/header/profile/profile-upsert-dialog/profile-upsert-dialog.models';
+import { IAddressPayload, IProfileResponse } from './components/header/profile/profile-upsert-dialog/profile-upsert-dialog.models';
 
 
 @Component({
@@ -26,7 +26,7 @@ import { IProfileResponse } from './components/header/profile/profile-upsert-dia
   templateUrl: './app.html',
   styleUrl: './app.scss',
 })
-export class App implements OnInit{
+export class App implements OnInit {
   protected readonly title = signal('Indraprastha-website');
 
   constructor(
@@ -47,10 +47,12 @@ export class App implements OnInit{
   }
   ngOnInit(): void {
     const tokenData = deCodeToken()
-    if(tokenData?.Id){
+    if (tokenData?.Id) {
       const id = parseInt(tokenData?.Id)
       this.getProfileData(id)
     }
+    this.getUserAddress()
+
   }
 
   ngAfterViewInit(): void {
@@ -85,21 +87,34 @@ export class App implements OnInit{
         }
       },
 
-      error: (error) => {},
+      error: (error) => { },
     });
   }
 
- public getProfileData(id:number){
+  public getProfileData(id: number) {
     httpGet<IRGeneric<IProfileResponse>>(ApiRoutes.CUSTOMERS.GET_BY_ID(id), false).subscribe({
       next: (response) => {
-        if(response){
-          if(response.data){
+        if (response) {
+          if (response.data) {
             this.utilityService.profileData.set(response.data);
-            console.log( this.utilityService.profileData())
           }
         }
       }
     })
   }
+
+  public getUserAddress() {
+    httpGet<IRGeneric<IAddressPayload[]>>(ApiRoutes.CUSTOMERS.GET_SHIPPING_ADDRESS, false).subscribe({
+      next: (response) => {
+        if (response) {
+          if (response.data) {
+           this.utilityService.AddressData.set(response.data)
+          }
+        }
+      }
+    })
+  }
+
+
 
 }
