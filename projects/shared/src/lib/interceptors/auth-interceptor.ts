@@ -6,6 +6,9 @@ import { ToastService } from '../services/toast-service';
 import { getLocalStorageItem } from '../utils/utility.util';
 import { localStorageEnum } from '../enum/localStorage.enum';
 import { PlatformService } from '../services/platform-service';
+import { ApiRoutes, httpPost, IRGeneric, IRLogin, setLocalStorageItem, UseFetch } from '@shared';
+import { appRoutes } from '@website/core';
+import { EToastType } from '../enum/toast-type.enum';
 
 // import { getLocalStorageItem, localStorageEnum, ToastService } from '@shared';
 
@@ -67,42 +70,6 @@ export const authInterceptor: HttpInterceptorFn = (req, next) => {
       }));
     })
   );
-  // return next(req).pipe(
-  //   catchError((error: HttpErrorResponse) => {
-  //     let errorMessage = 'An unexpected error occurred';
-
-  //     // if (error.error instanceof ErrorEvent) {
-  //     if (platformService.isBrowser && typeof ErrorEvent !== 'undefined' && error.error instanceof ErrorEvent) {
-  //       errorMessage = `Error: ${error.error.message}`;
-  //     } else {
-  //       switch (error.status) {
-  //         case 400:
-  //           errorMessage = getValidationErrorMessage(error) || 'Invalid request';
-  //           break;
-  //         case 401:
-  //           refreshToken(toastService, router);
-  //           break;
-  //         case 403:
-  //           errorMessage = 'You are not authorized to perform this action';
-  //           break;
-  //         case 404:
-  //           errorMessage = 'The requested resource was not found';
-  //           break;
-  //         case 500:
-  //           errorMessage = 'A server error occurred. Please try again later.';
-  //           break;
-  //         default:
-  //           errorMessage = `Error: ${error.message}`;
-  //       }
-  //     }
-
-  //     // toastService.error(errorMessage);
-  //     return throwError(() => ({
-  //       message: errorMessage,
-  //       originalError: error,
-  //     }));
-  //   })
-  // );
 };
 
 // ✅ helper for validation errors
@@ -121,25 +88,21 @@ function getValidationErrorMessage(error: HttpErrorResponse): string | null {
 async function refreshToken(toastService: ToastService, router: Router) {
   try {
     console.log('Refresh Token called');
-    // const res = await UseFetch(refreshTokenFn()); // ✅ correctly passes Observable
-    return true;
-    // if (res?.data) {
-    //   // localStorage.setItem(localStorageEnum.token, res.data.token);
-    //   // localStorage.setItem(localStorageEnum.refreshToken, res.data.refreshToken);
-    // //   setLocalStorageItem(localStorageEnum.token, res.data.token);
-    // //   setLocalStorageItem(localStorageEnum.refreshToken, res.data.refreshToken);
-
-    // //   const attemptedUrl = localStorage.getItem('attemptedUrl');
-    // //   localStorage.removeItem('attemptedUrl');
-
-    // //   router.navigate([attemptedUrl || '/dashboard']);
-    // //   toastService.success('Token refreshed');
-    //   return true;
-    // } else {
-    //   localStorage.clear();
-    //   router.navigate(['/login']);
-    //   return false;
-    // }
+    const res = await UseFetch(refreshTokenFn());
+    if(res?.data && res.data?.token){
+      setLocalStorageItem(localStorageEnum.token, res.data.token);
+      setLocalStorageItem(localStorageEnum.refreshToken, res.data.refreshToken);
+      return true;
+    }
+    else{
+      toastService.show({
+        type: EToastType.error,
+        message: 'Token expired. Please login again.',
+        duration: 800
+      })
+      localStorage.clear();
+      return false;
+    }
   } catch (error) {
     localStorage.clear();
     router.navigate(['/login']);
@@ -153,8 +116,5 @@ function refreshTokenFn() {
     token: getLocalStorageItem<string>(localStorageEnum.token),
     refreshToken: getLocalStorageItem<string>(localStorageEnum.refreshToken),
   };
-  //   return httpPost<IResponse<ILoginResponse>, typeof data>(
-  //     apiRoutes.login.silentLogin,
-  //     data
-  //   );
+  return httpPost<IRGeneric<IRLogin>, typeof data>(ApiRoutes.LOGIN.SILENT_LOGIN, data);
 }

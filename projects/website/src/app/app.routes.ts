@@ -34,6 +34,11 @@ export const routes: Routes = [
     loadComponent: () => import('./../app/pages/checkout/checkout').then((m) => m.Checkout),
   },
   {
+    path: appRoutes.PRODUCT_DETAIL,
+    loadComponent: () =>
+      import('./pages/product-detail/product-detail').then((m) => m.ProductDetail),
+  },
+  {
     path: appRoutes.WHATS_NEW,
     loadComponent: () =>
       import('./pages/dynamic-catalog/dynamic-catalog').then((m) => m.DynamicCatalog),
