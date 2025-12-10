@@ -3,6 +3,8 @@ export * from './lib/component/toast/toast';
 export * from './lib/component/confirmation-dialog/confirmation-dialog';
 export * from './lib/component/loader/loader';
 export * from './lib/component/app-loading-button/app-loading-button';
+export * from './lib/component/generic-save-button/generic-save-button';
+export * from './lib/component/generic-cancel-button/generic-cancel-button';
 
 export * from './lib/const/apiRoutes.const';
 

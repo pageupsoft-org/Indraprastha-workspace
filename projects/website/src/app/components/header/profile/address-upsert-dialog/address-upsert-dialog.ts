@@ -1,9 +1,10 @@
 import { Component } from '@angular/core';
 import { MatDialogRef } from '@angular/material/dialog';
+import { GenericCancelButton, GenericSaveButton, AppLoadingButton } from "@shared";
 
 @Component({
   selector: 'app-address-upsert-dialog',
-  imports: [],
+  imports: [GenericCancelButton, AppLoadingButton],
   templateUrl: './address-upsert-dialog.html',
   styleUrl: './address-upsert-dialog.scss',
 })

@@ -1,25 +1,13 @@
 import { Component, model, output } from '@angular/core';
 import { FormControl, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 import { HttpErrorResponse } from '@angular/common/http';
-import {
-  ApiRoutes,
-  ErrorHandler,
-  EToastType,
-  httpPost,
-  ILoginForm,
-  ILoginFormData,
-  IRGeneric,
-  IRLogin,
-  localStorageEnum,
-  setLocalStorageItem,
-  ToastService,
-} from '@shared';
+import { ApiRoutes, ErrorHandler, EToastType, httpPost, ILoginForm, ILoginFormData, IRGeneric, IRLogin, localStorageEnum, setLocalStorageItem, ToastService, GenericSaveButton, AppLoadingButton } from '@shared';
 import { ButtonLoader, CartService, EAuthManager, UtilityService, WishlistService } from '@website/core';
 
 
 @Component({
   selector: 'app-login',
-  imports: [ReactiveFormsModule, ErrorHandler, ButtonLoader],
+  imports: [ReactiveFormsModule, ErrorHandler, AppLoadingButton],
   templateUrl: './login.html',
   styleUrl: './login.scss',
 })

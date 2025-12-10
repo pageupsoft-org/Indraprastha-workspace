@@ -31,17 +31,7 @@
 
   <!-- Buttons -->
   <div class="flex items-center justify-center gap-6">
-    <button
-      class="px-8 py-2 rounded-lg border border-blue-400 text-blue-600 font-medium hover:bg-blue-50 transition cursor-pointer"
-    >
-      Save
-    </button>
-
-    <button
-      (click)="close()"
-      class="px-8 py-2 rounded-lg border border-red-400 text-red-500 font-medium hover:bg-red-50 transition cursor-pointer"
-    >
-      Cancel
-    </button>
+    <lib-generic-cancel-button (cancel)="close()"></lib-generic-cancel-button>
+    <lib-app-loading-button [isLoading]="false" [label]="'Save'" [isButtonDisabled]="false"></lib-app-loading-button>
   </div>
 </div>

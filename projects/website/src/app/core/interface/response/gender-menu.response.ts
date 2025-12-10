@@ -1,8 +1,9 @@
-import { GenderTypeEnum } from "@shared";
+import { GenderTypeEnum } from '@shared';
 
 export interface IResponseGenderMenuRoot {
   gender: GenderTypeEnum;
   collections: Collection[];
+  products: ProductComboUrl[];
 }
 
 export interface Collection {
@@ -16,4 +17,9 @@ export interface Category {
   id: number;
   name: string;
   description: string;
+}
+
+export interface ProductComboUrl {
+  id: number;
+  productURL: string;
 }

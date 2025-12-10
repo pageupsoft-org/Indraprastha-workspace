@@ -425,13 +425,15 @@ h3.brand-name {
   position: relative;
   overflow: hidden;
   margin: 0 auto;
-  height: 750px;
+  // height: 750px;
   overflow-x: hidden;
   display: flex;
   justify-content: center;
   align-items: center;
   padding-left: 0px;
   padding-right: 50px;
+  padding-top: 80px;
+  padding-bottom: 80px;
 }
 
 .gallery {
