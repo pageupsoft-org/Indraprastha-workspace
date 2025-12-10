@@ -1,7 +1,7 @@
-<div class="flex items-center justify-center bg-white h-full min-h-[700px]">
+<div class="flex items-center justify-center bg-white h-full">
   <div class="relative p-3 md:p-12 w-full">
-    <button (click)="close()"
-      
+    <button
+      (click)="close()"
       class="md:absolute top-4 right-4 p-2 text-gray-600 hover:text-gray-800 transition-colors duration-200 sticky z-1000 btn-close cursor-pointer"
     >
       <svg
@@ -22,16 +22,25 @@
 
     <div class="grid grid-cols-1 lg:grid-cols-2 gap-4 lg:gap-8 md:w-auto w-full">
       <div class="flex-shrink-0 md:h-auto h-[200px]">
+        @if(isShowloader()){
+        <ngx-skeleton-loader
+          count="1"
+          appearance="square"
+          class="rounded-md"
+          [theme]="{ height: '600px', width: '100%', margin: '0px' }"
+        ></ngx-skeleton-loader>
+        }@else {
         <img
           id="modal-product-image"
           [src]="productDetail().productURL[0]"
           alt="Product Image"
           class="w-full h-full object-cover md:h-auto rounded-xl shadow-lg sticky top-[50px]"
         />
+        }
       </div>
 
       <div class="flex flex-col space-y-4">
-        <h2 class="text-xl md:text-4xl font-bold text-gray-900 leading-[1] mb-1">
+        <h2 class="text-3xl font-medium text-[#000000] leading-[1] mb-4">
           {{ productDetail().name }}
         </h2>
         <p class="text-sm md:text-xl text-[#0000008C] mb-1">
@@ -222,7 +231,12 @@
             BUY IT NOW
           </button>
 
-          <button (click)="navigateToProductDetail()" class="cursor-pointer underline text-gray-500 py-1">View Details</button>
+          <button
+            (click)="navigateToProductDetail()"
+            class="cursor-pointer underline text-gray-500 py-1"
+          >
+            View Details
+          </button>
         </div>
       </div>
     </div>

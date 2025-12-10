@@ -7,5 +7,6 @@ export const appRoutes = {
   WHATS_NEW: 'whats-new',
   ORDER: 'order',
   REVIEW_RATING: 'review-rating',
-  ORDER_DETAIL: 'order-detail'
+  ORDER_DETAIL: 'order-detail',
+  COLLECTION: 'collection'
 };

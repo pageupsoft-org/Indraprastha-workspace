@@ -13,15 +13,9 @@ import { NewArrivalProductCard } from '../../../components/new-arrival-product-c
 import { MatDialog, MatDialogModule } from '@angular/material/dialog';
 import { ProductDetailDialog } from '../../../components/product-detail-dialog/product-detail-dialog';
 import {
-  ApiRoutes,
-  DashboardProductTypeStringEnum,
-  httpPost,
-  initializePagInationPayload,
-  IRGeneric,
   PlatformService,
 } from '@shared';
-import { IDashboadRequest } from './dashboard.request';
-import { DashboardResponseRoot, Product } from './dashboard.response';
+import { Product } from './dashboard.response';
 
 @Component({
   selector: 'app-product-slider',
@@ -30,29 +24,23 @@ import { DashboardResponseRoot, Product } from './dashboard.response';
   styleUrl: './product-slider.scss',
 })
 export class ProductSlider implements AfterViewInit {
+  public title = input.required<string>();
+  public productList = input.required<Product[]>();
+
   sliderTrack = viewChild<ElementRef<HTMLDivElement>>('sliderTrack');
   prevBtn = viewChild<ElementRef<HTMLButtonElement>>('prevBtn');
   nextBtn = viewChild<ElementRef<HTMLButtonElement>>('nextBtn');
   cardsContainer = viewChild<ElementRef<HTMLDivElement>>('cardsContainer');
 
-  public productType = input.required<DashboardProductTypeStringEnum>();
-  public title = input.required<string>();
 
-  public productList: WritableSignal<Product[]> = signal([]);
+  // public productList: WritableSignal<Product[]> = signal([]);
 
   public totalCards = computed(() => this.productList().length);
   public currentCardIndex: WritableSignal<number> = signal(0);
 
-  private payload: IDashboadRequest = {
-    ...initializePagInationPayload(),
-    type: DashboardProductTypeStringEnum.NewArrival,
-  };
-
   constructor(private platformService: PlatformService, private matDialog: MatDialog) {}
 
   ngOnInit(): void {
-    this.payload.type = this.productType();
-    this.getDashboardProduct();
   }
 
   ngAfterViewInit() {
@@ -114,6 +102,8 @@ export class ProductSlider implements AfterViewInit {
       panelClass: 'product-detail-dialog',
       width: '900px',
       maxWidth: '90vw',
+      height: '1000px',
+      maxHeight: '90vh',
       data: {
         productId: productId,
       },
@@ -128,26 +118,6 @@ export class ProductSlider implements AfterViewInit {
   public prev() {
     this.currentCardIndex.set(this.currentCardIndex() - 1);
     this.updateSlider();
-  }
-
-  private getDashboardProduct() {
-    httpPost<IRGeneric<DashboardResponseRoot>, IDashboadRequest>(
-      ApiRoutes.PRODUCT.DASHBOARD,
-      this.payload,
-      false
-    ).subscribe({
-      next: (response) => {
-        if (response?.data?.products) {
-          this.productList.set(response.data.products)
-        }
-        else{
-          this.productList.set([]);
-        }
-      },
-      error: (error) => {
-        console.error('Dashboard Product Error: ', error);
-      },
-    });
   }
 
   //#region  Hostlistner

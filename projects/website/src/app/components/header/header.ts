@@ -1,6 +1,8 @@
 import {
+  AfterViewInit,
   Component,
   effect,
+  ElementRef,
   HostListener,
   model,
   signal,
@@ -36,9 +38,11 @@ import { Profile } from './profile/profile';
   templateUrl: './header.html',
   styleUrl: './header.scss',
 })
-export class Header {
+export class Header{
   @ViewChild('shoppingCartRef') shoppingCartRef!: ShoppingCart;
   @ViewChild('authFormRef') authFormRef!: AuthManager;
+  @ViewChild('searchInput') searchInput!: ElementRef<HTMLInputElement>;
+
   public readonly appRoutes = appRoutes;
 
   public GenderTypeEnum = GenderTypeEnum;
@@ -80,8 +84,6 @@ export class Header {
   }
 
   public removeFromDom() {
-    console.log('removeFromDom');
-
     setTimeout(() => {
       this.isProfileMounted.update(() => false);
     }, 400); //THIS TIME SHOULD MATCH THE CLOSING ANIMATION TIME OF PROFILE
@@ -102,7 +104,6 @@ export class Header {
     if (event.key === 'Enter') {
       this.payloadGenderMenu.search = this.searchText() ?? '';
       this.router.navigate([createUrlFromObject(this.payloadGenderMenu, '')]);
-      this.isSearchInputVisible.update(() => false);
       this.searchText.set(null);
     }
   }

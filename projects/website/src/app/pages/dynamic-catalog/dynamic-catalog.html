@@ -1,70 +1,92 @@
-<div class="w-full mx-auto px-4 sm:px-6 lg:px-32 py-8">
+<div class="w-full mx-auto px-4 sm:px-6 lg:px-32 py-8 mt-5">
   <!-- Header Controls -->
   <div class="flex flex-wrap justify-between items-center mb-8 pb-4 border-b border-gray-200 gap-4">
     <!-- Left Side: Filter Toggle & Product Count -->
     <div class="flex items-center space-x-6">
-      <button (click)="setFiltersOpen(!filtersOpen)"
-        class="flex items-center space-x-2 text-sm font-semibold tracking-wider hover:text-gray-500 transition-colors cursor-pointer">
-        <!-- <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor"
-          stroke-width="2">
-          <path stroke-linecap="round" stroke-linejoin="round"
-            d="M12 6V4m0 16v-2m-6-5h12M6 12H4m16 0h-2m-5-6h.01M12 18h.01M6 18h.01M18 6h.01M6 6h.01M18 18h.01" />
-        </svg> -->
-        <img src="assets/images/filter.svg" class="h-4 w-4" alt="">
+      <button
+        (click)="setFiltersOpen(!filtersOpen)"
+        class="flex items-center space-x-2 text-sm font-semibold tracking-wider hover:text-gray-500 transition-colors cursor-pointer"
+      >
+        <img src="assets/images/filter.svg" class="h-4 w-4" alt="" />
         <span>{{ filtersOpen ? 'HIDE FILTERS' : 'SHOW FILTERS' }}</span>
       </button>
     </div>
 
     <!-- Right Side: View & Sort Controls -->
     <div class="flex items-center space-x-6">
-      <div #gridViewControls class="hidden lg:flex items-center space-x-1 p-1 bg-gray-100 rounded-md">
-        <button data-cols="6" (click)="changeGrid(6)"
+      <div
+        #gridViewControls
+        class="hidden lg:flex items-center space-x-1 p-1 bg-gray-100 rounded-md"
+      >
+        <button
+          data-cols="6"
+          (click)="changeGrid(6)"
           class="grid-view-btn p-1.5 rounded-md hover:bg-gray-200 transition-colors cursor-pointer"
-          [ngClass]="currentCols() === 6 ? 'bg-white shadow text-gray-800' : 'text-gray-400'">
+          [ngClass]="currentCols() === 6 ? 'bg-white shadow text-gray-800' : 'text-gray-400'"
+        >
           <svg class="w-5 h-5" viewBox="0 0 24 24" fill="currentColor">
             <path d="M3 4h18v2H3V4zm0 7h18v2H3v-2zm0 7h18v2H3v-2z"></path>
           </svg>
         </button>
-        <button data-cols="4" (click)="changeGrid(4)"
+        <button
+          data-cols="4"
+          (click)="changeGrid(4)"
           class="grid-view-btn p-1.5 rounded-md hover:bg-gray-200 transition-colors cursor-pointer"
-          [ngClass]="currentCols() === 4 ? 'bg-white shadow text-gray-800' : 'text-gray-400'">
+          [ngClass]="currentCols() === 4 ? 'bg-white shadow text-gray-800' : 'text-gray-400'"
+        >
           <svg class="w-5 h-5" viewBox="0 0 24 24" fill="currentColor">
             <path
-              d="M2 2h5v5H2V2zm7 0h5v5H9V2zm7 0h5v5h-5V2zM2 9h5v5H2V9zm7 0h5v5H9V9zm7 0h5v5h-5V9zM2 16h5v5H2v-5zm7 0h5v5H9v-5zm7 0h5v5h-5v-5z">
-            </path>
+              d="M2 2h5v5H2V2zm7 0h5v5H9V2zm7 0h5v5h-5V2zM2 9h5v5H2V9zm7 0h5v5H9V9zm7 0h5v5h-5V9zM2 16h5v5H2v-5zm7 0h5v5H9v-5zm7 0h5v5h-5v-5z"
+            ></path>
           </svg>
         </button>
-        <button data-cols="3" (click)="changeGrid(3)"
+        <button
+          data-cols="3"
+          (click)="changeGrid(3)"
           class="grid-view-btn p-1.5 rounded-md transition-colors cursor-pointer"
-          [ngClass]="currentCols() === 3 ? 'bg-white shadow text-gray-800' : 'text-gray-400'">
+          [ngClass]="currentCols() === 3 ? 'bg-white shadow text-gray-800' : 'text-gray-400'"
+        >
           <svg class="w-5 h-5" viewBox="0 0 24 24" fill="currentColor">
             <path d="M4 4h6v6H4V4zm8 0h6v6h-6V4zM4 14h6v6H4v-6zm8 6h6v-6h-6v6z"></path>
           </svg>
         </button>
-
-
       </div>
 
       <!-- Sort By Dropdown -->
       <div class="relative">
-        <button (click)="toggleSortOptions($event)"
-          class="flex items-center space-x-2 text-sm font-semibold tracking-wider hover:text-gray-500 transition-colors cursor-pointer">
+        <button
+          (click)="toggleSortOptions($event)"
+          class="flex items-center space-x-2 text-sm font-semibold tracking-wider hover:text-gray-500 transition-colors cursor-pointer"
+        >
           <span>SORT BY</span>
-          <svg #sortArrow xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 transform transition-transform duration-300"
-            fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+          <svg
+            #sortArrow
+            xmlns="http://www.w3.org/2000/svg"
+            class="h-4 w-4 transform transition-transform duration-300"
+            fill="none"
+            viewBox="0 0 24 24"
+            stroke="currentColor"
+            stroke-width="2"
+          >
             <path stroke-linecap="round" stroke-linejoin="round" d="M19 9l-7 7-7-7" />
           </svg>
         </button>
-        <div #sortOptions
-          class="hidden absolute right-0 mt-3 w-56 bg-white border border-gray-200 rounded-md shadow-lg z-20 transition-all duration-300 origin-top-right">
-          <a class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-50 rounded-t-md">FEATURED</a>
+        <div
+          #sortOptions
+          class="hidden absolute right-0 mt-3 w-56 bg-white border border-gray-200 rounded-md shadow-lg z-20 transition-all duration-300 origin-top-right"
+        >
+          <a class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-50 rounded-t-md"
+            >FEATURED</a
+          >
           <a class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-50">BEST SELLING</a>
           <a class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-50">ALPHABETICALLY, A-Z</a>
           <a class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-50">ALPHABETICALLY, Z-A</a>
           <a class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-50">PRICE, LOW TO HIGH</a>
           <a class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-50">PRICE, HIGH TO LOW</a>
           <a class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-50">DATE, OLD TO NEW</a>
-          <a class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-50 rounded-b-md">DATE, NEW TO OLD</a>
+          <a class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-50 rounded-b-md"
+            >DATE, NEW TO OLD</a
+          >
         </div>
       </div>
     </div>
@@ -74,39 +96,73 @@
   <main class="flex flex-row overflow-hidden">
     <!-- Filter Sidebar -->
 
-    <aside #filterSidebar
-      class="flex-shrink-0 self-start md:sticky md:top-0 h-screen overflow-y-auto transition-all duration-500 ease-in-out mob-filter-sodebar">
+    <aside
+      #filterSidebar
+      class="flex-shrink-0 self-start md:sticky md:top-0 h-screen overflow-y-auto transition-all duration-500 ease-in-out mob-filter-sodebar"
+    >
       <div class="w-52 xl:w-64 pr-8 transition-opacity duration-300">
         <!-- Inner div to maintain width and padding -->
         <div class="space-y-6">
           <!-- Filter Section Template -->
           <div class="filter-group border-b pb-4">
-            <button (click)="toggleFilter('category')"
-              class="font-semibold text-sm w-full flex justify-between items-center cursor-pointer">
+            <button
+              (click)="toggleFilter('category')"
+              class="font-semibold text-sm w-full flex justify-between items-center cursor-pointer"
+            >
               <span>CATEGORY</span>
-              <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 transform transition-transform duration-300"
-                [class.rotate-180]="isActive('category')" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7" />
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                class="h-4 w-4 transform transition-transform duration-300"
+                [class.rotate-180]="isActive('category')"
+                fill="none"
+                viewBox="0 0 24 24"
+                stroke="currentColor"
+              >
+                <path
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                  stroke-width="2"
+                  d="M19 9l-7 7-7-7"
+                />
               </svg>
             </button>
 
-            <div class="accordion-content mt-3 space-y-2 text-sm text-gray-700" [class.active]="isActive('category')">
+            <div
+              class="accordion-content mt-3 space-y-2 text-sm text-gray-700"
+              [class.active]="isActive('category')"
+            >
               @for (category of dynamicData().filter.category; track $index) {
               <label class="flex items-center space-x-2 cursor-pointer hover:text-black">
-                <input type="checkbox" class="w-4 h-4 rounded border-gray-400 text-black"
-                  [(ngModel)]="category.isSelected" />
+                <input
+                  type="checkbox"
+                  class="w-4 h-4 rounded border-gray-400 text-black"
+                  [(ngModel)]="category.isSelected"
+                />
                 <span>{{ category.name }} ({{ category.count }})</span>
               </label>
               }
             </div>
           </div>
           <div class="filter-group border-b pb-4">
-            <button (click)="toggleFilter('price')"
-              class="font-semibold text-sm w-full flex justify-between items-center cursor-pointer">
+            <button
+              (click)="toggleFilter('price')"
+              class="font-semibold text-sm w-full flex justify-between items-center cursor-pointer"
+            >
               <span>PRICE</span>
-              <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 transform transition-transform duration-300"
-                [class.rotate-180]="isActive('price')" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7" />
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                class="h-4 w-4 transform transition-transform duration-300"
+                [class.rotate-180]="isActive('price')"
+                fill="none"
+                viewBox="0 0 24 24"
+                stroke="currentColor"
+              >
+                <path
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                  stroke-width="2"
+                  d="M19 9l-7 7-7-7"
+                />
               </svg>
             </button>
             <div
@@ -119,32 +175,65 @@
                 <!-- Active (selected) range -->
                 <div class="absolute h-1 bg-black rounded" [ngStyle]="getRangeStyle()"></div>
                 <!-- Min slider -->
-                <input type="range" [min]="minLimit()" [max]="maxLimit()" step="1000"
-                  [value]="payloadGenderMenu().minPrice" (input)="onMinChange($event)"
-                  class="absolute w-full appearance-none bg-transparent accent-black pointer-events-auto" />
+                <input
+                  type="range"
+                  [min]="minLimit()"
+                  [max]="maxLimit()"
+                  step="1000"
+                  [value]="payloadGenderMenu().minPrice"
+                  (input)="onMinChange($event)"
+                  class="absolute w-full appearance-none bg-transparent accent-black pointer-events-auto"
+                />
                 <!-- Max slider -->
-                <input type="range" [min]="minLimit()" [max]="maxLimit()" step="1000"
-                  [value]="payloadGenderMenu().maxPrice" (input)="onMaxChange($event)"
-                  class="absolute w-full appearance-none bg-transparent accent-black pointer-events-auto" />
+                <input
+                  type="range"
+                  [min]="minLimit()"
+                  [max]="maxLimit()"
+                  step="1000"
+                  [value]="payloadGenderMenu().maxPrice"
+                  (input)="onMaxChange($event)"
+                  class="absolute w-full appearance-none bg-transparent accent-black pointer-events-auto"
+                />
               </div>
               <!-- Display values -->
               <div class="flex space-x-2">
-                <input type="text" [value]="'₹ ' + payloadGenderMenu().minPrice"
-                  class="w-1/2 border px-2 py-1 rounded text-sm focus:ring-1 focus:ring-black" readonly />
-                <input type="text" [value]="'₹ ' + payloadGenderMenu().maxPrice"
-                  class="w-1/2 border px-2 py-1 rounded text-sm focus:ring-1 focus:ring-black" readonly />
+                <input
+                  type="text"
+                  [value]="'₹ ' + payloadGenderMenu().minPrice"
+                  class="w-1/2 border px-2 py-1 rounded text-sm focus:ring-1 focus:ring-black"
+                  readonly
+                />
+                <input
+                  type="text"
+                  [value]="'₹ ' + payloadGenderMenu().maxPrice"
+                  class="w-1/2 border px-2 py-1 rounded text-sm focus:ring-1 focus:ring-black"
+                  readonly
+                />
               </div>
             </div>
           </div>
 
           <div class="filter-group border-b pb-4">
             <!-- filters.component.html -->
-            <button (click)="toggleFilter('color')"
-              class="font-semibold text-sm w-full flex justify-between items-center cursor-pointer">
+            <button
+              (click)="toggleFilter('color')"
+              class="font-semibold text-sm w-full flex justify-between items-center cursor-pointer"
+            >
               <span>COLOR</span>
-              <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 transform transition-transform duration-300"
-                [class.rotate-180]="isActive('color')" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7" />
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                class="h-4 w-4 transform transition-transform duration-300"
+                [class.rotate-180]="isActive('color')"
+                fill="none"
+                viewBox="0 0 24 24"
+                stroke="currentColor"
+              >
+                <path
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                  stroke-width="2"
+                  d="M19 9l-7 7-7-7"
+                />
               </svg>
             </button>
 
@@ -173,8 +262,10 @@
             </div>
           </div>
 
-          <button (click)="search()"
-            class="w-full bg-gray-900 text-white py-3 text-sm font-bold tracking-wider hover:bg-gray-700 transition-colors rounded-md">
+          <button
+            (click)="search()"
+            class="w-full bg-gray-900 text-white py-3 text-sm font-bold tracking-wider hover:bg-gray-700 transition-colors rounded-md"
+          >
             APPLY FILTERS
           </button>
         </div>
@@ -204,8 +295,11 @@
         @for (item of dynamicData().products; track $index) {
         <div class="group cursor-pointer" (click)="routeToProductDetail(item.id)">
           <div class="aspect-w-1 aspect-h-1 h-[90%] w-full overflow-hidden rounded-lg bg-gray-200">
-            <img [src]="item.productURL[0]" alt="Red Saree"
-              class="w-full h-full object-cover object-center group-hover:opacity-75 transition-opacity" />
+            <img
+              [src]="item.productURL[0]"
+              alt="Red Saree"
+              class="w-full h-full object-cover object-center group-hover:opacity-75 transition-opacity"
+            />
           </div>
           <div class="h-[10%]">
             <h3 class="mt-4 text-sm text-gray-700 truncate">{{ item.name }}</h3>
@@ -218,7 +312,9 @@
       </div>
 
       @if(!dynamicData().products.length){
-      <span class="w-full flex justify-center text-lg font-bold">No data</span>
+      <div class="w-full h-[90%]">
+        <app-no-product-found></app-no-product-found>
+      </div>
       } }
     </section>
   </main>

@@ -3,6 +3,14 @@ import { appRoutes } from '@website/core';
 
 export const serverRoutes: ServerRoute[] = [
   {
+    path: appRoutes.ABOUT_US,
+    renderMode: RenderMode.Prerender,
+  },
+  {
+    path: appRoutes.HOME,
+    renderMode: RenderMode.Prerender,
+  },
+  {
     path: appRoutes.WISHLIST,
     renderMode: RenderMode.Client,
   },

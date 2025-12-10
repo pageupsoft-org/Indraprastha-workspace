@@ -83,8 +83,6 @@ export class GenderMenu implements OnInit, OnDestroy {
         menuData.filter((val) => val.gender === this.genderType()).flatMap((val) => val.products)
       );
 
-      this.productList.update((list) => list.filter((_, i) => i < 4));
-
       // ✅ Update signals
       this.collectionList.set(combinedCollections);
       if (combinedCollections.length > 0) {

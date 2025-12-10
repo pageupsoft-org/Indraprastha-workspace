@@ -1,0 +1,17 @@
+<div class="w-full mx-auto px-4 sm:px-6 lg:px-32 py-8 mt-5">
+  @if(collectionList().length){
+
+    <div class="grid grid-cols-12 w-full">
+      @for (item of collectionList(); track $index) {
+        <div class="col-span-4">
+          <img [src]="item.productURLs[0]" [alt]="item.collectionName" />
+          <p class="text-center mt-2 text-gray-700 font-medium text-sm md:text-md">
+            {{ item.collectionName }}
+          </p>
+        </div>
+      }
+    </div>
+  }@else {
+    <app-no-product-found></app-no-product-found>
+  }
+</div>
