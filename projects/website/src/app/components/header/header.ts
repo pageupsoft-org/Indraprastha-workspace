@@ -3,6 +3,7 @@ import {
   effect,
   HostListener,
   model,
+  OnInit,
   signal,
   ViewChild,
   WritableSignal,
@@ -13,11 +14,15 @@ import { CommonModule } from '@angular/common';
 import { ShoppingCart } from '../shopping-cart/shopping-cart';
 import { AuthManager } from '../auth-manager/auth-manager';
 import {
+  ApiRoutes,
   clearLocalStorageItems,
   createUrlFromObject,
+  deCodeToken,
   EToastType,
   GenderTypeEnum,
+  httpGet,
   initializePagInationPayload,
+  IRGeneric,
 } from '@shared';
 import { ToastService } from '@shared';
 import {
@@ -29,6 +34,7 @@ import {
 } from '@website/core';
 import { FormsModule } from '@angular/forms';
 import { Profile } from './profile/profile';
+import { IAddressPayload, IProfileResponse } from './profile/profile-upsert-dialog/profile-upsert-dialog.models';
 
 @Component({
   selector: 'app-header',
@@ -36,7 +42,7 @@ import { Profile } from './profile/profile';
   templateUrl: './header.html',
   styleUrl: './header.scss',
 })
-export class Header {
+export class Header implements OnInit{
   @ViewChild('shoppingCartRef') shoppingCartRef!: ShoppingCart;
   @ViewChild('authFormRef') authFormRef!: AuthManager;
   public readonly appRoutes = appRoutes;
@@ -73,6 +79,16 @@ export class Header {
     public cartService: CartService,
     public wishlistService: WishlistService
   ) {}
+  
+  ngOnInit(): void {
+      const tokenData = deCodeToken()
+       if (tokenData?.Id) {
+         const id = parseInt(tokenData?.Id)
+         this.getProfileData(id)
+       }
+       this.getUserAddress()
+   
+  }
 
   public openProfile() {
     this.isProfileMounted.update(() => true);
@@ -141,6 +157,28 @@ export class Header {
     this.dropdownOpen = false;
   }
 
- 
+   public getProfileData(id: number) {
+    httpGet<IRGeneric<IProfileResponse>>(ApiRoutes.CUSTOMERS.GET_BY_ID(id), false).subscribe({
+      next: (response) => {
+        if (response) {
+          if (response.data) {
+            this._utitlityService.profileData.set(response.data);
+          }
+        }
+      }
+    })
+  }
+
+  public getUserAddress() {
+    httpGet<IRGeneric<IAddressPayload[]>>(ApiRoutes.CUSTOMERS.GET_SHIPPING_ADDRESS, false).subscribe({
+      next: (response) => {
+        if (response) {
+          if (response.data) {
+           this._utitlityService.AddressData.set(response.data)
+          }
+        }
+      }
+    })
+  }
 
 }

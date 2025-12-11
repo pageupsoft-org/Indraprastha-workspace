@@ -46,13 +46,7 @@ export class App implements OnInit {
     this.getGenderMenu();
   }
   ngOnInit(): void {
-    const tokenData = deCodeToken()
-    if (tokenData?.Id) {
-      const id = parseInt(tokenData?.Id)
-      this.getProfileData(id)
-    }
-    this.getUserAddress()
-
+ 
   }
 
   ngAfterViewInit(): void {
@@ -91,29 +85,7 @@ export class App implements OnInit {
     });
   }
 
-  public getProfileData(id: number) {
-    httpGet<IRGeneric<IProfileResponse>>(ApiRoutes.CUSTOMERS.GET_BY_ID(id), false).subscribe({
-      next: (response) => {
-        if (response) {
-          if (response.data) {
-            this.utilityService.profileData.set(response.data);
-          }
-        }
-      }
-    })
-  }
 
-  public getUserAddress() {
-    httpGet<IRGeneric<IAddressPayload[]>>(ApiRoutes.CUSTOMERS.GET_SHIPPING_ADDRESS, false).subscribe({
-      next: (response) => {
-        if (response) {
-          if (response.data) {
-           this.utilityService.AddressData.set(response.data)
-          }
-        }
-      }
-    })
-  }
 
 
 

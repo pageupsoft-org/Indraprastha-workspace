@@ -42,7 +42,7 @@ export interface IAddresseForm {
     firstName: FormControl<string | null>;
     lastName: FormControl<string | null>;
     address: FormControl<string | null>;
-    appartMent: FormControl<string | null>;
+    apartment: FormControl<string | null>;
     city: FormControl<string | null>;
     state: FormControl<string | null>;
     pinCode: FormControl<number | null>;
@@ -56,7 +56,7 @@ export interface IAddressPayload{
     firstName:string;
     lastName:string;
     address:string;
-    appartMent:string;
+    apartment:string;
     city:string;
     state:string;
     pinCode:number;
@@ -71,7 +71,7 @@ export const initializeAddressForm = (): FormGroup<IAddresseForm> =>
         firstName: new FormControl<string | null>(null, [Validators.required, Validators.minLength(3), Validators.maxLength(15)]),
         lastName: new FormControl<string | null>(null, [Validators.required, Validators.minLength(3), Validators.maxLength(15)]),
         address: new FormControl<string | null>(null, [Validators.required]),
-        appartMent: new FormControl<string | null>(null, Validators.required),
+        apartment: new FormControl<string | null>(null, Validators.required),
         city: new FormControl<string | null>(null, Validators.required),
         state: new FormControl<string | null>(null, Validators.required),
         pinCode: new FormControl<number | null>(null, Validators.required),
@@ -93,5 +93,4 @@ export interface IAddressPayload{
     apartment:string;
     firstName:string
     lastName:string
-    _isAccordionOpen: boolean
 }

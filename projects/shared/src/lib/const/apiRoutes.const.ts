@@ -28,7 +28,8 @@ export const ApiRoutes = {
     CUSTOMER_ALL: '/api/Customer/All',
     GET_BY_ID: (id: number) => `/api/Customer/${id}`,
     SHIPPING_ADDRESS : '/api/Customer/ShippingAddress',
-    GET_SHIPPING_ADDRESS : '/api/Customer/ShippingAddress'
+    GET_SHIPPING_ADDRESS : '/api/Customer/ShippingAddress',
+    SHIPPIBG_DELETE_BY_ID: (id: number) => `/api/Customer/ShippingAddress/${id}`
   },
   EMPLOYEE: {
     BASE: '/api/Employee',

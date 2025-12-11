@@ -15,14 +15,19 @@ import { UtilityService } from '@website/core';
 export class AddressUpsertDialog implements OnInit {
   readonly data = inject(MAT_DIALOG_DATA);
   public addressForm: FormGroup<IAddresseForm> = initializeAddressForm()
-  constructor(private matDialogRef: MatDialogRef<AddressUpsertDialog>, private _toaster: ToastService) { }
-
+  constructor(private matDialogRef: MatDialogRef<AddressUpsertDialog>, private _toaster: ToastService, private _utilityService: UtilityService) { }
+  public id: number = 0;
   public countries = COUNTRIES;
   public states: string[] = [];
   public cities: string[] = [];
 
 
   ngOnInit(): void {
+    this.id = this.data.id;
+    if (this.id) {
+      this.editAddress(this.id)
+    }
+    console.log(this.id)
   }
 
   // CLOSE POPUP
@@ -32,17 +37,35 @@ export class AddressUpsertDialog implements OnInit {
 
   // ON ADDRESS SUBMIT
   public onAddressSubmit() {
-    console.log(this.addressForm.getRawValue())
-    const payLoad = this.addressForm.getRawValue()
+
+    console.log(this.id)
+    const payLoad = this.addressForm.getRawValue() as IAddressPayload
 
     if (this.addressForm.valid) {
-      httpPost<IRGeneric<Boolean>, IAddressPayload>(ApiRoutes.CUSTOMERS.SHIPPING_ADDRESS, payLoad as IAddressPayload).subscribe({
+      httpPost<IRGeneric<number>, IAddressPayload>(ApiRoutes.CUSTOMERS.SHIPPING_ADDRESS, payLoad).subscribe({
         next: (res) => {
-          if (res) {
-            if (res.data) {
-              this._toaster.show({ message: 'Address Add Successfully', duration: 3000, type: EToastType.success })
-              this.close()
+          if (this.id === 0) {
+            console.log("id", this.id)
+            if (res) {
+              if (res.data) {
+                payLoad.id = res.data;
+                this._utilityService.AddressData().push(payLoad);
+                
+                console.log(this._utilityService.AddressData())
+                console.log(this._utilityService.AddressData())
+                this._toaster.show({ message: 'Address Add Successfully', duration: 3000, type: EToastType.success })
+                this.close()
+              }
             }
+          }
+          else {
+            this._utilityService.AddressData.update(list =>
+              list.map(item =>
+                item.id === this.id ? (payLoad as IAddressPayload) : item
+              )
+            );
+            this._toaster.show({ message: 'Address Update Successfully', duration: 3000, type: EToastType.success })
+            this.close()
           }
         },
         error: (error) => {
@@ -67,7 +90,30 @@ export class AddressUpsertDialog implements OnInit {
     console.log(this.cities)
   }
 
-   
+  public editAddress(id: number) {
+    console.log(this._utilityService.AddressData())
+    const val = this._utilityService.AddressData().find(v => v.id === id);
+    console.log(val)
+    if (!val) return;
+
+    // Patch all fields (or patch partial)
+    this.addressForm.patchValue(val);
+    this.addressForm.controls.apartment.setValue(val.apartment)
+
+    // Populate states for the patched country, then set state
+    this.onCountryChange();          // fills this.states based on country control value
+    this.addressForm.controls.state.patchValue(val.state);
+
+    // Populate cities for the patched state, then set city
+    this.onStateChange();            // fills this.cities based on state control value
+    this.addressForm.controls.city.patchValue(val.city);
+  }
+
+
+
+
+
+
 
 }
 
