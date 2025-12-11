@@ -1,17 +1,17 @@
-<section class="bg-white pt-8 pb-12" data-aos="fade-up" data-aos-duration="1000">
+<section class="bg-white pt-8 pb-12 w-full px-32" data-aos="fade-up" data-aos-duration="1000">
   <div class="w-full block">
     <h1 class="text-3xl md:text-4xl lg:text-5xl text-gray-800 text-center">MEN'S WEAR</h1>
   </div>
 
-  <div class="gallery-container max-w-7xl">
+  <div class="gallery-container w-full px-32">
     @if(mensWearList().length > 5){
     <button
       (click)="prev()"
-      class="prev absolute left-0 top-1/2 -translate-y-1/2 z-10 p-2 md:p-[.5rem] bg-white/70 backdrop-blur-sm rounded-full shadow-lg transition-transform duration-300 hover:scale-110 focus:outline-none focus:ring-2 focus:ring-[#cdb29c] focus:ring-offset-2"
+      class="prev absolute left-0 top-1/2 -translate-y-1/2 z-10 p-2 md:p-[.5rem] bg-white backdrop-blur-sm rounded-full shadow-lg transition-transform duration-300 hover:scale-110 focus:outline-none focus:ring-2 focus:ring-[#cdb29c] focus:ring-offset-2"
     >
       <svg
         xmlns="http://www.w3.org/20-00/svg"
-        class="md:h-6 md:w-6 h-3 w-3 text-gray-800"
+        class="md:h-4 md:w-4 h-3 w-3 text-gray-800"
         fill="none"
         viewBox="0 0 24 24"
         stroke="currentColor"
@@ -23,15 +23,20 @@
     }
 
     <div #galleryRef class="gallery">
-      @for (mensWear of mensWearList(); track mensWear.id) {
+      @for (mensWear of mensWearList(); track mensWear.collectionId) {
       <div #itemRef class="item">
-        <img (click)="zoomImage(itemRef, $index)" [src]="mensWear.productURL[0]" [alt]="mensWear.name" />
-        <a
-          [routerLink]="['/' + productDetailRoute]"
-          [queryParams]="{ id: mensWear.id }"
-          class="text-center font-bold mt-2 text-sm md:text-lg"
-          >{{ mensWear.name }}</a
-        >
+        <img
+          (click)="
+            $index == currentIndex
+              ? openProductPage(mensWear.collectionId)
+              : zoomImage(itemRef, $index)
+          "
+          [src]="mensWear.productURLs[0]"
+          [alt]="mensWear.collectionName"
+        />
+        <p class="text-center mt-2 text-gray-700 font-medium text-sm md:text-md">
+          {{ mensWear.collectionName }}
+        </p>
       </div>
       }
     </div>
@@ -40,11 +45,11 @@
     @if(mensWearList().length > 5){
     <button
       (click)="next()"
-      class="next absolute right-0 top-1/2 -translate-y-1/2 z-10 p-2 md:p-2 bg-white/70 backdrop-blur-sm rounded-full shadow-lg transition-transform duration-300 hover:scale-110 focus:outline-none focus:ring-2 focus:ring-[#cdb29c] focus:ring-offset-2"
+      class="next absolute right-0 top-1/2 -translate-y-1/2 z-10 p-2 md:p-2 bg-white backdrop-blur-sm rounded-full shadow-lg transition-transform duration-300 hover:scale-110 focus:outline-none focus:ring-2 focus:ring-[#cdb29c] focus:ring-offset-2"
     >
       <svg
         xmlns="http://www.w3.org/2000/svg"
-        class="md:h-6 md:w-6 h-3 w-3 text-gray-800"
+        class="md:h-4 md:w-4 h-3 w-3 text-gray-800"
         fill="none"
         viewBox="0 0 24 24"
         stroke="currentColor"

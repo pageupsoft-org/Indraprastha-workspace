@@ -5,7 +5,7 @@
   <form [formGroup]="loginForm" (submit)="login()">
     <div class="mb-5">
       <label class="block text-sm font-bold text-gray-700 uppercase tracking-widest mb-2"
-        >Username</label
+        >Registered Mobile</label
       >
       <input
         type="text"
@@ -28,17 +28,12 @@
     </div>
 
     <div class="flex items-center justify-between">
-      @if(isShowloader()){
+      <lib-app-loading-button [isLoading]="isShowloader()" [label]="'Submit'" [isButtonDisabled]="false"></lib-app-loading-button>
+      <!-- @if(isShowloader()){
       <app-button-loader></app-button-loader>
       } @else {
-      <button
-        type="submit"
-        (submit)="login()"
-        class="bg-red-800 rounded-[5px] text-white font-semibold py-3 px-6 hover:bg-red-900 transition-colors duration-300 uppercase cursor-pointer"
-      >
-        Sign In
-      </button>
-      }
+        <lib-generic-save-button [type]="'submit'"></lib-generic-save-button>
+      } -->
       <!-- <a
         class="text-sm font-medium text-gray-600 hover:text-red-800 transition-colors duration-300 uppercase tracking-widest"
       >

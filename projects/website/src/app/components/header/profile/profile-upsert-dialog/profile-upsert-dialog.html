@@ -1,52 +1,67 @@
 <!-- Modal -->
 <div class="bg-white w-full rounded-3xl p-8 shadow-xl">
-  <p class="text-md font-semibold mb-6">Edit Profile</p>
+  <p class="lg:text-xl md:text-lg sm:text-md text-black font-semibold mb-6">Edit Profile</p>
 
   <form action="" [formGroup]="profileForm">
-      <!-- Form Grid -->
-  <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mb-6">
-    <input
-      type="text"
-      placeholder="First Name" libValidateControl  [formControl]="profileForm.controls.firstName" minlength="3" maxlength="15"
-      class="w-full border border-gray-300 rounded-lg px-4 py-2 text-sm focus:ring-1 focus:ring-blue-400 focus:outline-none"
+    <!-- Form Grid -->
+    <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mb-6">
+      <input
+        type="text"
+        placeholder="First Name"
+        libValidateControl
+        [formControl]="profileForm.controls.firstName"
+        minlength="3"
+        maxlength="15"
+        class="w-full border border-gray-200 rounded-lg px-4 py-3 text-sm focus:ring-1 focus:ring-blue-400 focus:outline-none"
+      />
 
-    />
+      <input
+        type="text"
+        placeholder="Last Name"
+        libValidateControl
+        [formControl]="profileForm.controls.lastName"
+        minlength="3"
+        maxlength="15"
+        class="w-full border border-gray-200 rounded-lg px-4 py-3 text-sm focus:ring-1 focus:ring-blue-400 focus:outline-none"
+      />
 
-    <input
-      type="text"
-      placeholder="Last Name" libValidateControl [formControl]="profileForm.controls.lastName" minlength="3" maxlength="15"
-      class="w-full border border-gray-300 rounded-lg px-4 py-2 text-sm focus:ring-1 focus:ring-blue-400 focus:outline-none"
-    />
+      <input
+        type="email"
+        placeholder="Email"
+        libValidateControl
+        [formControl]="profileForm.controls.email"
+        class="w-full border border-gray-200 rounded-lg px-4 py-3 text-sm focus:ring-1 focus:ring-blue-400 focus:outline-none"
+      />
 
-    <input
-      type="email"
-      placeholder="Email" libValidateControl  [formControl]="profileForm.controls.email"
-      class="w-full border border-gray-300 rounded-lg px-4 py-2 text-sm focus:ring-1 
-      focus:ring-blue-400 focus:outline-none"
-    />
+      <input
+        type="text"
+        placeholder="Phone No."
+        libValidateControl
+        [formControl]="profileForm.controls.contact"
+        class="w-full border border-gray-200 rounded-lg px-4 py-3 text-sm focus:ring-1 focus:ring-blue-400 focus:outline-none bg-gray-100 text-gray-500 cursor-not-allowed opacity-50"
+      />
+    </div>
 
-    <input
-      type="text"
-      placeholder="Phone No." libValidateControl [formControl]="profileForm.controls.contact"
-      class="w-full border border-gray-300 rounded-lg px-4 py-2 
-      text-sm focus:ring-1 focus:ring-blue-400 focus:outline-none bg-gray-100 text-gray-500 cursor-not-allowed opacity-50"
-    />
-  </div>
-
-  <!-- Buttons -->
-  <div class="flex items-center justify-center gap-6">
-    <button (click)="onProfileSubmit()"
+    <!-- Buttons -->
+    <div class="flex items-center justify-center gap-6">
+      <!-- <button
       class="px-8 py-2 rounded-lg border border-blue-400 text-blue-600 font-medium hover:bg-blue-50 transition cursor-pointer"
     >
       Save
-    </button>
-
-    <button
+    </button> -->
+      <lib-app-loading-button
+        [isLoading]="false"
+        [label]="'Save'"
+        [isButtonDisabled]="false"
+        (clicked)="onProfileSubmit()"
+      ></lib-app-loading-button>
+      <lib-generic-cancel-button (cancel)="close()"></lib-generic-cancel-button>
+      <!-- <button
       (click)="close()"
       class="px-8 py-2 rounded-lg border border-red-400 text-red-500 font-medium hover:bg-red-50 transition cursor-pointer"
     >
       Cancel
-    </button>
-  </div>
+    </button> -->
+    </div>
   </form>
 </div>

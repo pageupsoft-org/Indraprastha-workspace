@@ -5,10 +5,11 @@ import { initializeProfileForm, IProfileForm, IProfilePayload, IProfileResponse 
 import { ApiRoutes, EToastType, httpGet, httpPost, IRGeneric, ToastService, ValidateControl } from '@shared';
 import { UtilityService } from '@website/core';
 import { CommonModule } from '@angular/common';
+import { GenericSaveButton, GenericCancelButton, AppLoadingButton } from "@shared";
 
 @Component({
   selector: 'app-profile-upsert-dialog',
-  imports: [ValidateControl, ReactiveFormsModule, CommonModule],
+  imports: [GenericCancelButton, AppLoadingButton, ValidateControl, ReactiveFormsModule, CommonModule],
   templateUrl: './profile-upsert-dialog.html',
   styleUrl: './profile-upsert-dialog.scss',
 })

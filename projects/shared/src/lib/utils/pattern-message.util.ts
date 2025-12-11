@@ -1,13 +1,16 @@
 import { AbstractControl, ValidationErrors, ValidatorFn } from '@angular/forms';
 
 export function patternWithMessage(pattern: RegExp, message: string): ValidatorFn {
-    return (control: AbstractControl): ValidationErrors | null => {
-        if (!control.value) {
-            return null;
-        }
-        return pattern.test(control.value)
-            ? null
-            : { pattern: { message } };
-    };
-}
+  return (control: AbstractControl): ValidationErrors | null => {
+    const rawValue = control.value;
 
+    // If empty/null → valid
+    if (rawValue === null || rawValue === undefined || rawValue === '') {
+      return null;
+    }
+
+    const value = String(rawValue).trim(); // <-- Safe conversion
+
+    return pattern.test(value) ? null : { pattern: { message } };
+  };
+}

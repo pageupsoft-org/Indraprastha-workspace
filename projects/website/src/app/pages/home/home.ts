@@ -1,22 +1,44 @@
-import { AfterViewInit, Component, OnInit } from '@angular/core';
+import { AfterViewInit, Component, OnInit, signal } from '@angular/core';
 import AOS from 'aos';
-import { ProductSlider } from "./product-slider/product-slider";
-import { WomenWear } from "./women-wear/women-wear";
-import { MensWear } from "./mens-wear/mens-wear";
-import { ApiRoutes, DashboardProductTypeStringEnum, EBannerConnectionType, EbannerTypes, GenderTypeEnum, httpPost, IBanner, IBannerPagination, IBannerResponse, initializePagInationPayload, IRGeneric, PlatformService } from '@shared';
+import { ProductSlider } from './product-slider/product-slider';
+import { WomenWear } from './women-wear/women-wear';
+import { MensWear } from './mens-wear/mens-wear';
+import {
+  ApiRoutes,
+  DashboardProductTypeStringEnum,
+  EBannerConnectionType,
+  EbannerTypes,
+  GenderTypeEnum,
+  httpPost,
+  IBanner,
+  IBannerPagination,
+  IBannerResponse,
+  initializePagInationPayload,
+  IRGeneric,
+  PlatformService,
+} from '@shared';
 import { Base } from '@portal/core';
+import { DashboardResponseRoot, Product } from './product-slider/dashboard.response';
+import { IDashboadRequest } from './product-slider/dashboard.request';
+import { Collection } from '../../core/services/collection';
 
 @Component({
   selector: 'app-home',
   imports: [ProductSlider, WomenWear, MensWear],
+  providers: [Collection],
   templateUrl: './home.html',
   styleUrl: './home.scss',
 })
-
 export class Home extends Base implements AfterViewInit, OnInit {
   public readonly DashboardProductTypeStringEnum = DashboardProductTypeStringEnum;
   public topBanners: string | null = null;
   public middleBanners: string | null = null;
+  public productList = signal<Product[]>([]);
+  
+  private payload: IDashboadRequest = {
+    ...initializePagInationPayload(),
+    type: DashboardProductTypeStringEnum.NewArrival,
+  };
 
   constructor(private platformService: PlatformService) {
     super();
@@ -26,24 +48,33 @@ export class Home extends Base implements AfterViewInit, OnInit {
   ngOnInit(): void {
     this.callAllBannerApis();
 
-    if(this.platformService.isBrowser){
+    if (this.platformService.isBrowser) {
       window.scrollTo({ top: 0, behavior: 'smooth' });
     }
+
+    this.getDashboardProduct();
   }
 
   // Initialize AOS animations
   ngAfterViewInit(): void {
     if (this.platformService.isBrowser) {
       AOS.init({
-        once: true
+        once: true,
       });
-      // AOS.refresh();
     }
   }
 
   public callAllBannerApis() {
-    const topPayload = this.buildBannerPayload(EbannerTypes.Top, EBannerConnectionType.Category, GenderTypeEnum.Women);
-    const middlePayload = this.buildBannerPayload(EbannerTypes.Middle, EBannerConnectionType.Category, GenderTypeEnum.Men);
+    const topPayload = this.buildBannerPayload(
+      EbannerTypes.Top,
+      EBannerConnectionType.Category,
+      GenderTypeEnum.Women
+    );
+    const middlePayload = this.buildBannerPayload(
+      EbannerTypes.Middle,
+      EBannerConnectionType.Category,
+      GenderTypeEnum.Men
+    );
 
     this.getBannerData(topPayload, 'top');
     this.getBannerData(middlePayload, 'middle');
@@ -52,32 +83,53 @@ export class Home extends Base implements AfterViewInit, OnInit {
   public buildBannerPayload(
     bannerType: EbannerTypes,
     bannerConnectionType: EBannerConnectionType,
-    gender: GenderTypeEnum,
+    gender: GenderTypeEnum
   ): IBannerPagination {
     return {
       ...initializePagInationPayload(),
       bannerType: bannerType,
       bannerConnectionType: bannerConnectionType,
       gender: gender,
-    }
+    };
   }
 
   public getBannerData(payload: IBannerPagination, type: 'top' | 'middle') {
-    httpPost<IRGeneric<IBannerResponse>, IBannerPagination>(ApiRoutes.BANNER.GET, payload)
-      .subscribe({
-        next: (response) => {
-          if (response) {
-            if (response.data) {
-              const banners = response.data.banners?.length ? response.data.banners[0].bannerURL : '';
-              if (type === 'top') {
-                this.topBanners = banners
-              } else {
-                this.middleBanners = banners;
-              }
+    httpPost<IRGeneric<IBannerResponse>, IBannerPagination>(
+      ApiRoutes.BANNER.GET,
+      payload
+    ).subscribe({
+      next: (response) => {
+        if (response) {
+          if (response.data) {
+            const banners = response.data.banners?.length ? response.data.banners[0].bannerURL : '';
+            if (type === 'top') {
+              this.topBanners = banners;
+            } else {
+              this.middleBanners = banners;
             }
           }
         }
-      });
+      },
+    });
+  }
+
+  private getDashboardProduct() {
+    httpPost<IRGeneric<DashboardResponseRoot>, IDashboadRequest>(
+      ApiRoutes.PRODUCT.DASHBOARD,
+      this.payload,
+      false
+    ).subscribe({
+      next: (response) => {
+        if (response?.data?.products) {
+          this.productList.set(response.data.products);
+        } else {
+          this.productList.set([]);
+        }
+      },
+      error: (error) => {
+        console.error('Dashboard Product Error: ', error);
+      },
+    });
   }
 
   onBannerError(type: 'top' | 'middle') {
@@ -87,5 +139,4 @@ export class Home extends Base implements AfterViewInit, OnInit {
       this.middleBanners = 'assets/images/banner-image2.png';
     }
   }
-
 }

@@ -2,11 +2,10 @@
 <header class="header-container hidden sm:block dark:bg-gray-900">
   <div class="flex flex-col items-center">
     <!-- Top Section: Logo and Icons -->
-    <div class="flex justify-between items-center w-full max-w-7xl px-4">
+    <div class="flex justify-between items-center w-full px-32">
       <!-- Empty div to balance the space and center the logo -->
-      <div class="flex-1 hidden md:block"></div>
 
-      <div class="flex-1 logo-section flex justify-center">
+      <div class="flex-1 logo-section flex justify-start">
         <!-- Logo and text -->
         <a [routerLink]="appRoutes.HOME">
           <div class="flex flex-col items-center">
@@ -19,6 +18,57 @@
           </div>
         </a>
       </div>
+
+        <!-- Section: Nav Menu -->
+    <nav class="nav-section">
+      <ul
+        class="flex justify-center space-x-8 sm:text-xs lg:text-sm font-medium sm:gap-[30px] lg:gap-[45px]"
+      >
+        <li>
+          <a
+            [routerLink]="appRoutes.WHATS_NEW"
+            class="nav-link hover:text-gray-900 transition-colors"
+            >WHAT'S NEW</a
+          >
+        </li>
+        <li><a [routerLink]="appRoutes.COLLECTION" class="nav-link hover:text-gray-900 transition-colors">COLLECTIONS</a></li>
+
+        <li
+          class="relative group cursor-pointer"
+          (mouseenter)="setGender(GenderTypeEnum.Women)"
+          (mouseleave)="clearGender()"
+        >
+          <a class="nav-link hover:text-gray-900 transition-colors">WOMEN'S WEAR</a>
+        </li>
+
+        <li
+          class="relative group cursor-pointer"
+          (mouseenter)="setGender(GenderTypeEnum.Men)"
+          (mouseleave)="clearGender()"
+        >
+          <a class="nav-link hover:text-gray-900 transition-colors">MEN'S WEAR</a>
+        </li>
+
+        <!-- Single shared dropdown -->
+
+        @if(activeGender()){
+        <div
+          animate.enter="dropdown-menu"
+          animate.leave="close"
+          (mouseenter)="setGender(activeGender())"
+          (mouseleave)="clearGender()"
+          class="absolute z-10 left-1/2 transform -translate-x-1/2 mt-[45px] sm:w-[700px] lg:w-[1200px] bg-white rounded-lg shadow-2xl py-2"
+        >
+          <!-- <app-gender-menu [genderType]="activeGender()"></app-gender-menu> -->
+          <app-gender-menu [(genderType)]="activeGender"></app-gender-menu>
+        </div>
+        }
+        <!-- <li class="relative group"><a class="nav-link hover:text-gray-900 transition-colors" (mouseenter)="setGender('men')" (mouseleave)="clearGender()">MEN'S WEAR</a></li> -->
+        <li [routerLink]="appRoutes.ABOUT_US">
+          <a class="nav-link hover:text-gray-900 transition-colors cursor-pointer">ABOUT US</a>
+        </li>
+      </ul>
+    </nav>
 
       <div class="flex-1 top-right-icons flex justify-end items-center space-x-6">
         <button (click)="updateSearchInputVisibility()" class="nav-link cursor-pointer">
@@ -82,24 +132,24 @@
           <div
             class="absolute w-40 bg-white border border-gray-200 rounded-lg shadow-lg z-50 duration-500 ease-in-out right-[-70px]"
             [ngClass]="
-              dropdownOpen ? 'visible opacity-100 top-[30px]' : 'opacity-0 invisible top-[70px]'
+              dropdownOpen ? 'visible opacity-100 top-[40px]' : 'opacity-0 invisible top-[70px]'
             "
           >
             <button
               (click)="logout()"
-              class="block px-4 py-2 text-gray-700 rounded-t-lg cursor-pointer relative before:content-[''] before:absolute before:w-0 before:h-0 before:border-l-[15px] before:border-l-transparent before:border-r-[15px] before:border-r-transparent before:border-b-[10px] before:border-b-[#ffff] before:top-[-5px] before:left-1/2 before:-translate-x-1/2 before:transform"
+              class="block px-4 py-2 text-gray-700 rounded-t-lg cursor-pointer relative before:content-[''] before:absolute before:w-0 before:h-0 before:border-l-[15px] before:border-l-transparent before:border-r-[15px] before:border-r-transparent before:border-b-[10px] before:border-b-[#ffff] before:top-[-5px] before:left-[100%] before:-translate-x-1/2 before:transform"
             >
               Logout
             </button>
             <button
               (click)="openProfile()"
-              class="block px-4 py-2 text-gray-700 rounded-t-lg cursor-pointer relative before:content-[''] before:absolute before:w-0 before:h-0 before:border-l-[15px] before:border-l-transparent before:border-r-[15px] before:border-r-transparent before:border-b-[10px] before:border-b-[#ffff] before:top-[-5px] before:left-1/2 before:-translate-x-1/2 before:transform"
+              class="block px-4 py-2 text-gray-700 rounded-t-lg cursor-pointer relative before:content-[''] before:absolute before:w-0 before:h-0 before:border-l-[15px] before:border-l-transparent before:border-r-[15px] before:border-r-transparent before:border-b-[10px] before:border-b-[#ffff] before:top-[-5px] before:-translate-x-1/2 before:transform"
             >
               Profile
             </button>
             <a
               [routerLink]="'/' + appRoutes.ORDER"
-              class="block px-4 py-2 text-gray-700 rounded-t-lg cursor-pointer relative before:content-[''] before:absolute before:w-0 before:h-0 before:border-l-[15px] before:border-l-transparent before:border-r-[15px] before:border-r-transparent before:border-b-[10px] before:border-b-[#ffff] before:top-[-5px] before:left-1/2 before:-translate-x-1/2 before:transform"
+              class="block px-4 py-2 text-gray-700 rounded-t-lg cursor-pointer relative before:content-[''] before:absolute before:w-0 before:h-0 before:border-l-[15px] before:border-l-transparent before:border-r-[15px] before:border-r-transparent before:border-b-[10px] before:border-b-[#ffff] before:top-[-5px] before:-translate-x-1/2 before:transform"
               >My Order</a
             >
           </div>
@@ -149,56 +199,7 @@
       </div>
     </div>
 
-    <!-- Bottom Section: Nav Menu -->
-    <nav class="nav-section mt-4 w-full">
-      <ul
-        class="flex justify-center space-x-8 sm:text-xs lg:text-sm font-medium sm:gap-[30px] lg:gap-[45px]"
-      >
-        <li>
-          <a
-            [routerLink]="appRoutes.WHATS_NEW"
-            class="nav-link hover:text-gray-900 transition-colors"
-            >WHAT'S NEW</a
-          >
-        </li>
-        <li><a href="#" class="nav-link hover:text-gray-900 transition-colors">COLLECTIONS</a></li>
-
-        <li
-          class="relative group cursor-pointer"
-          (mouseenter)="setGender(GenderTypeEnum.Women)"
-          (mouseleave)="clearGender()"
-        >
-          <a class="nav-link hover:text-gray-900 transition-colors">WOMEN'S WEAR</a>
-        </li>
-
-        <li
-          class="relative group cursor-pointer"
-          (mouseenter)="setGender(GenderTypeEnum.Men)"
-          (mouseleave)="clearGender()"
-        >
-          <a class="nav-link hover:text-gray-900 transition-colors">MEN'S WEAR</a>
-        </li>
-
-        <!-- Single shared dropdown -->
-
-        @if(activeGender()){
-        <div
-          animate.enter="dropdown-menu"
-          animate.leave="close"
-          (mouseenter)="setGender(activeGender())"
-          (mouseleave)="clearGender()"
-          class="absolute z-10 left-1/2 transform -translate-x-1/2 mt-[30px] sm:w-[700px] lg:w-[1200px] bg-white rounded-lg shadow-2xl py-2"
-        >
-          <!-- <app-gender-menu [genderType]="activeGender()"></app-gender-menu> -->
-          <app-gender-menu [(genderType)]="activeGender"></app-gender-menu>
-        </div>
-        }
-        <!-- <li class="relative group"><a class="nav-link hover:text-gray-900 transition-colors" (mouseenter)="setGender('men')" (mouseleave)="clearGender()">MEN'S WEAR</a></li> -->
-        <li [routerLink]="appRoutes.ABOUT_US">
-          <a class="nav-link hover:text-gray-900 transition-colors cursor-pointer">ABOUT US</a>
-        </li>
-      </ul>
-    </nav>
+  
   </div>
   <!-- Search Bar -->
   <div id="search-box-container" class="search-container">
@@ -348,10 +349,10 @@
       </div>
 
       <!-- Normal Links -->
-      <a href="#" class="block px-2 py-2 border-b">COLLECTIONS</a>
+      <a [routerLink]="appRoutes.COLLECTION" class="block px-2 py-2 border-b">COLLECTIONS</a>
       <a href="#" class="block px-2 py-2 border-b">WOMEN'S WEAR</a>
       <a href="#" class="block px-2 py-2 border-b">MAN'S WEAR</a>
-      <a href="#" class="block px-2 py-2">ABOUT US</a>
+      <a [routerLink]="appRoutes.ABOUT_US" class="block px-2 py-2">ABOUT US</a>
     </div>
   </aside>
 </header>

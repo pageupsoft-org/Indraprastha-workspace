@@ -8,7 +8,6 @@ import {
   DescriptionTypeStringEnum,
   EStockSize,
   EToastType,
-  httpGet,
   httpPost,
   IRGeneric,
   jsonToArray,
@@ -17,11 +16,16 @@ import {
   ToastService,
 } from '@shared';
 
-import { ICartForm, IStockWithIds } from '../../pages/product-detail/product-detail.model';
+import {
+  ICartForm,
+  IProductInfoPayload,
+  IStockWithIds,
+} from '../../pages/product-detail/product-detail.model';
 import { UtilityService } from '../services/utility-service';
 import { FormControl, FormGroup } from '@angular/forms';
 import { CartService } from '../services/cart-service';
 import { defaultIRCartRoot, IRCartRoot } from '../../components/shopping-cart/shopping-cart.model';
+import { Product } from '../../pages/home/product-slider/dashboard.response';
 
 export class ProductDetailBase {
   public isShowloader: WritableSignal<boolean> = signal(false);
@@ -37,83 +41,108 @@ export class ProductDetailBase {
   public productDetail: WritableSignal<IRProductDetailRoot> = signal(
     initializeIRProductDetailRoot()
   );
+  public relatedproductList = signal<Product[]>([]);
+
+  private productInfoPayload: IProductInfoPayload = {
+    id: 0,
+    isRelatedItem: false,
+  };
 
   private utilService: UtilityService = inject(UtilityService);
   private toastService: ToastService = inject(ToastService);
   private cartService: CartService = inject(CartService);
 
   public getProductDetail(productId: number) {
-
     this.isShowloader.set(true);
-    this.stockSizeArrayWithIds.splice(0, this.stockSizeArrayWithIds.length); 
-    httpGet<IRGeneric<IRProductDetailRoot>>(ApiRoutes.PRODUCT.GET_BY_ID(productId), true).subscribe(
-      {
-        next: (res: IRGeneric<IRProductDetailRoot>) => {
-          if (res?.data) {
-            this.productDetail.set(res.data);
-            this.productDetail().activeImage = this.productDetail().productURL.at(0) ?? '';
-            // format json text
-            this.productDetail().descriptions.forEach((pd) => {
-              // 1. Initialize pd.jsonText if it's undefined AND CLEAR the array if it already exists.
-              if (!pd.jsonText || pd.jsonText.length > 0) {
-                // Correctly initialize or reset the array to prevent duplication
-                pd.jsonText = [];
-              }
-
-              if (pd.descriptionType === DescriptionTypeStringEnum.Json) {
-                // Explicit type is good, keeps TypeScript happy
-                let keyValJsonText: { key: string; value: string }[] = [];
-
-                try {
-                  if (typeof pd.description === 'string' && pd.description.length > 0) {
-                    // Assume jsonToArray is correctly implemented
-                    keyValJsonText = jsonToArray(JSON.parse(pd.description));
-                  }
-                } catch (e) {
-                  console.error('Error parsing JSON description:', pd.description, e);
-                }
-
-                // 3. Push the converted items into the now-empty array
-                keyValJsonText.forEach((kv) => {
-                  pd.jsonText.push(kv);
-                });
-              }
-            });
-
-            this.stockSizeArray.forEach((ssd) => {
-              const stock = this.productDetail().stocks.find((x) => x.size == ssd.key);
-              let newStockWithIds: IStockWithIds = {
-                key: ssd.key,
-                value: ssd.value,
-                stockId: 0,
-                productId: 0,
-                quantity: 0,
-              };
-
-              if (stock) {
-                const { id, productId, quantity } = stock;
-                newStockWithIds.stockId = id;
-                newStockWithIds.productId = productId;
-                newStockWithIds.quantity = quantity;
-              }
-
-              this.stockSizeArrayWithIds.push(newStockWithIds);
-            });
-
-            if(this.productDetail().variants && this.productDetail().variants.length){
-              this.cartForm.controls.variantStockId.setValue(this.productDetail().variants[0].stocks.id)
+    this.productInfoPayload.id = productId;
+    this.stockSizeArrayWithIds.splice(0, this.stockSizeArrayWithIds.length);
+    httpPost<IRGeneric<IRProductDetailRoot>, IProductInfoPayload>(
+      ApiRoutes.PRODUCT.DETAIL_INFO,
+      this.productInfoPayload,
+      true
+    ).subscribe({
+      next: (res: IRGeneric<IRProductDetailRoot>) => {
+        if (res?.data) {
+          this.productDetail.set(res.data);
+          this.productDetail().activeImage = this.productDetail().productURL.at(0) ?? '';
+          // format json text
+          this.productDetail().descriptions.forEach((pd) => {
+            // 1. Initialize pd.jsonText if it's undefined AND CLEAR the array if it already exists.
+            if (!pd.jsonText || pd.jsonText.length > 0) {
+              // Correctly initialize or reset the array to prevent duplication
+              pd.jsonText = [];
             }
-          } else {
-            // this.productDetail.set(initializeIRProductDetailRoot());
+
+            if (pd.descriptionType === DescriptionTypeStringEnum.Json) {
+              // Explicit type is good, keeps TypeScript happy
+              let keyValJsonText: { key: string; value: string }[] = [];
+
+              try {
+                if (typeof pd.description === 'string' && pd.description.length > 0) {
+                  // Assume jsonToArray is correctly implemented
+                  keyValJsonText = jsonToArray(JSON.parse(pd.description));
+                }
+              } catch (e) {
+                console.error('Error parsing JSON description:', pd.description, e);
+              }
+
+              // 3. Push the converted items into the now-empty array
+              keyValJsonText.forEach((kv) => {
+                pd.jsonText.push(kv);
+              });
+            }
+          });
+
+          this.relatedproductList.set(
+            this.productDetail().relatedProducts.map((rp) => ({
+              id: rp.id,
+              productURL: [rp.productURL],
+              name: '',
+              color: [],
+              sizes: [],
+              mrp: rp.mrp,
+              gender: '',
+              isWishList: rp?.isWishList,
+            }))
+          );
+
+          this.stockSizeArray.forEach((ssd) => {
+            const stock = this.productDetail().stocks.find((x) => x.size == ssd.key);
+            let newStockWithIds: IStockWithIds = {
+              key: ssd.key,
+              value: ssd.value,
+              stockId: 0,
+              productId: 0,
+              quantity: 0,
+            };
+
+            if (stock) {
+              const { id, productId, quantity } = stock;
+              newStockWithIds.stockId = id;
+              newStockWithIds.productId = productId;
+              newStockWithIds.quantity = quantity;
+            }
+
+            this.stockSizeArrayWithIds.push(newStockWithIds);
+          });
+
+          this.cartForm.controls.stockId.setValue(this.stockSizeArrayWithIds[0].stockId);
+
+          if (this.productDetail().variants && this.productDetail().variants.length) {
+            this.cartForm.controls.variantStockId.setValue(
+              this.productDetail().variants[0].stocks.id
+            );
           }
-          this.isShowloader.set(false);
-        },
-      }
-    );
+        } else {
+          // this.productDetail.set(initializeIRProductDetailRoot());
+        }
+        this.isShowloader.set(false);
+      },
+    });
   }
 
   public addToCartWithDescription(): void {
-    const detail = this.productDetail(); 
+    const detail = this.productDetail();
 
     const newProduct: IRCartRoot = {
       name: detail.name,

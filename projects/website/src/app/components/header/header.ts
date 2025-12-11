@@ -1,6 +1,8 @@
 import {
+  AfterViewInit,
   Component,
   effect,
+  ElementRef,
   HostListener,
   model,
   OnInit,
@@ -45,6 +47,7 @@ import { IAddressPayload, IProfileResponse } from './profile/profile-upsert-dial
 export class Header implements OnInit{
   @ViewChild('shoppingCartRef') shoppingCartRef!: ShoppingCart;
   @ViewChild('authFormRef') authFormRef!: AuthManager;
+
   public readonly appRoutes = appRoutes;
 
   public GenderTypeEnum = GenderTypeEnum;
@@ -96,8 +99,6 @@ export class Header implements OnInit{
   }
 
   public removeFromDom() {
-    console.log('removeFromDom');
-
     setTimeout(() => {
       this.isProfileMounted.update(() => false);
     }, 400); //THIS TIME SHOULD MATCH THE CLOSING ANIMATION TIME OF PROFILE
@@ -118,7 +119,6 @@ export class Header implements OnInit{
     if (event.key === 'Enter') {
       this.payloadGenderMenu.search = this.searchText() ?? '';
       this.router.navigate([createUrlFromObject(this.payloadGenderMenu, '')]);
-      this.isSearchInputVisible.update(() => false);
       this.searchText.set(null);
     }
   }

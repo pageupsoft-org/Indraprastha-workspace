@@ -5,13 +5,14 @@
       <div class="flex md:w-2/5 lg:space-x-14 sm:space-x-5">
         <!-- Collection -->
         <div class="mb-8 sm:mb-0">
-          <h2 class="text-lg font-semibold mb-3 text-gray-800 tracking-wide">
-            COLLECTION
-          </h2>
+          <h2 class="text-lg font-semibold mb-3 text-gray-800 tracking-wide">COLLECTION</h2>
           <ul class="text-md text-gray-600 space-y-2 leading-[16px]">
             @for (item of collectionList(); track $index) {
             <li (mouseenter)="updatedCategory(item.categories)">
-              <a [routerLink]="getProductPageUrl(item, null)" class="hover:text-[#680c01] transition-colors cursor-pointer" >
+              <a
+                [routerLink]="getProductPageUrl(item, null)"
+                class="hover:text-[#680c01] transition-colors cursor-pointer"
+              >
                 {{ item.name }}</a
               >
             </li>
@@ -20,13 +21,15 @@
         </div>
         <!-- Categories -->
         <div>
-          <h2 class="text-lg font-semibold mb-3 text-gray-800 tracking-wide">
-            CATEGORIES
-          </h2>
+          <h2 class="text-lg font-semibold mb-3 text-gray-800 tracking-wide">CATEGORIES</h2>
           <ul class="text-sm text-gray-600 space-y-2">
             @for (item of categoryList(); track $index) {
             <li>
-              <a [routerLink]="getProductPageUrl(null, item)" class="hover:text-[#680c01] transition-colors cursor-pointer">{{ item.name }}</a>
+              <a
+                [routerLink]="getProductPageUrl(null, item)"
+                class="hover:text-[#680c01] transition-colors cursor-pointer"
+                >{{ item.name }}</a
+              >
             </li>
             }
           </ul>
@@ -37,41 +40,15 @@
     <!-- Right Section: Product Grid -->
     <!-- Using flexbox for the product grid to make it a single line with exactly 4 blocks -->
     <div class="w-full sm:w-3/5 lg:w-3/5 flex flex-row space-x-4 md:space-x-8">
-      <!-- Product Card 1 -->
-      <div class="flex-1 bg-white rounded[10px]l overflow-hidden">
+      @for(product of productList(); track product?.id){
+      <div class="flex-1 bg-white rounded[10px]l overflow-hidden" (click)="routeToProductDetail(product.id)">
         <img
-          src="assets/images/women-modal-1.png"
-          alt="Saree"
-          class="w-full h-full object-cover rounded-[10px]"
+          [src]="product?.productURL"
+          [alt]="'Saree' + product?.id"
+          class="w-full h-full object-cover rounded-[10px] cursor-pointer"
         />
       </div>
-
-      <!-- Product Card 2 -->
-      <div class="flex-1 bg-white rounded[10px]l overflow-hidden">
-        <img
-          src="assets/images/women-modal-2.png"
-          alt="Dress"
-          class="w-full h-full object-cover rounded-[10px]"
-        />
-      </div>
-
-      <!-- Product Card 3 -->
-      <div class="flex-1 bg-white rounde[10px]xg overflow-hidden">
-        <img
-          src="assets/images/women-modal-3.png"
-          alt="Gown"
-          class="w-full h-full object-cover rounded-[10px]"
-        />
-      </div>
-
-      <!-- Product Card 4 -->
-      <div class="flex-1 bg-white rounded-[10px] overflow-hidden">
-        <img
-          src="assets/images/women-modal-4.png"
-          alt="Kaftan"
-          class="w-full h-full object-cover rounded-[10px]"
-        />
-      </div>
+      }
     </div>
   </div>
 </div>

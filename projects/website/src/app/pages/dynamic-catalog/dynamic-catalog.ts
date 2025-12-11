@@ -31,6 +31,7 @@ import {
   initializeIResponseDynamicCatalogue,
   appRoutes,
 } from '@website/core';
+import { NoProductFound } from '../../core/component/no-product-found/no-product-found';
 
 @Component({
   selector: 'app-dynamic-catalog',
@@ -40,6 +41,7 @@ import {
     InfiniteScrollDirective,
     NgxSkeletonLoaderModule,
     NgTemplateOutlet,
+    NoProductFound,
   ],
   templateUrl: './dynamic-catalog.html',
   styleUrl: './dynamic-catalog.scss',
@@ -55,7 +57,7 @@ export class DynamicCatalog implements AfterViewInit {
 
   filtersOpen = true;
   sortOpen = false;
-  public currentCols: WritableSignal<number> = signal(3);
+  public currentCols: WritableSignal<number> = signal(6);
 
   public priceMax: WritableSignal<number> = signal(0);
   public selectedPrice: WritableSignal<number> = signal(0);
@@ -246,9 +248,12 @@ export class DynamicCatalog implements AfterViewInit {
               },
             };
           });
-        }
-        else{
-          this.dynamicData.set(initializeIResponseDynamicCatalogue())
+        } else {
+          this.dynamicData.set(initializeIResponseDynamicCatalogue());
+
+          if (this.payloadGenderMenu().pageIndex == 1) {
+            this.setFiltersOpen(false);
+          }
         }
         this.isShowLoading.set(false);
       },
@@ -259,7 +264,7 @@ export class DynamicCatalog implements AfterViewInit {
   }
 
   public onScrollDown() {
-    if (this.isShowLoading() || this.finished()) {
+    if (this.isShowLoading() || this.finished() || ((this.payloadGenderMenu().pageIndex == 1) && (!this.dynamicData().products.length))) {
       return;
     }
     // increment page

@@ -10,7 +10,7 @@
       </div>
 
       <div>
-        <h2 class="text-xl font-semibold">Create / Edit Product</h2>
+        <h2 class="text-xl font-semibold dark:text-white">Create / Edit Product</h2>
         <p class="text-sm text-gray-500 mt-0.5">
           Add product details, stocks, descriptions, and variants
         </p>
@@ -18,7 +18,7 @@
 
       <div class="ml-auto flex items-center gap-3">
         <button (click)="router.navigate([appRoutes.PRODUCT])" type="button"
-          class="px-6 py-2 rounded-[5px] border border-[#B89E70] text-[#82181A] hover:bg-slate-50 font-medium transition cursor-pointer">Cancel
+          class="px-6 py-2 rounded-[5px] border border-[#B89E70] text-[#82181A] hover:bg-slate-50 font-medium transition cursor-pointer dark:bg-white">Cancel
         </button>
       </div>
     </div>
@@ -109,7 +109,7 @@
         </div>
       </div>
 
-      <!-- varient section -->
+      <!-- variant section -->
 
       <div class="bg-white border border-gray-200 rounded-[5px] shadow-lg p-6 space-y-6">
         <div class="flex items-center justify-between border-b border-gray-200 pb-3">
@@ -161,7 +161,7 @@
                 <label class="block text-sm font-medium text-gray-700 mb-1">Description</label>
                 <textarea rows="3"
                   class="w-full border border-gray-300 rounded-[5px] px-3 py-2 text-sm text-gray-700 rounded-[5px] px-3 py-2 text-sm text-gray-700 focus:ring-[#82181A] focus:outline-none focus:border-[#82181A] transition duration-200 text-base"
-                  placeholder="Enter variant description" [formControl]="variant.controls.description"
+                  placeholder="Enter variant description" [formControl]="variant.controls.description" libValidateControl
                   maxlength="170"></textarea>
               </div>
 
@@ -283,7 +283,7 @@
           </div>
 
           <!-- Single Text Description -->
-          @if(description.controls.descriptionType.value == EDiscriptionType.SingleText){
+          @if(description.controls.descriptionType.value == EDescriptionType.SingleText){
           <div>
             <label class="block text-sm font-medium text-gray-700 mb-1">Description</label>
             <textarea [formControl]="description.controls.description" libValidateControl rows="4"
@@ -304,10 +304,10 @@
             <!-- One key-value pair row -->
             @for (jsonText of description.controls.jsonText.controls; track $index) {
             <div class="flex items-center gap-2 mb-2">
-              <input type="text" placeholder="Key" [formControl]="jsonText.controls.key" maxlength="40"
+              <input type="text" placeholder="Key" [formControl]="jsonText.controls.key" maxlength="40" libValidateControl
                 class="w-1/2 border border-gray-300 rounded-[5px] px-3 py-2 text-sm text-gray-700 focus:ring-[#82181A] focus:outline-none focus:border-[#82181A] transition duration-200 text-base" />
 
-              <input type="text" placeholder="Value" maxlength="100" [formControl]="jsonText.controls.value"
+              <input type="text" placeholder="Value" maxlength="100" [formControl]="jsonText.controls.value" libValidateControl
                 class="w-1/2 border border-gray-300 rounded-[5px] px-3 py-2 text-sm text-gray-700 focus:ring-[#82181A] focus:outline-none focus:border-[#82181A] transition duration-200 text-base" />
 
               @if(description.controls.jsonText.controls.length > 1){
@@ -324,7 +324,7 @@
           <!-- Short Description -->
           <div class="mt-4">
             <label class="block text-sm font-medium text-gray-700 mb-1">Short Description</label>
-            <input type="text" [formControl]="description.controls.shortDescription"
+            <input type="text" [formControl]="description.controls.shortDescription" libValidateControl
               class="w-full border border-gray-300 rounded-[5px] px-3 py-2 text-sm text-gray-700 focus:ring-[#82181A] focus:outline-none focus:border-[#82181A] transition duration-200 text-base"
               placeholder="Enter short summary" maxlength="70" />
           </div>
@@ -368,8 +368,7 @@
             <!-- File Input controlled by a label, not overlapping everything -->
             <label class="absolute inset-0 cursor-pointer z-0">
               <input type="file" accept="image/*" multiple title="" class="opacity-0 w-full h-full"
-                (change)="onProductImageChange($event, $index)"
-                [appErrorHandler]="productForm.controls.productBase64" />
+                (change)="onProductImageChange($event, $index)" />
               <!-- Empty label covers upload area only, does *not* prevent other actions in z-10 layers above -->
             </label>
 

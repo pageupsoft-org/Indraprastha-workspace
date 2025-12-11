@@ -26,19 +26,20 @@ export class Register implements OnInit {
 
   public registerForm: FormGroup<IRegisterForm> = new FormGroup<IRegisterForm>({
     firstName: new FormControl(null, [Validators.required]),
-    lastName: new FormControl(null, [Validators.required]),
-    email: new FormControl(null, [Validators.required, Validators.email]),
+    lastName: new FormControl(null),
+    email: new FormControl(null),
     contact: new FormControl(null, [
       Validators.required,
       patternWithMessage(/^(?:\+91|91)?[6789]\d{9}$/, 'Enter a valid mobile number.'),
+      Validators.maxLength(10), Validators.minLength(10)
     ]),
-    userName: new FormControl(null, [Validators.required]),
+    userName: new FormControl(null),
     password: new FormControl(null, [Validators.required, Validators.minLength(6)]),
   });
 
-  ngOnInit(): void {}
+  ngOnInit(): void { }
 
-  constructor(private _toastService: ToastService) {}
+  constructor(private _toastService: ToastService) { }
 
   public openLoginForm() {
     this.authType.set(EAuthManager.login);
@@ -56,7 +57,7 @@ export class Register implements OnInit {
             if (res.data) {
               this.authType.set(EAuthManager.login);
               this._toastService.show({
-                message: 'Login success',
+                message: 'User registered successfully',
                 type: EToastType.success,
                 duration: 2000,
               });

@@ -1,12 +1,12 @@
 <!-- @if(isShowloader()){
 <app-loader></app-loader>
 } @else { -->
-<div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12 lg:py-20 bg-white shadow-lg my-10">
+<div class="w-full mx-auto px-4 sm:px-6 lg:px-32 py-12 lg:py-20 bg-white">
   <div class="flex grid grid-cols-5 lg:flex-row gap-14">
     <!-- Product Image Gallery and Main Image -->
-    <div class="flex col-span-2 lg:flex-row lg:space-x-4 w-full sticky top-[150px] max-h-[80%]">
+    <div class="flex col-span-2 lg:flex-row lg:space-x-4 w-full sticky top-[150px] max-h-[100%]">
       <!-- Left Image Gallery (Thumbnails) -->
-      <div class="flex flex-row lg:flex-col space-x-3 lg:space-x-0 lg:space-y-4 mb-8 lg:mb-0">
+      <div class="flex flex-row lg:flex-col space-x-3 lg:space-x-0 lg:space-y-4 mb-8 lg:mb-0 overflow-y-auto scrollbar-thin">
         @let dummyArr = [1, 2, 3, 4]; @if(isShowloader()){ @for (item of dummyArr; track $index) {
         <ngx-skeleton-loader
           count="1"
@@ -235,7 +235,7 @@
       </div>
 
       <!-- Buttons -->
-      <div class="mt-8 flex flex-col space-y-4 mb-8">
+      <div class="mt-8 flex gap-4 space-y-4 mb-8">
         @if(isShowloader()){
         <ngx-skeleton-loader count="2" appearance="line" />
         }@else {
@@ -243,6 +243,7 @@
           [isLoading]="isBtnLoader()"
           label="ADD TO CART"
           type="submit"
+          class="mb-0"
           (clicked)="addToCartWithDescription()"
           [btnClass]="
             'w-full cursor-pointer px-6 py-3 font-semibold text-black border border-gray-300 bg-white rounded-[5px] hover:bg-gray-300 transition-colors duration-200 focus:outline-none'
@@ -349,6 +350,6 @@
 <div class="max-w-7xl mx-auto">
   <app-product-slider
     [title]="'RELATED PRODUCTS'"
-    [productType]="DashboardProductTypeStringEnum.Featured"
+    [productList]="relatedproductList()"
   ></app-product-slider>
 </div>

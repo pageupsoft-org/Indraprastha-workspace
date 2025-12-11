@@ -13,7 +13,14 @@ import { IRequestProductMenu } from '../../../core/interface/model/header.model'
 import { Router, RouterLink } from '@angular/router';
 import { FormsModule } from '@angular/forms';
 import { createUrlFromObject, GenderTypeEnum, initializePagInationPayload } from '@shared';
-import { Category, Collection, IResponseGenderMenuRoot, UtilityService } from '@website/core';
+import {
+  appRoutes,
+  Category,
+  Collection,
+  IResponseGenderMenuRoot,
+  ProductComboUrl,
+  UtilityService,
+} from '@website/core';
 
 @Component({
   selector: 'app-gender-menu',
@@ -24,6 +31,8 @@ import { Category, Collection, IResponseGenderMenuRoot, UtilityService } from '@
 export class GenderMenu implements OnInit, OnDestroy {
   public collectionList: WritableSignal<Collection[]> = signal([]);
   public categoryList: WritableSignal<Category[]> = signal([]);
+  public productList: WritableSignal<ProductComboUrl[]> = signal([]);
+  public aapRoutes = appRoutes;
 
   // public genderType = input.required<GenderTypeEnum | ''>();
   public genderType = model.required<GenderTypeEnum | ''>();
@@ -69,6 +78,10 @@ export class GenderMenu implements OnInit, OnDestroy {
       if (bothGender) {
         combinedCollections = [...combinedCollections, ...bothGender.collections];
       }
+
+      this.productList.set(
+        menuData.filter((val) => val.gender === this.genderType()).flatMap((val) => val.products)
+      );
 
       // ✅ Update signals
       this.collectionList.set(combinedCollections);
@@ -131,6 +144,14 @@ export class GenderMenu implements OnInit, OnDestroy {
     }
     this.router.navigate([createUrlFromObject(this.payloadGenderMenu, this.genderType())]);
     this.genderType.set('');
+  }
+
+  public routeToProductDetail(productId: number) {
+    this.router.navigate([appRoutes.PRODUCT_DETAIL], {
+      queryParams: {
+        id: productId,
+      },
+    });
   }
 
   ngOnDestroy(): void {

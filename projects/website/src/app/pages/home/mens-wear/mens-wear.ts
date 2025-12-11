@@ -8,23 +8,15 @@ import {
   ViewChildren,
   WritableSignal,
 } from '@angular/core';
-import {
-  ApiRoutes,
-  DashboardProductTypeStringEnum,
-  httpPost,
-  initializePagInationPayload,
-  IRGeneric,
-  PlatformService,
-} from '@shared';
-import { IDashboadRequest } from '../product-slider/dashboard.request';
-import { DashboardResponseRoot, Product } from '../product-slider/dashboard.response';
+import { GenderTypeEnum, PlatformService } from '@shared';
 import { CommonModule } from '@angular/common';
-import { RouterLink } from "@angular/router";
 import { appRoutes } from '@website/core';
+import { Collection } from '../../../core/services/collection';
+import { IResponseCollection } from '../../../core/interface/response/collection.response';
 
 @Component({
   selector: 'app-mens-wear',
-  imports: [CommonModule, RouterLink],
+  imports: [CommonModule],
   templateUrl: './mens-wear.html',
   styleUrl: './mens-wear.scss',
 })
@@ -35,16 +27,11 @@ export class MensWear implements AfterViewInit {
   public currentIndex = 2;
   private readonly visibleCount = 5;
 
-  public mensWearList: WritableSignal<Product[]> = signal([]);
+  public mensWearList: WritableSignal<IResponseCollection[]> = signal([]);
   public productDetailRoute = appRoutes.PRODUCT_DETAIL;
 
-  private payload: IDashboadRequest = {
-    ...initializePagInationPayload(),
-    type: DashboardProductTypeStringEnum.Men,
-  };
-
-  constructor(private platformService: PlatformService) {
-    this.getDashboardProduct();
+  constructor(private platformService: PlatformService, private collectionService: Collection) {
+    this.collectionService.getCollection(GenderTypeEnum.Men, this.mensWearList);
   }
 
   ngAfterViewInit(): void {
@@ -90,7 +77,7 @@ export class MensWear implements AfterViewInit {
       this.updateGallery();
     }
   }
-  
+
   public zoomImage(item: HTMLDivElement, index: number): void {
     if (index < 2) return; // cannot zoom first two images
     if (!(index + 2 <= this.mensWearList().length - 1)) return; // cannot zoom last two images
@@ -107,20 +94,7 @@ export class MensWear implements AfterViewInit {
     this.updateGallery();
   }
 
-  private getDashboardProduct() {
-    httpPost<IRGeneric<DashboardResponseRoot>, IDashboadRequest>(
-      ApiRoutes.PRODUCT.DASHBOARD,
-      this.payload,
-      false
-    ).subscribe({
-      next: (response) => {
-        if (response?.data) {
-          this.mensWearList.set(response.data.products);
-        }
-      },
-      error: (error) => {
-        console.error('Dashboard Product Error: ', error);
-      },
-    });
+  public openProductPage(collectionId: number) {
+    this.collectionService.openProductPage(collectionId);
   }
 }

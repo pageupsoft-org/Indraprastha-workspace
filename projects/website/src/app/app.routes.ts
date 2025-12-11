@@ -25,6 +25,11 @@ export const routes: Routes = [
       import('./../app/pages/review-and-rating/review-and-rating').then((m) => m.ReviewAndRating),
   },
   {
+    path: appRoutes.PRODUCT_DETAIL,
+    loadComponent: () =>
+      import('./../app/pages/product-detail/product-detail').then((m) => m.ProductDetail),
+  },
+  {
     path: appRoutes.ORDER_DETAIL,
     loadComponent: () =>
       import('./../app/pages/order-detail/order-detail').then((m) => m.OrderDetail),
@@ -42,6 +47,10 @@ export const routes: Routes = [
     path: appRoutes.WHATS_NEW,
     loadComponent: () =>
       import('./pages/dynamic-catalog/dynamic-catalog').then((m) => m.DynamicCatalog),
+  },
+  {
+    path: appRoutes.COLLECTION,
+    loadComponent: () => import('./pages/collections/collections').then((m) => m.Collections),
   },
   {
     path: appRoutes.ABOUT_US,

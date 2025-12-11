@@ -1,7 +1,5 @@
-import { Component, inject, OnInit, signal, WritableSignal } from '@angular/core';
-import { Base } from '../../../core/base/base';
+import { Component, OnInit, signal, WritableSignal } from '@angular/core';
 import {
-  FormArray,
   FormControl,
   FormGroup,
   FormsModule,
@@ -12,7 +10,6 @@ import {
 import {
   ApiRoutes,
   EDescriptionType,
-  ErrorHandler,
   EStockSize,
   EToastType,
   GenderTypeEnum,
@@ -25,17 +22,22 @@ import {
   ValidateControl,
 } from '@shared';
 import { CommonModule } from '@angular/common';
-import { arrayToJson, convertImagesToBase64Array, logInvalidControls } from '../../../core/utils/portal-utility.util';
 import { IDropdownSettings, NgMultiSelectDropDownModule } from 'ng-multiselect-dropdown';
 import { ActivatedRoute, Params, Router } from '@angular/router';
-import {
-  IConvertImageParams,
-  initialConvertImageParam,
-} from '../../../core/interface/model/portal-util.model';
-import { ImageSizeConst, ImageTypeEnum } from '../../../core/enum/image.enum';
-import { IConvertImageResult } from '../../../core/interface/model/portal-util.model';
+import { Base, IConvertImageParams, ImageSizeConst, ImageTypeEnum, initialConvertImageParam } from '@portal/core';
+import { IConvertImageResult } from '@portal/core';
 import { IGenericComboResponse } from '../../banner/banner.model';
-import { IDescriptionForm, initializeDescriptionForm, initializeIProductForm, initializeJsonTextForm, initializeStockForm, initializeVariantForm, IProductForm, IVariantData } from '../product.model';
+import {
+  IDescriptionForm,
+  initializeDescriptionForm,
+  initializeIProductForm,
+  initializeJsonTextForm,
+  initializeStockForm,
+  initializeVariantForm,
+  IProductForm,
+  IVariantData,
+} from '../product.model';
+import { arrayToJson, convertImagesToBase64Array, logInvalidControls } from '@portal/core';
 
 @Component({
   selector: 'app-product-upsert',
@@ -44,7 +46,6 @@ import { IDescriptionForm, initializeDescriptionForm, initializeIProductForm, in
     CommonModule,
     FormsModule,
     NgMultiSelectDropDownModule,
-    ErrorHandler,
     ValidateControl,
   ],
   templateUrl: './product-upsert.html',
@@ -55,9 +56,12 @@ export class ProductUpsert extends Base implements OnInit {
   public genders: MStringEnumToArray[] = stringEnumToArray(GenderTypeEnum);
   public descriptionTypeEnumList: MStringEnumToArray[] = stringEnumToArray(EDescriptionType);
   public stockSize: MStringEnumToArray[] = stringEnumToArray(EStockSize);
-  public ShowDiscription: boolean = false;
-  public readonly EDiscriptionType = EDescriptionType;
-  public setAllQtyInput = new FormControl<number | null>(null, patternWithMessage(/^1\d*$/, 'Only numbers are allowed'));
+  public ShowDescription: boolean = false;
+  public readonly EDescriptionType = EDescriptionType;
+  public setAllQtyInput = new FormControl<number | null>(
+    null,
+    patternWithMessage(/^[1-9]\d*$/, 'Only numbers are allowed')
+  );
   public setAllQty: WritableSignal<number> = signal(0);
   public productForm: FormGroup<IProductForm> = initializeIProductForm();
   public dropdownSettings: IDropdownSettings = {
@@ -68,10 +72,9 @@ export class ProductUpsert extends Base implements OnInit {
     unSelectAllText: 'UnSelect All',
     itemsShowLimit: 3,
     allowSearchFilter: false,
-    defaultOpen: false
+    defaultOpen: false,
   };
 
-  
   constructor(private activatedRoute: ActivatedRoute, public router: Router) {
     super();
   }
@@ -86,7 +89,7 @@ export class ProductUpsert extends Base implements OnInit {
       this.productForm.controls.stocks.push(initializeStockForm(0, size.key as EStockSize));
     });
 
-    this.mutateImageControl(null)
+    this.mutateImageControl(null);
 
     this.activatedRoute.queryParams.subscribe((param: Params) => {
       if (param && param['id']) {
@@ -105,7 +108,7 @@ export class ProductUpsert extends Base implements OnInit {
           }
         }
       })
-      .catch((error) => { });
+      .catch((error) => {});
   }
 
   public mutateColorControl(index: number | null) {
@@ -154,7 +157,7 @@ export class ProductUpsert extends Base implements OnInit {
       allowedTypes: [ImageTypeEnum.webp],
       expectedImgWidth: ImageSizeConst.productVariant.width,
       expectedImgHeight: ImageSizeConst.productVariant.height,
-      maxSize: 2
+      maxSize: 2,
     });
 
     convertImagesToBase64Array(param).then((res: IConvertImageResult) => {
@@ -183,7 +186,7 @@ export class ProductUpsert extends Base implements OnInit {
       allowedTypes: [ImageTypeEnum.webp, ImageTypeEnum.png, ImageTypeEnum.jpeg],
       expectedImgWidth: ImageSizeConst.product.width,
       expectedImgHeight: ImageSizeConst.product.height,
-      maxSize: 2
+      maxSize: 2,
     });
     convertImagesToBase64Array(param).then((res: IConvertImageResult) => {
       if (res) {
@@ -213,6 +216,8 @@ export class ProductUpsert extends Base implements OnInit {
   }
 
   public upsertProduct() {
+    const invalidControls: { path: string; errors: any }[] = logInvalidControls(this.productForm);
+
     if (this.productForm.valid) {
       const data = this.productForm.getRawValue();
       data.descriptions.forEach((desc: any) => {
@@ -256,17 +261,38 @@ export class ProductUpsert extends Base implements OnInit {
           }
         }
       );
-    }
-    else {
+    } else {
+      console.log(invalidControls);
+
+      invalidControls.forEach((ic: { path: string; errors: any }) => {
+        if (ic.path.includes('variantBase64') || ic.path.includes('productBase64')) {
+          const pType: string = ic.path.includes('variantBase64')
+            ? 'Variant'
+            : ic.path.includes('productBase64')
+            ? 'Product'
+            : '';
+          this.toastService.show({
+            message: `${pType} image is required`,
+            type: EToastType.error,
+            duration: 2000,
+          });
+        } else {
+          this.toastService.show({
+            message: 'Enter valid data',
+            type: EToastType.error,
+            duration: 2000,
+          });
+        }
+      });
+
       this.productForm.markAllAsTouched();
       this.productForm.updateValueAndValidity();
-
     }
   }
 
   public onDescriptionTypeChange(form: FormGroup<IDescriptionForm>) {
     if (form.controls.descriptionType.value === EDescriptionType.Json) {
-      this.mutateJsonValueControl(null, form)
+      this.mutateJsonValueControl(null, form);
       form.controls.description.clearValidators();
       form.controls.description.updateValueAndValidity();
     } else {
@@ -326,6 +352,7 @@ export class ProductUpsert extends Base implements OnInit {
           this.productForm.controls.color.push(new FormControl(c));
         });
 
+        this.productForm.controls.productBase64.clear();
         productURL.forEach((p) => {
           this.productForm.controls.productBase64.push(new FormControl(p));
         });
@@ -366,6 +393,9 @@ export class ProductUpsert extends Base implements OnInit {
           }
 
           this.productForm.controls.descriptions.push(form);
+
+          form.controls.description.clearValidators();
+          form.controls.description.updateValueAndValidity({ emitEvent: false });
         });
 
         this.productForm.controls.stocks.disable();
@@ -375,10 +405,12 @@ export class ProductUpsert extends Base implements OnInit {
 
   public setAllSize() {
     if (this.setAllQtyInput.valid) {
-      const qty = this.setAllQtyInput.value
-      this.productForm.controls.stocks.controls.filter((x) => x.controls.size.value !== EStockSize.FreeSize).forEach((x) => {
-        x.controls.quantity.setValue(qty);
-      });
+      const qty = this.setAllQtyInput.value;
+      this.productForm.controls.stocks.controls
+        .filter((x) => x.controls.size.value !== EStockSize.FreeSize)
+        .forEach((x) => {
+          x.controls.quantity.setValue(qty);
+        });
       // this.productForm.controls.stocks.updateValueAndValidity();
       this.setAllQtyInput.reset();
     }
