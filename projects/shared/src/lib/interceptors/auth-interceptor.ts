@@ -11,68 +11,129 @@ import { httpPost } from '../utils/api.helper';
 import { IRGeneric } from '../interface/response/generic.response';
 import { IRLogin } from '../interface/response/login.response';
 import { ApiRoutes } from '../const/apiRoutes.const';
+import { clearLocalStorage } from '@shared';
 
 // import { getLocalStorageItem, localStorageEnum, ToastService } from '@shared';
 
-export const authInterceptor: HttpInterceptorFn = (req, next) => {
-  const toastService = inject(ToastService);
-  const router = inject(Router);
-  const platformService: PlatformService = inject(PlatformService);
+// export const authInterceptor: HttpInterceptorFn = (req, next) => {
+//   const toastService = inject(ToastService);
+//   const router = inject(Router);
+//   const platformService: PlatformService = inject(PlatformService);
 
-  let token: string | null = null;
-  try {
-    token = getLocalStorageItem<string>(localStorageEnum.token);
-  } catch (err) {
-    console.error('Token fetch error:', err);
-  }
+//   let token: string | null = null;
+//   try {
+//     token = getLocalStorageItem<string>(localStorageEnum.token);
+//   } catch (err) {
+//     console.error('Token fetch error:', err);
+//   }
 
-  if (token) {
-    req = req.clone({
-      setHeaders: {
-        Authorization: `Bearer ${token}`,
-        'Content-Type': 'application/json',
-      },
-    });
-    // console.log(req);
-  }
+//   if (token) {
+//     req = req.clone({
+//       setHeaders: {
+//         Authorization: `Bearer ${token}`,
+//         'Content-Type': 'application/json',
+//       },
+//     });
+//     // console.log(req);
+//   }
 
-  return next(req).pipe(
-    catchError((error: HttpErrorResponse) => {
-      let errorMessage = 'An unexpected error occurred';
+//   return next(req).pipe(
+//     catchError((error: HttpErrorResponse) => {
+//       let errorMessage = 'An unexpected error occurred';
 
-      if (platformService.isBrowser && error.error instanceof ErrorEvent) {
-        // Browser-only client-side error
-        errorMessage = `Error: ${error.error.message}`;
-      } else {
-        // Server-side (SSR) or normal backend error
-        switch (error.status) {
-          case 400:
-            errorMessage = getValidationErrorMessage(error) || 'Invalid request';
-            break;
-          case 401:
-            refreshToken(toastService, router);
-            break;
-          case 403:
-            errorMessage = 'You are not authorized to perform this action';
-            break;
-          case 404:
-            errorMessage = 'The requested resource was not found';
-            break;
-          case 500:
-            errorMessage = 'A server error occurred. Please try again later.';
-            break;
-          default:
-            errorMessage = `Error: ${error.message}`;
+//       if (platformService.isBrowser && error.error instanceof ErrorEvent) {
+//         // Browser-only client-side error
+//         errorMessage = `Error: ${error.error.message}`;
+//       } else {
+//         // Server-side (SSR) or normal backend error
+//         switch (error.status) {
+//           case 400:
+//             errorMessage = getValidationErrorMessage(error) || 'Invalid request';
+//             break;
+//           case 401:
+//             refreshToken(toastService, router);
+//             break;
+//           case 403:
+//             errorMessage = 'You are not authorized to perform this action';
+//             break;
+//           case 404:
+//             errorMessage = 'The requested resource was not found';
+//             break;
+//           case 500:
+//             errorMessage = 'A server error occurred. Please try again later.';
+//             break;
+//           default:
+//             errorMessage = `Error: ${error.message}`;
+//         }
+//       }
+
+//       return throwError(() => ({
+//         message: errorMessage,
+//         originalError: error,
+//       }));
+//     })
+//   );
+// };
+export function authInterceptor(type: 'website' | 'portal'): HttpInterceptorFn {
+  return (req, next) => {
+    const toastService = inject(ToastService);
+    const router = inject(Router);
+    const platformService: PlatformService = inject(PlatformService);
+
+    let token: string | null = null;
+    try {
+      token = getLocalStorageItem<string>(localStorageEnum.token);
+    } catch (err) {
+      console.error('Token fetch error:', err);
+    }
+
+    if (token) {
+      req = req.clone({
+        setHeaders: {
+          Authorization: `Bearer ${token}`,
+          'Content-Type': 'application/json',
+        },
+      });
+    }
+
+    return next(req).pipe(
+      catchError((error: HttpErrorResponse) => {
+        let errorMessage = 'An unexpected error occurred';
+
+        if (platformService.isBrowser && error.error instanceof ErrorEvent) {
+          // Browser-only client-side error
+          errorMessage = `Error: ${error.error.message}`;
+        } else {
+          // Server-side (SSR) or backend error
+          switch (error.status) {
+            case 400:
+              errorMessage = getValidationErrorMessage(error) || 'Invalid request';
+              break;
+            case 401:
+              refreshToken(toastService, router, type);
+              break;
+            case 403:
+              errorMessage = 'You are not authorized to perform this action';
+              break;
+            case 404:
+              errorMessage = 'The requested resource was not found';
+              break;
+            case 500:
+              errorMessage = 'A server error occurred. Please try again later.';
+              break;
+            default:
+              errorMessage = `Error: ${error.message}`;
+          }
         }
-      }
 
-      return throwError(() => ({
-        message: errorMessage,
-        originalError: error,
-      }));
-    })
-  );
-};
+        return throwError(() => ({
+          message: errorMessage,
+          originalError: error,
+        }));
+      })
+    );
+  };
+}
 
 // ✅ helper for validation errors
 function getValidationErrorMessage(error: HttpErrorResponse): string | null {
@@ -87,33 +148,39 @@ function getValidationErrorMessage(error: HttpErrorResponse): string | null {
 }
 
 // ✅ helper for refresh token
-async function refreshToken(toastService: ToastService, router: Router) {
+async function refreshToken(
+  toastService: ToastService,
+  router: Router,
+  type: 'website' | 'portal'
+) {
   try {
-    console.log('Refresh Token called');
     const res = await UseFetch(refreshTokenFn());
-    if(res?.data && res.data?.token){
+    if (res?.data && res.data?.token) {
       setLocalStorageItem(localStorageEnum.token, res.data.token);
       setLocalStorageItem(localStorageEnum.refreshToken, res.data.refreshToken);
       return true;
-    }
-    else{
+    } else {
       toastService.show({
         type: EToastType.error,
         message: 'Token expired. Please login again.',
-        duration: 800
-      })
-      localStorage.clear();
+        duration: 800,
+      });
+      
+      if (type == 'website') {
+        router.navigate(['/login']);
+      }
+      
+      clearLocalStorage();
       return false;
     }
   } catch (error) {
-    localStorage.clear();
+    clearLocalStorage();
     router.navigate(['/login']);
     return false;
   }
 }
 
 function refreshTokenFn() {
-  console.log('refreshTokenFn called');
   const data = {
     token: getLocalStorageItem<string>(localStorageEnum.token),
     refreshToken: getLocalStorageItem<string>(localStorageEnum.refreshToken),

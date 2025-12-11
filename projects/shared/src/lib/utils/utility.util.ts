@@ -46,6 +46,15 @@ export function getLocalStorageItem<T>(key: string): T | null {
   }
   return null;
 }
+export function clearLocalStorage() {
+  if (typeof window !== 'undefined' && typeof window.localStorage !== 'undefined') {
+    try {
+      localStorage.clear();
+    } catch (error) {
+      console.error('Error reading from localStorage:', error);
+    }
+  }
+}
 
 export function setLocalStorageItem<T>(key: string, value: T): void {
   try {
