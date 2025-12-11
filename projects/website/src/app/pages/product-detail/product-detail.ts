@@ -73,4 +73,5 @@ export class ProductDetail extends ProductDetailBase implements OnInit {
   public toggleWishList(event: any){
     this.wishlistService.toggleWishList<IRProductDetailRoot>(event, this.productDetail(), 'isWishList', 'id');
   }
+  
 }
