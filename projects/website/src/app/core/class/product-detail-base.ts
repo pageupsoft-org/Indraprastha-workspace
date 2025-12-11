@@ -48,7 +48,7 @@ export class ProductDetailBase {
     isRelatedItem: false,
   };
 
-  private utilService: UtilityService = inject(UtilityService);
+  public utilService: UtilityService = inject(UtilityService);
   private toastService: ToastService = inject(ToastService);
   private cartService: CartService = inject(CartService);
 

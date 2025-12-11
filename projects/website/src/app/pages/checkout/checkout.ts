@@ -8,6 +8,7 @@ import {
 } from './checkout.model';
 import { ApiRoutes, httpGet, IRGeneric, ValidateControl } from '@shared';
 import { CommonModule } from '@angular/common';
+import { ActivatedRoute } from '@angular/router';
 
 @Component({
   selector: 'app-checkout',
@@ -19,8 +20,15 @@ export class Checkout {
   public checkoutForm: FormGroup<ICheckoutForm> = initializeICheckoutForm();
   public checkoutData: WritableSignal<IResponseCheckout> = signal(initializeResponseCheckout());
 
-  constructor() {
-    this.getCheckoutData();
+  public isRedirectedFromBuyNow: WritableSignal<boolean> = signal(false);
+
+  constructor(private activatedRoute: ActivatedRoute) {
+    let buyNow = activatedRoute.snapshot.queryParams['buy_now'];
+    if (buyNow && buyNow == 'buy_now') {
+      this.isRedirectedFromBuyNow.update(() => true);
+    } else {
+      this.getCheckoutData();
+    }
   }
 
   public onPaymentSumit() {

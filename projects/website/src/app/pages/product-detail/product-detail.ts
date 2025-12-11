@@ -6,12 +6,15 @@ import {
   AppLoadingButton,
   Loader,
   PlatformService,
+  ConfirmationUtil,
+  getDefaultConfirmationModalData,
+  MConfirmationModalData,
 } from '@shared';
-import { ActivatedRoute, Params } from '@angular/router';
+import { ActivatedRoute, Params, Router } from '@angular/router';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { CommonModule } from '@angular/common';
 import { NgxSkeletonLoaderModule } from 'ngx-skeleton-loader';
-import { CartUpdateOperation, ProductDetailBase } from '@website/core';
+import { appRoutes, CartUpdateOperation, ProductDetailBase } from '@website/core';
 
 @Component({
   selector: 'app-product-detail',
@@ -29,13 +32,18 @@ import { CartUpdateOperation, ProductDetailBase } from '@website/core';
 export class ProductDetail extends ProductDetailBase implements OnInit {
   public readonly DescriptionTypeStringEnum = DescriptionTypeStringEnum;
   public readonly CartAlterEnum = CartUpdateOperation;
+  public readonly objectCOnfirmationUtil: ConfirmationUtil = new ConfirmationUtil();
 
   public toggleAccordion(i: number) {
     const list = this.productDetail().descriptions;
     list[i]._isAccordionOpen = !list[i]._isAccordionOpen;
   }
 
-  constructor(private activatedRoute: ActivatedRoute, private platformService: PlatformService) {
+  constructor(
+    private activatedRoute: ActivatedRoute,
+    private platformService: PlatformService,
+    private router: Router
+  ) {
     super();
   }
 
@@ -68,5 +76,27 @@ export class ProductDetail extends ProductDetailBase implements OnInit {
 
   public enlargeImage(img: string) {
     this.productDetail().activeImage = img;
+  }
+
+  public buyNow() {
+    if (this.utilService.isUserLoggedIn()) {
+      this.router.navigate([appRoutes.CHECKOUT], {
+        queryParams: {
+          buy_now: true,
+        },
+      });
+    } else {
+      const confirmation_model: MConfirmationModalData = {
+        heading: 'Login Needed',
+        body: 'Please login first to buy this item.',
+        noText: 'Cancel',
+        yesText: 'Sure',
+      };
+      this.objectCOnfirmationUtil.getConfirmation(confirmation_model).then((res: boolean) => {
+        if (res) {
+          this.utilService.openLoginForm.emit();
+        }
+      });
+    }
   }
 }
