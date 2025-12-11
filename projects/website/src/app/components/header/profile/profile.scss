@@ -27,3 +27,31 @@
     opacity: 0;
   }
 }
+
+.address-enter {
+  animation: slide-up 800ms;
+}
+.address-leave {
+  animation: slide-down 800ms;
+}
+
+@keyframes slide-up {
+  from {
+    opacity: 0;
+    transform: translateY(-20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+@keyframes slide-down {
+  from {
+    opacity: 1;
+    transform: translateY(0px);
+  }
+  to {
+    opacity: 0;
+    transform: translateY(-20px);
+  }
+}

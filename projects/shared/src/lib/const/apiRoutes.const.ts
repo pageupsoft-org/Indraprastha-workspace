@@ -10,6 +10,9 @@ export const ApiRoutes = {
     BASE: '/api/Customer',
     CUSTOMER_ALL: '/api/Customer/All',
     GET_BY_ID: (id: number) => `/api/Customer/${id}`,
+    SHIPPING_ADDRESS : '/api/Customer/ShippingAddress',
+    GET_SHIPPING_ADDRESS : '/api/Customer/ShippingAddress',
+    SHIPPIBG_DELETE_BY_ID: (id: number) => `/api/Customer/ShippingAddress/${id}`
   },
   EMPLOYEE: {
     BASE: '/api/Employee',
@@ -67,7 +70,12 @@ export const ApiRoutes = {
   DASHBOARD: {
     BASE: '/api/Dashboard',
   },
-  ABOUT: {
-    GET: '/api/About',
+  ABOUT:{
+   GET:'/api/About'
   },
+  PROFILE:{
+    BASE:'/api/Profile',
+    GET_BY_ID: (id:number) => `/api/Profile/${id}`
+  },
+  
 };

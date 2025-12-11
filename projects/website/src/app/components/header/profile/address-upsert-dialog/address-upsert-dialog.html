@@ -1,15 +1,21 @@
 <div class="bg-white rounded-xl shadow-2xl w-full p-6">
   <!-- Title -->
-  <p class="text-lg font-medium mb-4">Add Address</p>
+  <p class="lg:text-xl md:text-lg sm:text-md text-black font-semibold mb-4">Add Address</p>
 
   <!-- Form -->
-  <form class="space-y-4">
+  <form class="space-y-4" [formGroup]="addressForm">
     <!-- Country / Region -->
     <div>
       <select
-        class="w-full border border-gray-300 rounded-lg p-2 focus:outline-none focus:ring-2 focus:ring-blue-400 placeholder-gray-300"
+        libValidateControl
+        [formControl]="addressForm.controls.country"
+        (change)="onCountryChange()"
+        class="w-full border border-gray-200 rounded-lg px-2 py-3 focus:outline-none focus:ring-2 focus:ring-blue-400 placeholder-gray-300"
       >
-        <option value="" disabled selected>Country / Region</option>
+        <option [ngValue]="null" disabled selected>Country / Region</option>
+        @for (item of countries; track $index){
+        <option [ngValue]="item.name">{{ item.name }}</option>
+        }
       </select>
     </div>
 
@@ -18,12 +24,16 @@
       <input
         type="text"
         placeholder="First Name"
-        class="flex-1 border border-gray-300 rounded-lg p-2 focus:outline-none focus:ring-2 focus:ring-blue-400 placeholder-gray-300"
+        libValidateControl
+        [formControl]="addressForm.controls.firstName"
+        class="flex-1 border border-gray-200 rounded-lg px-2 py-3 focus:outline-none focus:ring-2 focus:ring-blue-400 placeholder-gray-300"
       />
       <input
         type="text"
         placeholder="Last Name"
-        class="flex-1 border border-gray-300 rounded-lg p-2 focus:outline-none focus:ring-2 focus:ring-blue-400 placeholder-gray-300"
+        libValidateControl
+        [formControl]="addressForm.controls.lastName"
+        class="flex-1 border border-gray-200 rounded-lg px-2 py-3 focus:outline-none focus:ring-2 focus:ring-blue-400 placeholder-gray-300"
       />
     </div>
 
@@ -32,7 +42,9 @@
       <input
         type="text"
         placeholder="Address"
-        class="w-full border border-gray-300 rounded-lg p-2 focus:outline-none focus:ring-2 focus:ring-blue-400 placeholder-gray-300"
+        libValidateControl
+        [formControl]="addressForm.controls.address"
+        class="w-full border border-gray-200 rounded-lg px-2 py-3 focus:outline-none focus:ring-2 focus:ring-blue-400 placeholder-gray-300"
       />
     </div>
 
@@ -41,32 +53,55 @@
       <input
         type="text"
         placeholder="Apartment, suite"
-        class="w-full border border-gray-300 rounded-lg p-2 focus:outline-none focus:ring-2 focus:ring-blue-400 placeholder-gray-300"
+        libValidateControl
+        [formControl]="addressForm.controls.apartment"
+        class="w-full border border-gray-200 rounded-lg px-2 py-3 focus:outline-none focus:ring-2 focus:ring-blue-400 placeholder-gray-300"
       />
     </div>
 
     <!-- City, State, PIN Code -->
     <div class="flex gap-4">
-      <input
-        type="text"
-        placeholder="City"
-        class="flex-1 border border-gray-300 rounded-lg p-2 focus:outline-none focus:ring-2 focus:ring-blue-400 placeholder-gray-300"
-      />
       <select
-        class="flex-1 border border-gray-300 rounded-lg p-2 focus:outline-none focus:ring-2 focus:ring-blue-400 placeholder-gray-300"
+        libValidateControl
+        [formControl]="addressForm.controls.city"
+        class="flex-1 border border-gray-200 rounded-lg px-2 py-3 focus:outline-none focus:ring-2 focus:ring-blue-400 placeholder-gray-300"
       >
-        <option value="" disabled selected>State</option>
+        <option [ngValue]="null" disabled selected>city</option>
+        @for (item of cities; track $index){
+        <option [ngValue]="item">{{ item }}</option>
+        }
+      </select>
+
+      <select
+        libValidateControl
+        [formControl]="addressForm.controls.state"
+        (change)="onStateChange()"
+        class="flex-1 border border-gray-200 rounded-lg px-2 py-3 focus:outline-none focus:ring-2 focus:ring-blue-400 placeholder-gray-300"
+      >
+        <option [ngValue]="null" disabled selected>State</option>
+        @for (item of states; track $index){
+        <option [ngValue]="item">{{ item }}</option>
+        }
       </select>
       <input
         type="text"
         placeholder="PIN Code"
-        class="flex-1 border border-gray-300 rounded-lg p-2 focus:outline-none focus:ring-2 focus:ring-blue-400 placeholder-gray-300"
+        libValidateControl
+        [formControl]="addressForm.controls.pinCode"
+        class="flex-1 border border-gray-200 rounded-lg px-2 py-3 focus:outline-none focus:ring-2 focus:ring-blue-400 placeholder-gray-300"
       />
     </div>
 
     <!-- Phone Number -->
-    <div class="flex gap-2">
-      <button type="button" class="flex items-center gap-1 border border-gray-300 rounded-lg px-3">
+    <div class="flex gapx-2 flex-row border border-gray-200 w-full rounded-lg">
+      <input
+        type="text"
+        placeholder="Phone Number"
+        libValidateControl
+        [formControl]="addressForm.controls.contact"
+        class="flex-1 rounded-lg px-2 py-3 focus:outline-none focus:ring-2 focus:ring-blue-400 placeholder-gray-300 w-full"
+      />
+      <button type="button" class="flex items-center gap-1 px-3">
         <img
           src="https://upload.wikimedia.org/wikipedia/en/4/41/Flag_of_India.svg"
           alt="IN"
@@ -74,17 +109,17 @@
         />
         <span>+91</span>
       </button>
-      <input
-        type="text"
-        placeholder="Phone Number"
-        class="flex-1 border border-gray-300 rounded-lg p-2 focus:outline-none focus:ring-2 focus:ring-blue-400 placeholder-gray-300"
-      />
     </div>
 
     <!-- Buttons -->
-    <div class="flex justify-end gap-3 mt-4">
+    <div class="flex justify-center gap-3 mt-4">
+      <lib-app-loading-button
+        [isLoading]="isLoading()"
+        [label]="'Save'"
+        [isButtonDisabled]="false"
+        (clicked)="onAddressSubmit()"
+      ></lib-app-loading-button>
       <lib-generic-cancel-button (cancel)="close()"></lib-generic-cancel-button>
-      <lib-app-loading-button [isLoading]="false" [label]="'Save'" [isButtonDisabled]="false"></lib-app-loading-button>
     </div>
   </form>
 </div>

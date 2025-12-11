@@ -43,34 +43,36 @@ export class NewArrivalProductCard implements OnInit {
   public toggleWishList(event: any) {
     event.stopPropagation();
 
-    if (this.utilService.isUserLoggedIn()) {
-      if (this.product.wishList) {
-        this.wishlistService.removeFromWishList(this.product.productId).then((res: boolean) => {
-          if (res) {
-            this.product.wishList = false;
-          }
-        });
-      } else {
-        this.wishlistService.addToWishlist(this.product.productId).then((res: boolean) => {
-          if (res) {
-            this.product.wishList = true;
-          }
-        });
-      }
-    } else {
-      const modalData: MConfirmationModalData = {
-        heading: 'Login',
-        body: 'To add items to your wishlist, please login first.',
-        yesText: 'Yes',
-        noText: 'No',
-      };
-      this.wishlistService.objectCOnfirmationUtil
-        .getConfirmation(modalData)
-        .then((res: boolean) => {
-          if (res) {
-            this.utilService.openLoginForm.emit();
-          }
-        });
-    }
+    this.wishlistService.toggleWishList(event, this.product, 'wishList', 'productId');
+
+    // if (this.utilService.isUserLoggedIn()) {
+    //   if (this.product.wishList) {
+    //     this.wishlistService.removeFromWishList(this.product.productId).then((res: boolean) => {
+    //       if (res) {
+    //         this.product.wishList = false;
+    //       }
+    //     });
+    //   } else {
+    //     this.wishlistService.addToWishlist(this.product.productId).then((res: boolean) => {
+    //       if (res) {
+    //         this.product.wishList = true;
+    //       }
+    //     });
+    //   }
+    // } else {
+    //   const modalData: MConfirmationModalData = {
+    //     heading: 'Login',
+    //     body: 'To add items to your wishlist, please login first.',
+    //     yesText: 'Yes',
+    //     noText: 'No',
+    //   };
+    //   this.wishlistService.objectCOnfirmationUtil
+    //     .getConfirmation(modalData)
+    //     .then((res: boolean) => {
+    //       if (res) {
+    //         this.utilService.openLoginForm.emit();
+    //       }
+    //     });
+    // }
   }
 }

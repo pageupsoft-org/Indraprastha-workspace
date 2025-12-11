@@ -14,7 +14,7 @@ import { ActivatedRoute, Params, Router } from '@angular/router';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { CommonModule } from '@angular/common';
 import { NgxSkeletonLoaderModule } from 'ngx-skeleton-loader';
-import { appRoutes, CartUpdateOperation, ProductDetailBase } from '@website/core';
+import { appRoutes, CartUpdateOperation, IRProductDetailRoot, ProductDetailBase, WishlistService } from '@website/core';
 
 @Component({
   selector: 'app-product-detail',
@@ -41,7 +41,7 @@ export class ProductDetail extends ProductDetailBase implements OnInit {
 
   constructor(
     private activatedRoute: ActivatedRoute,
-    private platformService: PlatformService,
+    private platformService: PlatformService, private wishlistService: WishlistService,
     private router: Router
   ) {
     super();
@@ -99,4 +99,9 @@ export class ProductDetail extends ProductDetailBase implements OnInit {
       });
     }
   }
+
+  public toggleWishList(event: any){
+    this.wishlistService.toggleWishList<IRProductDetailRoot>(event, this.productDetail(), 'isWishList', 'id');
+  }
+  
 }

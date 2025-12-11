@@ -12,6 +12,7 @@ export interface IRProductDetailRoot {
   productURL: string[];
   activeImage: string; //used in frontedn
   isActive: boolean;
+  isWishList: boolean;
   variants: Variant[];
   stocks: Stock2[];
   descriptions: Description[];
@@ -70,6 +71,7 @@ export const initializeIRProductDetailRoot = () => {
     productURL: [],
     activeImage: '', //used in frontedn
     isActive: false,
+    isWishList: false,
     variants: [],
     stocks: [],
     descriptions: [],

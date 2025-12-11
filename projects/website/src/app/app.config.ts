@@ -22,7 +22,7 @@ export const appConfig: ApplicationConfig = {
         includePostRequests: true,
       })
     ),
-    provideHttpClient(withFetch(), withInterceptorsFromDi(), withInterceptors([authInterceptor])),
+    provideHttpClient(withFetch(), withInterceptorsFromDi(), withInterceptors([authInterceptor('website')])),
     {
       provide: LOCALE_ID,
       useValue: 'en-IN',
