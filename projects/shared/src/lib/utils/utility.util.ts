@@ -58,7 +58,9 @@ export function clearLocalStorage() {
 
 export function setLocalStorageItem<T>(key: string, value: T): void {
   try {
-    localStorage.setItem(key, JSON.stringify(value));
+    if (typeof window !== 'undefined' && typeof window.localStorage !== 'undefined') {
+      localStorage.setItem(key, JSON.stringify(value));
+    }
   } catch (error) {
     console.log(error);
   }

@@ -152,8 +152,13 @@ async function refreshToken(
   router: Router,
   type: 'website' | 'portal'
 ) {
+  console.log("type: ", type);
+  
   try {
     const res = await UseFetch(refreshTokenFn());
+    console.log("res", res);
+
+    
     if (res?.data && res.data?.token) {
       setLocalStorageItem(localStorageEnum.token, res.data.token);
       setLocalStorageItem(localStorageEnum.refreshToken, res.data.refreshToken);
@@ -165,7 +170,7 @@ async function refreshToken(
         duration: 800,
       });
       
-      if (type == 'website') {
+      if (type == 'portal') {
         router.navigate(['/login']);
       }
       
