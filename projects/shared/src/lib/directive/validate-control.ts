@@ -9,6 +9,7 @@ import {
 } from '@angular/core';
 import { FormGroupDirective, NgControl } from '@angular/forms';
 import { Subscription } from 'rxjs';
+import { trimFormValue } from '../utils/utility.util';
 
 @Directive({
   selector: '[libValidateControl]',
@@ -23,7 +24,7 @@ export class ValidateControl implements AfterViewInit, OnDestroy {
     @Optional() private ngControl: NgControl,
     @Optional() private formGroupDir: FormGroupDirective
   ) {
-    // //console.log(ngControl, formGroupDir)
+    console.log(ngControl, formGroupDir)
   }
 
   ngAfterViewInit() {
@@ -37,6 +38,14 @@ export class ValidateControl implements AfterViewInit, OnDestroy {
     if (this.formGroupDir) {
       this.sub.add(
         this.formGroupDir.ngSubmit.subscribe(() => {
+          // this.formGroupDir.directives.filter(control => {
+          //   console.log(control)
+          //    const rawValue = control.value;
+          //    console.log(rawValue)
+          //    const trimValue = String(rawValue).trim(); 
+          //    console.log(trimValue)
+          // })
+          trimFormValue(this.ngControl)
           this.formGroupDir.control.markAllAsTouched();
           this.updateMessage();
         })
@@ -105,7 +114,7 @@ export class ValidateControl implements AfterViewInit, OnDestroy {
     const control = this.ngControl.control;
     if (!control) return;
 
-   const shouldShow = control.invalid && (control.touched || control.dirty);
+    const shouldShow = control.invalid && (control.touched || control.dirty);
 
     if (shouldShow) {
       const msg = this.getError(control);
@@ -122,6 +131,7 @@ export class ValidateControl implements AfterViewInit, OnDestroy {
 
   private getError(control: any): string {
     const e = control.errors;
+
     if (!e) return '';
 
     if (e['required']) return 'This field is required.';
@@ -130,7 +140,7 @@ export class ValidateControl implements AfterViewInit, OnDestroy {
     if (e['maxlength']) return `Maximum length is ${e['maxlength'].requiredLength}.`;
     if (e['pattern']) return e['pattern'].message || 'Invalid format.';
     if (e['max']) return `Value must not exceed ${e['max'].max}.`;
-
+    if (e['leadingOrTrailingSpace']) return `Starting and ending space not allowed`
     return 'Invalid input.';
   }
 }

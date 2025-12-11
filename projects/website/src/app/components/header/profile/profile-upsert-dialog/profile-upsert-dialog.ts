@@ -2,14 +2,14 @@ import { ChangeDetectorRef, Component, inject, OnInit } from '@angular/core';
 import { FormGroup, ReactiveFormsModule } from '@angular/forms';
 import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
 import { initializeProfileForm, IProfileForm, IProfilePayload, IProfileResponse } from './profile-upsert-dialog.models';
-import { ApiRoutes, EToastType, httpGet, httpPost, IRGeneric, ToastService, ValidateControl } from '@shared';
+import { ApiRoutes, ContactValidators, EToastType, httpGet, httpPost, IRGeneric, ToastService, ValidateControl } from '@shared';
 import { UtilityService } from '@website/core';
 import { CommonModule } from '@angular/common';
-import { GenericSaveButton, GenericCancelButton, AppLoadingButton } from "@shared";
+import { GenericSaveButton, GenericCancelButton, AppLoadingButton,  } from "@shared";
 
 @Component({
   selector: 'app-profile-upsert-dialog',
-  imports: [GenericCancelButton, AppLoadingButton, ValidateControl, ReactiveFormsModule, CommonModule],
+  imports: [GenericCancelButton, AppLoadingButton, ValidateControl, ReactiveFormsModule, CommonModule, ContactValidators],
   templateUrl: './profile-upsert-dialog.html',
   styleUrl: './profile-upsert-dialog.scss',
 })
@@ -42,7 +42,7 @@ export class ProfileUpsertDialog implements OnInit {
       httpPost<IRGeneric<Boolean>, IProfilePayload>(ApiRoutes.CUSTOMERS.BASE, payLoad as IProfilePayload).subscribe({
         next: (res: any) => {
           if (res?.data) {
-            this._toaster.show({ message: 'Profile save Successfully', duration: 3000, type: EToastType.success });
+            this._toaster.show({ message: 'Profile Update Successfully', duration: 3000, type: EToastType.success });
             this.close(true)
             this.utilityService.profileData.update(val => ({
               ...val!,

@@ -2,6 +2,7 @@ import { Observable } from 'rxjs';
 import { MStringEnumToArray } from '../interface/model/utility.model';
 import { IPaginationPayload } from '../interface/request/pagination.request';
 import { IDecodeTokenKey } from '../interface/model/decode-token.model';
+import { FormControl, FormGroup } from '@angular/forms';
 
 export function UseFetch<R>(ob: Observable<R>): Promise<R> {
   const postPromise = new Promise<R>((resolve, reject) => {
@@ -107,7 +108,7 @@ export function createUrlFromObject(object: Record<string, any>, baseUrl: string
   return `${baseUrl}?${params.toString()}`;
 }
 
-export function deCodeToken(): IDecodeTokenKey | null{
+export function deCodeToken(): IDecodeTokenKey | null {
   const token = getLocalStorageItem('token') as string;
   console.log(token)
   if (!token) return null;
@@ -132,7 +133,28 @@ export function deCodeToken(): IDecodeTokenKey | null{
     console.error('Decode error:', e);
     return null;
   }
+
+
 }
+
+export function trimFormValue(ngControl: any) {
+  if (!ngControl || !ngControl.control) return;   // ✔ control exists check
+
+  const rawValue = ngControl.control.value;
+  console.log(rawValue, "raw");
+
+  // ✔ If value is null or undefined → do nothing
+  if (rawValue === null || rawValue === undefined) return;
+
+  // ✔ If value is NOT a string → convert safely
+  const trimValue = typeof rawValue === 'string'
+    ? rawValue.trim()
+    : String(rawValue).trim();
+
+  console.log(trimValue, "trimmed");
+  ngControl.setValue(trimValue, { emitEvent: false, onlySelf: true })
+}
+
 
 
 

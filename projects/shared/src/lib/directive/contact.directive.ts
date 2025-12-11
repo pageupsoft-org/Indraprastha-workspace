@@ -8,14 +8,14 @@ export class ContactValidators{
   constructor(
     @Optional() private ngControl: NgControl
   ) {
-    console.log(this.ngControl)
   }
 
 
 @HostListener('input', ['$event'])
   onInput(event: Event) {
    const input = event.target as HTMLInputElement;
-    const raw = input.value;          
+    const raw = input.value;   
+    console.log(raw)       
     const value = raw.replace(/[^0-9]/g, '');  
     if (value === '') {
       this.ngControl?.control?.setValue(null);

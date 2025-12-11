@@ -9,8 +9,9 @@ export function patternWithMessage(pattern: RegExp, message: string): ValidatorF
       return null;
     }
 
-    const value = String(rawValue).trim(); // <-- Safe conversion
+    const value = String(rawValue).trim(); 
 
     return pattern.test(value) ? null : { pattern: { message } };
+
   };
 }

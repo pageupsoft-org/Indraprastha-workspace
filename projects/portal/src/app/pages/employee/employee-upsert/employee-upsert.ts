@@ -34,7 +34,7 @@ export class EmployeeUpsert extends Base implements OnInit {
     patternWithMessage(/^[A-Za-z0-9]+$/, 'This field not allowed any space'), patternWithMessage(/^[A-Za-z ]*$/, 'No special characters and number allowed')]),
     email: new FormControl('', [Validators.required, patternWithMessage(/^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/, 'Enter a valid email address')]),
     contact: new FormControl('', [Validators.required, patternWithMessage(/^[6-9]\d{9}$/, 'Enter a valid contact number.')]),
-    userType: new FormControl('', [Validators.required]),
+    userType: new FormControl('',),
     address: new FormControl('', [Validators.required, Validators.maxLength(70),
     patternWithMessage(/^\S(.*\S)?$/, 'starting and ending space not allowed')]),
     username: new FormControl(null, [Validators.minLength(3), Validators.maxLength(30), patternWithMessage(/^\S*$/, 'This field does not allow any spaces')]),
@@ -101,34 +101,38 @@ export class EmployeeUpsert extends Base implements OnInit {
   }
 
   public onSubmitEmployee() {
-
+    console.log(this.employeeForm.getRawValue())
+    console.log(this.employeeForm, this.employeeForm.value)
     if (this.employeeForm.valid) {
-      if (this.data.id === 0) {
-        this.httpPostPromise<IGenericResponse<number>, IEmployee>(ApiRoutes.LOGIN.REGISTER_EMPLOYEE, this.employeeForm.value as IEmployee).then(response => {
-          if (response) {
-            if (response.data) {
-              this.onCancel(true)
-              this.toaster.show({ message: 'Employee register Successful', duration: 3000, type: EToastType.success });
-            }
-          }
-        })
-          .catch(error => {
-            // handle error
-          });
-      }
-      else {
-        this.httpPostPromise<IGenericResponse<number>, IEmployee>(ApiRoutes.EMPLOYEE.BASE, this.employeeForm.value as IEmployee).then(response => {
-          if (response) {
-            if (response.data) {
-              this.onCancel(true)
-              this.toaster.show({ message: 'Employee Update Successful', duration: 3000, type: EToastType.success });
-            }
-          }
-        })
-          .catch(error => {
-            // handle error
-          });
-      }
+      console.log(this.employeeForm, this.employeeForm.value)
+      const payLoad = this.employeeForm.value as IEmployee
+      console.log(payLoad)
+      // if (this.data.id === 0) {
+      //   this.httpPostPromise<IGenericResponse<number>, IEmployee>(ApiRoutes.LOGIN.REGISTER_EMPLOYEE, this.employeeForm.value as IEmployee).then(response => {
+      //     if (response) {
+      //       if (response.data) {
+      //         this.onCancel(true)
+      //         this.toaster.show({ message: 'Employee register Successful', duration: 3000, type: EToastType.success });
+      //       }
+      //     }
+      //   })
+      //     .catch(error => {
+      //       // handle error
+      //     });
+      // }
+      // else {
+      //   this.httpPostPromise<IGenericResponse<number>, IEmployee>(ApiRoutes.EMPLOYEE.BASE, this.employeeForm.value as IEmployee).then(response => {
+      //     if (response) {
+      //       if (response.data) {
+      //         this.onCancel(true)
+      //         this.toaster.show({ message: 'Employee Update Successful', duration: 3000, type: EToastType.success });
+      //       }
+      //     }
+      //   })
+      //     .catch(error => {
+      //       // handle error
+      //     });
+      // }
     }
     else {
       this.employeeForm.markAllAsTouched();

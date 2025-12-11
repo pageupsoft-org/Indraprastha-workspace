@@ -16,7 +16,7 @@ export const appConfig: ApplicationConfig = {
     provideHttpClient(
       withInterceptorsFromDi(),
       // withInterceptors([loaderInterceptor]),
-      withInterceptors([authInterceptor, loaderInterceptor])
+      withInterceptors([authInterceptor('portal'), loaderInterceptor])
     )
   ]
 };

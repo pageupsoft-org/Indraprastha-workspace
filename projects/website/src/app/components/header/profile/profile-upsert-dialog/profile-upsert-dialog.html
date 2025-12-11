@@ -37,7 +37,7 @@
         type="text"
         placeholder="Phone No."
         libValidateControl
-        [formControl]="profileForm.controls.contact"
+        [formControl]="profileForm.controls.contact" contactValidators
         class="w-full border border-gray-200 rounded-lg px-4 py-3 text-sm focus:ring-1 focus:ring-blue-400 focus:outline-none bg-gray-100 text-gray-500 cursor-not-allowed opacity-50"
       />
     </div>
@@ -51,7 +51,7 @@
     </button> -->
       <lib-app-loading-button
         [isLoading]="false"
-        [label]="'Save'"
+        [label]="profileForm.controls.id.value === 0 ?  'Save' :  'Update'"
         [isButtonDisabled]="false"
         (clicked)="onProfileSubmit()"
       ></lib-app-loading-button>
