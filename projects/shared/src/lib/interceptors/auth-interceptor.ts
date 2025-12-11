@@ -3,7 +3,7 @@ import { catchError, throwError } from 'rxjs';
 import { inject } from '@angular/core';
 import { Router } from '@angular/router';
 import { ToastService } from '../services/toast-service';
-import { getLocalStorageItem, setLocalStorageItem, UseFetch } from '../utils/utility.util';
+import { clearLocalStorage, getLocalStorageItem, setLocalStorageItem, UseFetch } from '../utils/utility.util';
 import { localStorageEnum } from '../enum/localStorage.enum';
 import { PlatformService } from '../services/platform-service';
 import { EToastType } from '../enum/toast-type.enum';
@@ -11,7 +11,6 @@ import { httpPost } from '../utils/api.helper';
 import { IRGeneric } from '../interface/response/generic.response';
 import { IRLogin } from '../interface/response/login.response';
 import { ApiRoutes } from '../const/apiRoutes.const';
-import { clearLocalStorage } from '@shared';
 
 // import { getLocalStorageItem, localStorageEnum, ToastService } from '@shared';
 

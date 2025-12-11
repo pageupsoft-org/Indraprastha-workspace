@@ -1,8 +1,14 @@
 @if(showProfileBar()){
-<div class="fixed top-0 left-0 w-full h-full z-[1000]" animate.enter="slide-in" animate.leave="slide-out">
+<div
+  class="fixed top-0 left-0 w-full h-full z-[1000]"
+  animate.enter="slide-in"
+  animate.leave="slide-out"
+>
   <div class="fixed inset-0 bg-white opacity-50 transition-opacity duration-500 z-40"></div>
 
-  <div class="drawer fixed top-0 right-0 w-full md:w-[35%] h-full bg-white shadow-2xl flex flex-col z-50">
+  <div
+    class="drawer fixed top-0 right-0 w-full md:w-[35%] h-full bg-white shadow-2xl flex flex-col z-50"
+  >
     <div class="flex justify-between items-center p-6 border-b border-gray-200">
       <h2 class="text-lg font-bold uppercase tracking-widest">PROFILE INFORMATION</h2>
       <button class="text-gray-500 hover:text-gray-800 text-2xl cursor-pointer" (click)="close()">
@@ -28,22 +34,32 @@
       </div>
 
       <!-- Address Card -->
-      <div class="bg-[#f7f7f7] rounded-t-2xl p-5 mt-4" [ngClass]="isShown() ? 'rounded-b-none' : 'rounded-b-2xl'">
+      <div
+        class="bg-[#f7f7f7] rounded-t-2xl p-5 mt-4"
+        [ngClass]="isShown() ? 'rounded-b-none' : 'rounded-b-2xl'"
+      >
         <!-- Header Row -->
         <div class="flex justify-between items-center">
           <p class="font-semibold text-[17px]">Address</p>
 
           <div class="flex items-center gap-4">
             <!-- Add Button -->
-            <button class="text-red-600 font-medium text-sm cursor-pointer" (click)="upsertAddress()">
+            <button
+              class="text-red-600 font-medium text-sm cursor-pointer"
+              (click)="upsertAddress()"
+            >
               + Add
             </button>
 
             <!-- Toggle Icon -->
-            <button (click)="toggle()"
-              class="cursor-pointer flex items-center justify-center w-6 h-6 rounded-full border border-gray-400 hover:bg-gray-200 transition">
+            @if(utilityService.AddressData().length > 1){
+            <button
+              (click)="toggle()"
+              class="cursor-pointer flex items-center justify-center w-6 h-6 rounded-full border border-gray-400 hover:bg-gray-200 transition"
+            >
               {{ isShown() ? '-' : '+' }}
             </button>
+            }
           </div>
         </div>
 
@@ -66,11 +82,16 @@
       </div>
 
       @if (isShown()) {
-      <div class="bg-[#f7f7f7] rounded-b-2xl rounded-t-none p-5 pt-0" animate.enter="address-enter"
-        animate.leave="address-leave">
+      <div
+        class="bg-[#f7f7f7] rounded-b-2xl rounded-t-none p-5 pt-0"
+        animate.enter="address-enter"
+        animate.leave="address-leave"
+      >
         <!-- Address list -->
         @for (item of utilityService.AddressData(); track $index) { @if($index > 0){
-        <div class="p-4 rounded-md border border-gray-200 bg-white shadow-sm mb-3 flex justify-between">
+        <div
+          class="p-4 rounded-md border border-gray-200 bg-white shadow-sm mb-3 flex justify-between"
+        >
           <div>
             <h3 class="font-bold text-gray-800 mb-2">Address {{ $index + 1 }}</h3>
 
@@ -84,33 +105,58 @@
             <p class="text-gray-600">{{ item.apartment }}</p>
             <p class="text-gray-600">Pin Code: {{ item.pinCode }}</p>
             <p class="text-gray-600">Contact: {{ item.contact }}</p>
-
           </div>
-          <div >
-            <button class="p-1 rounded-md bg-red-100 hover:bg-red-200 cursor-pointer" (click)="deleteShippingAddress(item.id)">
-              <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5"
-                stroke="currentColor" class="w-4 h-4 text-red-600">
+          <div>
+            <button
+              class="p-1 rounded-md bg-red-100 hover:bg-red-200 cursor-pointer"
+              (click)="deleteShippingAddress(item.id)"
+            >
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                fill="none"
+                viewBox="0 0 24 24"
+                stroke-width="1.5"
+                stroke="currentColor"
+                class="w-4 h-4 text-red-600"
+              >
                 <path stroke-linecap="round" stroke-linejoin="round" d="M3 6h18" />
-                <path stroke-linecap="round" stroke-linejoin="round" d="M8 6V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2" />
-                <path stroke-linecap="round" stroke-linejoin="round"
-                  d="M19 6l-1 14a2 2 0 0 1-2 2H8a2 2 0 0 1-2-2L5 6" />
+                <path
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                  d="M8 6V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"
+                />
+                <path
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                  d="M19 6l-1 14a2 2 0 0 1-2 2H8a2 2 0 0 1-2-2L5 6"
+                />
                 <path stroke-linecap="round" stroke-linejoin="round" d="M10 11v6" />
                 <path stroke-linecap="round" stroke-linejoin="round" d="M14 11v6" />
               </svg>
             </button>
 
-            <button class="p-1 rounded-md bg-blue-100 hover:bg-blue-200 cursor-pointer" (click)="upsertAddress(item.id)">
-              <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5"
-                stroke="currentColor" class="w-4 h-4 text-blue-600">
-                <path stroke-linecap="round" stroke-linejoin="round"
-                  d="M3 21v-3.75L14.06 6.19a2 2 0 0 1 2.83 0l1.92 1.92a2 2 0 0 1 0 2.83L7.75 21H3z" />
+            <button
+              class="p-1 rounded-md bg-blue-100 hover:bg-blue-200 cursor-pointer"
+              (click)="upsertAddress(item.id)"
+            >
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                fill="none"
+                viewBox="0 0 24 24"
+                stroke-width="1.5"
+                stroke="currentColor"
+                class="w-4 h-4 text-blue-600"
+              >
+                <path
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                  d="M3 21v-3.75L14.06 6.19a2 2 0 0 1 2.83 0l1.92 1.92a2 2 0 0 1 0 2.83L7.75 21H3z"
+                />
                 <path stroke-linecap="round" stroke-linejoin="round" d="M14.5 5.5l4 4" />
               </svg>
             </button>
           </div>
         </div>
-
-
 
         } }
       </div>
