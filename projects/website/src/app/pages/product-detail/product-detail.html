@@ -6,7 +6,9 @@
     <!-- Product Image Gallery and Main Image -->
     <div class="flex col-span-2 lg:flex-row lg:space-x-4 w-full sticky top-[150px] max-h-[100%]">
       <!-- Left Image Gallery (Thumbnails) -->
-      <div class="flex flex-row lg:flex-col space-x-3 lg:space-x-0 lg:space-y-4 mb-8 lg:mb-0 overflow-y-auto scrollbar-thin">
+      <div
+        class="flex flex-row lg:flex-col space-x-3 lg:space-x-0 lg:space-y-4 mb-8 lg:mb-0 overflow-y-auto scrollbar-thin"
+      >
         @let dummyArr = [1, 2, 3, 4]; @if(isShowloader()){ @for (item of dummyArr; track $index) {
         <ngx-skeleton-loader
           count="1"
@@ -74,8 +76,7 @@
               appearance="square"
               [theme]="{ height: '50px', width: '50' }"
             />
-            } }@else { 
-              @for (stockSize of stockSizeArrayWithIds; let i = $index; track
+            } }@else { @for (stockSize of stockSizeArrayWithIds; let i = $index; track
             stockSize.value) { @let radioId = 'radio' + i;
 
             <input
@@ -99,8 +100,7 @@
             >
               {{ stockSize.value }}
             </label>
-            }
-           }
+            } }
           </div>
         </div>
 
@@ -259,6 +259,40 @@
           [ngClass]="{ 'cursor-not-allowed!': !cartForm.value.stockId }"
         >
           BUY IT NOW
+        </button>
+
+        <button class="cursor-pointer flex justify-center items-start" (click)="toggleWishList($event)">
+          @if(productDetail().isWishList){
+          <svg
+            xmlns="http://www.w3.org/2000/svg"
+            class="w-10 text-[#df1800]"
+            fill="currentColor"
+            viewBox="0 0 24 24"
+            stroke="currentColor"
+          >
+            <path
+              stroke-linecap="round"
+              stroke-linejoin="round"
+              stroke-width="2"
+              d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z"
+            />
+          </svg>
+          } @else {
+          <svg
+            xmlns="http://www.w3.org/2000/svg"
+            class="w-10"
+            fill="none"
+            viewBox="0 0 24 24"
+            stroke="currentColor"
+          >
+            <path
+              stroke-linecap="round"
+              stroke-linejoin="round"
+              stroke-width="2"
+              d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z"
+            />
+          </svg>
+          }
         </button>
         }
       </div>

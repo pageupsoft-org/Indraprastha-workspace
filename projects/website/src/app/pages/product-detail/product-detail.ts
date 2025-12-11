@@ -11,7 +11,7 @@ import { ActivatedRoute, Params } from '@angular/router';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { CommonModule } from '@angular/common';
 import { NgxSkeletonLoaderModule } from 'ngx-skeleton-loader';
-import { CartUpdateOperation, ProductDetailBase } from '@website/core';
+import { CartUpdateOperation, IRProductDetailRoot, ProductDetailBase, WishlistService } from '@website/core';
 
 @Component({
   selector: 'app-product-detail',
@@ -35,7 +35,7 @@ export class ProductDetail extends ProductDetailBase implements OnInit {
     list[i]._isAccordionOpen = !list[i]._isAccordionOpen;
   }
 
-  constructor(private activatedRoute: ActivatedRoute, private platformService: PlatformService) {
+  constructor(private activatedRoute: ActivatedRoute, private platformService: PlatformService, private wishlistService: WishlistService) {
     super();
   }
 
@@ -68,5 +68,9 @@ export class ProductDetail extends ProductDetailBase implements OnInit {
 
   public enlargeImage(img: string) {
     this.productDetail().activeImage = img;
+  }
+
+  public toggleWishList(event: any){
+    this.wishlistService.toggleWishList<IRProductDetailRoot>(event, this.productDetail(), 'isWishList', 'id');
   }
 }
