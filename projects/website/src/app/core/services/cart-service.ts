@@ -1,26 +1,50 @@
-import { computed, effect, Injectable, Signal, signal, WritableSignal } from '@angular/core';
+import {
+  computed,
+  effect,
+  EventEmitter,
+  inject,
+  Injectable,
+  Signal,
+  signal,
+  WritableSignal,
+} from '@angular/core';
 import { CartVariant, IRCartRoot } from '../../components/shopping-cart/shopping-cart.model';
 import {
   ApiRoutes,
+  ConfirmationUtil,
+  EToastType,
+  getDefaultConfirmationModalData,
   getLocalStorageItem,
+  httpDelete,
   httpGet,
   httpPost,
   IRGeneric,
   setLocalStorageItem,
+  ToastService,
 } from '@shared';
 import { UtilityService } from './utility-service';
 import { LocalStorageEnum } from '../enum/local-storage.enum';
 import { ICartFormData } from '../../pages/product-detail/product-detail.model';
+import { CartUpdateOperation } from '../enum/cart.enum';
 
 @Injectable({
   providedIn: 'root',
 })
 export class CartService {
+  // if qty contains value means quantity is updated directly, but if it null quantity is increased by '+' or  '-' sign
+  public eventCartDataUpdated: EventEmitter<{
+    operation: CartUpdateOperation;
+    index: number;
+  }> = new EventEmitter();
+
   public cartData: WritableSignal<IRCartRoot[]> = signal([]);
   public cartCount = computed(() => this.cartData().length);
   public cartTotalMrp: Signal<number> = computed(() => {
     return this.cartData().reduce((total, item) => total + item.mrp * item.cartQuantity, 0);
   });
+
+  private objCOnfirmationUtil: ConfirmationUtil = new ConfirmationUtil();
+  private toastService: ToastService = inject(ToastService);
 
   constructor(private utilService: UtilityService) {
     effect(() => {});
@@ -158,6 +182,98 @@ export class CartService {
     });
   }
 
+  public alterQuantityCnt(operation: CartUpdateOperation, index: number) {
+    const cart = this.cartData();
+    const item = cart[index];
+
+    if (!item) return;
+
+    // ❌ avoid decreasing when qty is already 1
+    if (operation === CartUpdateOperation.decrease && item.cartQuantity === 1) {
+      return;
+    }
+
+    this.cartData()[index]._isDisable = true;
+    const newQty =
+      operation === CartUpdateOperation.increase ? item.cartQuantity + 1 : item.cartQuantity - 1; // this will now be >= 1 always
+
+    const payload: ICartFormData = {
+      variantId: item.cartVariant?.variantId ?? null,
+      stockId: item.stockId,
+      quantity: newQty,
+    };
+
+    // Make API call FIRST
+    this.updateCartProductQuantity(payload, index, operation);
+  }
+
+  public updateQuantity(qty: number, index: number, operation: CartUpdateOperation) {
+    const cart = this.cartData();
+    const item = cart[index];
+
+    const payload: ICartFormData = {
+      variantId: item.cartVariant?.variantId ?? null,
+      stockId: item.stockId,
+      quantity: qty,
+    };
+
+    // Make API call FIRST
+    this.updateCartProductQuantity(payload, index, operation);
+  }
+
+  public updateCartProductQuantity(
+    data: ICartFormData,
+    index: number,
+    operation: CartUpdateOperation
+  ) {
+    if (!this.utilService.isUserLoggedIn()) {
+      this.updateServiceVariable(data, index);
+      this.cartData()[index]._isDisable = false;
+      return;
+    }
+
+    httpPost<IRGeneric<number>, ICartFormData>(ApiRoutes.CART.POST, data).subscribe({
+      next: (res) => {
+        if (!res?.data) return; // do nothing on failure
+
+        // SUCCESS → Now update state
+        this.updateServiceVariable(data, index);
+        this.cartData()[index]._isDisable = false;
+        this.eventCartDataUpdated.emit({
+          operation: operation,
+          index: index
+        });
+      },
+
+      error: () => {
+        // On error: do nothing, don't update UI
+        this.cartData()[index]._isDisable = false;
+      },
+    });
+  }
+
+  private updateServiceVariable(data: ICartFormData, index: number) {
+    this.cartData.update((cart) => {
+      const updated = [...cart];
+
+      if (data.quantity === 0) {
+        // remove item from cart
+        updated.splice(index, 1);
+        return updated;
+      }
+
+      const item = { ...updated[index] };
+      item.cartQuantity = data.quantity ?? 0;
+      updated[index] = item;
+
+      return updated;
+    });
+
+    if (!this.utilService.isUserLoggedIn()) {
+      setLocalStorageItem(LocalStorageEnum.cartList, this.cartData());
+    }
+  }
+
   // Define a helper function to create a new CartVariant object with updated quantity
   private updateCartVariant(variant: CartVariant, newQuantity: number): CartVariant {
     return {
@@ -173,5 +289,45 @@ export class CartService {
       cartQuantity: newQuantity, // Update the root cartQuantity
       cartVariant: this.updateCartVariant(product.cartVariant, newQuantity), // Update the nested CartVariant
     };
+  }
+
+  public removeItemFromCart(cartId: number, index: number) {
+    this.objCOnfirmationUtil
+      .getConfirmation(
+        getDefaultConfirmationModalData('Remove item', 'Are you sure you want to remove this item?')
+      )
+      .then((res: boolean) => {
+        if (res) {
+          if (this.utilService.isUserLoggedIn()) {
+            httpDelete<IRGeneric<boolean>>(ApiRoutes.CART.DELETE_ITEM_FROM_CART(cartId)).subscribe({
+              next: (res) => {
+                if (res?.data) {
+                  this.cartData.update((currentCart) =>
+                    currentCart.filter((item) => item.cartId !== cartId)
+                  );
+
+                  this.toastService.show({
+                    message: 'Product removed',
+                    type: EToastType.success,
+                    duration: 2000,
+                  });
+
+                  this.eventCartDataUpdated.emit({operation: CartUpdateOperation.delete, index})
+                }
+              },
+            });
+          } else {
+            this.cartData.update((currentCart) =>
+              currentCart.filter((item, prodIndex) => prodIndex !== index)
+            );
+            setLocalStorageItem(LocalStorageEnum.cartList, this.cartData());
+            this.toastService.show({
+              message: 'Product removed',
+              type: EToastType.success,
+              duration: 2000,
+            });
+          }
+        }
+      });
   }
 }

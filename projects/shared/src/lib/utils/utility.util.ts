@@ -111,7 +111,6 @@ export function createUrlFromObject(object: Record<string, any>, baseUrl: string
 
 export function deCodeToken(): IDecodeTokenKey | null{
   const token = getLocalStorageItem('token') as string;
-  console.log(token)
   if (!token) return null;
 
   try {

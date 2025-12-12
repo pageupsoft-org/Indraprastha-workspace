@@ -13,21 +13,28 @@ import {
   EToastType,
   getDefaultConfirmationModalData,
   httpDelete,
-  httpGet,
-  httpPost,
   IRGeneric,
   Loader,
   setLocalStorageItem,
   ToastService,
 } from '@shared';
 import { CommonModule, CurrencyPipe } from '@angular/common';
-import { ICartFormData } from '../../pages/product-detail/product-detail.model';
-import { Router} from '@angular/router';
-import { CartUpdateOperation, appRoutes, UtilityService, CartService, LocalStorageEnum } from '@website/core';
+import { Router } from '@angular/router';
+import {
+  CartUpdateOperation,
+  appRoutes,
+  UtilityService,
+  CartService,
+  LocalStorageEnum,
+} from '@website/core';
+import { ProductCardSizeEdit } from '../product-card-size-edit/product-card-size-edit';
+import { IProductCardSizeDT } from '../product-card-size-edit/product-card-size-edit.model';
+import { IRCartRoot } from './shopping-cart.model';
+import { MatDialog } from '@angular/material/dialog';
 
 @Component({
   selector: 'app-shopping-cart',
-  imports: [Loader, CurrencyPipe, CommonModule],
+  imports: [Loader, CurrencyPipe, CommonModule, ProductCardSizeEdit],
   templateUrl: './shopping-cart.html',
   styleUrl: './shopping-cart.scss',
 })
@@ -36,16 +43,15 @@ export class ShoppingCart {
   cartOverlay = viewChild<ElementRef>('cartOverlay');
 
   public showLoader: WritableSignal<boolean> = signal(false);
-  private objCOnfirmationUtil: ConfirmationUtil = new ConfirmationUtil();
   public CartUpdateOperation = CartUpdateOperation;
 
   public readonly homeRoute = appRoutes.HOME;
 
   constructor(
     private utilService: UtilityService,
-    private toastService: ToastService,
     public cartService: CartService,
-    private router: Router
+    private router: Router,
+    public matDialog: MatDialog
   ) {}
 
   public openCart() {
@@ -60,78 +66,9 @@ export class ShoppingCart {
     this.cartOverlay()?.nativeElement.classList.add('hidden');
     // this.cartService.cartData.set([]);
   }
+
   public alterQuantityCnt(operation: CartUpdateOperation, index: number) {
-    const cart = this.cartService.cartData();
-    const item = cart[index];
-
-    if (!item) return;
-
-    // ❌ avoid decreasing when qty is already 1
-    if (operation === CartUpdateOperation.decrease && item.cartQuantity === 1) {
-      return;
-    }
-
-    this.cartService.cartData()[index]._isDisable = true;
-    const newQty =
-      operation === CartUpdateOperation.increase ? item.cartQuantity + 1 : item.cartQuantity - 1; // this will now be >= 1 always
-
-    const payload: ICartFormData = {
-      variantId: item.cartVariant?.variantId ?? null,
-      stockId: item.stockId,
-      quantity: newQty,
-    };
-
-    // Make API call FIRST
-    this.updateCartProductQuantity(payload, index, operation);
-  }
-
-  private updateServiceVariable(data: ICartFormData, index: number) {
-    this.cartService.cartData.update((cart) => {
-      const updated = [...cart];
-
-      if (data.quantity === 0) {
-        // remove item from cart
-        updated.splice(index, 1);
-        return updated;
-      }
-
-      const item = { ...updated[index] };
-      item.cartQuantity = data.quantity ?? 0;
-      updated[index] = item;
-
-      return updated;
-    });
-
-    if (!this.utilService.isUserLoggedIn()) {
-      setLocalStorageItem(LocalStorageEnum.cartList, this.cartService.cartData());
-    }
-  }
-
-  public updateCartProductQuantity(
-    data: ICartFormData,
-    index: number,
-    operation: CartUpdateOperation
-  ) {
-    if (!this.utilService.isUserLoggedIn()) {
-      this.updateServiceVariable(data, index);
-      this.cartService.cartData()[index]._isDisable = false;
-      return;
-    }
-
-    httpPost<IRGeneric<number>, ICartFormData>(ApiRoutes.CART.POST, data).subscribe({
-      next: (res) => {
-        if (!res?.data) return; // do nothing on failure
-
-        // SUCCESS → Now update state
-        this.updateServiceVariable(data, index);
-        this.cartService.cartData()[index]._isDisable = false;
-      },
-
-      error: () => {
-        // On error: do nothing, don't update UI
-        this.cartService.cartData()[index]._isDisable = false;
-      },
-    });
+    this.cartService.alterQuantityCnt(operation, index);
   }
 
   private getData() {
@@ -140,52 +77,77 @@ export class ShoppingCart {
       this.showLoader.set(false);
     });
   }
+  public getDataForCard(index: number): IProductCardSizeDT {
+    const data: IRCartRoot = this.cartService.cartData()[index];
 
-  public routeToHome(){
+    return {
+      imageUrl: data.productURL,
+      name: data.name,
+      mrp: data.mrp,
+      color: data.color?.[0] ?? '',
+      qty: data.cartQuantity,
+      stock: {
+        id: data.stockId,
+        name: data.size,
+      },
+
+      variant: data.cartVariant
+        ? {
+            id: data.cartVariant.variantId,
+            name: data.cartVariant.name,
+            mrp: data.cartVariant.mrp,
+          }
+        : undefined,
+
+      isShowDelete: true,
+    };
+  }
+
+  public routeToHome() {
     this.hideCart();
     this.router.navigate([appRoutes.HOME]);
   }
-
-  public routeToCheckout(){
+  public routeToCheckout() {
     this.hideCart();
     this.router.navigate([appRoutes.CHECKOUT]);
   }
 
   public removeItemFromCart(cartId: number, index: number) {
-    this.objCOnfirmationUtil
-      .getConfirmation(
-        getDefaultConfirmationModalData('Remove item', 'Are you sure you want to remove this item?')
-      )
-      .then((res: boolean) => {
-        if (res) {
-          if (this.utilService.isUserLoggedIn()) {
-            httpDelete<IRGeneric<boolean>>(ApiRoutes.CART.DELETE_ITEM_FROM_CART(cartId)).subscribe({
-              next: (res) => {
-                if (res?.data) {
-                  this.cartService.cartData.update((currentCart) =>
-                    currentCart.filter((item) => item.cartId !== cartId)
-                  );
+    this.cartService.removeItemFromCart(cartId, index);
+    // this.objCOnfirmationUtil
+    //   .getConfirmation(
+    //     getDefaultConfirmationModalData('Remove item', 'Are you sure you want to remove this item?')
+    //   )
+    //   .then((res: boolean) => {
+    //     if (res) {
+    //       if (this.utilService.isUserLoggedIn()) {
+    //         httpDelete<IRGeneric<boolean>>(ApiRoutes.CART.DELETE_ITEM_FROM_CART(cartId)).subscribe({
+    //           next: (res) => {
+    //             if (res?.data) {
+    //               this.cartService.cartData.update((currentCart) =>
+    //                 currentCart.filter((item) => item.cartId !== cartId)
+    //               );
 
-                  this.toastService.show({
-                    message: 'Product removed',
-                    type: EToastType.success,
-                    duration: 2000,
-                  });
-                }
-              },
-            });
-          } else {
-            this.cartService.cartData.update((currentCart) =>
-              currentCart.filter((item, prodIndex) => prodIndex !== index)
-            );
-            setLocalStorageItem(LocalStorageEnum.cartList, this.cartService.cartData());
-            this.toastService.show({
-              message: 'Product removed',
-              type: EToastType.success,
-              duration: 2000,
-            });
-          }
-        }
-      });
+    //               this.toastService.show({
+    //                 message: 'Product removed',
+    //                 type: EToastType.success,
+    //                 duration: 2000,
+    //               });
+    //             }
+    //           },
+    //         });
+    //       } else {
+    //         this.cartService.cartData.update((currentCart) =>
+    //           currentCart.filter((item, prodIndex) => prodIndex !== index)
+    //         );
+    //         setLocalStorageItem(LocalStorageEnum.cartList, this.cartService.cartData());
+    //         this.toastService.show({
+    //           message: 'Product removed',
+    //           type: EToastType.success,
+    //           duration: 2000,
+    //         });
+    //       }
+    //     }
+    //   });
   }
 }

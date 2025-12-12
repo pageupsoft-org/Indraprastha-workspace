@@ -30,6 +30,7 @@ import { Product } from '../../pages/home/product-slider/dashboard.response';
 export class ProductDetailBase {
   public isShowloader: WritableSignal<boolean> = signal(false);
   public isBtnLoader: WritableSignal<boolean> = signal(false);
+  public isProductValid: WritableSignal<boolean> = signal(true);
   public cartForm: FormGroup<ICartForm> = new FormGroup<ICartForm>({
     stockId: new FormControl(null),
     variantStockId: new FormControl(null),
@@ -49,8 +50,8 @@ export class ProductDetailBase {
   };
 
   public utilService: UtilityService = inject(UtilityService);
-  private toastService: ToastService = inject(ToastService);
-  private cartService: CartService = inject(CartService);
+  public toastService: ToastService = inject(ToastService);
+  public cartService: CartService = inject(CartService);
 
   public getProductDetail(productId: number) {
     this.isShowloader.set(true);
@@ -135,6 +136,7 @@ export class ProductDetailBase {
           }
         } else {
           // this.productDetail.set(initializeIRProductDetailRoot());
+          this.isProductValid.update(() => false);
         }
         this.isShowloader.set(false);
       },

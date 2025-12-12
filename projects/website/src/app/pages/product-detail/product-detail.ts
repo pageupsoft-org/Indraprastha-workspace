@@ -14,7 +14,14 @@ import { ActivatedRoute, Params, Router } from '@angular/router';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { CommonModule } from '@angular/common';
 import { NgxSkeletonLoaderModule } from 'ngx-skeleton-loader';
-import { appRoutes, CartUpdateOperation, IRProductDetailRoot, ProductDetailBase, WishlistService } from '@website/core';
+import {
+  appRoutes,
+  CartUpdateOperation,
+  IRProductDetailRoot,
+  ProductDetailBase,
+  WishlistService,
+} from '@website/core';
+import { IQueryToCheckout } from './product-detail.model';
 
 @Component({
   selector: 'app-product-detail',
@@ -41,7 +48,8 @@ export class ProductDetail extends ProductDetailBase implements OnInit {
 
   constructor(
     private activatedRoute: ActivatedRoute,
-    private platformService: PlatformService, private wishlistService: WishlistService,
+    private platformService: PlatformService,
+    private wishlistService: WishlistService,
     private router: Router
   ) {
     super();
@@ -80,9 +88,29 @@ export class ProductDetail extends ProductDetailBase implements OnInit {
 
   public buyNow() {
     if (this.utilService.isUserLoggedIn()) {
+      const payload: IQueryToCheckout = {
+        id: this.productDetail().id,
+        name: this.productDetail().name,
+        price: this.productDetail().mrp,
+        size:
+          this.stockSizeArrayWithIds.find(
+            (val) => val.stockId == this.cartForm.controls.stockId.value
+          )?.value ?? '',
+        qty: this.cartForm.controls.quantity.value ?? 0,
+
+        stockId: this.cartForm.controls.stockId.value ?? 0,
+        variantStockId: this.cartForm.controls.variantStockId.value ?? 0,
+        variantName: this.productDetail().variants.length
+          ? this.productDetail().variants.find(
+              (pv) => pv.id == this.cartForm.controls.variantStockId.value
+            )?.name ?? ''
+          : '',
+      };
+
       this.router.navigate([appRoutes.CHECKOUT], {
         queryParams: {
           buy_now: true,
+          data: JSON.stringify(payload),
         },
       });
     } else {
@@ -100,8 +128,12 @@ export class ProductDetail extends ProductDetailBase implements OnInit {
     }
   }
 
-  public toggleWishList(event: any){
-    this.wishlistService.toggleWishList<IRProductDetailRoot>(event, this.productDetail(), 'isWishList', 'id');
+  public toggleWishList(event: any) {
+    this.wishlistService.toggleWishList<IRProductDetailRoot>(
+      event,
+      this.productDetail(),
+      'isWishList',
+      'id'
+    );
   }
-  
 }

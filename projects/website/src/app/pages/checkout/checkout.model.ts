@@ -114,7 +114,8 @@ export interface Product {
   cartQuantity: number;
   cartId: number;
   productId: number;
-  cartVariant: CartVariant;
+  cartVariant?: CartVariant;
+  _isDisable: boolean;
 }
 
 export interface CartVariant {

@@ -75,6 +75,8 @@ export class ProductUpsert extends Base implements OnInit {
     defaultOpen: false,
   };
 
+  public ImageSizeConst = ImageSizeConst;
+
   constructor(private activatedRoute: ActivatedRoute, public router: Router) {
     super();
   }

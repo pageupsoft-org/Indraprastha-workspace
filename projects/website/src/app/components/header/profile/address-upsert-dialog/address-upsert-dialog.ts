@@ -65,7 +65,7 @@ export class AddressUpsertDialog implements OnInit {
                   duration: 3000,
                   type: EToastType.success,
                 });
-                this.close();
+                this.matDialogRef.close({saved: true});
               }
             }
           } else {
@@ -103,9 +103,7 @@ export class AddressUpsertDialog implements OnInit {
   }
 
   public editAddress(id: number) {
-    console.log(this._utilityService.AddressData());
     const val = this._utilityService.AddressData().find((v) => v.id === id);
-    console.log(val);
     if (!val) return;
 
     // Patch all fields (or patch partial)

@@ -6,6 +6,7 @@ import { AppLoadingButton } from '@shared';
 import { ProductDetailBase, CartUpdateOperation, RNewArrivals, appRoutes } from '@website/core';
 import { Router } from '@angular/router';
 import { NgxSkeletonLoaderModule } from 'ngx-skeleton-loader';
+import { IProductDetailDT } from './product-detail-dialog.model';
 
 @Component({
   selector: 'app-product-detail-dialog',
@@ -20,9 +21,7 @@ export class ProductDetailDialog extends ProductDetailBase implements OnInit {
   constructor(
     private dialogRef: MatDialogRef<ProductDetailDialog>,
     @Inject(MAT_DIALOG_DATA)
-    public data: {
-      productId: number;
-    },
+    public data: IProductDetailDT,
     private router: Router
   ) {
     super();
