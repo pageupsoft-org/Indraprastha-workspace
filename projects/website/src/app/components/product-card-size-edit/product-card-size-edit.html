@@ -20,7 +20,7 @@
       class="flex items-center justify-center gap-2 mt-2 border border-gray-300 rounded hover:bg-gray-100 w-[100px]"
     >
       <button
-        [disabled]="prod().qty"
+        [disabled]="prod().qty == 1"
         class="w-6 h-6 flex items-center justify-center cursor-pointer"
         [ngClass]="{ 'cursor-not-allowed!': prod().qty == 1 }"
         (click)="alterQuantityCnt(CartUpdateOperation.decrease)"

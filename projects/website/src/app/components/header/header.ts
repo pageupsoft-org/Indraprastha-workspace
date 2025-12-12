@@ -108,6 +108,9 @@ export class Header implements OnInit {
         if (cleanUrl === appRoutes.CHECKOUT) {
           this.isCheckoutPage.update(() => true);
         }
+        else{
+          this.isCheckoutPage.update(() => false);
+        }
       });
   }
 

@@ -243,7 +243,7 @@ export class Checkout extends ProductDetailBase implements OnInit {
 
         // increase or decrease
         const newQty =
-          operation === CartUpdateOperation.increase ? currentQty + 1 : Math.max(1, currentQty - 1); // never go below 1
+          operation === CartUpdateOperation.increase ? currentQty + 1 : currentQty - 1; // never go below 1
 
         products[0] = {
           ...products[0],
