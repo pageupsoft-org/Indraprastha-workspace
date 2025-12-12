@@ -71,7 +71,7 @@
           />
         </div>
         <div class="flex-1">
-          <h3 class="font-medium text-gray-800">{{ prod.name }}</h3>
+          <h3 class="font-semibold text-lg text-gray-800">{{ prod.name }}</h3>
           @if(prod.cartVariant && prod.cartVariant.variantId){
           <p class="text-sm text-gray-500">
             {{ prod.cartVariant.name }}
@@ -129,18 +129,18 @@
         </div>
 
         <div class="flex-1">
-          <p class="font-medium text-gray-800 text-end">
+          <p class="font-semibold text-lg text-gray-800 text-end">
             {{ prod.mrp | currency : 'INR' : 'symbol' : '1.0-0' : 'en-IN' }}
           </p>
           @if(prod?.cartVariant && prod?.cartVariant?.variantId){
-          <p class="font-medium text-gray-800 text-end">
+          <p class="font-semibold text-lg text-gray-800 text-end">
             {{ prod?.cartVariant?.mrp | currency : 'INR' : 'symbol' : '1.0-0' : 'en-IN' }}
           </p>
           }
 
           <hr />
 
-          <p class="font-medium text-gray-800 text-end">
+          <p class="font-semibold text-lg text-gray-800 text-end">
             @let sum = (prod.mrp * prod.cartQuantity) +( ((prod?.cartVariant?.mrp) ?
             (prod?.cartVariant?.mrp) : 0) ?? 0);
             {{ sum | currency : 'INR' : 'symbol' : '1.0-0' : 'en-IN' }}
