@@ -70,6 +70,10 @@ export class ProductDetail extends ProductDetailBase implements OnInit {
     return item.stockId;
   }
 
+  public routeToHome(){
+    this.router.navigate([appRoutes.HOME]);
+  }
+
   public alterQuantityCnt(operation: CartUpdateOperation) {
     const quantity = this.cartForm.controls.quantity.value ?? 0;
 

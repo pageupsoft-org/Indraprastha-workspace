@@ -30,7 +30,8 @@ import { Product } from '../../pages/home/product-slider/dashboard.response';
 export class ProductDetailBase {
   public isShowloader: WritableSignal<boolean> = signal(false);
   public isBtnLoader: WritableSignal<boolean> = signal(false);
-  public isProductValid: WritableSignal<boolean> = signal(true);
+  // public isProductValid: WritableSignal<boolean> = signal(true);
+  public isProductNotFound: WritableSignal<boolean> = signal(false);
   public cartForm: FormGroup<ICartForm> = new FormGroup<ICartForm>({
     stockId: new FormControl(null),
     variantStockId: new FormControl(null),
@@ -135,8 +136,8 @@ export class ProductDetailBase {
             );
           }
         } else {
-          // this.productDetail.set(initializeIRProductDetailRoot());
-          this.isProductValid.update(() => false);
+          this.productDetail.set(initializeIRProductDetailRoot()); 
+          this.isProductNotFound.update(() => true);         
         }
         this.isShowloader.set(false);
       },

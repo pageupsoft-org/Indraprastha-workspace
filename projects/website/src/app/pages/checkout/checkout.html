@@ -1,3 +1,68 @@
+@if(isShowloader()){
+<div class="bg-[#f8f8f8] grid grid-cols-12 gap-6 p-8 pt-0">
+  <!-- LEFT SIDE -->
+  <div class="col-span-6 p-8 space-y-6">
+    <!-- Address Card -->
+    <div class="bg-white p-5 rounded-2xl border border-gray-100 space-y-3">
+      <ngx-skeleton-loader appearance="line" [theme]="{ height: '20px', width: '60%' }" />
+      <ngx-skeleton-loader appearance="line" [theme]="{ height: '14px', width: '90%' }" />
+      <div class="border-t border-gray-200 my-4"></div>
+      <ngx-skeleton-loader appearance="line" [theme]="{ height: '16px', width: '40%' }" />
+    </div>
+
+    <!-- Payment Card -->
+    <div class="bg-white p-5 rounded-2xl border border-gray-100 space-y-4">
+      <ngx-skeleton-loader appearance="line" [theme]="{ height: '20px', width: '30%' }" />
+      <ngx-skeleton-loader appearance="line" [theme]="{ height: '14px', width: '70%' }" />
+
+      <div class="border border-gray-300 rounded-md p-4 space-y-4">
+        <ngx-skeleton-loader appearance="line" [theme]="{ height: '16px', width: '40%' }" />
+        <ngx-skeleton-loader
+          appearance="square"
+          [theme]="{ height: '120px', width: '100%', borderRadius: '8px' }"
+        />
+      </div>
+    </div>
+
+    <!-- Pay Now Button -->
+    <ngx-skeleton-loader
+      appearance="square"
+      [theme]="{ height: '56px', width: '100%', borderRadius: '8px' }"
+    />
+  </div>
+
+  <!-- RIGHT SIDE -->
+  <div class="col-span-6 bg-white mt-8 rounded-2xl border border-gray-100 p-6 space-y-6">
+    <!-- Product Skeleton -->
+    @for (i of [1,2]; track i) {
+    <div class="flex items-start gap-4">
+      <ngx-skeleton-loader
+        appearance="square"
+        [theme]="{ height: '96px', width: '80px', borderRadius: '8px' }"
+      />
+
+      <div class="flex-1 space-y-2">
+        <ngx-skeleton-loader appearance="line" [theme]="{ height: '16px', width: '70%' }" />
+        <ngx-skeleton-loader appearance="line" [theme]="{ height: '14px', width: '50%' }" />
+        <ngx-skeleton-loader appearance="line" [theme]="{ height: '14px', width: '40%' }" />
+      </div>
+
+      <ngx-skeleton-loader appearance="line" [theme]="{ height: '16px', width: '60px' }" />
+    </div>
+    }
+
+    <!-- Total -->
+    <ngx-skeleton-loader
+      appearance="square"
+      [theme]="{
+        height: '64px',
+        width: '100%',
+        borderRadius: '12px'
+      }"
+    />
+  </div>
+</div>
+} @else if(isProductValid()){
 <div class="bg-[#f8f8f8] grid grid-cols-12 gap-6 p-8 pt-0">
   <div class="col-span-6 p-8">
     @if(utilService.AddressData().length){
@@ -265,7 +330,9 @@
       </div>
 
       <!-- Total Button -->
-      <div class="flex justify-between items-center mt-4 border-t border-gray-200 pt-4 bg-[#5a1d1c] text-white px-6 py-4 rounded-lg">
+      <div
+        class="flex justify-between items-center mt-4 border-t border-gray-200 pt-4 bg-[#5a1d1c] text-white px-6 py-4 rounded-lg"
+      >
         <span class="text-lg font-semibold">Total</span>
         <span class="text-xl font-medium">{{
           total() | currency : 'INR' : 'symbol' : '1.0-0' : 'en-IN'
@@ -274,3 +341,23 @@
     </div>
   </div>
 </div>
+} @else {
+<div class="flex flex-col items-center justify-center py-16 text-center">
+  <div class="bg-red-50 border border-red-200 rounded-2xl p-6 max-w-md">
+    <div class="text-red-600 text-4xl mb-3">⚠️</div>
+
+    <h2 class="text-lg font-semibold text-red-700 mb-2">Invalid Product</h2>
+
+    <p class="text-sm text-red-600 mb-4">
+      The product or variant you are trying to access is not available.
+    </p>
+
+    <a
+      class="px-5 py-2 rounded-xl bg-red-600 text-white text-sm font-medium hover:bg-red-700 transition cursor-pointer"
+      routerLink="/home"
+    >
+      Go to Home
+    </a>
+  </div>
+</div>
+}

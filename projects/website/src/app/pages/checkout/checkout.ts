@@ -1,12 +1,4 @@
-import {
-  Component,
-  computed,
-  effect,
-  numberAttribute,
-  OnInit,
-  signal,
-  WritableSignal,
-} from '@angular/core';
+import { Component, computed, effect, OnInit, signal, WritableSignal } from '@angular/core';
 import { FormControl, FormGroup, ReactiveFormsModule } from '@angular/forms';
 import {
   ICheckoutForm,
@@ -17,7 +9,7 @@ import {
 } from './checkout.model';
 import { ApiRoutes, EToastType, httpGet, IRGeneric, PlatformService } from '@shared';
 import { CommonModule } from '@angular/common';
-import { ActivatedRoute } from '@angular/router';
+import { ActivatedRoute, RouterModule } from '@angular/router';
 import { CartService, CartUpdateOperation, ProductDetailBase } from '@website/core';
 import {
   initializeIQueryToCheckout,
@@ -27,119 +19,115 @@ import { AddressUpsertDialog } from '../../components/header/profile/address-ups
 import { MatDialog } from '@angular/material/dialog';
 import { ProductCardSizeEdit } from '../../components/product-card-size-edit/product-card-size-edit';
 import { IProductCardSizeDT } from '../../components/product-card-size-edit/product-card-size-edit.model';
+import { finalize } from 'rxjs';
+import { NgxSkeletonLoaderModule } from 'ngx-skeleton-loader';
 
 @Component({
   selector: 'app-checkout',
-  imports: [ReactiveFormsModule, CommonModule, ProductCardSizeEdit],
+  imports: [ReactiveFormsModule, CommonModule, RouterModule, ProductCardSizeEdit, NgxSkeletonLoaderModule],
   templateUrl: './checkout.html',
   styleUrl: './checkout.scss',
 })
 export class Checkout extends ProductDetailBase implements OnInit {
   public CartUpdateOperation = CartUpdateOperation;
+
   public checkoutForm: FormGroup<ICheckoutForm> = initializeICheckoutForm();
   public checkoutData: WritableSignal<IResponseCheckout> = signal(initializeResponseCheckout());
 
-  public isRedirectedFromBuyNow: WritableSignal<boolean> = signal(false);
-  public isViewAllAddress: WritableSignal<boolean> = signal(false);
-  public selectedAddress: FormControl<number | null> = new FormControl<number>(0);
+  public isRedirectedFromBuyNow = signal(false);
+  public isViewAllAddress = signal(false);
+
+  public selectedAddress = new FormControl<number | null>(0);
+
   public productDataFromQuery: WritableSignal<IQueryToCheckout> = signal(
     initializeIQueryToCheckout()
   );
 
-  public invalidProduct = effect(() => {
-    this.isProductValid();
-    if (!this.isProductValid()) {
-      this.toastService.show({
-        message: 'Invalid Product',
-        type: EToastType.error,
-        duration: 3000,
-      });
+  /* ---------------------------------------------
+   * ✅ PRODUCT VALIDATION (PURE COMPUTED)
+   * --------------------------------------------- */
+  public isProductValid = computed(() => {
+    // 🔴 product itself not found
+    if (this.isProductNotFound()) return false;
+
+    const pd = this.productDetail();
+    const query = this.productDataFromQuery();
+
+    // ⏳ wait for API response
+    if (!pd?.id) return true;
+
+    // 📦 stock validation
+    const stockValid = pd.stocks.some((s) => s.id === query.stockId);
+    if (!stockValid) return false;
+
+    // 🎯 variant validation (optional)
+    if (query.variantStockId) {
+      return pd.variants.some((v) => v.stocks.id === query.variantStockId);
     }
+
+    return true;
   });
 
+  /* ---------------------------------------------
+   * ✅ TOTAL AMOUNT
+   * --------------------------------------------- */
   public total = computed(() => {
     return this.checkoutData().products.reduce((sum, pd) => {
       sum += pd.mrp;
-
-      if (pd.cartVariant?.mrp) {
-        sum += pd.cartVariant.mrp;
-      }
-
+      if (pd.cartVariant?.mrp) sum += pd.cartVariant.mrp;
       return sum;
     }, 0);
   });
 
-  // this will only execute if user is redirected from buy now
+  /* ---------------------------------------------
+   * ✅ BUY NOW PRODUCT SETUP (SAFE EFFECT)
+   * --------------------------------------------- */
   private productDetailEffectChange = effect(() => {
-    this.productDetail();
+    const pd = this.productDetail();
+    const query = this.productDataFromQuery();
 
-    if (this.productDetail().id) {
-      this.checkoutData.update(() => ({
-        totalAmount: this.productDetail().mrp,
-        shippingAddresses: this.utilService.AddressData().map((val) => val as any),
-        products: [
-          {
-            name: this.productDetail().name,
-            color: this.productDetail().color,
-            mrp: this.productDetail().mrp,
-            gender: this.productDetail().gender,
-            productURL: this.productDetail().productURL,
-            _isDisable: false,
+    if (!pd?.id) return;
+    if (!this.isRedirectedFromBuyNow()) return;
+    if (!this.isProductValid()) return;
 
-            // Variant-related values from checkout item
-            stockId: this.productDataFromQuery().stockId,
-            size: this.productDataFromQuery().size,
-            stockQuantity: this.productDataFromQuery().qty,
-            cartQuantity: this.productDataFromQuery().qty ?? 0,
-            cartId: 0,
-            productId: this.productDetail().id,
-            cartVariant: {
-              name: '',
-              mrp: 0,
-              variantURL: '',
-              stockId: 0,
-              stockQuantity: 0,
-              cartQuantity: 0,
-              variantId: 0,
-            },
-          },
-        ],
-      }));
+    const product: Product = {
+      name: pd.name,
+      color: pd.color,
+      mrp: pd.mrp,
+      gender: pd.gender,
+      productURL: pd.productURL,
+      _isDisable: false,
 
-      this.isProductValid.update(() => true);
+      stockId: query.stockId,
+      size: query.size,
+      stockQuantity: query.qty,
+      cartQuantity: query.qty ?? 1,
+      cartId: 0,
+      productId: pd.id,
+      cartVariant: undefined,
+    };
 
-      this.isProductValid.update(() =>
-        this.productDetail().stocks.some((v) => v.id == this.productDataFromQuery().stockId)
-      );
+    if (query.variantStockId) {
+      const variant = pd.variants.find((v) => v.stocks.id === query.variantStockId);
 
-      if (this.productDataFromQuery().variantStockId) {
-        this.isProductValid.update(() =>
-          this.productDetail().variants.some(
-            (v) => v.stocks.id == this.productDataFromQuery().variantStockId
-          )
-        );
-
-        const variant = this.productDetail().variants.find(
-          (pv) => pv.stocks.id == this.productDataFromQuery().variantStockId
-        );
-
-        this.checkoutData.update((val) => ({
-          ...val,
-          products: val.products.map((pVal) => ({
-            ...pVal,
-            cartVariant: {
-              name: variant?.name ?? '',
-              mrp: variant?.mrp ?? 0,
-              variantURL: '',
-              stockId: this.productDataFromQuery().variantStockId,
-              stockQuantity: variant?.stocks.quantity ?? 0,
-              cartQuantity: 0,
-              variantId: variant?.id ?? 0,
-            },
-          })),
-        }));
+      if (variant) {
+        product.cartVariant = {
+          name: variant.name,
+          mrp: variant.mrp,
+          variantURL: '',
+          stockId: query.variantStockId,
+          stockQuantity: variant.stocks.quantity,
+          cartQuantity: 0,
+          variantId: variant.id,
+        };
       }
     }
+
+    this.checkoutData.set({
+      totalAmount: pd.mrp,
+      shippingAddresses: this.utilService.AddressData().map((v) => v as any),
+      products: [product],
+    });
   });
 
   constructor(
@@ -148,52 +136,24 @@ export class Checkout extends ProductDetailBase implements OnInit {
     private platformService: PlatformService
   ) {
     super();
-    let buyNow = activatedRoute.snapshot.queryParams['buy_now'];
+
+    const buyNow = activatedRoute.snapshot.queryParams['buy_now'];
     let data = activatedRoute.snapshot.queryParams['data'];
+
     try {
       if (data) {
         data = JSON.parse(data);
-        this.productDataFromQuery.update(() => data);
+        this.productDataFromQuery.set(data);
       }
-    } catch (err) {
-      console.log(err);
-    }
+    } catch {}
 
-    if (buyNow && buyNow == 'true' && data) {
-      if (this.productDataFromQuery().id && this.productDataFromQuery().stockId) {
+    if (buyNow === 'true' && data) {
+      if (this.productDataFromQuery().id) {
         this.getProductDetail(this.productDataFromQuery().id);
-      } else {
-        this.isProductValid.update(() => false);
       }
-
-      this.isRedirectedFromBuyNow.update(() => true);
+      this.isRedirectedFromBuyNow.set(true);
     } else {
       this.getCheckoutData();
-      this.cartService.eventCartDataUpdated.subscribe(
-        (val: { operation: CartUpdateOperation; index: number }) => {
-          if (val.operation == CartUpdateOperation.delete) {
-            this.checkoutData.update((data) => ({
-              ...data,
-              products: data.products.filter((_, index) => index != val.index),
-            }));
-
-            return;
-          }
-
-          this.checkoutData.update((data) => ({
-            ...data,
-            products: data.products.map((prod, index) => ({
-              ...prod,
-              cartQuantity:
-                index == val.index
-                  ? val.operation == CartUpdateOperation.increase
-                    ? prod.cartQuantity + 1
-                    : prod.cartQuantity - 1
-                  : prod.cartQuantity,
-            })),
-          }));
-        }
-      );
     }
   }
 
@@ -203,14 +163,11 @@ export class Checkout extends ProductDetailBase implements OnInit {
     }
   }
 
-  public removeItemFromCart(cartId: number, index: number){
-    this.cartService.removeItemFromCart(cartId, index);
-  }
-
-  
-
+  /* ---------------------------------------------
+   * ✅ UI HELPERS
+   * --------------------------------------------- */
   public getDataForCard(index: number): IProductCardSizeDT {
-    const data: Product = this.checkoutData().products[index];
+    const data = this.checkoutData().products[index];
 
     return {
       imageUrl: data.productURL,
@@ -218,11 +175,7 @@ export class Checkout extends ProductDetailBase implements OnInit {
       mrp: data.mrp,
       color: data.color?.[0] ?? '',
       qty: data.cartQuantity,
-      stock: {
-        id: data.stockId,
-        name: data.size,
-      },
-
+      stock: { id: data.stockId, name: data.size },
       variant: data.cartVariant
         ? {
             id: data.cartVariant.variantId,
@@ -230,33 +183,9 @@ export class Checkout extends ProductDetailBase implements OnInit {
             mrp: data.cartVariant.mrp,
           }
         : undefined,
-
-      isShowDelete: !this.isRedirectedFromBuyNow()
+      isShowDelete: !this.isRedirectedFromBuyNow(),
     };
   }
-  public alterQuantityCnt(operation: CartUpdateOperation, index: number) {
-    if (this.isRedirectedFromBuyNow()) {
-      this.checkoutData.update((state) => {
-        const products = [...state.products];
-
-        const currentQty = products[0].cartQuantity ?? 1;
-
-        // increase or decrease
-        const newQty =
-          operation === CartUpdateOperation.increase ? currentQty + 1 : currentQty - 1; // never go below 1
-
-        products[0] = {
-          ...products[0],
-          cartQuantity: newQty,
-        };
-
-        return { ...state, products };
-      });
-    } else {
-      this.cartService.alterQuantityCnt(operation, index);
-    }
-  }
-
   public upsertAddress(id: number = 0) {
     this.matdialog
       .open(AddressUpsertDialog, {
@@ -273,11 +202,6 @@ export class Checkout extends ProductDetailBase implements OnInit {
         }
       });
   }
-
-  public toggleViewAllAddress() {
-    this.isViewAllAddress.update((val) => !val);
-  }
-
   public updatedSelectedAddress(index: number) {
     this.utilService.AddressData.update((addresses) => {
       if (!addresses || addresses.length === 0) return addresses;
@@ -294,30 +218,48 @@ export class Checkout extends ProductDetailBase implements OnInit {
       return updated;
     });
   }
+  public alterQuantityCnt(operation: CartUpdateOperation, index: number) {
+    if (this.isRedirectedFromBuyNow()) {
+      this.checkoutData.update((state) => {
+        const products = [...state.products];
+        const qty = products[0].cartQuantity ?? 1;
+        products[0] = {
+          ...products[0],
+          cartQuantity: operation === CartUpdateOperation.increase ? qty + 1 : qty - 1,
+        };
+        return { ...state, products };
+      });
+    } else {
+      this.cartService.alterQuantityCnt(operation, index);
+    }
+  }
+
+  public toggleViewAllAddress() {
+    this.isViewAllAddress.update((v) => !v);
+  }
 
   public onPaymentSumit() {
-    console.log(this.checkoutData());
-
-    // console.log(this.checkoutForm.value);
     if (this.checkoutForm.valid) {
-      // proceed to payment
+      // proceed
     } else {
       this.checkoutForm.markAllAsTouched();
     }
   }
 
+  public removeItemFromCart(cartId: number, index: number) {
+    this.cartService.removeItemFromCart(cartId, index);
+  }
+
   private getCheckoutData() {
-    httpGet<IRGeneric<IResponseCheckout>>(ApiRoutes.CART.CHECKOUT).subscribe({
-      next: (res) => {
-        if (res?.data) {
-          this.checkoutData.set(res.data);
-        } else {
-          this.checkoutData.set(initializeResponseCheckout());
-        }
-      },
-      error: () => {
-        this.checkoutData.set(initializeResponseCheckout());
-      },
-    });
+    this.isShowloader.set(true);
+
+    httpGet<IRGeneric<IResponseCheckout>>(ApiRoutes.CART.CHECKOUT)
+      .pipe(
+        finalize(() => this.isShowloader.set(false)) 
+      )
+      .subscribe({
+        next: (res) => this.checkoutData.set(res?.data ?? initializeResponseCheckout()),
+        error: () => this.checkoutData.set(initializeResponseCheckout()),
+      });
   }
 }
