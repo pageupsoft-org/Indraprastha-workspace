@@ -1,7 +1,7 @@
 import { Component, inject, OnInit, signal, WritableSignal } from '@angular/core';
 import { FormGroup, ReactiveFormsModule } from '@angular/forms';
 import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
-import { GenericCancelButton, AppLoadingButton, ContactValidators } from '@shared';
+import { GenericCancelButton, AppLoadingButton, NumberOnlyValidators } from '@shared';
 import {
   IAddresseForm,
   IAddressPayload,
@@ -13,7 +13,7 @@ import { UtilityService } from '@website/core';
 
 @Component({
   selector: 'app-address-upsert-dialog',
-  imports: [GenericCancelButton, ReactiveFormsModule, ValidateControl, AppLoadingButton, ContactValidators],
+  imports: [GenericCancelButton, ReactiveFormsModule, ValidateControl, AppLoadingButton, NumberOnlyValidators],
   templateUrl: './address-upsert-dialog.html',
   styleUrl: './address-upsert-dialog.scss',
 })

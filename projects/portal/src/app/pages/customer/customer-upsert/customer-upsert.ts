@@ -4,13 +4,13 @@ import { Base } from '../../../core/base/base';
 import { IGenericResponse } from '../../../core/interface/response/genericResponse';
 import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
 import { CustomerList } from '../customer-list/customer-list';
-import { ApiRoutes, ContactValidators, ErrorHandler, EToastType, patternWithMessage, ToastService, ValidateControl } from '@shared';
+import { ApiRoutes, EToastType, NumberOnlyValidators, patternWithMessage, ToastService, ValidateControl } from '@shared';
 import { ICustomer, ICustomerForm } from '../customer.model';
 
 
 @Component({
   selector: 'app-customer-upsert',
-  imports: [ReactiveFormsModule, ValidateControl, ContactValidators],
+  imports: [ReactiveFormsModule, ValidateControl, NumberOnlyValidators],
   templateUrl: './customer-upsert.html',
   styleUrl: './customer-upsert.scss',
 })

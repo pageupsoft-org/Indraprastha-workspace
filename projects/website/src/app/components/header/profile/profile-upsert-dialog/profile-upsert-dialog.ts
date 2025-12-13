@@ -2,14 +2,14 @@ import { ChangeDetectorRef, Component, inject, OnInit } from '@angular/core';
 import { FormGroup, ReactiveFormsModule } from '@angular/forms';
 import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
 import { initializeProfileForm, IProfileForm, IProfilePayload, IProfileResponse } from './profile-upsert-dialog.models';
-import { ApiRoutes, ContactValidators, EToastType, httpGet, httpPost, IRGeneric, ToastService, ValidateControl } from '@shared';
+import { ApiRoutes, EToastType, httpPost, IRGeneric, ToastService, ValidateControl } from '@shared';
 import { UtilityService } from '@website/core';
 import { CommonModule } from '@angular/common';
 import { GenericSaveButton, GenericCancelButton, AppLoadingButton,  } from "@shared";
 
 @Component({
   selector: 'app-profile-upsert-dialog',
-  imports: [GenericCancelButton, AppLoadingButton, ValidateControl, ReactiveFormsModule, CommonModule, ContactValidators],
+  imports: [GenericCancelButton, AppLoadingButton, ValidateControl, ReactiveFormsModule, CommonModule],
   templateUrl: './profile-upsert-dialog.html',
   styleUrl: './profile-upsert-dialog.scss',
 })

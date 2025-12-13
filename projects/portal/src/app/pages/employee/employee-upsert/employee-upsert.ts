@@ -4,8 +4,7 @@ import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
 import { CommonModule } from '@angular/common';
 import { EmployeeList } from '../employee-list/employee-list';
 import { Base } from '../../../core/base/base';
-import { IGenericResponse } from '../../../core/interface/response/genericResponse';
-import { ApiRoutes, ContactValidators, ErrorHandler, EToastType, patternWithMessage, ToastService, ValidateControl } from '@shared';
+import { ApiRoutes, NumberOnlyValidators, patternWithMessage, ToastService, ValidateControl } from '@shared';
 import { IEmployee, IEmployeeForm } from '../employee.model';
 
 
@@ -16,7 +15,7 @@ import { IEmployee, IEmployeeForm } from '../employee.model';
     CommonModule,
     ReactiveFormsModule,
     ValidateControl,
-    ContactValidators
+    NumberOnlyValidators
   ],
   templateUrl: './employee-upsert.html',
   styleUrl: './employee-upsert.scss',

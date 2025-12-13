@@ -25,15 +25,19 @@
         type="text"
         placeholder="First Name"
         libValidateControl
-        [formControl]="addressForm.controls.firstName" minlength="3" maxlength="15"
-        class="flex-1 border border-gray-200 rounded-lg px-2 py-3 focus:outline-none focus:ring-2 focus:ring-blue-400 placeholder-gray-300"
+        [formControl]="addressForm.controls.firstName"
+        minlength="3"
+        maxlength="15"
+        class="flex-1 w-full border border-gray-200 rounded-lg px-2 py-3 focus:outline-none focus:ring-2 focus:ring-blue-400 placeholder-gray-300"
       />
       <input
         type="text"
         placeholder="Last Name"
         libValidateControl
-        [formControl]="addressForm.controls.lastName" minlength="3" maxlength="15"
-        class="flex-1 border border-gray-200 rounded-lg px-2 py-3 focus:outline-none focus:ring-2 focus:ring-blue-400 placeholder-gray-300"
+        [formControl]="addressForm.controls.lastName"
+        minlength="3"
+        maxlength="15"
+        class="flex-1 w-full border border-gray-200 rounded-lg px-2 py-3 focus:outline-none focus:ring-2 focus:ring-blue-400 placeholder-gray-300"
       />
     </div>
 
@@ -43,7 +47,8 @@
         type="text"
         placeholder="Address"
         libValidateControl
-        [formControl]="addressForm.controls.address"  maxlength="70"
+        [formControl]="addressForm.controls.address"
+        maxlength="70"
         class="w-full border border-gray-200 rounded-lg px-2 py-3 focus:outline-none focus:ring-2 focus:ring-blue-400 placeholder-gray-300"
       />
     </div>
@@ -53,7 +58,8 @@
       <input
         type="text"
         placeholder="Apartment, suite"
-        libValidateControl maxlength="70"
+        libValidateControl
+        maxlength="70"
         [formControl]="addressForm.controls.apartment"
         class="w-full border border-gray-200 rounded-lg px-2 py-3 focus:outline-none focus:ring-2 focus:ring-blue-400 placeholder-gray-300"
       />
@@ -63,32 +69,34 @@
     <div class="flex gap-4">
       <select
         libValidateControl
-        [formControl]="addressForm.controls.city"
-        class="flex-1 border border-gray-200 rounded-lg px-2 py-3 focus:outline-none focus:ring-2 focus:ring-blue-400 placeholder-gray-300"
-      >
-        <option [ngValue]="null" disabled selected>city</option>
-        @for (item of cities; track $index){
-        <option [ngValue]="item">{{ item }}</option>
-        }
-      </select>
-
-      <select
-        libValidateControl
         [formControl]="addressForm.controls.state"
         (change)="onStateChange()"
-        class="flex-1 border border-gray-200 rounded-lg px-2 py-3 focus:outline-none focus:ring-2 focus:ring-blue-400 placeholder-gray-300"
+        class="flex-1 w-full border border-gray-200 rounded-lg px-2 py-3 focus:outline-none focus:ring-2 focus:ring-blue-400 placeholder-gray-300"
       >
         <option [ngValue]="null" disabled selected>State</option>
         @for (item of states; track $index){
         <option [ngValue]="item">{{ item }}</option>
         }
       </select>
+      <select
+        libValidateControl
+        [formControl]="addressForm.controls.city"
+        class="flex-1 w-full border border-gray-200 rounded-lg px-2 py-3 focus:outline-none focus:ring-2 focus:ring-blue-400 placeholder-gray-300"
+      >
+        <option [ngValue]="null" disabled selected>city</option>
+        @for (item of cities; track $index){
+        <option [ngValue]="item">{{ item }}</option>
+        }
+      </select>
       <input
         type="text"
-        placeholder="PIN Code" maxlength="6" minlength="6"
-        libValidateControl maxlength="6" minlength="6" contactValidators
+        placeholder="PIN Code"
+        libValidateControl
+        maxlength="6"
+        minlength="6"
+        numberOnlyValidators
         [formControl]="addressForm.controls.pinCode"
-        class="flex-1 border border-gray-200 rounded-lg px-2 py-3 focus:outline-none focus:ring-2 focus:ring-blue-400 placeholder-gray-300"
+        class="flex-1 w-full border border-gray-200 rounded-lg px-2 py-3 focus:outline-none focus:ring-2 focus:ring-blue-400 placeholder-gray-300"
       />
     </div>
 
@@ -98,7 +106,10 @@
         type="text"
         placeholder="Phone Number"
         libValidateControl
-        [formControl]="addressForm.controls.contact" contactValidators minlength="10" maxlength="10"
+        [formControl]="addressForm.controls.contact"
+        numberOnlyValidators
+        minlength="10"
+        maxlength="10"
         class="flex-1 rounded-lg px-2 py-3 focus:outline-none focus:ring-2 focus:ring-blue-400 placeholder-gray-300 w-full"
       />
       <button type="button" class="flex items-center gap-1 px-3">

@@ -3,7 +3,12 @@ import { catchError, throwError } from 'rxjs';
 import { inject } from '@angular/core';
 import { Router } from '@angular/router';
 import { ToastService } from '../services/toast-service';
-import { clearLocalStorage, getLocalStorageItem, setLocalStorageItem, UseFetch } from '../utils/utility.util';
+import {
+  clearLocalStorage,
+  getLocalStorageItem,
+  setLocalStorageItem,
+  UseFetch,
+} from '../utils/utility.util';
 import { localStorageEnum } from '../enum/localStorage.enum';
 import { PlatformService } from '../services/platform-service';
 import { EToastType } from '../enum/toast-type.enum';
@@ -164,17 +169,20 @@ async function refreshToken(
         message: 'Token expired. Please login again.',
         duration: 800,
       });
-      
-      if (type == 'website') {
+
+      if (type == 'portal') {
         router.navigate(['/login']);
       }
-      
+
       clearLocalStorage();
       return false;
     }
   } catch (error) {
     clearLocalStorage();
-    router.navigate(['/login']);
+
+    if (type == 'portal') {
+      router.navigate(['/login']);
+    }
     return false;
   }
 }

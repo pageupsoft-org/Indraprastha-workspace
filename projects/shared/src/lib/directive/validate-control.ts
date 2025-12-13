@@ -7,7 +7,7 @@ import {
   HostListener,
   Optional,
 } from '@angular/core';
-import { FormGroupDirective, NgControl } from '@angular/forms';
+import { AbstractControl, FormGroupDirective, NgControl } from '@angular/forms';
 import { Subscription } from 'rxjs';
 import { trimFormValue } from '../utils/utility.util';
 
@@ -129,7 +129,7 @@ export class ValidateControl implements AfterViewInit, OnDestroy {
     }
   }
 
-  private getError(control: any): string {
+  private getError(control: AbstractControl): string {
     const e = control.errors;
 
     if (!e) return '';
