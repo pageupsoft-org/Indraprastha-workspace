@@ -294,8 +294,9 @@
       >
         @for (item of dynamicData().products; track $index) {
         <div class="group cursor-pointer relative" (click)="routeToProductDetail(item.id)">
-          <div (click)="toggleWishList($event, item)"
-            class="w-[30] h-[32px] like-btn absolute top-3 right-3 p-2 text-black bg-white rounded-[50%] cursor-pointer hover:bg-opacity-90 transition-all duration-300 z-20"
+          <div
+            (click)="toggleWishList($event, item)"
+            class="w-[30px] h-[32px] like-btn absolute top-3 right-3 p-2 text-black bg-white rounded-[50%] cursor-pointer hover:bg-opacity-90 transition-all duration-300 z-20"
           >
             <button class="cursor-pointer">
               @if(item.isWishList){
@@ -332,17 +333,32 @@
             </button>
           </div>
 
-          <div class="aspect-w-1 aspect-h-1 h-[90%] w-full overflow-hidden rounded-lg bg-gray-200">
+          <div
+            class="aspect-w-1 image-wrapper aspect-h-1 h-[90%] w-full overflow-hidden rounded-lg bg-gray-200"
+          >
             <img
               [src]="item.productURL[0]"
-              alt="Red Saree"
-              class="w-full h-full object-cover object-center group-hover:opacity-75 transition-opacity"
+              alt="Product Image 1"
+              class="product-image image-main"
+            />
+            <img
+              [src]="item.productURL[1]"
+              alt="Product Image 1 Hover"
+              class="product-image image-secondary"
             />
           </div>
 
+          <!-- Updated bottom section with animated underline -->
           <div class="h-[10%]">
-            <h3 class="mt-4 text-sm text-gray-700 truncate">{{ item.name }}</h3>
-            <p class="mt-1 text-lg font-medium text-gray-900">Rs. {{ item.mrp }}</p>
+            <h3 class="mt-4 text-sm text-gray-700 truncate relative pb-1">
+              <span>{{ item.name }}</span>
+              <div
+                class="absolute bottom-0 left-0 w-0 h-0.5 bg-gray-700 group-hover:w-full transition-all duration-300 ease-in-out origin-left"
+              ></div>
+            </h3>
+            <p class="mt-1 text-lg font-medium text-gray-900">
+              {{ item.mrp | currency : 'INR' : 'symbol' : '1.0-0' : 'en-IN' }}
+            </p>
           </div>
         </div>
         } @if(isShowLoading() && payloadGenderMenu().pageIndex > 1){
