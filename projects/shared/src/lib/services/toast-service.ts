@@ -13,4 +13,8 @@ export class ToastService {
     this._toast$.next(toast);
     setTimeout(() => this._toast$.next(null), toast.duration || 3000);
   }
+
+  public close() {
+    this._toast$.next(null);
+  }
 }
