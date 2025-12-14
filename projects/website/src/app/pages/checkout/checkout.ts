@@ -24,7 +24,13 @@ import { NgxSkeletonLoaderModule } from 'ngx-skeleton-loader';
 
 @Component({
   selector: 'app-checkout',
-  imports: [ReactiveFormsModule, CommonModule, RouterModule, ProductCardSizeEdit, NgxSkeletonLoaderModule],
+  imports: [
+    ReactiveFormsModule,
+    CommonModule,
+    RouterModule,
+    ProductCardSizeEdit,
+    NgxSkeletonLoaderModule,
+  ],
   templateUrl: './checkout.html',
   styleUrl: './checkout.scss',
 })
@@ -154,6 +160,32 @@ export class Checkout extends ProductDetailBase implements OnInit {
       this.isRedirectedFromBuyNow.set(true);
     } else {
       this.getCheckoutData();
+
+      this.cartService.eventCartDataUpdated.subscribe(
+        (val: { operation: CartUpdateOperation; index: number }) => {
+          if (val.operation == CartUpdateOperation.delete) {
+            this.checkoutData.update((data) => ({
+              ...data,
+              products: data.products.filter((_, index) => index != val.index),
+            }));
+
+            return;
+          }
+
+          this.checkoutData.update((data) => ({
+            ...data,
+            products: data.products.map((prod, index) => ({
+              ...prod,
+              cartQuantity:
+                index == val.index
+                  ? val.operation == CartUpdateOperation.increase
+                    ? prod.cartQuantity + 1
+                    : prod.cartQuantity - 1
+                  : prod.cartQuantity,
+            })),
+          }));
+        }
+      );
     }
   }
 
@@ -254,9 +286,7 @@ export class Checkout extends ProductDetailBase implements OnInit {
     this.isShowloader.set(true);
 
     httpGet<IRGeneric<IResponseCheckout>>(ApiRoutes.CART.CHECKOUT)
-      .pipe(
-        finalize(() => this.isShowloader.set(false)) 
-      )
+      .pipe(finalize(() => this.isShowloader.set(false)))
       .subscribe({
         next: (res) => this.checkoutData.set(res?.data ?? initializeResponseCheckout()),
         error: () => this.checkoutData.set(initializeResponseCheckout()),
