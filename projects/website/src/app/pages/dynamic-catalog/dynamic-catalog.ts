@@ -129,12 +129,14 @@ export class DynamicCatalog implements AfterViewInit {
     this.setFiltersOpen(false);
   }
 
+
   public routeToProductDetail(productId: number) {
-    this.router.navigate([appRoutes.PRODUCT_DETAIL], {
-      queryParams: {
-        id: productId,
-      },
+    const urlTree = this.router.createUrlTree([appRoutes.PRODUCT_DETAIL], {
+      queryParams: { id: productId },
     });
+
+    const url = this.router.serializeUrl(urlTree);
+    window.open(url, '_blank');
   }
 
   ngAfterViewInit(): void {
@@ -267,7 +269,11 @@ export class DynamicCatalog implements AfterViewInit {
   }
 
   public onScrollDown() {
-    if (this.isShowLoading() || this.finished() || ((this.payloadGenderMenu().pageIndex == 1) && (!this.dynamicData().products.length))) {
+    if (
+      this.isShowLoading() ||
+      this.finished() ||
+      (this.payloadGenderMenu().pageIndex == 1 && !this.dynamicData().products.length)
+    ) {
       return;
     }
     // increment page
@@ -334,8 +340,7 @@ export class DynamicCatalog implements AfterViewInit {
     this.location.go(newUrl);
   }
 
-  public toggleWishList(event: any, item: ProductHeader){
-    
+  public toggleWishList(event: any, item: ProductHeader) {
     this.wishlistService.toggleWishList<ProductHeader>(event, item, 'isWishList', 'id');
   }
 }

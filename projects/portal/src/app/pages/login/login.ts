@@ -1,10 +1,9 @@
-import { Component, model, OnInit, signal, WritableSignal } from '@angular/core';
+import { Component, OnInit, signal, WritableSignal } from '@angular/core';
 import { FormControl, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
-import { HttpErrorResponse } from '@angular/common/http';
 import { Router } from '@angular/router';
 import { IGenericResponse } from '../../core/interface/response/genericResponse';
 import { Base } from '@portal/core';
-import { ApiRoutes, ErrorHandler, EToastType, ILoginForm, ILoginFormData, localStorageEnum, setLocalStorageItem, ToastService, ValidateControl } from '@shared';
+import { ApiRoutes, EToastType, ILoginForm, ILoginFormData, localStorageEnum, setLocalStorageItem, ToastService, ValidateControl } from '@shared';
 import { CommonModule } from '@angular/common';
 import { AppLoadingButton } from '@shared';
 import { LoginResponse } from './login.model';

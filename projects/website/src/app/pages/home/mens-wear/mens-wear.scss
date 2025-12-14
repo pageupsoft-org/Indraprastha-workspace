@@ -1,0 +1,23 @@
+.gallery-container {
+  position: relative;
+  overflow: hidden;
+  margin: 0 auto;
+  // height: 750px;
+  overflow-x: hidden;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding-left: 0px;
+  padding-right: 50px;
+  padding-top: 80px;
+  padding-bottom: 80px;
+}
+.gallery {
+  display: flex;
+  transition: transform 0.5s ease-in-out;
+}
+@media (max-width: 767px) and (min-width: 320px) {
+  .gallery-container {
+    height: 350px;
+  }
+}

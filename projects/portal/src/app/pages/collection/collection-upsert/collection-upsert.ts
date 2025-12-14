@@ -5,7 +5,6 @@ import { FormControl, FormGroup, ReactiveFormsModule, Validators } from '@angula
 
 import { IGenericResponse } from '../../../core/interface/response/genericResponse';
 import { Base } from '@portal/core';
-import { ErrorHandler } from '@shared';
 import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
 import { EmployeeList } from '../../employee/employee-list/employee-list';
 import { ICollection, ICollectionForm } from '../collection.model';

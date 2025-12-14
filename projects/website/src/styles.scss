@@ -9,12 +9,16 @@
 @import 'aos/dist/aos.css';
 
 html {
-  @include mat.theme((color: (primary: mat.$azure-palette,
+  @include mat.theme(
+    (
+      color: (
+        primary: mat.$azure-palette,
         tertiary: mat.$blue-palette,
       ),
       typography: Roboto,
       density: 0,
-    ));
+    )
+  );
 }
 
 body {
@@ -67,32 +71,32 @@ h5 {
 }
 
 /* Slider container for smooth scrolling and snapping */
-.slider-container {
-  display: flex;
-  overflow-x: auto;
-  scroll-behavior: smooth;
-  scroll-snap-type: x proximity;
-  /* Smoother snapping for partial scrolls */
-  -ms-overflow-style: none;
-  /* IE and Edge */
-  scrollbar-width: none;
-  /* Firefox */
-  gap: 16px;
-  /* Matches Tailwind's space-x-4 */
-  padding: 0 8px;
-  /* Prevent edge clipping */
-  will-change: scroll-position;
-  /* Optimize for scrolling */
-  scroll-padding: 8px;
-  /* Ensure snap aligns with padding */
-  transition: scroll 0.4s cubic-bezier(0.4, 0, 0.2, 1);
-  /* Custom easing for smooth scroll */
-}
+// .slider-container {
+//   display: flex;
+//   overflow-x: auto;
+//   scroll-behavior: smooth;
+//   scroll-snap-type: x proximity;
+//   /* Smoother snapping for partial scrolls */
+//   -ms-overflow-style: none;
+//   /* IE and Edge */
+//   scrollbar-width: none;
+//   /* Firefox */
+//   gap: 16px;
+//   /* Matches Tailwind's space-x-4 */
+//   padding: 0 8px;
+//   /* Prevent edge clipping */
+//   will-change: scroll-position;
+//   /* Optimize for scrolling */
+//   scroll-padding: 8px;
+//   /* Ensure snap aligns with padding */
+//   transition: scroll 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+//   /* Custom easing for smooth scroll */
+// }
 
 /* Hide scrollbar for Webkit browsers (Chrome, Safari) */
-.slider-container::-webkit-scrollbar {
-  display: none;
-}
+// .slider-container::-webkit-scrollbar {
+//   display: none;
+// }
 
 /* Slider item styling */
 .slider-item {
@@ -126,24 +130,24 @@ h5 {
 }
 
 /* Slider navigation buttons */
-.slider-container+button {
-  padding: 0.75rem;
-  background-color: #ffffff;
-  border-radius: 50%;
-  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.15);
-  transition: background-color 0.3s ease, transform 0.2s ease;
-}
+// .slider-container + button {
+//   padding: 0.75rem;
+//   background-color: #ffffff;
+//   border-radius: 50%;
+//   box-shadow: 0 2px 6px rgba(0, 0, 0, 0.15);
+//   transition: background-color 0.3s ease, transform 0.2s ease;
+// }
 
-.slider-container+button:hover {
-  background-color: #e5e7eb;
-  transform: scale(1.15);
-}
+// .slider-container + button:hover {
+//   background-color: #e5e7eb;
+//   transform: scale(1.15);
+// }
 
-.slider-container+button svg {
-  width: 1.5rem;
-  height: 1.5rem;
-  color: #4b5563;
-}
+// .slider-container + button svg {
+//   width: 1.5rem;
+//   height: 1.5rem;
+//   color: #4b5563;
+// }
 
 /* Header styles */
 #site-header {
@@ -402,10 +406,10 @@ h3.brand-name {
 
 /*Second type slider*/
 /* Custom scrollbar for a cleaner look */
-.slider-container::-webkit-scrollbar {
-  height: 0;
-  background: transparent;
-}
+// .slider-container::-webkit-scrollbar {
+//   height: 0;
+//   background: transparent;
+// }
 
 /* Hide the scrollbar for the slider section */
 #slider::-webkit-scrollbar {
@@ -420,26 +424,7 @@ h3.brand-name {
   /* Firefox */
 }
 
-/* third slider */
-.gallery-container {
-  position: relative;
-  overflow: hidden;
-  margin: 0 auto;
-  // height: 750px;
-  overflow-x: hidden;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  padding-left: 0px;
-  padding-right: 50px;
-  padding-top: 80px;
-  padding-bottom: 80px;
-}
 
-.gallery {
-  display: flex;
-  transition: transform 0.5s ease-in-out;
-}
 
 .item {
   flex: 0 0 calc(20% - 1rem);
@@ -684,10 +669,6 @@ input[type='range']::-moz-range-thumb {
     padding-left: 20px;
   }
 
-  .gallery-container {
-    height: 350px;
-  }
-
   .btn-close {
     float: right;
     top: 0 !important;
@@ -712,4 +693,9 @@ body {
   height: 85vh;
   max-height: none;
   scrollbar-width: thin;
+}
+
+.blur-backdrop {
+  backdrop-filter: blur(3px) !important;
+  background-color: rgba(0, 0, 0, 0.5) !important;
 }

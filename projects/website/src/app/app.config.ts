@@ -7,9 +7,19 @@ import {
 import { provideRouter } from '@angular/router';
 import { provideNgxSkeletonLoader } from 'ngx-skeleton-loader';
 import { routes } from './app.routes';
-import { provideClientHydration, withEventReplay, withHttpTransferCacheOptions } from '@angular/platform-browser';
-import { provideHttpClient, withInterceptorsFromDi, withInterceptors, withFetch } from '@angular/common/http';
-import { authInterceptor } from '@shared'
+import {
+  provideClientHydration,
+  withEventReplay,
+  withHttpTransferCacheOptions,
+} from '@angular/platform-browser';
+import {
+  provideHttpClient,
+  withInterceptorsFromDi,
+  withInterceptors,
+  withFetch,
+} from '@angular/common/http';
+import { authInterceptor } from '@shared';
+import { MAT_DIALOG_DEFAULT_OPTIONS } from '@angular/material/dialog';
 
 export const appConfig: ApplicationConfig = {
   providers: [
@@ -22,7 +32,11 @@ export const appConfig: ApplicationConfig = {
         includePostRequests: true,
       })
     ),
-    provideHttpClient(withFetch(), withInterceptorsFromDi(), withInterceptors([authInterceptor('website')])),
+    provideHttpClient(
+      withFetch(),
+      withInterceptorsFromDi(),
+      withInterceptors([authInterceptor('website')])
+    ),
     {
       provide: LOCALE_ID,
       useValue: 'en-IN',
@@ -33,5 +47,12 @@ export const appConfig: ApplicationConfig = {
         height: '30px',
       },
     }),
+    {
+      provide: MAT_DIALOG_DEFAULT_OPTIONS,
+      useValue: {
+        backdropClass: 'blur-backdrop',
+        hasBackdrop: true,
+      },
+    },
   ],
 };
