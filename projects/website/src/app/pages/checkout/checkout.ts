@@ -1,23 +1,265 @@
-import { Component } from '@angular/core';
-import { FormGroup, ReactiveFormsModule } from '@angular/forms';
-import { ICheckoutForm, initializeICheckoutForm } from './checkout.model';
-import { ValidateControl } from '@shared';
+import { Component, computed, effect, OnInit, signal, WritableSignal } from '@angular/core';
+import { FormControl, FormGroup, ReactiveFormsModule } from '@angular/forms';
+import {
+  ICheckoutForm,
+  initializeICheckoutForm,
+  initializeResponseCheckout,
+  IResponseCheckout,
+  Product,
+} from './checkout.model';
+import { ApiRoutes, EToastType, httpGet, IRGeneric, PlatformService } from '@shared';
+import { CommonModule } from '@angular/common';
+import { ActivatedRoute, RouterModule } from '@angular/router';
+import { CartService, CartUpdateOperation, ProductDetailBase } from '@website/core';
+import {
+  initializeIQueryToCheckout,
+  IQueryToCheckout,
+} from '../product-detail/product-detail.model';
+import { AddressUpsertDialog } from '../../components/header/profile/address-upsert-dialog/address-upsert-dialog';
+import { MatDialog } from '@angular/material/dialog';
+import { ProductCardSizeEdit } from '../../components/product-card-size-edit/product-card-size-edit';
+import { IProductCardSizeDT } from '../../components/product-card-size-edit/product-card-size-edit.model';
+import { finalize } from 'rxjs';
+import { NgxSkeletonLoaderModule } from 'ngx-skeleton-loader';
 
 @Component({
   selector: 'app-checkout',
-  imports: [ReactiveFormsModule, ValidateControl],
+  imports: [ReactiveFormsModule, CommonModule, RouterModule, ProductCardSizeEdit, NgxSkeletonLoaderModule],
   templateUrl: './checkout.html',
   styleUrl: './checkout.scss',
 })
-export class Checkout {
-  public checkoutForm: FormGroup<ICheckoutForm> = initializeICheckoutForm();
+export class Checkout extends ProductDetailBase implements OnInit {
+  public CartUpdateOperation = CartUpdateOperation;
 
-  public onPaymentSumit(){
-    console.log(this.checkoutForm.value);
-    if(this.checkoutForm.valid){
-      // proceed to payment
+  public checkoutForm: FormGroup<ICheckoutForm> = initializeICheckoutForm();
+  public checkoutData: WritableSignal<IResponseCheckout> = signal(initializeResponseCheckout());
+
+  public isRedirectedFromBuyNow = signal(false);
+  public isViewAllAddress = signal(false);
+
+  public selectedAddress = new FormControl<number | null>(0);
+
+  public productDataFromQuery: WritableSignal<IQueryToCheckout> = signal(
+    initializeIQueryToCheckout()
+  );
+
+  /* ---------------------------------------------
+   * ✅ PRODUCT VALIDATION (PURE COMPUTED)
+   * --------------------------------------------- */
+  public isProductValid = computed(() => {
+    // 🔴 product itself not found
+    if (this.isProductNotFound()) return false;
+
+    const pd = this.productDetail();
+    const query = this.productDataFromQuery();
+
+    // ⏳ wait for API response
+    if (!pd?.id) return true;
+
+    // 📦 stock validation
+    const stockValid = pd.stocks.some((s) => s.id === query.stockId);
+    if (!stockValid) return false;
+
+    // 🎯 variant validation (optional)
+    if (query.variantStockId) {
+      return pd.variants.some((v) => v.stocks.id === query.variantStockId);
+    }
+
+    return true;
+  });
+
+  /* ---------------------------------------------
+   * ✅ TOTAL AMOUNT
+   * --------------------------------------------- */
+  public total = computed(() => {
+    return this.checkoutData().products.reduce((sum, pd) => {
+      sum += pd.mrp;
+      if (pd.cartVariant?.mrp) sum += pd.cartVariant.mrp;
+      return sum;
+    }, 0);
+  });
+
+  /* ---------------------------------------------
+   * ✅ BUY NOW PRODUCT SETUP (SAFE EFFECT)
+   * --------------------------------------------- */
+  private productDetailEffectChange = effect(() => {
+    const pd = this.productDetail();
+    const query = this.productDataFromQuery();
+
+    if (!pd?.id) return;
+    if (!this.isRedirectedFromBuyNow()) return;
+    if (!this.isProductValid()) return;
+
+    const product: Product = {
+      name: pd.name,
+      color: pd.color,
+      mrp: pd.mrp,
+      gender: pd.gender,
+      productURL: pd.productURL,
+      _isDisable: false,
+
+      stockId: query.stockId,
+      size: query.size,
+      stockQuantity: query.qty,
+      cartQuantity: query.qty ?? 1,
+      cartId: 0,
+      productId: pd.id,
+      cartVariant: undefined,
+    };
+
+    if (query.variantStockId) {
+      const variant = pd.variants.find((v) => v.stocks.id === query.variantStockId);
+
+      if (variant) {
+        product.cartVariant = {
+          name: variant.name,
+          mrp: variant.mrp,
+          variantURL: '',
+          stockId: query.variantStockId,
+          stockQuantity: variant.stocks.quantity,
+          cartQuantity: 0,
+          variantId: variant.id,
+        };
+      }
+    }
+
+    this.checkoutData.set({
+      totalAmount: pd.mrp,
+      shippingAddresses: this.utilService.AddressData().map((v) => v as any),
+      products: [product],
+    });
+  });
+
+  constructor(
+    private activatedRoute: ActivatedRoute,
+    private matdialog: MatDialog,
+    private platformService: PlatformService
+  ) {
+    super();
+
+    const buyNow = activatedRoute.snapshot.queryParams['buy_now'];
+    let data = activatedRoute.snapshot.queryParams['data'];
+
+    try {
+      if (data) {
+        data = JSON.parse(data);
+        this.productDataFromQuery.set(data);
+      }
+    } catch {}
+
+    if (buyNow === 'true' && data) {
+      if (this.productDataFromQuery().id) {
+        this.getProductDetail(this.productDataFromQuery().id);
+      }
+      this.isRedirectedFromBuyNow.set(true);
+    } else {
+      this.getCheckoutData();
+    }
+  }
+
+  ngOnInit(): void {
+    if (this.platformService.isBrowser) {
+      window.scroll({ top: 0, behavior: 'smooth' });
+    }
+  }
+
+  /* ---------------------------------------------
+   * ✅ UI HELPERS
+   * --------------------------------------------- */
+  public getDataForCard(index: number): IProductCardSizeDT {
+    const data = this.checkoutData().products[index];
+
+    return {
+      imageUrl: data.productURL,
+      name: data.name,
+      mrp: data.mrp,
+      color: data.color?.[0] ?? '',
+      qty: data.cartQuantity,
+      stock: { id: data.stockId, name: data.size },
+      variant: data.cartVariant
+        ? {
+            id: data.cartVariant.variantId,
+            name: data.cartVariant.name,
+            mrp: data.cartVariant.mrp,
+          }
+        : undefined,
+      isShowDelete: !this.isRedirectedFromBuyNow(),
+    };
+  }
+  public upsertAddress(id: number = 0) {
+    this.matdialog
+      .open(AddressUpsertDialog, {
+        width: '650px',
+        maxWidth: '90vw',
+        data: {
+          id: id,
+        },
+      })
+      .afterClosed()
+      .subscribe((val: { saved: true }) => {
+        if (val.saved) {
+          this.updatedSelectedAddress(this.utilService.AddressData().length - 1);
+        }
+      });
+  }
+  public updatedSelectedAddress(index: number) {
+    this.utilService.AddressData.update((addresses) => {
+      if (!addresses || addresses.length === 0) return addresses;
+
+      // If user clicked the first itself → no change
+      if (index === 0) return addresses;
+
+      // Create a copy (always a good practice)
+      const updated = [...addresses];
+
+      // Swap 0th element with clicked element
+      [updated[0], updated[index]] = [updated[index], updated[0]];
+
+      return updated;
+    });
+  }
+  public alterQuantityCnt(operation: CartUpdateOperation, index: number) {
+    if (this.isRedirectedFromBuyNow()) {
+      this.checkoutData.update((state) => {
+        const products = [...state.products];
+        const qty = products[0].cartQuantity ?? 1;
+        products[0] = {
+          ...products[0],
+          cartQuantity: operation === CartUpdateOperation.increase ? qty + 1 : qty - 1,
+        };
+        return { ...state, products };
+      });
+    } else {
+      this.cartService.alterQuantityCnt(operation, index);
+    }
+  }
+
+  public toggleViewAllAddress() {
+    this.isViewAllAddress.update((v) => !v);
+  }
+
+  public onPaymentSumit() {
+    if (this.checkoutForm.valid) {
+      // proceed
     } else {
       this.checkoutForm.markAllAsTouched();
     }
+  }
+
+  public removeItemFromCart(cartId: number, index: number) {
+    this.cartService.removeItemFromCart(cartId, index);
+  }
+
+  private getCheckoutData() {
+    this.isShowloader.set(true);
+
+    httpGet<IRGeneric<IResponseCheckout>>(ApiRoutes.CART.CHECKOUT)
+      .pipe(
+        finalize(() => this.isShowloader.set(false)) 
+      )
+      .subscribe({
+        next: (res) => this.checkoutData.set(res?.data ?? initializeResponseCheckout()),
+        error: () => this.checkoutData.set(initializeResponseCheckout()),
+      });
   }
 }

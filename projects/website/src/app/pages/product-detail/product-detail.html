@@ -1,12 +1,12 @@
-<!-- @if(isShowloader()){
-<app-loader></app-loader>
-} @else { -->
+@if(!isProductNotFound()){
 <div class="w-full mx-auto px-4 sm:px-6 lg:px-32 py-12 lg:py-20 bg-white">
   <div class="flex grid grid-cols-5 lg:flex-row gap-14">
     <!-- Product Image Gallery and Main Image -->
     <div class="flex col-span-2 lg:flex-row lg:space-x-4 w-full sticky top-[150px] max-h-[100%]">
       <!-- Left Image Gallery (Thumbnails) -->
-      <div class="flex flex-row lg:flex-col space-x-3 lg:space-x-0 lg:space-y-4 mb-8 lg:mb-0 overflow-y-auto scrollbar-thin">
+      <div
+        class="flex flex-row lg:flex-col space-x-3 lg:space-x-0 lg:space-y-4 mb-8 lg:mb-0 overflow-y-auto scrollbar-thin"
+      >
         @let dummyArr = [1, 2, 3, 4]; @if(isShowloader()){ @for (item of dummyArr; track $index) {
         <ngx-skeleton-loader
           count="1"
@@ -74,8 +74,7 @@
               appearance="square"
               [theme]="{ height: '50px', width: '50' }"
             />
-            } }@else { 
-              @for (stockSize of stockSizeArrayWithIds; let i = $index; track
+            } }@else { @for (stockSize of stockSizeArrayWithIds; let i = $index; track
             stockSize.value) { @let radioId = 'radio' + i;
 
             <input
@@ -99,8 +98,7 @@
             >
               {{ stockSize.value }}
             </label>
-            }
-           }
+            } }
           </div>
         </div>
 
@@ -147,35 +145,6 @@
           </div>
         </div>
         }
-
-        <!-- <div>
-            <p class="font-semibold text-gray-800 mb-2">Blouse Piece</p>
-            <div class="flex flex-wrap gap-2">
-              <button
-                class="px-4 py-2 border border-gray-300 rounded-[5px] text-sm text-white bg-[#680C01] hover:bg-gray-200 transition-colors duration-200 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-gray-500"
-              >
-                Blouse Piece
-              </button>
-              <button
-                class="px-4 py-2 border border-gray-300 rounded-[5px] text-sm text-gray-700 hover:bg-gray-200 transition-colors duration-200 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-500"
-              >
-                Styled/Stitched Blouse
-              </button>
-            </div>
-          </div> -->
-
-        <!-- <div>
-            <p class="font-semibold text-gray-800 mb-2">Custom Tailor</p>
-            <div class="relative">
-              <select
-                class="block w-auto px-4 py-2 pr-8 border border-gray-300 rounded-[5px] text-sm text-gray-700 bg-white appearance-none focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-gray-500"
-              >
-                <option>Tailor Name</option>
-              </select>
-            </div>
-          </div> -->
-
-        <!-- Input Number -->
 
         <p class="font-semibold text-gray-800 mb-2">Quantity</p>
         <div class="py-2 px-3 inline-block bg-white border border-gray-200 rounded-lg">
@@ -254,11 +223,49 @@
         ></lib-app-loading-button>
 
         <button
+          (click)="buyNow()"
           [disabled]="!cartForm.value.stockId"
           class="cursor-pointer px-6 py-3 font-semibold text-white bg-[#680C01] rounded-[5px] focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-red-500"
           [ngClass]="{ 'cursor-not-allowed!': !cartForm.value.stockId }"
         >
           BUY IT NOW
+        </button>
+
+        <button
+          class="cursor-pointer flex justify-center items-start"
+          (click)="toggleWishList($event)"
+        >
+          @if(productDetail().isWishList){
+          <svg
+            xmlns="http://www.w3.org/2000/svg"
+            class="w-10 text-[#df1800]"
+            fill="currentColor"
+            viewBox="0 0 24 24"
+            stroke="currentColor"
+          >
+            <path
+              stroke-linecap="round"
+              stroke-linejoin="round"
+              stroke-width="2"
+              d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z"
+            />
+          </svg>
+          } @else {
+          <svg
+            xmlns="http://www.w3.org/2000/svg"
+            class="w-10"
+            fill="none"
+            viewBox="0 0 24 24"
+            stroke="currentColor"
+          >
+            <path
+              stroke-linecap="round"
+              stroke-linejoin="round"
+              stroke-width="2"
+              d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z"
+            />
+          </svg>
+          }
         </button>
         }
       </div>
@@ -275,10 +282,10 @@
           </h2>
 
           <!-- + / - icons -->
-          <span class="relative w-6 h-6 flex items-center justify-center">
+          <span class="relative w-6 h-6 flex items-center justify-center cursor-pointer">
             <!-- PLUS -->
             <svg
-              class="absolute w-5 h-5 transition-all duration-200"
+              class="absolute w-5 h-5 transition-all duration-200 cursor-pointer"
               [class.opacity-0]="description._isAccordionOpen"
               [class.scale-90]="description._isAccordionOpen"
               fill="none"
@@ -290,7 +297,7 @@
 
             <!-- MINUS -->
             <svg
-              class="absolute w-5 h-5 transition-all duration-200"
+              class="absolute w-5 h-5 transition-all duration-200 cursor-pointer"
               [class.opacity-100]="description._isAccordionOpen"
               [class.opacity-0]="!description._isAccordionOpen"
               [class.scale-90]="!description._isAccordionOpen"
@@ -321,7 +328,7 @@
             </div>
             }
 
-            <div class="mt-6 pt-4 border-t border-gray-200 text-gray-700">
+            <div class="mt-6 pt-4 text-gray-700">
               {{ description.shortDescription }}
             </div>
 
@@ -334,7 +341,7 @@
               </div>
             </div>
 
-            <div class="mt-6 pt-4 border-t border-gray-200 text-gray-700">
+            <div class="mt-6 pt-4  text-gray-700">
               {{ description.shortDescription }}
             </div>
             }
@@ -345,7 +352,6 @@
     </div>
   </div>
 </div>
-<!-- } -->
 
 <div class="max-w-7xl mx-auto">
   <app-product-slider
@@ -353,3 +359,24 @@
     [productList]="relatedproductList()"
   ></app-product-slider>
 </div>
+} @else {
+
+<div class="flex flex-col items-center justify-center py-16 text-center">
+  <div class="bg-red-50 border border-red-200 rounded-2xl p-6 max-w-md">
+    <div class="text-red-600 text-4xl mb-3">⚠️</div>
+
+    <h2 class="text-lg font-semibold text-red-700 mb-2">Invalid Product</h2>
+
+    <p class="text-sm text-red-600 mb-4">
+      The product or variant you are trying to access is not available.
+    </p>
+
+    <button
+      class="px-5 py-2 rounded-xl bg-red-600 text-white text-sm font-medium hover:bg-red-700 transition cursor-pointer"
+      (click)="routeToHome()"
+    >
+      Go to Home
+    </button>
+  </div>
+</div>
+}

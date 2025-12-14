@@ -174,28 +174,30 @@
         }
 
         <!-- Cart Button -->
-        <a (click)="openCart()" class="nav-link relative shopping-cart cursor-pointer">
-          <svg
-            xmlns="http://www.w3.org/2000/svg"
-            class="sm:h-4 sm:w-4 lg:h-6 lg:w-6"
-            fill="none"
-            viewBox="0 0 24 24"
-            stroke="currentColor"
-          >
-            <path
-              stroke-linecap="round"
-              stroke-linejoin="round"
-              stroke-width="2"
-              d="M16 11V7a4 4 0 00-8 0v4M5 9h14l1 12H4L5 9z"
-            />
-          </svg>
-          @if(cartService.cartCount()){
-          <span
-            class="icon-button-badge absolute flex justify-center align-center sm:h-[14px] sm:w-[14px] lg:h-[18px] lg:w-[18px] top-[-8px] right-[-8px] bg-[#df1800] text-white rounded-[50%] sm:text-[10px] lg:text-[12px] font-semibold"
-            >{{ cartService.cartCount() }}</span
-          >
-          }
-        </a>
+         @if(!isCheckoutPage()){
+           <a (click)="openCart()" class="nav-link relative shopping-cart cursor-pointer">
+             <svg
+               xmlns="http://www.w3.org/2000/svg"
+               class="sm:h-4 sm:w-4 lg:h-6 lg:w-6"
+               fill="none"
+               viewBox="0 0 24 24"
+               stroke="currentColor"
+             >
+               <path
+                 stroke-linecap="round"
+                 stroke-linejoin="round"
+                 stroke-width="2"
+                 d="M16 11V7a4 4 0 00-8 0v4M5 9h14l1 12H4L5 9z"
+               />
+             </svg>
+             @if(cartService.cartCount()){
+             <span
+               class="icon-button-badge absolute flex justify-center align-center sm:h-[14px] sm:w-[14px] lg:h-[18px] lg:w-[18px] top-[-8px] right-[-8px] bg-[#df1800] text-white rounded-[50%] sm:text-[10px] lg:text-[12px] font-semibold"
+               >{{ cartService.cartCount() }}</span
+             >
+             }
+           </a>
+         }
       </div>
     </div>
 

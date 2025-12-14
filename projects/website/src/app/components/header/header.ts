@@ -11,7 +11,7 @@ import {
   WritableSignal,
 } from '@angular/core';
 import { GenderMenu } from './gender-menu/gender-menu';
-import { Router, RouterLink } from '@angular/router';
+import { ActivatedRoute, NavigationEnd, Router, RouterLink } from '@angular/router';
 import { CommonModule } from '@angular/common';
 import { ShoppingCart } from '../shopping-cart/shopping-cart';
 import { AuthManager } from '../auth-manager/auth-manager';
@@ -36,9 +36,8 @@ import {
 } from '@website/core';
 import { FormsModule } from '@angular/forms';
 import { Profile } from './profile/profile';
-import {
-  IProfileResponse,
-} from './profile/profile-upsert-dialog/profile-upsert-dialog.models';
+import { IProfileResponse } from './profile/profile-upsert-dialog/profile-upsert-dialog.models';
+import { filter } from 'rxjs';
 import { IAddressPayload } from './profile/address-upsert-dialog/address-upsert-dialog.model';
 
 @Component({
@@ -78,6 +77,8 @@ export class Header implements OnInit {
     newlyAdded: false,
   };
 
+  public isCheckoutPage: WritableSignal<boolean> = signal(false);
+
   constructor(
     public _utitlityService: UtilityService,
     private router: Router,
@@ -95,6 +96,18 @@ export class Header implements OnInit {
       }
       this.getUserAddress();
     }
+
+    this.router.events
+      .pipe(filter((event) => event instanceof NavigationEnd))
+      .subscribe((event: NavigationEnd) => {
+        const cleanUrl = event.url.split('?')[0].replace(/^\//, '');
+
+        if (cleanUrl === appRoutes.CHECKOUT) {
+          this.isCheckoutPage.update(() => true);
+        } else {
+          this.isCheckoutPage.update(() => false);
+        }
+      });
   }
 
   public openProfile() {

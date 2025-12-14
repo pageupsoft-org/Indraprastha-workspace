@@ -1,165 +1,363 @@
-<div class="bg-white">
-    <div class="container mx-auto px-4">
-        <div class="grid grid-cols-1 lg:grid-cols-2 lg:gap-12">
-
-            <div class="order-2 lg:order-1 pb-10">
-                <form action="#" class="pt-10" [formGroup]="checkoutForm">
-                    <div class="mb-8">
-                        <p class="text-xl font-medium text-gray-800 mb-3">Contact</p>
-                        <input type="text" placeholder="Email or mobile phone number" [formControl]="checkoutForm.controls.contactNumber" libValidateControl
-                             minlength="10" maxlength="10"
-                            class="w-full p-3 border border-gray-300 rounded-md focus:ring-2 focus:ring-gray-800 focus:border-gray-800 outline-none">
-                    </div>
-
-                    <div class="mb-8">
-                        <p class="text-xl font-medium text-gray-800 mb-3">Delivery</p>
-                        <div class="space-y-4">
-                            <input type="text" placeholder="Country/Region" [formControl]="checkoutForm.controls.deliveryAddress.controls.country" libValidateControl
-                                minlength="3" maxlength="30"
-                                class="w-full p-3 border border-gray-300 rounded-md focus:ring-2 focus:ring-gray-800 focus:border-gray-800 outline-none">
-                            <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
-                                <input type="text" placeholder="First Name" [formControl]="checkoutForm.controls.deliveryAddress.controls.firstName" libValidateControl
-                                 minlength="3" maxlength="30"
-                                    class="w-full p-3 border border-gray-300 rounded-md focus:ring-2 focus:ring-gray-800 focus:border-gray-800 outline-none">
-                                <input type="text" placeholder="Last Name" [formControl]="checkoutForm.controls.deliveryAddress.controls.lastName" libValidateControl
-                                    minlength="3" maxlength="30"
-                                    class="w-full p-3 border border-gray-300 rounded-md focus:ring-2 focus:ring-gray-800 focus:border-gray-800 outline-none">
-                            </div>
-                            <input type="text" placeholder="Address" [formControl]="checkoutForm.controls.deliveryAddress.controls.address" libValidateControl
-                                    maxlength="200"
-                                class="w-full p-3 border border-gray-300 rounded-md focus:ring-2 focus:ring-gray-800 focus:border-gray-800 outline-none">
-                            <input type="text" placeholder="Apartment (optional)" [formControl]="checkoutForm.controls.deliveryAddress.controls.apartment" libValidateControl
-                               maxlength="100"   class="w-full p-3 border border-gray-300 rounded-md focus:ring-2 focus:ring-gray-800 focus:border-gray-800 outline-none">
-                            <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
-                                <input type="text" placeholder="City" [formControl]="checkoutForm.controls.deliveryAddress.controls.city" libValidateControl
-                                   maxlength="30" class="w-full p-3 border border-gray-300 rounded-md focus:ring-2 focus:ring-gray-800 focus:border-gray-800 outline-none">
-                                <input type="text" placeholder="State" [formControl]="checkoutForm.controls.deliveryAddress.controls.state" libValidateControl
-                                  maxlength="30"  class="w-full p-3 border border-gray-300 rounded-md focus:ring-2 focus:ring-gray-800 focus:border-gray-800 outline-none">
-                                <input type="text" placeholder="Pin code" [formControl]="checkoutForm.controls.deliveryAddress.controls.pinCode" libValidateControl
-                                  minlength="6" maxlength="6"  class="w-full p-3 border border-gray-300 rounded-md focus:ring-2 focus:ring-gray-800 focus:border-gray-800 outline-none">
-                            </div>
-                            <input type="tel" placeholder="Phone" [formControl]="checkoutForm.controls.deliveryAddress.controls.phoneNumber" libValidateControl
-                               minlength="10" maxlength="10" class="w-full p-3 border border-gray-300 rounded-md focus:ring-2 focus:ring-gray-800 focus:border-gray-800 outline-none">
-                            <div class="flex items-center">
-                                <input id="save-info" type="checkbox" [formControl]="checkoutForm.controls.deliveryAddress.controls.isSavedAddress"
-                                     
-                                    class="h-4 w-4 text-[#5a1d1c] border-gray-300 rounded focus:ring-[#5a1d1c]">
-                                <label for="save-info" class="ml-2 block text-sm text-gray-700">Save this information
-                                    for
-                                    next time</label>
-                            </div>
-                            <div class="flex items-center">
-                                <input id="text-me" type="checkbox" [formControl]="checkoutForm.controls.deliveryAddress.controls.isUpdateNewOffers"
-                                     
-                                    class="h-4 w-4 text-[#5a1d1c] border-gray-300 rounded focus:ring-[#5a1d1c]">
-                                <label for="text-me" class="ml-2 block text-sm text-gray-700">Text me with news and
-                                    offers</label>
-                            </div>
-                        </div>
-                    </div>
-
-                    <div class="mb-8">
-                        <p class="text-xl font-medium text-gray-800 mb-3">Shipping method</p>
-                        <div class="w-full p-3 border border-gray-200 rounded-md bg-gray-100 text-gray-500">
-                            Enter your shipping address to view available shipping methods.
-                        </div>
-                    </div>
-
-                    <div class="mb-8">
-                        <p class="text-xl font-medium text-gray-800 mb-3">Payment</p>
-                        <p class="text-sm text-gray-500 mb-4">All transactions are secure and encrypted.</p>
-                        <div class="border border-gray-300 rounded-md">
-                            <div class="flex justify-between items-center p-4 border-b border-gray-300">
-                                <h3 class="font-medium text-gray-800">CCAvenue</h3>
-                                <div class="flex items-center space-x-2">
-                                    <i class="fab fa-cc-visa text-2xl text-blue-800"></i>
-                                    <i class="fab fa-cc-mastercard text-2xl text-red-600"></i>
-                                    <i class="fab fa-cc-amex text-2xl text-blue-600"></i>
-                                    <span class="text-sm font-medium text-gray-600">+2</span>
-                                </div>
-                            </div>
-                            <div class="bg-gray-50 p-6 text-center">
-                                <img src="https://i.imgur.com/gK2e3pL.png" alt="Redirect illustration"
-                                    class="mx-auto mb-4 w-48">
-                                <p class="text-sm text-gray-600">After clicking "Pay now", you will be redirected to
-                                    CCAvenue to complete your purchase securely.</p>
-                            </div>
-                        </div>
-                    </div>
-
-                    <div class="mb-8">
-                        <p class="text-xl font-medium text-gray-800 mb-3">Billing Address</p>
-                        <div class="space-y-3">
-                            <div
-                                class="flex items-center p-3 border border-[#580202] rounded-md bg-[#FAF8F0] ring-1 ring-gray-800">
-                                <input id="same-address" name="billing-address" type="radio" checked [formControl]="checkoutForm.controls.billingAddress.controls.shippingAddress"
-                                     
-                                    class="h-4 w-4 text-[#5a1d1c] border-gray-400 focus:ring-[#5a1d1c]">
-                                <label for="same-address" class="ml-3 block text-sm font-medium text-gray-900">Same as
-                                    shipping Address</label>
-                            </div>
-                            <div class="flex items-center p-3 border border-gray-300 rounded-md">
-                                <input id="different-address" name="billing-address" type="radio" [formControl]="checkoutForm.controls.billingAddress.controls.billingAddress"
-                                     
-                                    class="h-4 w-4 text-[#5a1d1c] border-gray-400 focus:ring-[#5a1d1c]">
-                                <label for="different-address" class="ml-3 block text-sm font-medium text-gray-900">Use
-                                    a
-                                    different billing address</label>
-                            </div>
-                        </div>
-                    </div>
-
-                    <div class="mt-8">
-                        <button type="submit" (click)="onPaymentSumit()"
-                            class="w-full bg-[#5a1d1c] text-white py-4 px-6 rounded-md font-semibold text-lg hover:bg-opacity-90 transition-colors">Pay
-                            Now</button>
-                    </div>
-                    <div class="mt-4">
-                        <a href="#" class="text-sm text-gray-600 hover:underline">Privacy policy</a>
-                    </div>
-                </form>
-            </div>
-
-
-            <div class="order-1 lg:order-2 mb-10 lg:mb-0 bg-[#D9D9D940] p-5">
-                <div class="p-4 lg:p-6">
-                    <div class="flex items-start space-x-4 mb-6">
-                        <div class="relative">
-                            <img src="assets/images/saree-5.png" alt="Verdant Sunpetal Gown"
-                                class="w-20 h-24 object-cover rounded-md border border-gray-200">
-                        </div>
-                        <div class="flex-1">
-                            <h3 class="font-medium text-gray-800">Verdant Sunpetal Gown</h3>
-                            <p class="text-sm text-gray-500">Size: L | Color: As shown</p>
-                        </div>
-                        <p class="font-medium text-gray-800">Rs. 00000.00</p>
-                    </div>
-
-                    <div class="flex space-x-3 mb-6">
-                        <input type="text" placeholder="Discount code"
-                            class="w-full p-3 border border-gray-300 rounded-md focus:ring-2 focus:ring-gray-800 focus:border-gray-800 outline-none">
-                        <button
-                            class="bg-gray-200 text-gray-700 px-6 rounded-md hover:bg-gray-300 font-medium transition-colors">Apply</button>
-                    </div>
-
-                    <div class="space-y-3 border-t border-gray-200 pt-4">
-                        <div class="flex justify-between text-gray-700">
-                            <span>Subtotal</span>
-                            <span class="font-medium">Rs. 00000</span>
-                        </div>
-                        <div class="flex justify-between text-gray-700">
-                            <span>Shipping</span>
-                            <span class="text-sm text-gray-500">Enter Shipping Address</span>
-                        </div>
-                    </div>
-
-                    <div
-                        class="flex justify-between items-center mt-4 border-t border-gray-200 pt-4 bg-[#5a1d1c] text-white -mx-6 px-6 py-4 rounded-lg">
-                        <span class="text-lg font-semibold">Total</span>
-                        <span class="text-xl font-bold">Rs. 000000</span>
-                    </div>
-                </div>
-            </div>
-        </div>
+@if(isShowloader()){
+<div class="bg-[#f8f8f8] grid grid-cols-12 gap-6 p-8 pt-0">
+  <!-- LEFT SIDE -->
+  <div class="col-span-6 p-8 space-y-6">
+    <!-- Address Card -->
+    <div class="bg-white p-5 rounded-2xl border border-gray-100 space-y-3">
+      <ngx-skeleton-loader appearance="line" [theme]="{ height: '20px', width: '60%' }" />
+      <ngx-skeleton-loader appearance="line" [theme]="{ height: '14px', width: '90%' }" />
+      <div class="border-t border-gray-200 my-4"></div>
+      <ngx-skeleton-loader appearance="line" [theme]="{ height: '16px', width: '40%' }" />
     </div>
+
+    <!-- Payment Card -->
+    <div class="bg-white p-5 rounded-2xl border border-gray-100 space-y-4">
+      <ngx-skeleton-loader appearance="line" [theme]="{ height: '20px', width: '30%' }" />
+      <ngx-skeleton-loader appearance="line" [theme]="{ height: '14px', width: '70%' }" />
+
+      <div class="border border-gray-300 rounded-md p-4 space-y-4">
+        <ngx-skeleton-loader appearance="line" [theme]="{ height: '16px', width: '40%' }" />
+        <ngx-skeleton-loader
+          appearance="square"
+          [theme]="{ height: '120px', width: '100%', borderRadius: '8px' }"
+        />
+      </div>
+    </div>
+
+    <!-- Pay Now Button -->
+    <ngx-skeleton-loader
+      appearance="square"
+      [theme]="{ height: '56px', width: '100%', borderRadius: '8px' }"
+    />
+  </div>
+
+  <!-- RIGHT SIDE -->
+  <div class="col-span-6 bg-white mt-8 rounded-2xl border border-gray-100 p-6 space-y-6">
+    <!-- Product Skeleton -->
+    @for (i of [1,2]; track i) {
+    <div class="flex items-start gap-4">
+      <ngx-skeleton-loader
+        appearance="square"
+        [theme]="{ height: '96px', width: '80px', borderRadius: '8px' }"
+      />
+
+      <div class="flex-1 space-y-2">
+        <ngx-skeleton-loader appearance="line" [theme]="{ height: '16px', width: '70%' }" />
+        <ngx-skeleton-loader appearance="line" [theme]="{ height: '14px', width: '50%' }" />
+        <ngx-skeleton-loader appearance="line" [theme]="{ height: '14px', width: '40%' }" />
+      </div>
+
+      <ngx-skeleton-loader appearance="line" [theme]="{ height: '16px', width: '60px' }" />
+    </div>
+    }
+
+    <!-- Total -->
+    <ngx-skeleton-loader
+      appearance="square"
+      [theme]="{
+        height: '64px',
+        width: '100%',
+        borderRadius: '12px'
+      }"
+    />
+  </div>
 </div>
+} @else if(isProductValid()){
+<div class="bg-[#f8f8f8] grid grid-cols-12 gap-6 p-8 pt-0">
+  <div class="col-span-6 p-8">
+    @if(utilService.AddressData().length){
+    <div
+      class="bg-white p-5 rounded-2xl border w-full border-gray-100"
+      [ngClass]="isViewAllAddress() ? 'border-b-0 rounded-b-none' : ''"
+    >
+      @for (item of utilService.AddressData(); track $index) { @if($index == 0){
+
+      <p class="text-lg font-semibold text-gray-900">
+        Delivering to {{ item.firstName }} {{ item.lastName }}
+      </p>
+
+      <!-- Address -->
+      <p class="text-sm text-gray-500 mt-1">
+        {{ item.address }}, {{ item.city }} - {{ item.pinCode }}
+      </p>
+      } }
+
+      <!-- Divider -->
+      <div class="border-t border-gray-200 my-4"></div>
+
+      <!-- Change Address -->
+      @if(utilService.AddressData().length == 1){
+      <button
+        class="flex items-center gap-1 text-[#680C01] font-medium text-sm cursor-pointer"
+        (click)="upsertAddress(0)"
+      >
+        Add a new delivery address
+      </button>
+      }@else {
+      <button
+        class="flex items-center gap-1 text-[#680C01] font-medium text-sm cursor-pointer"
+        (click)="toggleViewAllAddress()"
+      >
+        Change Address
+        <svg
+          xmlns="http://www.w3.org/2000/svg"
+          class="w-4 h-4"
+          [ngClass]="isViewAllAddress() ? 'rotate-180' : 'rotate-0'"
+          fill="none"
+          viewBox="0 0 24 24"
+          stroke="currentColor"
+        >
+          <path
+            stroke-linecap="round"
+            stroke-linejoin="round"
+            stroke-width="2"
+            d="M19 9l-7 7-7-7"
+          />
+        </svg>
+      </button>
+      }
+    </div>
+    @if(isViewAllAddress()){
+    <div
+      class="space-y-6 p-6 pt-0 bg-white rounded-2xl rounded-t-none border border-gray-100 border-t-0"
+      animate.enter="address-enter"
+      animate.leave="address-leave"
+    >
+      @for (item of utilService.AddressData(); track $index) { @if($index > 0){
+      <label class="flex items-start gap-3 cursor-pointer">
+        <input
+          type="radio"
+          name="address"
+          class="hidden peer"
+          [value]="item.id"
+          [formControl]="selectedAddress"
+          (click)="updatedSelectedAddress($index)"
+        />
+        <span
+          class="w-5 h-5 rounded-full border-5 border-gray-400 flex items-center justify-center peer-checked:border-red-800 mt-1"
+        >
+          <span class="w-3 h-3 bg-red-800 rounded-full opacity-0 peer-checked:opacity-100"></span>
+        </span>
+
+        <div>
+          <p class="text-lg font-medium text-gray-900">
+            Delivering to {{ item?.firstName }} {{ item?.lastName }}
+          </p>
+          <p class="text-sm text-gray-500">
+            {{ item.address }}, {{ item.city }} - {{ item.pinCode }}
+          </p>
+          <p class="text-sm text-gray-500">Phone No. {{ item.contact }}</p>
+          <button
+            class="text-[#680C01] font-medium text-sm mt-1 cursor-pointer"
+            (click)="upsertAddress(item.id)"
+          >
+            Edit Address
+          </button>
+        </div>
+      </label>
+      } }
+
+      <!-- Divider -->
+      <div class="border-t border-gray-200 my-4"></div>
+
+      <!-- Change Address -->
+      <button
+        class="flex items-center gap-1 text-[#680C01] font-medium text-sm cursor-pointer"
+        (click)="upsertAddress(0)"
+      >
+        Add a new delivery address
+      </button>
+    </div>
+    } } @else {
+    <div class="bg-white p-5 rounded-2xl border border-gray-100 w-full">
+      <button class="text-lg font-semibold text-gray-900 cursor-pointer" (click)="upsertAddress(0)">
+        Add a new delivery address
+      </button>
+    </div>
+    }
+
+    <div class="my-8 bg-white p-5 rounded-2xl border border-gray-100">
+      <p class="text-xl font-medium text-gray-800 mb-3">Payment</p>
+      <p class="text-sm text-gray-500 mb-4">All transactions are secure and encrypted.</p>
+      <div class="border border-gray-300 rounded-md">
+        <div class="flex justify-between items-center p-4 border-b border-gray-300">
+          <h3 class="font-medium text-gray-800">CCAvenue</h3>
+          <div class="flex items-center space-x-2">
+            <i class="fab fa-cc-visa text-2xl text-blue-800"></i>
+            <i class="fab fa-cc-mastercard text-2xl text-red-600"></i>
+            <i class="fab fa-cc-amex text-2xl text-blue-600"></i>
+            <span class="text-sm font-medium text-gray-600">+2</span>
+          </div>
+        </div>
+        <div class="bg-gray-50 p-6 text-center">
+          <img
+            src="https://i.imgur.com/gK2e3pL.png"
+            alt="Redirect illustration"
+            class="mx-auto mb-4 w-48"
+          />
+          <p class="text-sm text-gray-600">
+            After clicking "Pay now", you will be redirected to CCAvenue to complete your purchase
+            securely.
+          </p>
+        </div>
+      </div>
+    </div>
+
+    <div class="mt-8">
+      <button
+        type="submit"
+        (click)="onPaymentSumit()"
+        class="w-full bg-[#5a1d1c] text-white py-4 px-6 rounded-md font-semibold text-lg hover:bg-opacity-90 transition-colors"
+      >
+        Pay Now
+      </button>
+    </div>
+    <div class="mt-4">
+      <a href="#" class="text-sm text-gray-600 hover:underline"
+        >Privacy policy{{ utilService.AddressData().length }}</a
+      >
+    </div>
+  </div>
+
+  <div class="col-span-6 bg-white mt-8 rounded-2xl border border-gray-100">
+    <div class="p-4 lg:p-6">
+      @for(prod of checkoutData().products; track $index){
+      <div class="flex items-start space-x-4 mb-6 hidden">
+        <div class="relative">
+          <img
+            [src]="prod.productURL[0]"
+            [alt]="prod.name"
+            class="w-20 h-24 object-cover rounded-md border border-gray-200"
+          />
+        </div>
+        <div class="flex-1">
+          <h3 class="font-medium text-gray-800">{{ prod.name }}</h3>
+          @if(prod.cartVariant && prod.cartVariant.variantId){
+          <p class="text-sm text-gray-500">
+            {{ prod.cartVariant.name }}
+          </p>
+          }
+          <p class="text-sm text-gray-500">Size: {{ prod.size }} | Color: As shown</p>
+
+          <div
+            class="flex items-center justify-center gap-2 mt-2 border border-gray-300 rounded hover:bg-gray-100 w-[100px]"
+          >
+            <button
+              [disabled]="prod.cartQuantity == 1"
+              class="w-6 h-6 flex items-center justify-center cursor-pointer"
+              [ngClass]="{ 'cursor-not-allowed!': prod.cartQuantity == 1 || prod._isDisable }"
+              (click)="alterQuantityCnt(CartUpdateOperation.decrease, $index)"
+            >
+              −
+            </button>
+
+            <span class="text-sm">{{ prod.cartQuantity }}</span>
+
+            <button
+              [disabled]="prod._isDisable"
+              class="w-6 h-6 flex items-center justify-center cursor-pointer"
+              [ngClass]="{ 'cursor-not-allowed!': prod._isDisable }"
+              (click)="alterQuantityCnt(CartUpdateOperation.increase, $index)"
+            >
+              +
+            </button>
+          </div>
+
+          <!-- <button
+            (click)="removeItemFromCart(prod.cartId, $index)"
+            [disabled]="prod._isDisable"
+            class="right-0 top-0 p-1 text-gray-400 hover:text-red-500 transition cursor-pointer"
+            [ngClass]="{ 'cursor-not-allowed!': prod._isDisable }"
+          >
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              class="w-5 h-5"
+              fill="none"
+              viewBox="0 0 24 24"
+              stroke="currentColor"
+              stroke-width="2"
+            >
+              <path
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1
+           0 00-1-1h-4a1 1 0 00-1 1v3m-4 0h14"
+              />
+            </svg>
+          </button> -->
+        </div>
+
+        <div class="flex-1">
+          <p class="font-medium text-gray-800 text-end">
+            {{ prod.mrp | currency : 'INR' : 'symbol' : '1.0-0' : 'en-IN' }}
+          </p>
+          @if(prod?.cartVariant && prod?.cartVariant?.variantId){
+          <p class="font-medium text-gray-800 text-end">
+            {{ prod?.cartVariant?.mrp | currency : 'INR' : 'symbol' : '1.0-0' : 'en-IN' }}
+          </p>
+          }
+
+          <hr />
+
+          <p class="font-medium text-gray-800 text-end">
+            @let sum = (prod.mrp * prod.cartQuantity) +( ((prod?.cartVariant?.mrp) ?
+            (prod?.cartVariant?.mrp) : 0) ?? 0);
+            {{ sum | currency : 'INR' : 'symbol' : '1.0-0' : 'en-IN' }}
+          </p>
+        </div>
+      </div>
+
+      <app-product-card-size-edit
+        [prod]="getDataForCard($index)"
+        (alterQty)="alterQuantityCnt($event, $index)"
+        (emitDelete)="removeItemFromCart(prod.cartId, $index)"
+      ></app-product-card-size-edit>
+      }
+
+      <!-- discount hidden -->
+
+      <div class="flex space-x-3 mb-6 hidden">
+        <input
+          type="text"
+          placeholder="Discount code"
+          class="w-full p-3 border border-gray-300 rounded-md focus:ring-2 focus:ring-gray-800 focus:border-gray-800 outline-none"
+        />
+        <button
+          class="bg-gray-200 text-gray-700 px-6 rounded-md hover:bg-gray-300 font-medium transition-colors"
+        >
+          Apply
+        </button>
+      </div>
+
+      <!-- Total Button -->
+      <div
+        class="flex justify-between items-center mt-4 border-t border-gray-200 pt-4 bg-[#5a1d1c] text-white px-6 py-4 rounded-lg"
+      >
+        <span class="text-lg font-semibold">Total</span>
+        <span class="text-xl font-medium">{{
+          total() | currency : 'INR' : 'symbol' : '1.0-0' : 'en-IN'
+        }}</span>
+      </div>
+    </div>
+  </div>
+</div>
+} @else {
+<div class="flex flex-col items-center justify-center py-16 text-center">
+  <div class="bg-red-50 border border-red-200 rounded-2xl p-6 max-w-md">
+    <div class="text-red-600 text-4xl mb-3">⚠️</div>
+
+    <h2 class="text-lg font-semibold text-red-700 mb-2">Invalid Product</h2>
+
+    <p class="text-sm text-red-600 mb-4">
+      The product or variant you are trying to access is not available.
+    </p>
+
+    <a
+      class="px-5 py-2 rounded-xl bg-red-600 text-white text-sm font-medium hover:bg-red-700 transition cursor-pointer"
+      routerLink="/home"
+    >
+      Go to Home
+    </a>
+  </div>
+</div>
+}

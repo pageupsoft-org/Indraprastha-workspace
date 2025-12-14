@@ -22,3 +22,30 @@ export interface IProductInfoPayload {
   id: number;
   isRelatedItem: boolean;
 }
+
+export interface IQueryToCheckout {
+  id: number;
+  name: string;
+  price: number;
+  qty: number;
+  
+  size: string;
+  stockId: number;
+
+  variantStockId: number;
+  variantName: string;
+}
+
+export const initializeIQueryToCheckout = () => {
+  return {
+    id: 0,
+    name: '',
+    price: 0,
+    size: '',
+    qty: 0,
+
+    stockId: 0,
+    variantStockId: 0,
+    variantName: ''
+  };
+};

@@ -12,10 +12,9 @@ import {
 import { NewArrivalProductCard } from '../../../components/new-arrival-product-card/new-arrival-product-card';
 import { MatDialog, MatDialogModule } from '@angular/material/dialog';
 import { ProductDetailDialog } from '../../../components/product-detail-dialog/product-detail-dialog';
-import {
-  PlatformService,
-} from '@shared';
+import { PlatformService } from '@shared';
 import { Product } from './dashboard.response';
+import { IProductDetailDT } from '../../../components/product-detail-dialog/product-detail-dialog.model';
 
 @Component({
   selector: 'app-product-slider',
@@ -32,7 +31,6 @@ export class ProductSlider implements AfterViewInit {
   nextBtn = viewChild<ElementRef<HTMLButtonElement>>('nextBtn');
   cardsContainer = viewChild<ElementRef<HTMLDivElement>>('cardsContainer');
 
-
   // public productList: WritableSignal<Product[]> = signal([]);
 
   public totalCards = computed(() => this.productList().length);
@@ -40,8 +38,7 @@ export class ProductSlider implements AfterViewInit {
 
   constructor(private platformService: PlatformService, private matDialog: MatDialog) {}
 
-  ngOnInit(): void {
-  }
+  ngOnInit(): void {}
 
   ngAfterViewInit() {
     if (this.platformService.isBrowser) {
@@ -97,16 +94,17 @@ export class ProductSlider implements AfterViewInit {
   }
 
   public openProductDetail(productId: number) {
-    // this.matDialog.open(ProductDetails).afterClosed().subscribe()
+    const data: IProductDetailDT = {
+      productId: productId,
+      type: 'detail',
+    };
     this.matDialog.open(ProductDetailDialog, {
       panelClass: 'product-detail-dialog',
       width: '900px',
       maxWidth: '90vw',
       height: '1000px',
       maxHeight: '90vh',
-      data: {
-        productId: productId,
-      },
+      data: data,
     });
   }
 

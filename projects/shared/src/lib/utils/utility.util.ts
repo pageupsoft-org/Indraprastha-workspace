@@ -59,7 +59,9 @@ export function clearLocalStorage() {
 
 export function setLocalStorageItem<T>(key: string, value: T): void {
   try {
-    localStorage.setItem(key, JSON.stringify(value));
+    if (typeof window !== 'undefined' && typeof window.localStorage !== 'undefined') {
+      localStorage.setItem(key, JSON.stringify(value));
+    }
   } catch (error) {
     console.log(error);
   }
@@ -110,7 +112,6 @@ export function createUrlFromObject(object: Record<string, any>, baseUrl: string
 
 export function deCodeToken(): IDecodeTokenKey | null {
   const token = getLocalStorageItem('token') as string;
-  console.log(token)
   if (!token) return null;
 
   try {

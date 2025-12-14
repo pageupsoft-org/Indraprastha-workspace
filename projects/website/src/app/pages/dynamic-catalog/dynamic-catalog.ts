@@ -30,6 +30,8 @@ import {
   IResponseDynamicCatalogue,
   initializeIResponseDynamicCatalogue,
   appRoutes,
+  WishlistService,
+  ProductHeader,
 } from '@website/core';
 import { NoProductFound } from '../../core/component/no-product-found/no-product-found';
 
@@ -92,7 +94,8 @@ export class DynamicCatalog implements AfterViewInit {
     private activatedRoute: ActivatedRoute,
     private toastService: ToastService,
     private router: Router,
-    private location: Location
+    private location: Location,
+    private wishlistService: WishlistService
   ) {
     activatedRoute.url.subscribe((url: any) => {
       const { baseUrl, params } = getObjectFromUrl((url as Array<UrlSegment>)[0].path, [
@@ -329,5 +332,10 @@ export class DynamicCatalog implements AfterViewInit {
     this.getData();
     const newUrl = createUrlFromObject(this.payloadGenderMenu(), this.baseUrl());
     this.location.go(newUrl);
+  }
+
+  public toggleWishList(event: any, item: ProductHeader){
+    
+    this.wishlistService.toggleWishList<ProductHeader>(event, item, 'isWishList', 'id');
   }
 }

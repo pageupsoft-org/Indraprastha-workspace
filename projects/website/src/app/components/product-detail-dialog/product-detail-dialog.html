@@ -80,18 +80,6 @@
             </div>
           </div>
 
-          <!-- <div class="">
-            <p class="font-semibold text-gray-800 mb-2">COLOR</p>
-            <div class="flex flex-wrap gap-2">
-              @for (item of productDetail().color; track $index) {
-              <button
-                class="p-3 w-10 h-10 border cursor-pointer border-gray-300 rounded-full text-sm text-gray-700 hover:bg-gray-200 transition-colors duration-200 flex items-center justify-center focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-gray-500"
-                [style.backgroundColor]="item"
-              ></button>
-              }
-            </div>
-          </div> -->
-
           <!-- variant -->
           @if(productDetail().variants.length){
           <div>
@@ -123,35 +111,6 @@
             </div>
           </div>
           }
-
-          <!-- <div>
-            <p class="font-semibold text-gray-800 mb-2">Blouse Piece</p>
-            <div class="flex flex-wrap gap-2">
-              <button
-                class="px-4 py-2 border border-gray-300 rounded-[5px] text-sm text-white bg-[#680C01] hover:bg-gray-200 transition-colors duration-200 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-gray-500"
-              >
-                Blouse Piece
-              </button>
-              <button
-                class="px-4 py-2 border border-gray-300 rounded-[5px] text-sm text-gray-700 hover:bg-gray-200 transition-colors duration-200 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-500"
-              >
-                Styled/Stitched Blouse
-              </button>
-            </div>
-          </div> -->
-
-          <!-- <div>
-            <p class="font-semibold text-gray-800 mb-2">Custom Tailor</p>
-            <div class="relative">
-              <select
-                class="block w-auto px-4 py-2 pr-8 border border-gray-300 rounded-[5px] text-sm text-gray-700 bg-white appearance-none focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-gray-500"
-              >
-                <option>Tailor Name</option>
-              </select>
-            </div>
-          </div> -->
-
-          <!-- Input Number -->
 
           <p class="font-semibold text-gray-800 mb-2">Quantity</p>
           <div class="py-2 px-3 inline-block bg-white border border-gray-200 rounded-lg">
@@ -210,6 +169,7 @@
           <!-- End Input Number -->
         </div>
         <div class="mt-8 flex flex-col space-y-4">
+          @if(data.type == 'detail'){
           <lib-app-loading-button
             [isLoading]="isBtnLoader()"
             label="ADD TO CART"
@@ -237,6 +197,20 @@
           >
             View Details
           </button>
+          }@else {
+          <lib-app-loading-button
+            [isLoading]="isBtnLoader()"
+            label="Update"
+            type="submit"
+            (clicked)="addToCartWithDescription()"
+            [btnClass]="
+              'w-full cursor-pointer px-6 py-3 font-semibold text-black border border-gray-300 bg-white rounded-[5px] hover:bg-gray-300 transition-colors duration-200 focus:outline-none'
+            "
+            [conditionalClass]="'cursor-not-allowed!'"
+            [addConditionClass]="!cartForm.value.stockId"
+            [isButtonDisabled]="!cartForm.value.stockId"
+          ></lib-app-loading-button>
+          }
         </div>
       </div>
     </div>

@@ -110,45 +110,35 @@ export class WishlistService {
 
     return promise;
   }
-  // public removeFromWishList(id: number): Promise<boolean> {
-  //   const promise = new Promise<boolean>((resolve, reject) => {
-  //     const modalData: MConfirmationModalData = {
-  //       heading: 'Confirm',
-  //       body: 'Are you sure you want to remove this item from wishlist?',
-  //       yesText: 'Yes',
-  //       noText: 'No',
-  //     };
-  //     this.objectCOnfirmationUtil.getConfirmation(modalData).then((res: boolean) => {
-  //       if (res) {
-  //         httpDelete<IRGeneric<IRWishlistRoot>>(ApiRoutes.WISH.DELETE(id), true).subscribe({
-  //           next: (response) => {
-  //             if (response?.data) {
-  //               this.toastService.show({
-  //                 message: 'Item removed from wishlist successfully',
-  //                 type: EToastType.success,
-  //                 duration: 3000,
-  //               });
+  public toggleWishList<PType>(event: any, product: PType, isWishListKey: string, prodcutIdKey: string) {
+    event.stopPropagation();
 
-  //               this.wishlistProducts.update(() => {
-  //                 return this.wishlistProducts().filter((_) => _.id !== id);
-  //               });
-  //               resolve(true);
-  //             } else {
-  //               this.toastService.show({
-  //                 message: response.errorMessage || 'Failed to remove item from wishlist',
-  //                 type: EToastType.error,
-  //                 duration: 3000,
-  //               });
-  //               resolve(false);
-  //             }
-  //           },
-  //         });
-  //       } else {
-  //         resolve(false);
-  //       }
-  //     });
-  //   });
-
-  //   return promise;
-  // }
+    if (this.utilService.isUserLoggedIn()) {
+      if (product[isWishListKey]) {
+        this.removeFromWishList(product[prodcutIdKey]).then((res: boolean) => {
+          if (res) {
+            product[isWishListKey] = false;
+          }
+        });
+      } else {
+        this.addToWishlist(product[prodcutIdKey]).then((res: boolean) => {
+          if (res) {
+            product[isWishListKey] = true;
+          }
+        });
+      }
+    } else {
+      const modalData: MConfirmationModalData = {
+        heading: 'Login',
+        body: 'To add items to your wishlist, please login first.',
+        yesText: 'Yes',
+        noText: 'No',
+      };
+      this.objectCOnfirmationUtil.getConfirmation(modalData).then((res: boolean) => {
+        if (res) {
+          this.utilService.openLoginForm.emit();
+        }
+      });
+    }
+  }
 }

@@ -30,6 +30,8 @@ import { Product } from '../../pages/home/product-slider/dashboard.response';
 export class ProductDetailBase {
   public isShowloader: WritableSignal<boolean> = signal(false);
   public isBtnLoader: WritableSignal<boolean> = signal(false);
+  // public isProductValid: WritableSignal<boolean> = signal(true);
+  public isProductNotFound: WritableSignal<boolean> = signal(false);
   public cartForm: FormGroup<ICartForm> = new FormGroup<ICartForm>({
     stockId: new FormControl(null),
     variantStockId: new FormControl(null),
@@ -48,9 +50,9 @@ export class ProductDetailBase {
     isRelatedItem: false,
   };
 
-  private utilService: UtilityService = inject(UtilityService);
-  private toastService: ToastService = inject(ToastService);
-  private cartService: CartService = inject(CartService);
+  public utilService: UtilityService = inject(UtilityService);
+  public toastService: ToastService = inject(ToastService);
+  public cartService: CartService = inject(CartService);
 
   public getProductDetail(productId: number) {
     this.isShowloader.set(true);
@@ -134,7 +136,8 @@ export class ProductDetailBase {
             );
           }
         } else {
-          // this.productDetail.set(initializeIRProductDetailRoot());
+          this.productDetail.set(initializeIRProductDetailRoot()); 
+          this.isProductNotFound.update(() => true);         
         }
         this.isShowloader.set(false);
       },

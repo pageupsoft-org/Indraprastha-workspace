@@ -46,6 +46,7 @@ export * from './lib/interface/request/pagination.request';
 export * from './lib/services/firebase-service';
 export * from './lib/services/platform-service';
 export * from './lib/services/toast-service';
+export * from './lib/services/shared-util-service';
 
 
 export * from './lib/utils/api.helper';
