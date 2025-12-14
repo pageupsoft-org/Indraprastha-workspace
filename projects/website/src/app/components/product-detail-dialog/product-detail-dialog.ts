@@ -33,6 +33,7 @@ export class ProductDetailDialog extends ProductDetailBase implements OnInit {
     wishList: false,
     imageUrl: [],
     productId: 0,
+    color: []
   };
 
 

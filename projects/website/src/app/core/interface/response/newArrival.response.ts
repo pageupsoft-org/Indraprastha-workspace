@@ -3,5 +3,6 @@ export interface RNewArrivals {
     price: number;
     wishList: boolean;
     imageUrl: string[],
+    color: string[],
     productId: number
 }

@@ -1,80 +1,100 @@
 <!-- <div class="w-[calc(100%)] sm:w-[calc(100%/3-12px)] lg:w-[calc(100%/4-24px)] flex-shrink-0"> -->
-<div class="bg-white relative new-arrivals-card rounded-xl shadow-md overflow-hidden group">
-  <img
-    [src]="product.imageUrl[0]"
-    alt="Model 2"
-    class="w-full h-full object-cover transition-transform duration-300 group-hover:scale-105"
-  />
+<div class="group">
+  <div class="bg-white relative new-arrivals-card rounded-xl shadow-md overflow-hidden">
+    <img
+      [src]="product.imageUrl[0]"
+      alt="Model 2"
+      class="w-full h-full object-cover transition-transform duration-300 group-hover:scale-105"
+    />
 
-  <!-- Like button: ensure it's above overlay too -->
-  <div (click)="toggleWishList($event)"
-    class="w-[30] h-[32px] like-btn absolute top-3 right-3 p-2 text-black bg-white rounded-[50%] cursor-pointer hover:bg-opacity-90 transition-all duration-300 z-20"
-  >
-    <button  class="cursor-pointer">
-      @if(product.wishList){
+    <!-- Like button: ensure it's above overlay too -->
+    <div
+      (click)="toggleWishList($event)"
+      class="w-[30] h-[32px] like-btn absolute top-3 right-3 p-2 text-black bg-white rounded-[50%] cursor-pointer hover:bg-opacity-90 transition-all duration-300 z-20"
+    >
+      <button class="cursor-pointer">
+        @if(product.wishList){
+        <svg
+          xmlns="http://www.w3.org/2000/svg"
+          class="h-4 w-4 text-[#df1800]"
+          fill="currentColor"
+          viewBox="0 0 24 24"
+          stroke="currentColor"
+        >
+          <path
+            stroke-linecap="round"
+            stroke-linejoin="round"
+            stroke-width="2"
+            d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z"
+          />
+        </svg>
+        } @else {
+        <svg
+          xmlns="http://www.w3.org/2000/svg"
+          class="h-4 w-4"
+          fill="none"
+          viewBox="0 0 24 24"
+          stroke="currentColor"
+        >
+          <path
+            stroke-linecap="round"
+            stroke-linejoin="round"
+            stroke-width="2"
+            d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z"
+          />
+        </svg>
+        }
+      </button>
+    </div>
+
+    <!-- Gradient overlay -->
+    <div
+      (click)="navigateToProductDetail()"
+      class="absolute inset-0 bg-gradient-to-t from-gray-900 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300 cursor-pointer pointer-events-none group-hover:pointer-events-auto"
+    ></div>
+
+    <!-- Hidden Add Button (visible on hover) -->
+    <button
+      (click)="addProduct($event)"
+      class="add-btn absolute bottom-4 right-4 p-2 text-black bg-white bg-opacity-90 rounded-[10px] opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-300 cursor-pointer z-20"
+    >
       <svg
-        xmlns="http://www.w3.org/2000/svg"
-        class="h-4 w-4 text-[#df1800]"
-        fill="currentColor"
-        viewBox="0 0 24 24"
-        stroke="currentColor"
-      >
-        <path
-          stroke-linecap="round"
-          stroke-linejoin="round"
-          stroke-width="2"
-          d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z"
-        />
-      </svg>
-      } @else {
-      <svg
-        xmlns="http://www.w3.org/2000/svg"
-        class="h-4 w-4"
+        class="w-6 h-6"
         fill="none"
-        viewBox="0 0 24 24"
         stroke="currentColor"
+        viewBox="0 0 24 24"
+        xmlns="http://www.w3.org/2000/svg"
       >
         <path
           stroke-linecap="round"
           stroke-linejoin="round"
           stroke-width="2"
-          d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z"
-        />
+          d="M12 6v6m0 0v6m0-6h6m-6 0H6"
+        ></path>
       </svg>
-      }
     </button>
   </div>
 
-  <!-- Gradient overlay -->
-  <div
-    (click)="navigateToProductDetail()"
-    class="absolute inset-0 bg-gradient-to-t from-gray-900 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300 cursor-pointer pointer-events-none group-hover:pointer-events-auto"
-  ></div>
-
-  <!-- Hidden Add Button (visible on hover) -->
-  <button
-    (click)="addProduct($event)"
-    class="add-btn absolute bottom-4 right-4 p-2 text-black bg-white bg-opacity-90 rounded-[10px] opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-300 cursor-pointer z-20"
-  >
-    <svg
-      class="w-6 h-6"
-      fill="none"
-      stroke="currentColor"
-      viewBox="0 0 24 24"
-      xmlns="http://www.w3.org/2000/svg"
-    >
-      <path
-        stroke-linecap="round"
-        stroke-linejoin="round"
-        stroke-width="2"
-        d="M12 6v6m0 0v6m0-6h6m-6 0H6"
-      ></path>
-    </svg>
-  </button>
+  <div class="mt-4">
+    <div class="h-[10%]">
+      <h3
+        class="mt-4 text-sm text-gray-700 truncate relative pb-1"
+        (click)="navigateToProductDetail()"
+      >
+        <span>{{ product.name }}</span>
+        <!-- <div
+          class="absolute bottom-0 left-0 w-0 h-0.5 bg-gradient-to-r from-[#800020] via-[#A52A2A] to-[#DC143C] group-hover:w-full transition-all duration-300 ease-in-out origin-left"
+        ></div> -->
+        <div
+          class="absolute bottom-0 left-0 w-0 h-0.5 bg-gradient-to-r group-hover:w-full transition-all duration-300 ease-in-out origin-left"
+          [style.--from-color]="product.color[0]"
+          [style.--to-color]="product.color[0]"
+          [style.backgroundImage]="'linear-gradient(to right, var(--from-color), var(--to-color))'"
+        ></div>
+      </h3>
+      <p class="mt-1 text-lg text-[#8f8f8f]">
+        {{ product.price | currency : 'INR' : 'symbol' : '1.0-0' : 'en-IN' }}
+      </p>
+    </div>
+  </div>
 </div>
-
-<div class="mt-4">
-  <p class="cursor-pointer" (click)="navigateToProductDetail()">{{ product.name }}</p>
-  <p class="text-lg text-[#8f8f8f]">Rs. {{ product.price }}</p>
-</div>
-<!-- </div> -->
