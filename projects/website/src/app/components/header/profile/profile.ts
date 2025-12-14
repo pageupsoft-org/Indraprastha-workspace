@@ -1,11 +1,30 @@
-import { Component, effect, EventEmitter, inject, model, OnInit, Output, output, signal } from '@angular/core';
+import {
+  Component,
+  effect,
+  EventEmitter,
+  inject,
+  model,
+  OnInit,
+  Output,
+  output,
+  signal,
+} from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
 import { ProfileUpsertDialog } from './profile-upsert-dialog/profile-upsert-dialog';
 import { AddressUpsertDialog } from './address-upsert-dialog/address-upsert-dialog';
-import { ApiRoutes, ConfirmationUtil, deCodeToken, EToastType, httpDelete, httpGet, IRGeneric, MConfirmationModalData, ToastService } from '@shared';
+import {
+  ApiRoutes,
+  ConfirmationUtil,
+  deCodeToken,
+  EToastType,
+  httpDelete,
+  httpGet,
+  IRGeneric,
+  MConfirmationModalData,
+  ToastService,
+} from '@shared';
 import { UtilityService } from '@website/core';
 import { CommonModule } from '@angular/common';
-
 
 @Component({
   selector: 'app-profile',
@@ -15,19 +34,20 @@ import { CommonModule } from '@angular/common';
 })
 export class Profile {
   public showProfileBar = signal(true);
-  public addressData = inject(UtilityService)
+  public addressData = inject(UtilityService);
   @Output() removeFromDom: EventEmitter<boolean> = new EventEmitter<boolean>();
   public isShown = signal(false);
   public readonly objectCOnfirmationUtil: ConfirmationUtil = new ConfirmationUtil();
 
-  constructor(private matdialog: MatDialog, public utilityService: UtilityService, private _toaster: ToastService) {
-  }
-
+  constructor(
+    private matdialog: MatDialog,
+    public utilityService: UtilityService,
+    private _toaster: ToastService
+  ) {}
 
   public close() {
     this.showProfileBar.set(false);
     this.removeFromDom.emit(true);
-
   }
 
   public upsertInfo(id: number = 0) {
@@ -45,7 +65,7 @@ export class Profile {
       width: '650px',
       maxWidth: '90vw',
       data: {
-        id: id
+        id: id,
       },
     });
   }
@@ -59,28 +79,36 @@ export class Profile {
       heading: 'Confirm Delete',
       body: 'Are you sure you want to delete this shipping address?',
       yesText: 'Yes',
-      noText: 'No'
+      noText: 'No',
     };
 
     this.objectCOnfirmationUtil.getConfirmation(modalData).then((res: boolean) => {
       if (res) {
-        httpDelete<IRGeneric<boolean>>(ApiRoutes.CUSTOMERS.SHIPPIBG_DELETE_BY_ID(id), false).subscribe({
+        httpDelete<IRGeneric<boolean>>(
+          ApiRoutes.CUSTOMERS.SHIPPIBG_DELETE_BY_ID(id),
+          false
+        ).subscribe({
           next: (response) => {
             if (response && response.data) {
-              this.utilityService.AddressData.update(list =>
-                list.filter(item => item.id !== id)
+              this.utilityService.AddressData.update((list) =>
+                list.filter((item) => item.id !== id)
               );
-              this._toaster.show({ message: 'Address Delete Successfully', duration: 3000, type: EToastType.success })
+              this._toaster.show({
+                message: 'Address Delete Successfully',
+                duration: 3000,
+                type: EToastType.success,
+              });
             }
-          }
-        })
+          },
+        });
       }
-    })
-
+    });
   }
 
-
-
-
-
+  public onBackdropClick(event: MouseEvent) {
+    // Only close if clicking directly on backdrop (not bubbled from children)
+    if (event.target === event.currentTarget) {
+      this.close();
+    }
+  }
 }

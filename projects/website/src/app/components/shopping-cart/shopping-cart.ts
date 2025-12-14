@@ -114,40 +114,12 @@ export class ShoppingCart {
 
   public removeItemFromCart(cartId: number, index: number) {
     this.cartService.removeItemFromCart(cartId, index);
-    // this.objCOnfirmationUtil
-    //   .getConfirmation(
-    //     getDefaultConfirmationModalData('Remove item', 'Are you sure you want to remove this item?')
-    //   )
-    //   .then((res: boolean) => {
-    //     if (res) {
-    //       if (this.utilService.isUserLoggedIn()) {
-    //         httpDelete<IRGeneric<boolean>>(ApiRoutes.CART.DELETE_ITEM_FROM_CART(cartId)).subscribe({
-    //           next: (res) => {
-    //             if (res?.data) {
-    //               this.cartService.cartData.update((currentCart) =>
-    //                 currentCart.filter((item) => item.cartId !== cartId)
-    //               );
+  }
 
-    //               this.toastService.show({
-    //                 message: 'Product removed',
-    //                 type: EToastType.success,
-    //                 duration: 2000,
-    //               });
-    //             }
-    //           },
-    //         });
-    //       } else {
-    //         this.cartService.cartData.update((currentCart) =>
-    //           currentCart.filter((item, prodIndex) => prodIndex !== index)
-    //         );
-    //         setLocalStorageItem(LocalStorageEnum.cartList, this.cartService.cartData());
-    //         this.toastService.show({
-    //           message: 'Product removed',
-    //           type: EToastType.success,
-    //           duration: 2000,
-    //         });
-    //       }
-    //     }
-    //   });
+  public onBackdropClick(event: MouseEvent) {
+    // Only close if clicking directly on backdrop (not bubbled from children)
+    if (event.target === event.currentTarget) {
+      this.hideCart();
+    }
   }
 }
