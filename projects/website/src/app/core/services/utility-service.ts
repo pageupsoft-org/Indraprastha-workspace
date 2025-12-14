@@ -1,7 +1,7 @@
 import { EventEmitter, Injectable, signal, WritableSignal } from '@angular/core';
 import { IResponseGenderMenuRoot } from '../interface/response/gender-menu.response';
-import { IDecodeTokenKey } from '@shared';
-import { IAddressPayload, IProfileResponse } from '../../components/header/profile/profile-upsert-dialog/profile-upsert-dialog.models';
+import { IProfileResponse } from '../../components/header/profile/profile-upsert-dialog/profile-upsert-dialog.models';
+import { IAddressPayload } from '../../components/header/profile/address-upsert-dialog/address-upsert-dialog.model';
 
 @Injectable({
   providedIn: 'root',

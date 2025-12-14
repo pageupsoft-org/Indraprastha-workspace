@@ -17,7 +17,6 @@ import {
 } from '@shared';
 import AOS from 'aos';
 import { environment, IResponseGenderMenuRoot, UtilityService } from '@website/core';
-import { IAddressPayload, IProfileResponse } from './components/header/profile/profile-upsert-dialog/profile-upsert-dialog.models';
 
 
 @Component({

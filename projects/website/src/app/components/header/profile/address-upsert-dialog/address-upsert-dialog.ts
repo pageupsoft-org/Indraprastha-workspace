@@ -1,19 +1,15 @@
 import { Component, inject, OnInit, signal, WritableSignal } from '@angular/core';
 import { FormGroup, ReactiveFormsModule } from '@angular/forms';
 import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
-import { GenericCancelButton, AppLoadingButton, NumberOnlyValidators } from '@shared';
-import {
-  IAddresseForm,
-  IAddressPayload,
-  initializeAddressForm,
-} from '../profile-upsert-dialog/profile-upsert-dialog.models';
+import { GenericCancelButton, AppLoadingButton, NumberOnlyValidators, NoLeadingTrailingSpaceDirective } from '@shared';
 import { ApiRoutes, EToastType, httpPost, IRGeneric, ToastService, ValidateControl } from '@shared';
 import { COUNTRIES } from './static-country-data';
 import { UtilityService } from '@website/core';
+import { IAddresseForm, IAddressPayload, initializeAddressForm } from './address-upsert-dialog.model';
 
 @Component({
   selector: 'app-address-upsert-dialog',
-  imports: [GenericCancelButton, ReactiveFormsModule, ValidateControl, AppLoadingButton, NumberOnlyValidators],
+  imports: [GenericCancelButton, ReactiveFormsModule, ValidateControl, AppLoadingButton, NumberOnlyValidators, NoLeadingTrailingSpaceDirective],
   templateUrl: './address-upsert-dialog.html',
   styleUrl: './address-upsert-dialog.scss',
 })

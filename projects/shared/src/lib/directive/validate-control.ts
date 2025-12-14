@@ -24,7 +24,6 @@ export class ValidateControl implements AfterViewInit, OnDestroy {
     @Optional() private ngControl: NgControl,
     @Optional() private formGroupDir: FormGroupDirective
   ) {
-    console.log(ngControl, formGroupDir)
   }
 
   ngAfterViewInit() {
@@ -130,7 +129,7 @@ export class ValidateControl implements AfterViewInit, OnDestroy {
   }
 
   private getError(control: AbstractControl): string {
-    const e = control.errors;
+    const e = control.errors;    
 
     if (!e) return '';
 

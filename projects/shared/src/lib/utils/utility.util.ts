@@ -141,7 +141,6 @@ export function trimFormValue(ngControl: any) {
   if (!ngControl || !ngControl.control) return;   // ✔ control exists check
 
   const rawValue = ngControl.control.value;
-  console.log(rawValue, "raw");
 
   // ✔ If value is null or undefined → do nothing
   if (rawValue === null || rawValue === undefined) return;
@@ -151,48 +150,9 @@ export function trimFormValue(ngControl: any) {
     ? rawValue.trim()
     : String(rawValue).trim();
 
-  console.log(trimValue, "trimmed");
   ngControl.setValue(trimValue, { emitEvent: false, onlySelf: true })
 }
 
-
-
-
-// export function getObjectFromUrl(
-//   url: string,
-//   arrayKeys: string[] = []
-// ): { baseUrl: string; params: Record<string, any> } {
-//   const result: Record<string, any> = {};
-
-//   const [baseUrl, queryString] = url.includes('?') ? url.split('?') : [url, ''];
-//   const params = new URLSearchParams(queryString);
-
-//   const parseValue = (value: string): any => {
-//     if (value === 'true') return true;
-//     if (value === 'false') return false;
-//     if (!isNaN(Number(value)) && value.trim() !== '') return Number(value);
-//     return value;
-//   };
-
-//   params.forEach((value, key) => {
-//     const parsed = parseValue(value);
-
-//     if (result[key]) {
-//       result[key] = Array.isArray(result[key]) ? [...result[key], parsed] : [result[key], parsed];
-//     } else {
-//       result[key] = arrayKeys.includes(key) ? [parsed] : parsed;
-//     }
-//   });
-
-//   // Ensure all arrayKeys exist, even if empty
-//   for (const key of arrayKeys) {
-//     if (!(key in result)) {
-//       result[key] = [];
-//     }
-//   }
-
-//   return { baseUrl, params: result };
-// }
 export function getObjectFromUrl(
   url: string,
   arrayKeys: string[] = []

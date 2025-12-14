@@ -37,9 +37,9 @@ import {
 import { FormsModule } from '@angular/forms';
 import { Profile } from './profile/profile';
 import {
-  IAddressPayload,
   IProfileResponse,
 } from './profile/profile-upsert-dialog/profile-upsert-dialog.models';
+import { IAddressPayload } from './profile/address-upsert-dialog/address-upsert-dialog.model';
 
 @Component({
   selector: 'app-header',

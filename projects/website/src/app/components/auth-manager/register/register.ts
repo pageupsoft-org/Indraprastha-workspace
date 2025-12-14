@@ -1,22 +1,12 @@
 import { Component, model, OnInit } from '@angular/core';
 import { FormControl, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 import { HttpErrorResponse } from '@angular/common/http';
-import {
-  ApiRoutes,
-  ErrorHandler,
-  EToastType,
-  httpPost,
-  IRegisterForm,
-  IRegisterFormData,
-  IRGeneric,
-  patternWithMessage,
-  ToastService,
-} from '@shared';
+import { ApiRoutes, EToastType, httpPost, IRegisterForm, IRegisterFormData, IRGeneric, patternWithMessage, ToastService, ValidateControl, NumberOnlyValidators } from '@shared';
 import { ButtonLoader, EAuthManager } from '@website/core';
 
 @Component({
   selector: 'app-register',
-  imports: [ErrorHandler, ReactiveFormsModule, ButtonLoader],
+  imports: [ReactiveFormsModule, ButtonLoader, ValidateControl, NumberOnlyValidators],
   templateUrl: './register.html',
   styleUrl: './register.scss',
 })

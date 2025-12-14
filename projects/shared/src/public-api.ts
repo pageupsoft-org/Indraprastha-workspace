@@ -8,7 +8,6 @@ export * from './lib/component/generic-cancel-button/generic-cancel-button';
 
 export * from './lib/const/apiRoutes.const';
 
-export * from './lib/directive/error-handler';
 export * from './lib/directive/validate-control';
 export * from './lib/directive/contact.directive';
 
@@ -55,3 +54,5 @@ export * from './lib/utils/utility.util';
 export * from './lib/utils/confimation.util';
 
 export * from './lib/interceptors/auth-interceptor';
+
+export * from './lib/validator/no-leading-trailing-space-directive';

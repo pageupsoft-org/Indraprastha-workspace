@@ -23,6 +23,7 @@
     <div class="flex gap-4">
       <input
         type="text"
+        libNoLeadingTrailingSpaceDirective
         placeholder="First Name"
         libValidateControl
         [formControl]="addressForm.controls.firstName"
@@ -33,6 +34,7 @@
       <input
         type="text"
         placeholder="Last Name"
+        libNoLeadingTrailingSpaceDirective
         libValidateControl
         [formControl]="addressForm.controls.lastName"
         minlength="3"
@@ -46,6 +48,7 @@
       <input
         type="text"
         placeholder="Address"
+        libNoLeadingTrailingSpaceDirective
         libValidateControl
         [formControl]="addressForm.controls.address"
         maxlength="70"
@@ -58,6 +61,7 @@
       <input
         type="text"
         placeholder="Apartment, suite"
+        libNoLeadingTrailingSpaceDirective
         libValidateControl
         maxlength="70"
         [formControl]="addressForm.controls.apartment"
@@ -69,6 +73,7 @@
     <div class="flex gap-4">
       <select
         libValidateControl
+        libNoLeadingTrailingSpaceDirective
         [formControl]="addressForm.controls.state"
         (change)="onStateChange()"
         class="flex-1 w-full border border-gray-200 rounded-lg px-2 py-3 focus:outline-none focus:ring-2 focus:ring-blue-400 placeholder-gray-300"
@@ -80,6 +85,7 @@
       </select>
       <select
         libValidateControl
+        libNoLeadingTrailingSpaceDirective
         [formControl]="addressForm.controls.city"
         class="flex-1 w-full border border-gray-200 rounded-lg px-2 py-3 focus:outline-none focus:ring-2 focus:ring-blue-400 placeholder-gray-300"
       >
