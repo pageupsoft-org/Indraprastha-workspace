@@ -12,12 +12,14 @@ import {
 } from '@shared';
 import { Router } from '@angular/router';
 import { IResponseCollection } from '../interface/response/collection.response';
+import { ApiCallService } from './api-call-service';
 
 @Injectable({
   providedIn: null,
 })
 export class Collection {
   private readonly router: Router = inject(Router);
+  private readonly apiCallService: ApiCallService = inject(ApiCallService);
 
   public payloadGenderMenu: IRequestProductMenu = {
     ...initializePagInationPayload(),
@@ -40,12 +42,9 @@ export class Collection {
 
     this.router.navigate([createUrlFromObject(this.payloadGenderMenu, GenderTypeEnum.Women)]);
   }
+
   public getCollection(gender: string, responseVar: WritableSignal<IResponseCollection[]>) {
-    return UseFetch(
-      httpGet<IRGeneric<IResponseCollection[]>>(ApiRoutes.COLLECTION.GET_BY_GENDER(gender), false, [
-        { key: CustomToken.AUTH_REQUIRED, value: false },
-      ])
-    )
+    return UseFetch(this.apiCallService.getCollection(gender))
       .then((response) => {
         if (response?.data && response.data.length) {
           responseVar.set(response.data);

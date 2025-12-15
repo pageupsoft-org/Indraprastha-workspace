@@ -21,13 +21,13 @@ export class WomenWear implements AfterViewInit {
   @ViewChild('slider', { static: true }) sliderRef!: ElementRef<HTMLDivElement>;
   @ViewChildren('slide') slidesRef!: QueryList<ElementRef<HTMLDivElement>>;
 
-  public womemsWearList: WritableSignal<IResponseCollection[]> = signal([]);
+  public womensWearList: WritableSignal<IResponseCollection[]> = signal([]);
 
   slideWidth = 0;
   slideMargin = 16; // matches your 16px margin
 
   constructor(private platformService: PlatformService, private collectionService: Collection) {
-    this.collectionService.getCollection(GenderTypeEnum.Women, this.womemsWearList);
+    this.collectionService.getCollection(GenderTypeEnum.Women, this.womensWearList);
   }
 
   ngAfterViewInit(): void {

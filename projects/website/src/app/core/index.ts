@@ -22,3 +22,4 @@ export * from './interface/response/wishlist.response';
 export * from './services/cart-service';
 export * from './services/utility-service';
 export * from './services/wishlist-service';
+export * from './services/api-call-service';

@@ -2,15 +2,17 @@ import { Component, computed, effect, OnInit, signal, WritableSignal } from '@an
 import { FormControl, FormGroup, ReactiveFormsModule } from '@angular/forms';
 import {
   ICheckoutForm,
+  ICreateOrder,
   initializeICheckoutForm,
   initializeResponseCheckout,
+  IProductInfo,
   IResponseCheckout,
   Product,
 } from './checkout.model';
-import { ApiRoutes, EToastType, httpGet, IRGeneric, PlatformService } from '@shared';
+import { ApiRoutes, EToastType, httpGet, httpPost, IRGeneric, PlatformService } from '@shared';
 import { CommonModule } from '@angular/common';
-import { ActivatedRoute, RouterModule } from '@angular/router';
-import { CartService, CartUpdateOperation, ProductDetailBase } from '@website/core';
+import { ActivatedRoute, Router, RouterModule } from '@angular/router';
+import { appRoutes, CartService, CartUpdateOperation, ProductDetailBase } from '@website/core';
 import {
   initializeIQueryToCheckout,
   IQueryToCheckout,
@@ -43,7 +45,7 @@ export class Checkout extends ProductDetailBase implements OnInit {
   public isRedirectedFromBuyNow = signal(false);
   public isViewAllAddress = signal(false);
 
-  public selectedAddress = new FormControl<number | null>(0);
+  public selectedAddress = new FormControl<number | null>(null);
 
   public productDataFromQuery: WritableSignal<IQueryToCheckout> = signal(
     initializeIQueryToCheckout()
@@ -136,10 +138,18 @@ export class Checkout extends ProductDetailBase implements OnInit {
     });
   });
 
+  private checkoutDataEffect = effect(() => {
+    this.checkoutData();
+    if (this.checkoutData().shippingAddresses.length) {
+      this.selectedAddress.setValue(this.checkoutData().shippingAddresses[0].id);
+    }
+  });
+
   constructor(
     private activatedRoute: ActivatedRoute,
     private matdialog: MatDialog,
-    private platformService: PlatformService
+    private platformService: PlatformService,
+    private router: Router
   ) {
     super();
 
@@ -270,12 +280,48 @@ export class Checkout extends ProductDetailBase implements OnInit {
     this.isViewAllAddress.update((v) => !v);
   }
 
-  public onPaymentSumit() {
-    if (this.checkoutForm.valid) {
-      // proceed
-    } else {
-      this.checkoutForm.markAllAsTouched();
-    }
+  public onPaymentSubmit() {
+    const payload: ICreateOrder = {
+      shippingAddressId: this.selectedAddress.value ?? 0,
+      shippingAddress: null,
+      cartIds: [],
+      products: [],
+    };
+
+    this.checkoutData().products.forEach((value) => {
+      const { stockId, cartVariant, cartQuantity } = value;
+
+      const prod: IProductInfo = {
+        stockId,
+        variantId: cartVariant?.variantId ?? null,
+        quantity: cartQuantity,
+      };
+
+      payload.products.push(prod);
+    });
+
+    console.log(payload);
+    // return;
+
+    httpPost<IRGeneric<number>, ICreateOrder>(ApiRoutes.ORDERS.BASE, payload, true).subscribe({
+      next: (res) => {
+        if (res.data) {
+          this.toastService.show({
+            message: 'Order placed',
+            type: EToastType.success,
+            duration: 2000,
+          });
+
+          this.router.navigate([appRoutes.ORDER]);
+        } else {
+          this.toastService.show({
+            message: res.errorMessage,
+            type: EToastType.error,
+            duration: 2000,
+          });
+        }
+      },
+    });
   }
 
   public removeItemFromCart(cartId: number, index: number) {

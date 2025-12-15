@@ -22,6 +22,7 @@ import { Base } from '@portal/core';
 import { DashboardResponseRoot, Product } from './product-slider/dashboard.response';
 import { IDashboadRequest } from './product-slider/dashboard.request';
 import { Collection } from '../../core/services/collection';
+import { ApiCallService } from '@website/core';
 
 @Component({
   selector: 'app-home',
@@ -41,7 +42,7 @@ export class Home extends Base implements AfterViewInit, OnInit {
     type: DashboardProductTypeStringEnum.NewArrival,
   };
 
-  constructor(private platformService: PlatformService) {
+  constructor(private platformService: PlatformService, private apiCallService: ApiCallService) {
     super();
   }
 
@@ -95,9 +96,7 @@ export class Home extends Base implements AfterViewInit, OnInit {
   }
 
   public getBannerData(payload: IBannerPagination, type: 'top' | 'middle') {
-    httpPost<IRGeneric<IBannerResponse>, IBannerPagination>(ApiRoutes.BANNER.GET, payload, false, [
-      { key: CustomToken.AUTH_REQUIRED, value: false },
-    ]).subscribe({
+    this.apiCallService.getBannerData(payload, type).subscribe({
       next: (response) => {
         if (response) {
           if (response.data) {
@@ -114,12 +113,7 @@ export class Home extends Base implements AfterViewInit, OnInit {
   }
 
   private getDashboardProduct() {
-    httpPost<IRGeneric<DashboardResponseRoot>, IDashboadRequest>(
-      ApiRoutes.PRODUCT.DASHBOARD,
-      this.payload,
-      false,
-      [{ key: CustomToken.AUTH_REQUIRED, value: false },]
-    ).subscribe({
+    this.apiCallService.getDashboardProduct(this.payload).subscribe({
       next: (response) => {
         if (response?.data?.products) {
           this.productList.set(response.data.products);

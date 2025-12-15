@@ -34,7 +34,7 @@
       <!-- Slider Container -->
       <div class="relative w-full">
         <!-- Left Arrow -->
-        @if(womemsWearList().length > 3){
+        @if(womensWearList().length > 3){
         <button
           id="prevBtn"
           (click)="scrollSlider('prev')"
@@ -77,7 +77,7 @@
           #slider
           class="flex overflow-x-auto snap-x snap-mandatory space-x-4 md:space-x-6 pb-2 scroll-smooth"
         >
-          @for (item of womemsWearList(); track $index) {
+          @for (item of womensWearList(); track $index) {
           <div
             #slide
             class="flex-shrink-0 w-[45%] sm:w-[35%] md:w-1/3 lg:w-1/3 snap-center relative"

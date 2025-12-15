@@ -127,3 +127,16 @@ export interface CartVariant {
   cartQuantity: number;
   variantId: number;
 }
+
+export interface ICreateOrder {
+  shippingAddressId: number;
+  shippingAddress: null;
+  cartIds: number[];
+  products: IProductInfo[];
+}
+
+export interface IProductInfo {
+  stockId: number | null;
+  variantId: number | null;
+  quantity: number | null;
+}
