@@ -5,6 +5,7 @@ import { WomenWear } from './women-wear/women-wear';
 import { MensWear } from './mens-wear/mens-wear';
 import {
   ApiRoutes,
+  CustomToken,
   DashboardProductTypeStringEnum,
   EBannerConnectionType,
   EbannerTypes,
@@ -34,7 +35,7 @@ export class Home extends Base implements AfterViewInit, OnInit {
   public topBanners: string | null = null;
   public middleBanners: string | null = null;
   public productList = signal<Product[]>([]);
-  
+
   private payload: IDashboadRequest = {
     ...initializePagInationPayload(),
     type: DashboardProductTypeStringEnum.NewArrival,
@@ -94,10 +95,9 @@ export class Home extends Base implements AfterViewInit, OnInit {
   }
 
   public getBannerData(payload: IBannerPagination, type: 'top' | 'middle') {
-    httpPost<IRGeneric<IBannerResponse>, IBannerPagination>(
-      ApiRoutes.BANNER.GET,
-      payload
-    ).subscribe({
+    httpPost<IRGeneric<IBannerResponse>, IBannerPagination>(ApiRoutes.BANNER.GET, payload, false, [
+      { key: CustomToken.AUTH_REQUIRED, value: false },
+    ]).subscribe({
       next: (response) => {
         if (response) {
           if (response.data) {
@@ -117,7 +117,8 @@ export class Home extends Base implements AfterViewInit, OnInit {
     httpPost<IRGeneric<DashboardResponseRoot>, IDashboadRequest>(
       ApiRoutes.PRODUCT.DASHBOARD,
       this.payload,
-      false
+      false,
+      [{ key: CustomToken.AUTH_REQUIRED, value: false },]
     ).subscribe({
       next: (response) => {
         if (response?.data?.products) {

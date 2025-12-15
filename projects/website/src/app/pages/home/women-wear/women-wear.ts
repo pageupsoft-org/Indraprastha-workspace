@@ -8,18 +8,7 @@ import {
   ViewChildren,
   WritableSignal,
 } from '@angular/core';
-import {
-  ApiRoutes,
-  createUrlFromObject,
-  DashboardProductTypeStringEnum,
-  GenderTypeEnum,
-  httpGet,
-  initializePagInationPayload,
-  IRGeneric,
-  PlatformService,
-} from '@shared';
-import { IDashboadRequest } from '../product-slider/dashboard.request';
-import { Router } from '@angular/router';
+import { GenderTypeEnum, PlatformService } from '@shared';
 import { IResponseCollection } from '../../../core/interface/response/collection.response';
 import { Collection } from '../../../core/services/collection';
 @Component({

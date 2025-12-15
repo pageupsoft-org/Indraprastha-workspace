@@ -5,6 +5,7 @@ import { Footer } from './components/footer/footer';
 import { HttpClient } from '@angular/common/http';
 import {
   ApiRoutes,
+  CustomToken,
   deCodeToken,
   FirebaseService,
   getLocalStorageItem,
@@ -69,13 +70,13 @@ export class App implements OnInit {
   }
 
   private getGenderMenu() {
-    httpGet<IRGeneric<IResponseGenderMenuRoot[]>>(ApiRoutes.COLLECTION.MENU, false).subscribe({
+    httpGet<IRGeneric<IResponseGenderMenuRoot[]>>(ApiRoutes.COLLECTION.MENU, false, [
+      { key: CustomToken.AUTH_REQUIRED, value: false },
+    ]).subscribe({
       next: (response) => {
         if (response && response.data) {
           this.utilityService.genderMenuData.set([]);
-          // this.utilityService.genderMenuData.set(response.data);
           this.utilityService.genderMenuData.set(response.data);
-          // this.utilityService.genderMenuData.set(dummyDataGenderMenu.data);
         } else {
           this.utilityService.genderMenuData.set([]);
         }

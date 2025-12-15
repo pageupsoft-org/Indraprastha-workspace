@@ -3,7 +3,12 @@ import { catchError, throwError } from 'rxjs';
 import { inject } from '@angular/core';
 import { Router } from '@angular/router';
 import { ToastService } from '../services/toast-service';
-import { clearLocalStorage, getLocalStorageItem, setLocalStorageItem, UseFetch } from '../utils/utility.util';
+import {
+  clearLocalStorage,
+  getLocalStorageItem,
+  setLocalStorageItem,
+  UseFetch,
+} from '../utils/utility.util';
 import { localStorageEnum } from '../enum/localStorage.enum';
 import { PlatformService } from '../services/platform-service';
 import { EToastType } from '../enum/toast-type.enum';
@@ -12,6 +17,7 @@ import { IRGeneric } from '../interface/response/generic.response';
 import { IRLogin } from '../interface/response/login.response';
 import { ApiRoutes } from '../const/apiRoutes.const';
 import { SharedUtilService } from '../services/shared-util-service';
+import { CustomToken } from '../custom-token';
 
 export function authInterceptor(type: 'website' | 'portal'): HttpInterceptorFn {
   return (req, next) => {
@@ -19,6 +25,10 @@ export function authInterceptor(type: 'website' | 'portal'): HttpInterceptorFn {
     const sharedUtilService = inject(SharedUtilService);
     const router = inject(Router);
     const platformService: PlatformService = inject(PlatformService);
+    
+    if (!req.context.get(CustomToken.AUTH_REQUIRED)) {
+      return next(req);
+    }
 
     let token: string | null = null;
     try {

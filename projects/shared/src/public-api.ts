@@ -57,3 +57,6 @@ export * from './lib/utils/confimation.util';
 export * from './lib/interceptors/auth-interceptor';
 
 export * from './lib/validator/no-leading-trailing-space-directive';
+
+
+export * from './lib/custom-token';

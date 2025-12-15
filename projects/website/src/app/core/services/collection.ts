@@ -3,6 +3,7 @@ import { IRequestProductMenu } from '../interface/model/header.model';
 import {
   ApiRoutes,
   createUrlFromObject,
+  CustomToken,
   GenderTypeEnum,
   httpGet,
   initializePagInationPayload,
@@ -41,7 +42,9 @@ export class Collection {
   }
   public getCollection(gender: string, responseVar: WritableSignal<IResponseCollection[]>) {
     return UseFetch(
-      httpGet<IRGeneric<IResponseCollection[]>>(ApiRoutes.COLLECTION.GET_BY_GENDER(gender), false)
+      httpGet<IRGeneric<IResponseCollection[]>>(ApiRoutes.COLLECTION.GET_BY_GENDER(gender), false, [
+        { key: CustomToken.AUTH_REQUIRED, value: false },
+      ])
     )
       .then((response) => {
         if (response?.data && response.data.length) {
