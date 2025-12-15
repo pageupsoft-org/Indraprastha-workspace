@@ -1,0 +1,54 @@
+<div class="w-full mt-5">
+  <div class="flex justify-center w-full flex-col" style="align-items: center">
+    <div class="w-full max-w-4xl text-sm border-collapse flex justify-end mb-3">
+      <button
+        class="px-2 py-1 cursor-pointer border border-1"
+        [class.bg-black]="unit() === 'cm'"
+        [class.text-white]="unit() === 'cm'"
+        (click)="unit.set('cm')"
+      >
+        cm
+      </button>
+      <button
+        class="px-2 py-1 cursor-pointer border border-1"
+        [class.bg-black]="unit() === 'in'"
+        [class.text-white]="unit() === 'in'"
+        (click)="unit.set('in')"
+      >
+        in
+      </button>
+    </div>
+
+    <table class="w-full max-w-4xl text-sm border-collapse">
+      <thead class="bg-[#f7f4ee]">
+        <tr>
+          <th class="border border-gray-300 px-4 py-2 text-left">Size</th>
+          <th class="border border-gray-300 px-4 py-2 text-left">Bust</th>
+          <th class="border border-gray-300 px-4 py-2 text-left">Waist</th>
+          <th class="border border-gray-300 px-4 py-2 text-left">Hip</th>
+        </tr>
+      </thead>
+
+      <tbody>
+        @for (item of sizeChart; track item.size) {
+        <tr class="bg-white">
+          <td class="border border-gray-300 px-4 py-2">{{ item.size }}</td>
+          <td class="border border-gray-300 px-4 py-2">
+            {{ item.bust[unit()] }}
+          </td>
+          <td class="border border-gray-300 px-4 py-2">
+            {{ item.waist[unit()] }}
+          </td>
+          <td class="border border-gray-300 px-4 py-2">
+            {{ item.hip[unit()] }}
+          </td>
+        </tr>
+        }
+      </tbody>
+    </table>
+
+    <div class="w-full max-w-4xl mt-5 mb-3 font-bold text-lg">
+      <h1 class="bg-[#faf8f1] p-4">How to measure ?</h1>
+    </div>
+  </div>
+</div>

@@ -8,5 +8,6 @@ export const appRoutes = {
   ORDER: 'order',
   REVIEW_RATING: 'review-rating',
   ORDER_DETAIL: 'order-detail',
-  COLLECTION: 'collection'
+  COLLECTION: 'collection',
+  SIZE_GUIDE : 'size-guide'
 };

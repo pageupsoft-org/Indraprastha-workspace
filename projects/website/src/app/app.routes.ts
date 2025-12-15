@@ -57,6 +57,10 @@ export const routes: Routes = [
     loadComponent: () => import('./pages/about-us/about-us').then((m) => m.AboutUs),
   },
   {
+    path: appRoutes.SIZE_GUIDE,
+    loadComponent: () => import('./pages/size-guide/size-guide').then((m) => m.SizeGuide),
+  },
+  {
     path: ':path',
     loadComponent: () =>
       import('./pages/dynamic-catalog/dynamic-catalog').then((m) => m.DynamicCatalog),
