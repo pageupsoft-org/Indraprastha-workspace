@@ -8,7 +8,7 @@ export const serverRoutes: ServerRoute[] = [
   },
   {
     path: appRoutes.HOME,
-    renderMode: RenderMode.Prerender,
+    renderMode: RenderMode.Server,
   },
   {
     path: appRoutes.WISHLIST,
