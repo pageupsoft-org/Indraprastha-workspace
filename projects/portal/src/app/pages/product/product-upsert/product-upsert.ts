@@ -219,8 +219,8 @@ export class ProductUpsert extends Base implements OnInit {
 
   public upsertProduct() {
     const invalidControls: { path: string; errors: any }[] = logInvalidControls(this.productForm);
-
     if (this.productForm.valid) {
+      // return;
       const data = this.productForm.getRawValue();
       data.descriptions.forEach((desc: any) => {
         if (desc.descriptionType === EDescriptionType.Json) {

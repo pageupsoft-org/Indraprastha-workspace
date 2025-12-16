@@ -121,7 +121,7 @@ export const initializeVariantForm = (data: IVariantData | null): FormGroup<IVar
     stocks: new FormGroup({
       quantity: new FormControl<number | null>(null, [Validators.required, Validators.maxLength(4), patternWithMessage(/^[1-9]\d*$/, 'Please enter a valid quantity')]),
     }),
-    variantBase64: new FormControl<string | null>(null, Validators.required,),
+    variantBase64: new FormControl<string | null>(null),
   });
 
   if (data) {
@@ -136,7 +136,7 @@ export const initializeStockForm = (
   size?: EStockSize | null
 ): FormGroup<stocks> =>
   new FormGroup<stocks>({
-    quantity: new FormControl<number | null>(quantity ?? null, [Validators.required, Validators.maxLength(4), patternWithMessage(/^[1-9]\d*$/, 'Please enter a valid quantity')]),
+    quantity: new FormControl<number | null>(quantity ?? null, [Validators.required, Validators.maxLength(4), patternWithMessage(/^[0-9]\d*$/, 'Please enter a valid quantity')]),
     size: new FormControl<EStockSize | null>(size ?? null),
   });
 

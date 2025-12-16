@@ -129,17 +129,14 @@ export function deCodeToken(): IDecodeTokenKey | null {
 
     const decoded = atob(base64);
     return JSON.parse(decoded);
-
   } catch (e) {
     console.error('Decode error:', e);
     return null;
   }
-
-
 }
 
 export function trimFormValue(ngControl: any) {
-  if (!ngControl || !ngControl.control) return;   // ✔ control exists check
+  if (!ngControl || !ngControl.control) return; // ✔ control exists check
 
   const rawValue = ngControl.control.value;
 
@@ -147,11 +144,10 @@ export function trimFormValue(ngControl: any) {
   if (rawValue === null || rawValue === undefined) return;
 
   // ✔ If value is NOT a string → convert safely
-  const trimValue = typeof rawValue === 'string'
-    ? rawValue.trim()
-    : String(rawValue).trim();
+  const trimValue = typeof rawValue === 'string' ? rawValue.trim() : String(rawValue).trim();
 
-  ngControl.setValue(trimValue, { emitEvent: false, onlySelf: true })
+  // ngControl.setValue(trimValue, { emitEvent: false, onlySelf: true })
+  ngControl.control.setValue(trimValue, { emitEvent: false, onlySelf: true });
 }
 
 export function getObjectFromUrl(

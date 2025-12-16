@@ -260,7 +260,7 @@
                 @if(variant.controls.variantBase64.value == null){
                 <span id="placeholder1" class="text-gray-500 text-center text-sm leading-tight">
                   Upload Image<br />({{ ImageSizeConst.productVariant.width
-                  }}{{ ImageSizeConst.productVariant.height }})
+                  }}x{{ ImageSizeConst.productVariant.height }})
                 </span>
                 }
               </div>
@@ -524,7 +524,9 @@
             <!-- Placeholder -->
             @if(productBase.value == null){
             <span class="text-gray-500 text-center text-sm leading-tight z-0">
-              Upload Image<br />(1080×1920)
+              Upload Image<br />({{ ImageSizeConst.product.width }}×{{
+                ImageSizeConst.product.height
+              }})
             </span>
             }
           </div>
