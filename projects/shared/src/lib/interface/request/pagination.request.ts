@@ -13,10 +13,6 @@ export interface IOrdersBy {
 }
 
 export function initializePagInationPayload(): IPaginationPayload {
-    // const orderBy: IOrdersBy = {
-    //     fieldName: "Id",
-    //     sort: 
-    // };
     let payload: IPaginationPayload = {
         search: "",
         pageIndex: 1,

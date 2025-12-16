@@ -99,7 +99,7 @@ export class ProductDetailBase {
             this.productDetail().relatedProducts.map((rp) => ({
               id: rp.id,
               productURL: [rp.productURL],
-              name: '',
+              name: rp.productName,
               color: [],
               sizes: [],
               mrp: rp.mrp,

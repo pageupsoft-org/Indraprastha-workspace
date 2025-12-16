@@ -6,11 +6,13 @@ import {
   httpPost,
   IBannerPagination,
   IBannerResponse,
+  IOrderPagination,
+  IOrderResponse,
   IRGeneric,
 } from '@shared';
 import { DashboardResponseRoot } from '../../components/new-arrival-product-card/dashboard.response';
 import { IDashboadRequest } from '../../pages/home/product-slider/dashboard.request';
-import { Observable, shareReplay, tap } from 'rxjs';
+import { Observable, of, shareReplay, tap } from 'rxjs';
 import { IResponseCollection } from '../interface/response/collection.response';
 
 @Injectable({
@@ -68,4 +70,5 @@ export class ApiCallService {
 
     return this.bannerCache.get(cacheKey)!;
   }
+
 }

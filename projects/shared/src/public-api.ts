@@ -31,6 +31,7 @@ export * from './lib/interface/model/toast.model';
 export * from './lib/interface/model/utility.model';
 export * from './lib/interface/model/confirmation.model';
 export * from './lib/interface/model/decode-token.model';
+export * from './lib/interface/model/order.model';
 
 
 export * from './lib/interface/response/generic.response';

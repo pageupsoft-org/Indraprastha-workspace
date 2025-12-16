@@ -12,7 +12,13 @@ import {
 import { ApiRoutes, EToastType, httpGet, httpPost, IRGeneric, PlatformService } from '@shared';
 import { CommonModule } from '@angular/common';
 import { ActivatedRoute, Router, RouterModule } from '@angular/router';
-import { appRoutes, CartService, CartUpdateOperation, ProductDetailBase } from '@website/core';
+import {
+  ApiCallService,
+  appRoutes,
+  CartService,
+  CartUpdateOperation,
+  ProductDetailBase,
+} from '@website/core';
 import {
   initializeIQueryToCheckout,
   IQueryToCheckout,
@@ -81,7 +87,7 @@ export class Checkout extends ProductDetailBase implements OnInit {
    * --------------------------------------------- */
   public total = computed(() => {
     return this.checkoutData().products.reduce((sum, pd) => {
-      sum += pd.mrp;
+      sum += pd.mrp * pd.cartQuantity;
       if (pd.cartVariant?.mrp) sum += pd.cartVariant.mrp;
       return sum;
     }, 0);
@@ -288,20 +294,25 @@ export class Checkout extends ProductDetailBase implements OnInit {
       products: [],
     };
 
-    this.checkoutData().products.forEach((value) => {
-      const { stockId, cartVariant, cartQuantity } = value;
+    if (this.isRedirectedFromBuyNow()) {
+      this.checkoutData().products.forEach((value) => {
+        const { stockId, cartVariant, cartQuantity } = value;
 
-      const prod: IProductInfo = {
-        stockId,
-        variantId: cartVariant?.variantId ?? null,
-        quantity: cartQuantity,
-      };
+        const prod: IProductInfo = {
+          stockId,
+          variantId: cartVariant?.variantId ?? null,
+          quantity: cartQuantity,
+        };
 
-      payload.products.push(prod);
-    });
+        payload.products.push(prod);
+      });
+    } else {
+      this.checkoutData().products.forEach((value) => {
+        payload.cartIds.push(value.cartId);
+      });
 
-    console.log(payload);
-    // return;
+      this.checkoutData().products = [];
+    }
 
     httpPost<IRGeneric<number>, ICreateOrder>(ApiRoutes.ORDERS.BASE, payload, true).subscribe({
       next: (res) => {
@@ -311,6 +322,10 @@ export class Checkout extends ProductDetailBase implements OnInit {
             type: EToastType.success,
             duration: 2000,
           });
+
+          if (!this.isRedirectedFromBuyNow()) {
+            this.cartService.getCartProduct();
+          }
 
           this.router.navigate([appRoutes.ORDER]);
         } else {

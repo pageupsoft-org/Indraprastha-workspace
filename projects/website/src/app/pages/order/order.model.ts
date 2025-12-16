@@ -13,3 +13,7 @@ export interface IOrder {
   totalAmount: number;
 }
 
+export interface IUpdateOrderStatus {
+  orderId: number;
+  orderStatus: string;
+}
