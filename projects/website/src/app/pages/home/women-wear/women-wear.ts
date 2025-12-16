@@ -20,6 +20,8 @@ import { Collection } from '../../../core/services/collection';
 export class WomenWear implements AfterViewInit {
   @ViewChild('slider', { static: true }) sliderRef!: ElementRef<HTMLDivElement>;
   @ViewChildren('slide') slidesRef!: QueryList<ElementRef<HTMLDivElement>>;
+  @ViewChild('videoPlayer') videoPlayer!: ElementRef<HTMLVideoElement>;
+  public isMuted = signal(true);
 
   public womensWearList: WritableSignal<IResponseCollection[]> = signal([]);
 
@@ -37,8 +39,21 @@ export class WomenWear implements AfterViewInit {
         this.slideWidth = slides[0].nativeElement.offsetWidth;
       }
     }
+    if (this.platformService.isBrowser && this.videoPlayer) {
+      this.videoPlayer.nativeElement.play().catch((e) => console.log('Autoplay prevented:', e));
+    }
   }
 
+  public toggleMute() {
+    if (this.videoPlayer?.nativeElement) {
+      this.isMuted.update(() => !this.videoPlayer.nativeElement.muted);
+      this.videoPlayer.nativeElement.muted = this.isMuted();
+    }
+  }
+
+  onVideoLoaded() {
+    this.isMuted.update(() => this.videoPlayer?.nativeElement.muted ?? true);
+  }
   public openProductPage(collectionId: number) {
     this.collectionService.openProductPage(collectionId);
   }

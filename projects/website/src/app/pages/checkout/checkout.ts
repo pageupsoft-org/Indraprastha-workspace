@@ -9,7 +9,15 @@ import {
   IResponseCheckout,
   Product,
 } from './checkout.model';
-import { ApiRoutes, EToastType, httpGet, httpPost, IRGeneric, PlatformService } from '@shared';
+import {
+  ApiRoutes,
+  EToastType,
+  httpGet,
+  httpPost,
+  IRGeneric,
+  PlatformService,
+  AppLoadingButton,
+} from '@shared';
 import { CommonModule } from '@angular/common';
 import { ActivatedRoute, Router, RouterModule } from '@angular/router';
 import {
@@ -38,6 +46,7 @@ import { NgxSkeletonLoaderModule } from 'ngx-skeleton-loader';
     RouterModule,
     ProductCardSizeEdit,
     NgxSkeletonLoaderModule,
+    AppLoadingButton,
   ],
   templateUrl: './checkout.html',
   styleUrl: './checkout.scss',
@@ -294,6 +303,18 @@ export class Checkout extends ProductDetailBase implements OnInit {
       products: [],
     };
 
+    if (!payload.shippingAddressId) {
+      this.toastService.show({
+        message: 'Select delivery address',
+        type: EToastType.error,
+        duration: 2000,
+      });
+
+      return;
+    }
+
+    this.isBtnLoader.update(() => true);
+
     if (this.isRedirectedFromBuyNow()) {
       this.checkoutData().products.forEach((value) => {
         const { stockId, cartVariant, cartQuantity } = value;
@@ -314,29 +335,31 @@ export class Checkout extends ProductDetailBase implements OnInit {
       this.checkoutData().products = [];
     }
 
-    httpPost<IRGeneric<number>, ICreateOrder>(ApiRoutes.ORDERS.BASE, payload, true).subscribe({
-      next: (res) => {
-        if (res.data) {
-          this.toastService.show({
-            message: 'Order placed',
-            type: EToastType.success,
-            duration: 2000,
-          });
+    httpPost<IRGeneric<number>, ICreateOrder>(ApiRoutes.ORDERS.BASE, payload, true)
+      .pipe(finalize(() => this.isBtnLoader.update(() => false)))
+      .subscribe({
+        next: (res) => {
+          if (res.data) {
+            this.toastService.show({
+              message: 'Order placed',
+              type: EToastType.success,
+              duration: 2000,
+            });
 
-          if (!this.isRedirectedFromBuyNow()) {
-            this.cartService.getCartProduct();
+            if (!this.isRedirectedFromBuyNow()) {
+              this.cartService.getCartProduct();
+            }
+
+            this.router.navigate([appRoutes.ORDER]);
+          } else {
+            this.toastService.show({
+              message: res.errorMessage,
+              type: EToastType.error,
+              duration: 2000,
+            });
           }
-
-          this.router.navigate([appRoutes.ORDER]);
-        } else {
-          this.toastService.show({
-            message: res.errorMessage,
-            type: EToastType.error,
-            duration: 2000,
-          });
-        }
-      },
-    });
+        },
+      });
   }
 
   public removeItemFromCart(cartId: number, index: number) {
