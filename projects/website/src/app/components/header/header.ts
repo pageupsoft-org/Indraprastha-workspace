@@ -92,9 +92,9 @@ export class Header implements OnInit {
       const tokenData = deCodeToken();
       if (tokenData?.Id) {
         const id = parseInt(tokenData?.Id);
-        this.getProfileData(id);
+        this._utitlityService.getProfileData(id);
       }
-      this.getUserAddress();
+      this._utitlityService.getUserAddress();
     }
 
     this.router.events
@@ -161,6 +161,7 @@ export class Header implements OnInit {
     clearLocalStorageItems();
     this.cartService.cartData.update(() => []);
     this.wishlistService.wishlistProducts.update(() => []);
+    this._utitlityService.AddressData.update(() => []);
     this._utitlityService.isUserLoggedIn.set(false);
     this._toastService.show({
       message: 'Logout success',
@@ -172,32 +173,5 @@ export class Header implements OnInit {
   @HostListener('document:click', ['$event'])
   clickOutside(event: Event) {
     this.dropdownOpen = false;
-  }
-
-  public getProfileData(id: number) {
-    httpGet<IRGeneric<IProfileResponse>>(ApiRoutes.CUSTOMERS.GET_BY_ID(id), false).subscribe({
-      next: (response) => {
-        if (response) {
-          if (response.data) {
-            this._utitlityService.profileData.set(response.data);
-          }
-        }
-      },
-    });
-  }
-
-  public getUserAddress() {
-    httpGet<IRGeneric<IAddressPayload[]>>(
-      ApiRoutes.CUSTOMERS.GET_SHIPPING_ADDRESS,
-      false
-    ).subscribe({
-      next: (response) => {
-        if (response) {
-          if (response.data) {
-            this._utitlityService.AddressData.set(response.data);
-          }
-        }
-      },
-    });
   }
 }

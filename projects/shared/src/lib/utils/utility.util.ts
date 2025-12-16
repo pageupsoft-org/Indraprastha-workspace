@@ -110,8 +110,8 @@ export function createUrlFromObject(object: Record<string, any>, baseUrl: string
   return `${baseUrl}?${params.toString()}`;
 }
 
-export function deCodeToken(): IDecodeTokenKey | null {
-  const token = getLocalStorageItem('token') as string;
+export function deCodeToken(tokenP: string | null = null): IDecodeTokenKey | null {
+  const token = tokenP ? tokenP : (getLocalStorageItem('token') as string);
   if (!token) return null;
 
   try {

@@ -1,6 +1,6 @@
 import { EventEmitter, inject, Injectable, signal, WritableSignal } from '@angular/core';
 import { IResponseGenderMenuRoot } from '../interface/response/gender-menu.response';
-import { SharedUtilService } from '@shared';
+import { ApiRoutes, httpGet, IRGeneric, SharedUtilService } from '@shared';
 import { IProfileResponse } from '../../components/header/profile/profile-upsert-dialog/profile-upsert-dialog.models';
 import { IAddressPayload } from '../../components/header/profile/address-upsert-dialog/address-upsert-dialog.model';
 
@@ -25,6 +25,38 @@ export class UtilityService {
   constructor() {
     this.sharedUtilService.localStorageCleared.subscribe(() => {
       this.isUserLoggedIn.update(() => false);
+    });
+  }
+
+  public getProfileData(id: number) {
+    httpGet<IRGeneric<IProfileResponse>>(ApiRoutes.CUSTOMERS.GET_BY_ID(id), false).subscribe({
+      next: (response) => {
+        if (response) {
+          if (response.data) {
+            this.profileData.set(response.data);
+          }
+        }
+      },
+    });
+  }
+
+  public getUserAddress() {
+    httpGet<IRGeneric<IAddressPayload[]>>(
+      ApiRoutes.CUSTOMERS.GET_SHIPPING_ADDRESS,
+      false
+    ).subscribe({
+      next: (response) => {
+        if (response) {
+          if (response.data) {
+            this.AddressData.set(response.data);
+          } else {
+            this.AddressData.set([]);
+          }
+        }
+      },
+      error: (err) => {
+        this.AddressData.set([]);
+      },
     });
   }
 }

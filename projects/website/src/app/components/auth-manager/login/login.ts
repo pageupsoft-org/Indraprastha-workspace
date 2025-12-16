@@ -1,9 +1,22 @@
 import { Component, model, output } from '@angular/core';
 import { FormControl, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 import { HttpErrorResponse } from '@angular/common/http';
-import { ApiRoutes, EToastType, httpPost, ILoginForm, ILoginFormData, IRGeneric, IRLogin, localStorageEnum, setLocalStorageItem, ToastService, GenericSaveButton, AppLoadingButton } from '@shared';
+import {
+  ApiRoutes,
+  EToastType,
+  httpPost,
+  ILoginForm,
+  ILoginFormData,
+  IRGeneric,
+  IRLogin,
+  localStorageEnum,
+  setLocalStorageItem,
+  ToastService,
+  GenericSaveButton,
+  AppLoadingButton,
+  deCodeToken,
+} from '@shared';
 import { CartService, EAuthManager, UtilityService, WishlistService } from '@website/core';
-
 
 @Component({
   selector: 'app-login',
@@ -45,9 +58,18 @@ export class Login {
         next: (res: IRGeneric<IRLogin>) => {
           if (res) {
             if (res.data) {
-              this._utilityService.isUserLoggedIn.set(true);
               setLocalStorageItem(localStorageEnum.token, res.data.token);
               setLocalStorageItem(localStorageEnum.refreshToken, res.data.refreshToken);
+              this._utilityService.isUserLoggedIn.set(true);
+              this.cartService.getCartProduct();
+              this.wishlistService.getWishlistProduct();
+              this._utilityService.getUserAddress();
+              this.cartService.addLocalStorageCartToDb();
+              const tokenData = deCodeToken(res.data.token);
+              if (tokenData?.Id) {
+                const id = parseInt(tokenData?.Id);
+                this._utilityService.getProfileData(id);
+              }
               this._toastService.show({
                 message: 'Login success',
                 type: EToastType.success,
@@ -55,9 +77,6 @@ export class Login {
               });
               this.closeForm.emit();
               this.loginForm.reset();
-
-              this.cartService.addLocalStorageCartToDb();
-              this.wishlistService.getWishlistProduct();
             } else {
               this._toastService.show({
                 message: res.errorMessage,
