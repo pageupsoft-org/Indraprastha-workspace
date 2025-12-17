@@ -55,7 +55,7 @@ export class WomenWear implements AfterViewInit {
     this.isMuted.update(() => this.videoPlayer?.nativeElement.muted ?? true);
   }
   public openProductPage(collectionId: number) {
-    this.collectionService.openProductPage(collectionId);
+    this.collectionService.openProductPage(collectionId, GenderTypeEnum.Women);
   }
 
   public scrollSlider(direction: 'next' | 'prev'): void {
