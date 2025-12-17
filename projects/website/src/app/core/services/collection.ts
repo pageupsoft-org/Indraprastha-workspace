@@ -33,14 +33,14 @@ export class Collection {
     newlyAdded: false,
   };
 
-  public openProductPage(collectionId: number) {
+  public openProductPage(collectionId: number, gender: GenderTypeEnum) {
     this.payloadGenderMenu.categoryIds = [];
     this.payloadGenderMenu.collectionIds = [];
-    this.payloadGenderMenu.gender = GenderTypeEnum.Women;
+    this.payloadGenderMenu.gender = gender;
 
     this.payloadGenderMenu.collectionIds.push(collectionId);
 
-    this.router.navigate([createUrlFromObject(this.payloadGenderMenu, GenderTypeEnum.Women)]);
+    this.router.navigate([createUrlFromObject(this.payloadGenderMenu, gender)]);
   }
 
   public getCollection(gender: string, responseVar: WritableSignal<IResponseCollection[]>) {

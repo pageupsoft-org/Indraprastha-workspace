@@ -95,6 +95,6 @@ export class MensWear implements AfterViewInit {
   }
 
   public openProductPage(collectionId: number) {
-    this.collectionService.openProductPage(collectionId);
+    this.collectionService.openProductPage(collectionId, GenderTypeEnum.Men);
   }
 }
