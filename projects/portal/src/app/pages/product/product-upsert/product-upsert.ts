@@ -55,11 +55,13 @@ import { arrayToJson, convertImagesToBase64Array, logInvalidControls } from '@po
 })
 export class ProductUpsert extends Base implements OnInit {
   public categoryCombo: IGenericComboResponse[] = [];
+  public collectionCombo: IGenericComboResponse[] = [];
   public genders: MStringEnumToArray[] = stringEnumToArray(GenderTypeEnum);
   public descriptionTypeEnumList: MStringEnumToArray[] = stringEnumToArray(EDescriptionType);
   public stockSize: MStringEnumToArray[] = stringEnumToArray(EStockSize);
   public ShowDescription: boolean = false;
   public readonly EDescriptionType = EDescriptionType;
+  public collection: string = ''
   public setAllQtyInput = new FormControl<number | null>(
     null,
     patternWithMessage(/^[1-9]\d*$/, 'Only numbers are allowed')
@@ -84,7 +86,7 @@ export class ProductUpsert extends Base implements OnInit {
   }
 
   ngOnInit(): void {
-    this.getCategoryCombo();
+    // this.getCategoryCombo();
 
     // add one default value
     this.productForm.controls.color.push(new FormControl<string>('#9c1c1c'));
@@ -103,17 +105,17 @@ export class ProductUpsert extends Base implements OnInit {
   }
 
   // GET CATEGORY COMBO
-  private getCategoryCombo() {
-    this.httpGetPromise<IRGeneric<IGenericComboResponse[]>>(ApiRoutes.CATEGORY.GET_COMBO)
-      .then((response) => {
-        if (response) {
-          if (response.data) {
-            this.categoryCombo = response.data;
-          }
-        }
-      })
-      .catch((error) => {});
-  }
+  // private getCategoryCombo() {
+  //   this.httpGetPromise<IRGeneric<IGenericComboResponse[]>>(ApiRoutes.CATEGORY.GET_COMBO)
+  //     .then((response) => {
+  //       if (response) {
+  //         if (response.data) {
+  //           this.categoryCombo = response.data;
+  //         }
+  //       }
+  //     })
+  //     .catch((error) => {});
+  // }
 
   public mutateColorControl(index: number | null) {
     if (index == null) {
@@ -220,10 +222,15 @@ export class ProductUpsert extends Base implements OnInit {
   }
 
   public upsertProduct() {
+    
     const invalidControls: { path: string; errors: any }[] = logInvalidControls(this.productForm);
+    console.log(this.productForm.getRawValue())
     if (this.productForm.valid) {
       // return;
+      
       const data = this.productForm.getRawValue();
+      const { collection, ...payload } = data;
+      console.log(data)
       data.descriptions.forEach((desc: any) => {
         if (desc.descriptionType === EDescriptionType.Json) {
           desc.description = JSON.stringify(arrayToJson(desc.jsonText));
@@ -244,7 +251,7 @@ export class ProductUpsert extends Base implements OnInit {
       delete (data as any).categoryIdsList;
       console.log(invalidControls)
 
-      this.httpPostPromise<IRGeneric<number>, any>(ApiRoutes.PRODUCT.POST, data).then(
+      this.httpPostPromise<IRGeneric<number>, any>(ApiRoutes.PRODUCT.POST, payload).then(
         (res: IRGeneric<number>) => {
           if (res?.data) {
             const msg: string = this.productForm.controls.id.value
@@ -274,8 +281,8 @@ export class ProductUpsert extends Base implements OnInit {
           const pType: string = ic.path.includes('variantBase64')
             ? 'Variant'
             : ic.path.includes('productBase64')
-            ? 'Product'
-            : '';
+              ? 'Product'
+              : '';
           this.toastService.show({
             message: `${pType} image is required`,
             type: EToastType.error,
@@ -420,4 +427,34 @@ export class ProductUpsert extends Base implements OnInit {
       this.setAllQtyInput.reset();
     }
   }
+
+  public getCollectionByGender() {
+    this.collectionCombo = []
+    this.categoryCombo = []
+    const gender = this.productForm.controls.gender.value || ''
+    this.httpGetPromise<IRGeneric<IGenericComboResponse[]>>(ApiRoutes.COLLECTION.GET_BY_GENDER_COLLECTION(gender)).then((res) => {
+      console.log(res)
+      if (res && res.data != null) {
+        this.collectionCombo = res.data;
+      }
+    }).catch(error => {
+      // error handle
+    })
+  }
+
+  public getCategoryByCollectionId() {
+    this.categoryCombo = []
+    console.log(this.productForm.controls.collection.value)
+    const id = this.productForm.controls.collection.value || 0
+    this.httpGetPromise<IRGeneric<IGenericComboResponse[]>>(ApiRoutes.CATEGORY.GET_BY_ID_CATEGORY(id))
+      .then((response) => {
+        if (response) {
+          if (response.data != null) {
+            this.categoryCombo = response.data;
+          }
+        }
+      })
+      .catch((error) => { });
+  }
+
 }

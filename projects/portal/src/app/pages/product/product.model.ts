@@ -5,6 +5,7 @@ import { EDescriptionType, EStockSize, GenderTypeEnum, IPaginationPayload, patte
 export interface IProductForm {
   id: FormControl<number | null>;
   categoryIds: FormControl<Array<number> | null>;
+  collection: FormControl<number | null>
   categoryIdsList: FormControl<Array<{ id: number; name: string }> | null>;
   name: FormControl<string | null>;
   isCustomSize: FormControl<boolean | null>;
@@ -94,7 +95,7 @@ export const initializeDescriptionForm = (
   const form = new FormGroup<IDescriptionForm>({
     header: new FormControl<string | null>(null, [Validators.required, Validators.maxLength(40)]),
     descriptionType: new FormControl<EDescriptionType | null>(EDescriptionType.SingleText),
-    description: new FormControl<string | null>(null, [Validators.required, Validators.maxLength(300)]),
+    description: new FormControl<string | null>(null, [Validators.required, Validators.maxLength(400)]),
     shortDescription: new FormControl<string | null>(null, [Validators.maxLength(70)]),
     jsonText: new FormArray<FormGroup<IJsonTextForm>>([]),
   });
@@ -140,7 +141,8 @@ export const initializeStockForm = (
 export const initializeIProductForm = (): FormGroup<IProductForm> =>
   new FormGroup<IProductForm>({
     id: new FormControl<number | null>(0),
-    categoryIds: new FormControl<number[]>([]),
+    categoryIds: new FormControl<number[] | null>(null),
+    collection: new FormControl<number | null>(null, Validators.required),
     categoryIdsList: new FormControl<Array<{ id: number; name: string }> | null>([]),
     name: new FormControl<string | null>(null, [Validators.required, Validators.maxLength(70)]),
     isCustomSize: new FormControl<boolean | null>(false,),
@@ -180,4 +182,6 @@ export interface IProduct {
   quantity: number;
   id: number;
 }
+
+
 

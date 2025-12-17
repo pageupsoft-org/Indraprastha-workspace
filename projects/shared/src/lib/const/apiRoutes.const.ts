@@ -26,6 +26,7 @@ export const ApiRoutes = {
     GET_COMBO: '/api/Collection/combo',
     GET_BY_ID: (id: number) => `/api/Collection/${id}`,
     GET_BY_GENDER: (gender: string) => `/api/Collection/Menu/${gender}`,
+    GET_BY_GENDER_COLLECTION: (gender: string) => `/api/Collection/Combo/${gender}`,
   },
   CART: {
     POST: '/api/Cart',
@@ -38,6 +39,7 @@ export const ApiRoutes = {
     GET: '/api/Category/All',
     GET_COMBO: '/api/Category/Combo',
     GET_BY_ID: (id: number) => `/api/Category/${id}`,
+    GET_BY_ID_CATEGORY: (id:number) => `/api/Category/Combo/${id}`
   },
   BANNER: {
     BASE: '/api/Banner',
