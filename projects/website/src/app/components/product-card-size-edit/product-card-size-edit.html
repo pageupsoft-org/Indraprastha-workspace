@@ -99,13 +99,7 @@
             +
           </button>
         </div>
-        <p class="mt-2">Total</p>
-      </div>
-    </div>
-
-    <div class="flex flex-col text-right relative pt-[40px]">
-
-      <div class="flex gap-4 mt-auto absolute top-[8px] right-0">
+          <div class="flex gap-4 mt-5">
         @if(prod().isShowDelete){
         <button (click)="removeItemFromCart()" class="text-gray-400 hover:text-red-500 cursor-pointer">
           <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5"
@@ -116,8 +110,12 @@
         </button>
       }
       </div>
+      </div>
+    </div>
 
-      <p class="text-gray-400 font-light">
+    <div class="flex flex-col text-right relative">
+  
+      <p class="text-gray-400 font-light mt-2">
         {{ prod().mrp | currency : 'INR' : 'symbol' : '1.0-0' : 'en-IN' }}
       </p>
 

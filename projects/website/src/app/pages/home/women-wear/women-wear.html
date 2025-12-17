@@ -2,7 +2,7 @@
   <div class="w-full block">
     <!-- Title for the slider -->
     <h1
-      class="text-3xl md:text-4xl lg:text-5xl text-gray-800 text-center"
+      class="text-3xl md:text-4xl xl:text-5xl text-gray-800 text-center"
       data-aos="fade-up"
       data-aos-duration="1000"
     >
@@ -10,7 +10,7 @@
     </h1>
   </div>
   <div
-    class="overflow-hidden w-full flex flex-col md:flex-row mx-auto px-32"
+    class="overflow-hidden w-full flex flex-col md:flex-row mx-auto px-32 xl:mt-10 lg:mt-5"
     data-aos="fade-up"
     data-aos-duration="1000"
   >
@@ -31,7 +31,7 @@
             autoplay
             loop
             playsinline
-            class="w-full h-full object-cover"
+            class="w-full h-full object-cover xl:max-h-[60vh] lg:max-h-[70vh]"
           >
             <source src="assets/videos/women-collection-row.mp4" type="video/mp4" />
           </video>
@@ -81,7 +81,7 @@
     </div>
 
     <!-- Right Panel: Slider with assets/images and controls -->
-    <div class="relative w-full md:w-3/5 lg:w-2/3 p-2 md:p-6 lg:p-8 flex flex-col">
+    <div class="relative w-full md:w-3/5 lg:w-2/3 py-2 md:py-6 lg:py-8 flex flex-col">
       <!-- Slider Container -->
       <div class="relative w-full">
         <!-- Left Arrow -->
@@ -126,20 +126,20 @@
         <div
           id="slider"
           #slider
-          class="flex overflow-x-auto snap-x snap-mandatory space-x-4 md:space-x-6 pb-2 scroll-smooth"
+          class="flex overflow-x-auto snap-x snap-mandatory pb-2 scroll-smooth"
         >
           @for (item of womensWearList(); track $index) {
           <div
             #slide
-            class="flex-shrink-0 w-[45%] sm:w-[35%] md:w-1/3 lg:w-1/3 snap-center relative"
+            class="flex-shrink-0 w-[45%] sm:w-[35%] md:w-1/3 lg:w-1/3 px-2 md:px-4 snap-center relative"
             (click)="openProductPage(item.collectionId)"
           >
             <img
               [src]="item.productURLs[0]"
               alt=""
-              class="w-full sm:h-[250px] lg:h-[420px] rounded-xl shadow-lg transition-colors duration-300 cursor-pointer object-cover"
+              class="w-full sm:h-[250px] lg:h-[320px] xl:h-[420px] rounded-xl shadow-lg transition-colors duration-300 cursor-pointer object-cover"
             />
-            <p class="text-center mt-2 text-gray-700 font-medium text-sm md:text-md">
+            <p class="text-center mt-2 text-gray-700 font-medium text-md lg:text-lg xl:text-xl">
               {{ item.collectionName }}
             </p>
           </div>

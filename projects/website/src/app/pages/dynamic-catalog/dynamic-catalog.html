@@ -1,4 +1,4 @@
-<div class="w-full mx-auto px-4 sm:px-6 lg:px-32 py-8 mt-5">
+<div class="w-full mx-auto px-4 sm:px-6 xl:px-32 py-8 mt-5">
   <!-- Header Controls -->
   <div class="flex flex-wrap justify-between items-center mb-8 pb-4 border-b border-gray-200 gap-4">
     <!-- Left Side: Filter Toggle & Product Count -->
@@ -274,17 +274,17 @@
 
     <!-- Product Grid -->
     <section
-      class="flex-grow overflow-y-auto h-screen pr-6 transition-all duration-500 ease-in-out main-panel"
+      class="flex-grow overflow-y-auto h-screen xl:pr-6 transition-all duration-500 ease-in-out main-panel"
     >
       @if (isShowLoading() && payloadGenderMenu().pageIndex === 1) {
-      <div class="grid grid-cols-6 sm:grid-cols-6 lg:grid-cols-6 gap-x-6 gap-y-10 pb-14">
+      <div class="grid grid-cols-6 sm:grid-cols-6 lg:grid-cols-6 gap-x-6 gap-y-10 pb-14 lg:pl-[35px] p-0">
         <ng-container *ngTemplateOutlet="skeletonLoader"></ng-container>
       </div>
 
       } @else {
       <div
         #productGrid
-        class="grid grid-cols-6 sm:grid-cols-6 lg:grid-cols-6 gap-x-6 gap-y-10 pb-14"
+        class="grid grid-cols-6 sm:grid-cols-6 lg:grid-cols-6 gap-x-6 gap-y-10 pb-14 pl-10"
         infiniteScroll
         [infiniteScrollDistance]="2"
         [infiniteScrollThrottle]="50"
@@ -293,7 +293,7 @@
         (scrolled)="onScrollDown()"
       >
         @for (item of dynamicData().products; track $index) {
-        <div class="group cursor-pointer relative" (click)="routeToProductDetail(item.id)">
+        <div class="group cursor-pointer relative mt-5 xl:mt-0" (click)="routeToProductDetail(item.id)">
           <div
             (click)="toggleWishList($event, item)"
             class="w-[30px] h-[32px] like-btn absolute top-3 right-3 p-2 text-black bg-white rounded-[50%] cursor-pointer hover:bg-opacity-90 transition-all duration-300 z-20"
@@ -349,7 +349,7 @@
           </div>
 
           <!-- Updated bottom section with animated underline -->
-          <div class="h-[10%]">
+          <div class="h-[10%] mb-20">
             <h3 class="mt-4 text-sm text-gray-700 truncate relative pb-1">
               <span>{{ item.name }}</span>
               <div

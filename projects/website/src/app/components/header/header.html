@@ -2,7 +2,7 @@
 <header class="header-container hidden sm:block dark:bg-gray-900">
   <div class="flex flex-col items-center">
     <!-- Top Section: Logo and Icons -->
-    <div class="flex justify-between items-center w-full px-32">
+    <div class="flex justify-between items-center w-full px-10 xl:px-32">
       <!-- Empty div to balance the space and center the logo -->
 
       <div class="flex-1 logo-section flex justify-start">
@@ -22,7 +22,7 @@
         <!-- Section: Nav Menu -->
     <nav class="nav-section">
       <ul
-        class="flex justify-center space-x-8 sm:text-xs lg:text-sm font-medium sm:gap-[30px] lg:gap-[45px]"
+        class="flex justify-center sm:space-x-4 xl:space-x-8 sm:text-xs lg:text-sm font-medium sm:gap-[15px] xl:gap-[45px]"
       >
         <li>
           <a
@@ -57,7 +57,7 @@
           animate.leave="close"
           (mouseenter)="setGender(activeGender())"
           (mouseleave)="clearGender()"
-          class="absolute z-10 left-1/2 transform -translate-x-1/2 mt-[45px] sm:w-[700px] lg:w-[1200px] bg-white rounded-lg shadow-2xl py-2"
+          class="absolute z-10 left-1/2 transform -translate-x-1/2 mt-[45px] sm:w-[700px] lg:w-[1000px] xl:w-[1200px] bg-white rounded-lg shadow-2xl py-2"
         >
           <!-- <app-gender-menu [genderType]="activeGender()"></app-gender-menu> -->
           <app-gender-menu [(genderType)]="activeGender"></app-gender-menu>
@@ -360,7 +360,7 @@
 </header>
 
 @if(isSearchInputVisible()){
-<div class="w-full absolute">
+<div class="w-full absolute sticky top-[75px] z-100 bg-white">
   <label for="search" class="block mb-2.5 text-sm font-medium text-heading sr-only">Search</label>
   <div class="relative">
     <div class="absolute inset-y-0 start-0 flex items-center ps-3 pointer-events-none">
@@ -384,7 +384,7 @@
     <input
       type="search"
       id="search"
-      class="block w-full p-3 ps-9 bg-[#f0f8ff] focus:outline-none focus:ring-0 focus:border-transparent text-heading text-sm rounded-base placeholder:text-body"
+      class="block w-full p-3 ps-9 bg-[#fff] focus:outline-none focus:ring-0 focus:border-transparent text-heading text-sm rounded-base placeholder:text-body"
       placeholder="Search"
       (keyup.enter)="search($event)"
       [(ngModel)]="searchText"
