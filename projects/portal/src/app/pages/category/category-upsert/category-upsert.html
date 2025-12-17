@@ -34,7 +34,7 @@
               </svg>
             </span>
             <input type="text"
-                   formControlName="name" libValidateControl
+                   formControlName="name" libValidateControl libNoLeadingTrailingSpaceDirective
                    placeholder="e.g. shirts, sarees"
                    minlength="3"
                    maxlength="30"
@@ -54,7 +54,7 @@
                       d="M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2m0 0c1.657 0 3 .895 3 2s-1.343 2-3 2m0-4c-1.657 0-3-.895-3-2s1.343-2 3-2m-6 8h12" />
               </svg>
             </span>
-            <select formControlName="gst" libValidateControl
+            <select formControlName="gst" libValidateControl 
                 class="w-full appearance-none h-11 pl-9 pr-4 rounded-[5px] border bg-white text-slate-800 placeholder-slate-400
                          focus:ring-[#82181A] focus:outline-none focus:border-[#82181A] 
                         transition duration-200 text-base">
@@ -110,7 +110,7 @@
             </svg>
           </div>
           <textarea formControlName="description"
-                    rows="2" libValidateControl
+                    rows="2" libValidateControl libNoLeadingTrailingSpaceDirective
                     maxlength="200"
                     placeholder="Write a short description about this category..."
                     class="w-full pl-10 pr-4 py-2 rounded-[5px] border border-slate-300 bg-white text-slate-900

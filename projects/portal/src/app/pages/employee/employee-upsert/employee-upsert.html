@@ -64,6 +64,7 @@
             type="text"
             placeholder="Enter first name"
             formControlName="firstName"
+            libNoLeadingTrailingSpaceDirective
             minlength="3"
             maxlength="15"
             libValidateControl
@@ -100,6 +101,7 @@
             formControlName="lastName"
             maxlength="15"
             libValidateControl
+            libNoLeadingTrailingSpaceDirective
           />
         </div>
       </div>
@@ -132,7 +134,8 @@
             placeholder="Enter email"
             formControlName="email"
             maxlength="50"
-            libValidateControl
+            libValidateControl libNoLeadingTrailingSpaceDirective
+            
           />
         </div>
       </div>
@@ -238,6 +241,7 @@
           formControlName="address"
           maxlength="70"
           libValidateControl
+          libNoLeadingTrailingSpaceDirective
         ></textarea>
       </div>
     </div>

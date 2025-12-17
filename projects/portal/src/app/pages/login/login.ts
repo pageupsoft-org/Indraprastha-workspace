@@ -3,7 +3,7 @@ import { FormControl, FormGroup, ReactiveFormsModule, Validators } from '@angula
 import { Router } from '@angular/router';
 import { IGenericResponse } from '../../core/interface/response/genericResponse';
 import { Base } from '@portal/core';
-import { ApiRoutes, EToastType, ILoginForm, ILoginFormData, localStorageEnum, setLocalStorageItem, ToastService, ValidateControl } from '@shared';
+import { ApiRoutes, EToastType, ILoginForm, ILoginFormData, localStorageEnum, NoLeadingTrailingSpaceDirective, setLocalStorageItem, ToastService, ValidateControl } from '@shared';
 import { CommonModule } from '@angular/common';
 import { AppLoadingButton } from '@shared';
 import { LoginResponse } from './login.model';
@@ -11,7 +11,7 @@ import { LoginResponse } from './login.model';
 
 @Component({
   selector: 'app-login',
-  imports: [ReactiveFormsModule, ValidateControl, CommonModule,  AppLoadingButton],
+  imports: [ReactiveFormsModule, ValidateControl, CommonModule,  AppLoadingButton, NoLeadingTrailingSpaceDirective],
   templateUrl: './login.html',
   styleUrl: './login.scss',
 })

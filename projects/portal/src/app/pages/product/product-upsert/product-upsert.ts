@@ -17,6 +17,7 @@ import {
   IRProductDetailRoot,
   jsonToArray,
   MStringEnumToArray,
+  NoLeadingTrailingSpaceDirective,
   patternWithMessage,
   stringEnumToArray,
   ValidateControl,
@@ -47,6 +48,7 @@ import { arrayToJson, convertImagesToBase64Array, logInvalidControls } from '@po
     FormsModule,
     NgMultiSelectDropDownModule,
     ValidateControl,
+    NoLeadingTrailingSpaceDirective
   ],
   templateUrl: './product-upsert.html',
   styleUrl: './product-upsert.scss',
@@ -240,6 +242,7 @@ export class ProductUpsert extends Base implements OnInit {
       });
 
       delete (data as any).categoryIdsList;
+      console.log(invalidControls)
 
       this.httpPostPromise<IRGeneric<number>, any>(ApiRoutes.PRODUCT.POST, data).then(
         (res: IRGeneric<number>) => {

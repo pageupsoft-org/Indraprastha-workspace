@@ -4,13 +4,13 @@ import { Base } from '../../../core/base/base';
 import { IGenericResponse } from '../../../core/interface/response/genericResponse';
 import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
 import { CustomerList } from '../customer-list/customer-list';
-import { ApiRoutes, EToastType, NumberOnlyValidators, patternWithMessage, ToastService, ValidateControl } from '@shared';
+import { ApiRoutes, EToastType, NoLeadingTrailingSpaceDirective, NumberOnlyValidators, patternWithMessage, ToastService, ValidateControl } from '@shared';
 import { ICustomer, ICustomerForm } from '../customer.model';
 
 
 @Component({
   selector: 'app-customer-upsert',
-  imports: [ReactiveFormsModule, ValidateControl, NumberOnlyValidators],
+  imports: [ReactiveFormsModule, ValidateControl, NumberOnlyValidators, NoLeadingTrailingSpaceDirective],
   templateUrl: './customer-upsert.html',
   styleUrl: './customer-upsert.scss',
 })
@@ -20,14 +20,12 @@ export class CustomerUpsert extends Base implements OnInit {
   public readonly data = inject(MAT_DIALOG_DATA);
   public customerRegisetr = new FormGroup<ICustomerForm>({
     id: new FormControl(0),
-    firstName: new FormControl('', [Validators.required, Validators.minLength(3), Validators.maxLength(15), 
-       patternWithMessage(/^[A-Za-z0-9]+$/, 'This field not allowed any space'), patternWithMessage(/^[A-Za-z ]*$/, 'No special characters and number allowed')]),
-    lastName: new FormControl('', [Validators.required, Validators.minLength(3), Validators.maxLength(15),
-       patternWithMessage(/^[A-Za-z0-9]+$/, 'This field not allowed any space'), patternWithMessage(/^[A-Za-z ]*$/, 'No special characters and number allowed')]),
-    email: new FormControl('', [Validators.required, patternWithMessage(/^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/, 'Enter a valid email address')]),
+    firstName: new FormControl('', [Validators.required, Validators.minLength(3), Validators.maxLength(15)]),
+    lastName: new FormControl('', [Validators.required, Validators.minLength(3), Validators.maxLength(15)]),
+    email: new FormControl('', [Validators.required]),
     contact: new FormControl('', [Validators.required, Validators.minLength(10), Validators.maxLength(10), patternWithMessage(/^[6-9]\d{9}$/, 'Please enter a valid contact number.')]),
-    userName: new FormControl('', [Validators.required, Validators.minLength(3), Validators.maxLength(15), patternWithMessage(/^\S*$/, 'This field does not allow any spaces')]),
-    password: new FormControl('', [Validators.required, Validators.minLength(8), Validators.maxLength(8), patternWithMessage(/^\S*$/, 'This field does not allow any spaces')]),
+    userName: new FormControl('', [Validators.required, Validators.minLength(3), Validators.maxLength(15)]),
+    password: new FormControl('', [Validators.required, Validators.minLength(8), Validators.maxLength(8)]),
   });
   public showPassword: boolean = false;
 

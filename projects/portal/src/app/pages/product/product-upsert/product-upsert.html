@@ -47,7 +47,7 @@
             <label class="block text-sm font-medium text-slate-700 mb-1">Name</label>
             <input
               [formControl]="productForm.controls.name"
-              libValidateControl
+              libValidateControl libNoLeadingTrailingSpaceDirective
               type="text"
               placeholder="Enter product name"
               maxlength="70"
@@ -193,7 +193,7 @@
                   class="w-full border border-gray-300 rounded-[5px] px-3 py-2 text-sm text-gray-700 focus:ring-[#82181A] focus:outline-none focus:border-[#82181A] transition duration-200 text-base"
                   placeholder="Enter variant name"
                   maxlength="40"
-                  [formControl]="variant.controls.name"
+                  [formControl]="variant.controls.name" libNoLeadingTrailingSpaceDirective
                   libValidateControl
                 />
               </div>
@@ -218,7 +218,7 @@
                   class="w-full border border-gray-300 rounded-[5px] px-3 py-2 text-sm text-gray-700 rounded-[5px] px-3 py-2 text-sm text-gray-700 focus:ring-[#82181A] focus:outline-none focus:border-[#82181A] transition duration-200 text-base"
                   placeholder="Enter variant description"
                   [formControl]="variant.controls.description"
-                  libValidateControl
+                  libValidateControl libNoLeadingTrailingSpaceDirective
                   maxlength="170"
                 ></textarea>
               </div>
@@ -365,7 +365,7 @@
                 class="w-full border border-gray-300 rounded-[5px] px-3 py-2 text-sm text-gray-700 focus:ring-[#82181A] focus:outline-none focus:border-[#82181A] transition duration-200 text-base"
                 placeholder="Enter header"
                 [formControl]="description.controls.header"
-                libValidateControl
+                libValidateControl libNoLeadingTrailingSpaceDirective
                 maxlength="40"
               />
             </div>
@@ -390,7 +390,7 @@
             <label class="block text-sm font-medium text-gray-700 mb-1">Description</label>
             <textarea
               [formControl]="description.controls.description"
-              libValidateControl
+              libValidateControl libNoLeadingTrailingSpaceDirective
               rows="4"
               class="w-full border border-gray-300 rounded-[5px] px-3 py-2 text-sm text-gray-700 focus:ring-[#82181A] focus:outline-none focus:border-[#82181A] transition duration-200 text-base"
               placeholder="Write detailed description..."
@@ -418,7 +418,7 @@
                 placeholder="Key"
                 [formControl]="jsonText.controls.key"
                 maxlength="40"
-                libValidateControl
+                libValidateControl libNoLeadingTrailingSpaceDirective
                 class="w-1/2 border border-gray-300 rounded-[5px] px-3 py-2 text-sm text-gray-700 focus:ring-[#82181A] focus:outline-none focus:border-[#82181A] transition duration-200 text-base"
               />
 
@@ -427,7 +427,7 @@
                 placeholder="Value"
                 maxlength="100"
                 [formControl]="jsonText.controls.value"
-                libValidateControl
+                libValidateControl libNoLeadingTrailingSpaceDirective
                 class="w-1/2 border border-gray-300 rounded-[5px] px-3 py-2 text-sm text-gray-700 focus:ring-[#82181A] focus:outline-none focus:border-[#82181A] transition duration-200 text-base"
               />
 
@@ -450,7 +450,7 @@
             <input
               type="text"
               [formControl]="description.controls.shortDescription"
-              libValidateControl
+              libValidateControl libNoLeadingTrailingSpaceDirective
               class="w-full border border-gray-300 rounded-[5px] px-3 py-2 text-sm text-gray-700 focus:ring-[#82181A] focus:outline-none focus:border-[#82181A] transition duration-200 text-base"
               placeholder="Enter short summary"
               maxlength="70"
