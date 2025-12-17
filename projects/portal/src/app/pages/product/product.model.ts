@@ -95,7 +95,7 @@ export const initializeDescriptionForm = (
   const form = new FormGroup<IDescriptionForm>({
     header: new FormControl<string | null>(null, [Validators.required, Validators.maxLength(40)]),
     descriptionType: new FormControl<EDescriptionType | null>(EDescriptionType.SingleText),
-    description: new FormControl<string | null>(null, [Validators.required, Validators.maxLength(400)]),
+    description: new FormControl<string | null>(null, [Validators.required, Validators.maxLength(400),]),
     shortDescription: new FormControl<string | null>(null, [Validators.maxLength(70)]),
     jsonText: new FormArray<FormGroup<IJsonTextForm>>([]),
   });
@@ -112,10 +112,10 @@ export const initializeVariantForm = (data: IVariantData | null): FormGroup<IVar
     productId: new FormControl<number | null>(0),
     name: new FormControl<string | null>(null, [Validators.required, Validators.maxLength(40)]),
     description: new FormControl<string | null>(null,[Validators.maxLength(170)]),
-    mrp: new FormControl<number | null>(null, [Validators.required, Validators.maxLength(10)]),
+    mrp: new FormControl<number | null>(null, [Validators.required, Validators.maxLength(10), 
+      patternWithMessage(/^\d+(\.\d{1,2})?$/, 'enter a valid price')]),
     stocks: new FormGroup({
-      quantity: new FormControl<number | null>(null, [Validators.required, Validators.maxLength(4),
-         patternWithMessage(/^[1-9]\d*$/, 'Please enter a valid quantity')]),
+      quantity: new FormControl<number | null>(null, [Validators.required, Validators.maxLength(4), patternWithMessage(/^[1-9]\d*$/, 'Please enter a valid quantity')]),
     }),
     variantBase64: new FormControl<string | null>(null),
   });
@@ -141,15 +141,14 @@ export const initializeStockForm = (
 export const initializeIProductForm = (): FormGroup<IProductForm> =>
   new FormGroup<IProductForm>({
     id: new FormControl<number | null>(0),
-    categoryIds: new FormControl<number[] | null>(null),
-    collection: new FormControl<number | null>(null, Validators.required),
+    categoryIds: new FormControl<number[]>([]),
+    collection: new FormControl<number | null>(null),
     categoryIdsList: new FormControl<Array<{ id: number; name: string }> | null>([]),
     name: new FormControl<string | null>(null, [Validators.required, Validators.maxLength(70)]),
     isCustomSize: new FormControl<boolean | null>(false,),
     customSizeName: new FormControl<string | null>(''),
     color: new FormArray<FormControl<string | null>>([]),
-    mrp: new FormControl<number | null>(null, [Validators.required, Validators.maxLength(10), 
-      patternWithMessage(/^\d+(\.\d{1,2})?$/, 'Enter a valid price')]),
+    mrp: new FormControl<number | null>(null, [Validators.required, Validators.maxLength(10), patternWithMessage(/^\d+(\.\d{1,2})?$/, 'Enter a valid price')]),
     gender: new FormControl<GenderTypeEnum | null>(null, Validators.required),
     variants: new FormArray<FormGroup<IVariantForm>>([]),
     stocks: new FormArray<FormGroup<stocks>>([]),
@@ -182,6 +181,4 @@ export interface IProduct {
   quantity: number;
   id: number;
 }
-
-
 

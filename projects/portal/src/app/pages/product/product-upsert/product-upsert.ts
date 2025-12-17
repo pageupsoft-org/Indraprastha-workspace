@@ -229,7 +229,7 @@ export class ProductUpsert extends Base implements OnInit {
       // return;
       
       const data = this.productForm.getRawValue();
-      const { collection, ...payload } = data;
+      // const { collection, ...payload } = data;
       console.log(data)
       data.descriptions.forEach((desc: any) => {
         if (desc.descriptionType === EDescriptionType.Json) {
@@ -251,7 +251,7 @@ export class ProductUpsert extends Base implements OnInit {
       delete (data as any).categoryIdsList;
       console.log(invalidControls)
 
-      this.httpPostPromise<IRGeneric<number>, any>(ApiRoutes.PRODUCT.POST, payload).then(
+      this.httpPostPromise<IRGeneric<number>, any>(ApiRoutes.PRODUCT.POST, data).then(
         (res: IRGeneric<number>) => {
           if (res?.data) {
             const msg: string = this.productForm.controls.id.value
