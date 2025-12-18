@@ -20,7 +20,7 @@ export class Register implements OnInit {
     email: new FormControl(null),
     contact: new FormControl(null, [
       Validators.required,
-      patternWithMessage(/^(?:\+91|91)?[6789]\d{9}$/, 'Enter a valid mobile number.'),
+      patternWithMessage(/^[6-9]\d{9}$/, 'Please enter a valid contact number.'),
       Validators.maxLength(10), Validators.minLength(10)
     ]),
     userName: new FormControl(null),

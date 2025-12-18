@@ -297,11 +297,16 @@ export class Checkout extends ProductDetailBase implements OnInit {
 
   public onPaymentSubmit() {
     const payload: ICreateOrder = {
-      shippingAddressId: this.selectedAddress.value ?? 0,
+      // shippingAddressId: this.selectedAddress.value ?? 0,
+      shippingAddressId: this.utilService.AddressData()[0]?.id ?? 0,
       shippingAddress: null,
       cartIds: [],
       products: [],
     };
+
+    console.log(payload);
+    // return
+    
 
     if (!payload.shippingAddressId) {
       this.toastService.show({

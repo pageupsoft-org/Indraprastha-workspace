@@ -1,26 +1,12 @@
 import { Component, model, output } from '@angular/core';
 import { FormControl, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 import { HttpErrorResponse } from '@angular/common/http';
-import {
-  ApiRoutes,
-  EToastType,
-  httpPost,
-  ILoginForm,
-  ILoginFormData,
-  IRGeneric,
-  IRLogin,
-  localStorageEnum,
-  setLocalStorageItem,
-  ToastService,
-  GenericSaveButton,
-  AppLoadingButton,
-  deCodeToken,
-} from '@shared';
+import { ApiRoutes, EToastType, httpPost, ILoginForm, ILoginFormData, IRGeneric, IRLogin, localStorageEnum, setLocalStorageItem, ToastService, GenericSaveButton, AppLoadingButton, deCodeToken, patternWithMessage, NumberOnlyValidators } from '@shared';
 import { CartService, EAuthManager, UtilityService, WishlistService } from '@website/core';
 
 @Component({
   selector: 'app-login',
-  imports: [ReactiveFormsModule, AppLoadingButton],
+  imports: [ReactiveFormsModule, AppLoadingButton, NumberOnlyValidators],
   templateUrl: './login.html',
   styleUrl: './login.scss',
 })
@@ -31,7 +17,7 @@ export class Login {
   public closeForm = output<void>();
 
   public loginForm: FormGroup<ILoginForm> = new FormGroup<ILoginForm>({
-    username: new FormControl(null, [Validators.required]),
+    username: new FormControl(null, [Validators.required, patternWithMessage(/^[6-9]\d{9}$/, 'Please enter a valid contact number.')]),
     password: new FormControl(null, [Validators.required, Validators.minLength(6)]),
     fcmToken: new FormControl(''),
   });

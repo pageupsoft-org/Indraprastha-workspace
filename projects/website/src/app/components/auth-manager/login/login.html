@@ -10,6 +10,10 @@
       <input
         type="text"
         [formControl]="loginForm.controls.username"
+        numberOnlyValidators
+        libValidateControl
+        [maxlength]="10"
+        [minlength]="10"
         class="w-full rounded-[5px] p-2 border border-gray-400 focus:outline-none focus:border-red-800 transition-colors duration-200"
       />
     </div>

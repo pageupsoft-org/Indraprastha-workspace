@@ -56,6 +56,9 @@ export class AddressUpsertDialog implements OnInit {
               if (res.data) {
                 payLoad.id = res.data;
                 this._utilityService.AddressData().push(payLoad);
+
+                console.log(this._utilityService.AddressData());
+                
                 this._toaster.show({
                   message: 'Address Add Successfully',
                   duration: 3000,
