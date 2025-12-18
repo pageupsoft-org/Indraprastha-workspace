@@ -2,7 +2,7 @@
   <div class="w-full block">
     <!-- Title for the slider -->
     <h1
-      class="text-3xl md:text-4xl xl:text-5xl text-gray-800 text-center"
+      class="text-3xl lg:text-4xl xl:text-5xl text-gray-800 text-center"
       data-aos="fade-up"
       data-aos-duration="1000"
     >
@@ -10,7 +10,7 @@
     </h1>
   </div>
   <div
-    class="overflow-hidden w-full flex flex-col md:flex-row mx-auto px-32 xl:mt-10 lg:mt-5"
+    class="overflow-hidden w-full flex flex-col md:flex-row mx-auto px-5 xl:px-32 xl:mt-10 lg:mt-5"
     data-aos="fade-up"
     data-aos-duration="1000"
   >
@@ -31,7 +31,7 @@
             autoplay
             loop
             playsinline
-            class="w-full h-full object-cover xl:max-h-[60vh] lg:max-h-[70vh]"
+            class="w-full h-full object-cover xl:max-h-[60vh] lg:max-h-[70vh] min-h-[490px]"
           >
             <source src="assets/videos/women-collection-row.mp4" type="video/mp4" />
           </video>
@@ -89,7 +89,7 @@
         <button
           id="prevBtn"
           (click)="scrollSlider('prev')"
-          class="cursor-pointer absolute left-0 top-1/2 -translate-y-1/2 z-10 p-2 md:p-[.5rem] bg-white backdrop-blur-sm rounded-full shadow-lg transition-transform duration-300 hover:scale-110 focus:outline-none focus:ring-2 focus:ring-[#cdb29c] focus:ring-offset-2"
+          class="cursor-pointer absolute left-0 top-[42%] -translate-y-1/2 z-10 p-2 md:p-[.5rem] bg-white backdrop-blur-sm rounded-full shadow-lg transition-transform duration-300 hover:scale-110 focus:outline-none focus:ring-2 focus:ring-[#cdb29c] focus:ring-offset-2"
         >
           <svg
             xmlns="http://www.w3.org/20-00/svg"
@@ -107,7 +107,7 @@
         <button
           (click)="scrollSlider('next')"
           id="nextBtn"
-          class="cursor-pointer absolute right-0 top-1/2 -translate-y-1/2 z-10 p-2 md:p-[.5rem] bg-white backdrop-blur-sm rounded-full shadow-lg transition-transform duration-300 hover:scale-110 focus:outline-none focus:ring-2 focus:ring-[#cdb29c] focus:ring-offset-2"
+          class="cursor-pointer absolute right-0 top-[42%] -translate-y-1/2 z-10 p-2 md:p-[.5rem] bg-white backdrop-blur-sm rounded-full shadow-lg transition-transform duration-300 hover:scale-110 focus:outline-none focus:ring-2 focus:ring-[#cdb29c] focus:ring-offset-2"
         >
           <svg
             xmlns="http://www.w3.org/2000/svg"

@@ -8,11 +8,11 @@
   <!-- Shopping Cart Drawer -->
   <div 
     #shoppingCart
-    class="fixed top-0 right-0 w-full md:w-[40%] h-full bg-white shadow-2xl transform translate-x-full transition-transform duration-500 flex flex-col z-50"
+    class="fixed top-0 right-0 w-[70%] lg:w-[40%] h-full bg-white shadow-2xl transform translate-x-full transition-transform duration-500 flex flex-col z-50"
   >
     <!-- Header -->
     <div class="flex justify-between items-center p-6 border-b border-gray-200">
-      <h2 class="text-lg font-bold uppercase tracking-widest">Shopping Cart</h2>
+      <h2 class="text-lg font-bold tracking-widest">Shopping Cart</h2>
       <button
         (click)="hideCart()"
         class="text-gray-500 hover:text-gray-800 text-2xl cursor-pointer"
@@ -81,7 +81,7 @@
 
           <!-- Quantity Controls -->
           <div
-            class="flex items-center justify-center gap-2 mt-2 border border-gray-300 rounded hover:bg-gray-100 w-[100px]"
+            class="flex items-center justify-center gap-2 mt-2 border border-gray-600 rounded hover:bg-gray-100 w-[100px]"
           >
             <button
               [disabled]="prod.cartQuantity == 1"
