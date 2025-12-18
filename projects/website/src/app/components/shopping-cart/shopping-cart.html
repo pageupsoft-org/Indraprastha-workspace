@@ -140,11 +140,13 @@
 
           <hr />
 
-          <p class="font-semibold text-lg text-gray-800 text-end">
-            @let sum = (prod.mrp * prod.cartQuantity) +( ((prod?.cartVariant?.mrp) ?
-            (prod?.cartVariant?.mrp) : 0) ?? 0);
-            {{ sum | currency : 'INR' : 'symbol' : '1.0-0' : 'en-IN' }}
-          </p>
+          @if(prod?.cartVariant?.mrp){
+            <p class="font-semibold text-lg text-gray-800 text-end">
+              @let sum = (prod.mrp * prod.cartQuantity) +( ((prod?.cartVariant?.mrp) ?
+              (prod?.cartVariant?.mrp) : 0) ?? 0);
+              {{ sum | currency : 'INR' : 'symbol' : '1.0-0' : 'en-IN' }}
+            </p>
+          }
         </div>
       </div>
       <app-product-card-size-edit [prod]="getDataForCard($index)" (alterQty)="alterQuantityCnt($event, $index)" (emitDelete)="removeItemFromCart(prod.cartId, $index)"></app-product-card-size-edit>

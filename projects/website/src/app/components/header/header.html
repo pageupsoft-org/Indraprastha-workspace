@@ -238,7 +238,7 @@
     <input type="search" id="search"
       class="block w-full p-3 ps-20 bg-[#fff] focus:outline-none focus:ring-0 focus:border-transparent text-heading shadow-sm text-sm rounded-base placeholder:text-body"
       placeholder="Search" (keyup.enter)="search($event)" [(ngModel)]="searchText" />
-    <div class="absolute right-20 top-[15px] cursor-pointer">
+    <div class="absolute right-20 top-[15px] cursor-pointer" (click)="updateSearchInputVisibility()">
       <svg class="w-4 h-4 text-body" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="24" height="24"
         fill="none" viewBox="0 0 24 24">
         <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"

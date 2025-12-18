@@ -108,6 +108,10 @@ export class GenderMenu implements OnInit, OnDestroy {
     this.categoryList.set(menu);
   }
 
+  public clearGender(){
+    this.genderType.update(() => '');
+  }
+
   public getProductPageUrl(collection: Collection | null, category: Category | null): string {
     this.payloadGenderMenu.categoryIds = [];
     this.payloadGenderMenu.collectionIds = [];

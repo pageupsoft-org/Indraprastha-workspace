@@ -116,7 +116,7 @@
     <div class="flex flex-col text-right relative">
   
       <p class="text-gray-400 font-light mt-2">
-        {{ prod().mrp | currency : 'INR' : 'symbol' : '1.0-0' : 'en-IN' }}
+        {{ (prod().mrp * prod().qty) | currency : 'INR' : 'symbol' : '1.0-0' : 'en-IN' }}
       </p>
 
       @if(prod().variant && prod().variant?.id){
@@ -125,14 +125,16 @@
       </p>
       }
 
+      @if(prod().variant?.mrp){
       <div class="mt-auto">
         <div class="w-24 ml-auto h-px bg-gray-200 mb-2"></div>
 
-        <p class="text-[#680C01] font-bold text-lg">
-          @let sum = (prod().mrp * prod().qty) +( ((prod().variant?.mrp) ? (prod().variant?.mrp) : 0) ?? 0);
-          {{ sum | currency : 'INR' : 'symbol' : '1.0-0' : 'en-IN' }}
-        </p>
+          <p class="text-[#680C01] font-bold text-lg">
+            @let sum = (prod().mrp * prod().qty) +( ((prod().variant?.mrp) ? (prod().variant?.mrp) : 0) ?? 0);
+            {{ sum | currency : 'INR' : 'symbol' : '1.0-0' : 'en-IN' }}
+          </p>
+        </div>
+      }
       </div>
-    </div>
   </div>
 </div>

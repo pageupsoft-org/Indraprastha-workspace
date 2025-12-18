@@ -11,9 +11,10 @@ import {
 import { GenderTypeEnum, PlatformService } from '@shared';
 import { IResponseCollection } from '../../../core/interface/response/collection.response';
 import { Collection } from '../../../core/services/collection';
+import { CommonModule } from '@angular/common';
 @Component({
   selector: 'app-women-wear',
-  imports: [],
+  imports: [CommonModule],
   templateUrl: './women-wear.html',
   styleUrl: './women-wear.scss',
 })
@@ -22,6 +23,9 @@ export class WomenWear implements AfterViewInit {
   @ViewChildren('slide') slidesRef!: QueryList<ElementRef<HTMLDivElement>>;
   @ViewChild('videoPlayer') videoPlayer!: ElementRef<HTMLVideoElement>;
   public isMuted = signal(true);
+
+  public canScrollPrev: WritableSignal<boolean> = signal(false);
+  public canScrollNext: WritableSignal<boolean> = signal(false);
 
   public womensWearList: WritableSignal<IResponseCollection[]> = signal([]);
 
@@ -37,25 +41,22 @@ export class WomenWear implements AfterViewInit {
       const slides = this.slidesRef.toArray();
       if (slides.length > 0) {
         this.slideWidth = slides[0].nativeElement.offsetWidth;
+        this.updateButtonStates();
       }
     }
     if (this.platformService.isBrowser && this.videoPlayer) {
       this.videoPlayer.nativeElement.play().catch((e) => console.log('Autoplay prevented:', e));
     }
-  }
 
-  public toggleMute() {
-    if (this.videoPlayer?.nativeElement) {
-      this.isMuted.update(() => !this.videoPlayer.nativeElement.muted);
-      this.videoPlayer.nativeElement.muted = this.isMuted();
+    if (this.platformService.isBrowser && this.sliderRef) {
+      this.sliderRef.nativeElement.addEventListener(
+        'scroll',
+        () => {
+          this.updateButtonStates();
+        },
+        { passive: true }
+      );
     }
-  }
-
-  onVideoLoaded() {
-    this.isMuted.update(() => this.videoPlayer?.nativeElement.muted ?? true);
-  }
-  public openProductPage(collectionId: number) {
-    this.collectionService.openProductPage(collectionId, GenderTypeEnum.Women);
   }
 
   public scrollSlider(direction: 'next' | 'prev'): void {
@@ -78,5 +79,32 @@ export class WomenWear implements AfterViewInit {
       }
       // Else do nothing to prevent jump to end
     }
+
+    // Wait for scroll to complete before updating signals
+    setTimeout(() => this.updateButtonStates(), 150);
+  }
+
+  private updateButtonStates(): void {
+    if (!this.platformService.isBrowser || !this.sliderRef) return;
+
+    const slider = this.sliderRef.nativeElement;
+    const maxScrollLeft = slider.scrollWidth - slider.clientWidth;
+
+    this.canScrollPrev.update(() => slider.scrollLeft > 0);
+    this.canScrollNext.update(() => slider.scrollLeft < maxScrollLeft);
+  }
+
+  public toggleMute() {
+    if (this.videoPlayer?.nativeElement) {
+      this.isMuted.update(() => !this.videoPlayer.nativeElement.muted);
+      this.videoPlayer.nativeElement.muted = this.isMuted();
+    }
+  }
+
+  onVideoLoaded() {
+    this.isMuted.update(() => this.videoPlayer?.nativeElement.muted ?? true);
+  }
+  public openProductPage(collectionId: number) {
+    this.collectionService.openProductPage(collectionId, GenderTypeEnum.Women);
   }
 }

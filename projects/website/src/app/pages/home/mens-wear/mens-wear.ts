@@ -30,6 +30,9 @@ export class MensWear implements AfterViewInit {
   public mensWearList: WritableSignal<IResponseCollection[]> = signal([]);
   public productDetailRoute = appRoutes.PRODUCT_DETAIL;
 
+  public canGoNext: WritableSignal<boolean> = signal(false);
+  public canGoBack: WritableSignal<boolean> = signal(false);
+
   constructor(private platformService: PlatformService, private collectionService: Collection) {
     this.collectionService.getCollection(GenderTypeEnum.Men, this.mensWearList);
   }
@@ -58,6 +61,19 @@ export class MensWear implements AfterViewInit {
     this.items.forEach((item, index) => {
       item.nativeElement.classList.toggle('active', index === this.currentIndex);
     });
+
+    this.updateCanSlide();
+  }
+
+  private updateCanSlide(){
+    // can go next
+    let lastVisibleINdex: number = this.currentIndex + 2;
+    let lengthWithVisibleCard: number = lastVisibleINdex + 1;
+    this.canGoNext.update(()=> lengthWithVisibleCard < this.mensWearList().length);
+   
+    // can go back
+    let firstIndex: number = this.currentIndex - 2;
+    this.canGoBack.update(()=> firstIndex > 0)
   }
 
   prev(): void {

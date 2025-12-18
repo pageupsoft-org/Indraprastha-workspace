@@ -6,8 +6,10 @@
   <div class="gallery-container w-full px-32">
     @if(mensWearList().length > 5){
     <button
+      [disabled]="!canGoBack()"
       (click)="prev()"
       class="prev absolute left-0 top-1/2 -translate-y-1/2 z-10 p-2 md:p-[.5rem] bg-white backdrop-blur-sm rounded-full shadow-lg transition-transform duration-300 hover:scale-110 focus:outline-none focus:ring-2 focus:ring-[#cdb29c] focus:ring-offset-2"
+      [ngClass]="canGoBack() ? '':'!cursor-default !bg-[#ffffff69]'"
     >
       <svg
         xmlns="http://www.w3.org/20-00/svg"
@@ -45,7 +47,9 @@
     @if(mensWearList().length > 5){
     <button
       (click)="next()"
+      [disabled]="!canGoNext()"
       class="next absolute right-0 top-1/2 -translate-y-1/2 z-10 p-2 md:p-2 bg-white backdrop-blur-sm rounded-full shadow-lg transition-transform duration-300 hover:scale-110 focus:outline-none focus:ring-2 focus:ring-[#cdb29c] focus:ring-offset-2"
+      [ngClass]="canGoNext() ? '':'!cursor-default !bg-[#ffffff69]'"
     >
       <svg
         xmlns="http://www.w3.org/2000/svg"

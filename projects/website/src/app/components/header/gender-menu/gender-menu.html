@@ -11,6 +11,7 @@
             <li (mouseenter)="updatedCategory(item.categories)">
               <a
                 [routerLink]="getProductPageUrl(item, null)"
+                (click)="clearGender(); $event.stopPropagation()"
                 class="hover:text-[#680c01] transition-colors cursor-pointer"
               >
                 {{ item.name }}</a
@@ -27,6 +28,7 @@
             <li>
               <a
                 [routerLink]="getProductPageUrl(null, item)"
+                (click)="clearGender(); $event.stopPropagation()"
                 class="hover:text-[#680c01] transition-colors cursor-pointer"
                 >{{ item.name }}</a
               >
