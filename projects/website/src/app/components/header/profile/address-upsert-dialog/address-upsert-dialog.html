@@ -10,7 +10,7 @@
         libValidateControl
         [formControl]="addressForm.controls.country"
         (change)="onCountryChange()"
-        class="w-full border border-gray-200 rounded-lg px-2 py-3 focus:outline-none focus:ring-2 focus:ring-blue-400 placeholder-gray-300"
+        class="w-full border border-gray-200 rounded-lg px-2 py-3 focus:outline-none md:h-[44px] focus:ring-2 focus:ring-blue-400 placeholder-gray-300"
       >
         <option [ngValue]="null" disabled selected>Country / Region</option>
         @for (item of countries; track $index){
@@ -76,7 +76,7 @@
         libNoLeadingTrailingSpaceDirective
         [formControl]="addressForm.controls.state"
         (change)="onStateChange()"
-        class="flex-1 w-full border border-gray-200 rounded-lg px-2 py-3 focus:outline-none focus:ring-2 focus:ring-blue-400 placeholder-gray-300"
+        class="flex-1 w-full border border-gray-200 rounded-lg px-2 py-3 md:h-[44px] focus:outline-none focus:ring-2 focus:ring-blue-400 placeholder-gray-300"
       >
         <option [ngValue]="null" disabled selected>State</option>
         @for (item of states; track $index){
@@ -87,7 +87,7 @@
         libValidateControl
         libNoLeadingTrailingSpaceDirective
         [formControl]="addressForm.controls.city"
-        class="flex-1 w-full border border-gray-200 rounded-lg px-2 py-3 focus:outline-none focus:ring-2 focus:ring-blue-400 placeholder-gray-300"
+        class="flex-1 w-full border border-gray-200 rounded-lg px-2 py-3 md:h-[44px] focus:outline-none focus:ring-2 focus:ring-blue-400 placeholder-gray-300"
       >
         <option [ngValue]="null" disabled selected>city</option>
         @for (item of cities; track $index){
