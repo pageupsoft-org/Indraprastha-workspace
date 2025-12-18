@@ -101,6 +101,7 @@ export class Order {
             next: (res) => {
               if (res.data) {
                 this.payLoad.pageIndex = 1;
+                this.hasMoreData.update(() => true);
                 this.getAllOrders();
                 this.toastService.show({
                   message: 'Order cancelled',

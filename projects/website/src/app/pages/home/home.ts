@@ -73,6 +73,10 @@ export class Home extends Base implements AfterViewInit, OnInit {
         once: true,
       });
     }
+
+    if (this.platformService.isBrowser && this.videoPlayer) {
+      this.videoPlayer.nativeElement.play().catch((e) => console.log('Autoplay prevented:', e));
+    }
   }
 
   public callAllBannerApis() {

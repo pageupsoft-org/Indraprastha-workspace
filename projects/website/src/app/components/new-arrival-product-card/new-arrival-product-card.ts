@@ -1,5 +1,5 @@
 import { CommonModule } from '@angular/common';
-import { Component, EventEmitter, input, Input, OnInit, Output } from '@angular/core';
+import { Component, EventEmitter, input, Input, OnInit, Output, signal } from '@angular/core';
 import { Router } from '@angular/router';
 import { MConfirmationModalData } from '@shared';
 import { appRoutes, RNewArrivals, UtilityService, WishlistService } from '@website/core';
@@ -21,10 +21,12 @@ export class NewArrivalProductCard implements OnInit {
   };
   @Output() addButtonPressed: EventEmitter<null> = new EventEmitter<null>();
 
+  public activeProductId = signal(0);
+
   constructor(
     private router: Router,
     private utilService: UtilityService,
-    private wishlistService: WishlistService
+    public wishlistService: WishlistService
   ) {}
 
   ngOnInit(): void {}
@@ -45,36 +47,7 @@ export class NewArrivalProductCard implements OnInit {
   public toggleWishList(event: any) {
     event.stopPropagation();
 
+    this.activeProductId.update(()=> this.product.productId)
     this.wishlistService.toggleWishList(event, this.product, 'wishList', 'productId');
-
-    // if (this.utilService.isUserLoggedIn()) {
-    //   if (this.product.wishList) {
-    //     this.wishlistService.removeFromWishList(this.product.productId).then((res: boolean) => {
-    //       if (res) {
-    //         this.product.wishList = false;
-    //       }
-    //     });
-    //   } else {
-    //     this.wishlistService.addToWishlist(this.product.productId).then((res: boolean) => {
-    //       if (res) {
-    //         this.product.wishList = true;
-    //       }
-    //     });
-    //   }
-    // } else {
-    //   const modalData: MConfirmationModalData = {
-    //     heading: 'Login',
-    //     body: 'To add items to your wishlist, please login first.',
-    //     yesText: 'Yes',
-    //     noText: 'No',
-    //   };
-    //   this.wishlistService.objectCOnfirmationUtil
-    //     .getConfirmation(modalData)
-    //     .then((res: boolean) => {
-    //       if (res) {
-    //         this.utilService.openLoginForm.emit();
-    //       }
-    //     });
-    // }
   }
 }

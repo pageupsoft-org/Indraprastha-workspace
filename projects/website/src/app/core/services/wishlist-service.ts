@@ -19,6 +19,7 @@ import { UtilityService } from './utility-service';
 export class WishlistService {
   public wishlistProducts: WritableSignal<Product[]> = signal<Product[]>([]);
   public wishlistCount = computed(() => this.wishlistProducts().length);
+  public isWishlistLoading: WritableSignal<boolean> = signal(false);
 
   public readonly objectCOnfirmationUtil: ConfirmationUtil = new ConfirmationUtil();
   public toastService: ToastService = inject(ToastService);
@@ -110,22 +111,36 @@ export class WishlistService {
 
     return promise;
   }
-  public toggleWishList<PType>(event: any, product: PType, isWishListKey: string, prodcutIdKey: string) {
+  public toggleWishList<PType>(
+    event: any,
+    product: PType,
+    isWishListKey: string,
+    prodcutIdKey: string
+  ) {
     event.stopPropagation();
 
     if (this.utilService.isUserLoggedIn()) {
+      this.isWishlistLoading.update(() => true);
       if (product[isWishListKey]) {
-        this.removeFromWishList(product[prodcutIdKey]).then((res: boolean) => {
-          if (res) {
-            product[isWishListKey] = false;
-          }
-        });
+        this.removeFromWishList(product[prodcutIdKey])
+          .then((res: boolean) => {
+            if (res) {
+              product[isWishListKey] = false;
+            }
+          })
+          .finally(() => {
+            this.isWishlistLoading.update(() => false);
+          });
       } else {
-        this.addToWishlist(product[prodcutIdKey]).then((res: boolean) => {
-          if (res) {
-            product[isWishListKey] = true;
-          }
-        });
+        this.addToWishlist(product[prodcutIdKey])
+          .then((res: boolean) => {
+            if (res) {
+              product[isWishListKey] = true;
+            }
+          })
+          .finally(() => {
+            this.isWishlistLoading.update(() => false);
+          });
       }
     } else {
       const modalData: MConfirmationModalData = {
