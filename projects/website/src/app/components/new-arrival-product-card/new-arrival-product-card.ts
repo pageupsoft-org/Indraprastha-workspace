@@ -21,8 +21,6 @@ export class NewArrivalProductCard implements OnInit {
   };
   @Output() addButtonPressed: EventEmitter<null> = new EventEmitter<null>();
 
-  public activeProductId = signal(0);
-
   constructor(
     private router: Router,
     private utilService: UtilityService,
@@ -46,8 +44,6 @@ export class NewArrivalProductCard implements OnInit {
 
   public toggleWishList(event: any) {
     event.stopPropagation();
-
-    this.activeProductId.update(()=> this.product.productId)
     this.wishlistService.toggleWishList(event, this.product, 'wishList', 'productId');
   }
 }

@@ -88,7 +88,6 @@ export class DynamicCatalog implements AfterViewInit {
   public dynamicData: WritableSignal<IResponseDynamicCatalogue> = signal(
     initializeIResponseDynamicCatalogue()
   );
-  public activeProductId = signal(0);
 
   constructor(
     private platformService: PlatformService,
@@ -341,7 +340,6 @@ export class DynamicCatalog implements AfterViewInit {
   }
 
   public toggleWishList(event: any, item: ProductHeader) {
-    this.activeProductId.update(()=> item.id)
     this.wishlistService.toggleWishList<ProductHeader>(event, item, 'isWishList', 'id');
   }
 }

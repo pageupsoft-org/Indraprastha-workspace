@@ -20,6 +20,7 @@ export class WishlistService {
   public wishlistProducts: WritableSignal<Product[]> = signal<Product[]>([]);
   public wishlistCount = computed(() => this.wishlistProducts().length);
   public isWishlistLoading: WritableSignal<boolean> = signal(false);
+  public activeProdId = signal(0);
 
   public readonly objectCOnfirmationUtil: ConfirmationUtil = new ConfirmationUtil();
   public toastService: ToastService = inject(ToastService);
@@ -44,6 +45,7 @@ export class WishlistService {
   }
 
   public addToWishlist(id: number): Promise<boolean> {
+    this.activeProdId.update(()=> id);
     const promise = new Promise<boolean>((resolve, reject) => {
       httpPost<IRGeneric<number>, { productId: number }>(
         ApiRoutes.WISH.ADD,
@@ -68,6 +70,7 @@ export class WishlistService {
 
             resolve(false);
           }
+          this.activeProdId.update(()=> 0);
         },
         error: (error) => {
           this.toastService.show({

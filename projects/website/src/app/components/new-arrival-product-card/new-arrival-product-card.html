@@ -13,7 +13,7 @@
       class="w-[30] h-[32px] like-btn absolute top-3 right-3 p-2 text-black bg-white rounded-[50%] cursor-pointer hover:bg-opacity-90 transition-all duration-300 z-20"
     >
       <button class="cursor-pointer">
-        @if(wishlistService.isWishlistLoading() && product.productId == activeProductId()){
+        @if(wishlistService.isWishlistLoading() && product.productId == wishlistService.activeProdId()){
         <svg
           xmlns="http://www.w3.org/2000/svg"
           class="h-4 w-4 animate-spin text-[#df1800]"
