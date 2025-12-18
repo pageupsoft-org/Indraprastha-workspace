@@ -1,4 +1,4 @@
-import { AfterViewInit, Component, OnInit, signal } from '@angular/core';
+import { AfterViewInit, Component, ElementRef, OnInit, signal, ViewChild } from '@angular/core';
 import AOS from 'aos';
 import { ProductSlider } from './product-slider/product-slider';
 import { WomenWear } from './women-wear/women-wear';
@@ -32,10 +32,12 @@ import { ApiCallService } from '@website/core';
   styleUrl: './home.scss',
 })
 export class Home extends Base implements AfterViewInit, OnInit {
+  @ViewChild('videoPlayer') videoPlayer!: ElementRef<HTMLVideoElement>;
   public readonly DashboardProductTypeStringEnum = DashboardProductTypeStringEnum;
   public topBanners: string | null = null;
   public middleBanners: string | null = null;
   public productList = signal<Product[]>([]);
+  public isMuted = signal(true);
 
   private payload: IDashboadRequest = {
     ...initializePagInationPayload(),
@@ -55,6 +57,13 @@ export class Home extends Base implements AfterViewInit, OnInit {
     }
 
     this.getDashboardProduct();
+  }
+
+  public toggleMute() {
+    if (this.videoPlayer?.nativeElement) {
+      this.isMuted.update(() => !this.videoPlayer.nativeElement.muted);
+      this.videoPlayer.nativeElement.muted = this.isMuted();
+    }
   }
 
   // Initialize AOS animations
