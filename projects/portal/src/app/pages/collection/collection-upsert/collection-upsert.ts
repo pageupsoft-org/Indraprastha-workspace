@@ -1,5 +1,5 @@
 import { Component, inject } from '@angular/core';
-import { ApiRoutes, EToastType, GenderTypeEnum, MStringEnumToArray, patternWithMessage, stringEnumToArray, ToastService, ValidateControl } from '@shared';
+import { ApiRoutes, EToastType, GenderTypeEnum, MStringEnumToArray, NoLeadingTrailingSpaceDirective, patternWithMessage, stringEnumToArray, ToastService, ValidateControl } from '@shared';
 import { CommonModule } from '@angular/common';
 import { FormControl, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 
@@ -11,7 +11,7 @@ import { ICollection, ICollectionForm } from '../collection.model';
 
 @Component({
   selector: 'app-collection-upsert',
-  imports: [CommonModule, ReactiveFormsModule, ValidateControl],
+  imports: [CommonModule, ReactiveFormsModule, ValidateControl, NoLeadingTrailingSpaceDirective],
   templateUrl: './collection-upsert.html',
   styleUrl: './collection-upsert.scss',
 })
@@ -21,11 +21,9 @@ export class CollectionUpsert extends Base {
   public genders: MStringEnumToArray[] = stringEnumToArray(GenderTypeEnum);
     public collectionForm = new FormGroup<ICollectionForm>({
     id: new FormControl(0),
-    name: new FormControl('', [Validators.required, Validators.maxLength(30), Validators.minLength(3), 
-     patternWithMessage(/^\S(.*\S)?$/, 'starting and ending space not allowed'), patternWithMessage(/^[A-Za-z ]*$/, 'No special characters and number allowed')]),
+    name: new FormControl('', [Validators.required, Validators.maxLength(30), Validators.minLength(3)]),
     gender: new FormControl(null, Validators.required),
-    description: new FormControl('', [ Validators.maxLength(200), 
-     patternWithMessage(/^\S(.*\S)?$/, 'starting and ending space not allowed')]),
+    description: new FormControl('', [ Validators.maxLength(200)]),
   });
 
   constructor(private toaster: ToastService) {

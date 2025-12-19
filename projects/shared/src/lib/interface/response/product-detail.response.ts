@@ -4,6 +4,9 @@ export interface IRProductDetailRoot {
   id: number
   name: string
   categoryIds: number[]
+  categories: categories[]
+  collectionId:number;
+  collectionName:string;
   isCustomSize: boolean
   customSizeName: string
   color: string[]
@@ -14,6 +17,11 @@ export interface IRProductDetailRoot {
   variants: Variant[]
   stocks: Stock2[]
   descriptions: Description[]
+}
+
+export interface categories {
+  id: number
+  name: string
 }
 
 export interface Variant {

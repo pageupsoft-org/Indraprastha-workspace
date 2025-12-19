@@ -1,4 +1,4 @@
-import { Component, OnInit, signal, WritableSignal } from '@angular/core';
+import { Component, Inject, Input, OnInit, signal, WritableSignal } from '@angular/core';
 import {
   FormControl,
   FormGroup,
@@ -17,6 +17,7 @@ import {
   IRProductDetailRoot,
   jsonToArray,
   MStringEnumToArray,
+  NoLeadingTrailingSpaceDirective,
   patternWithMessage,
   stringEnumToArray,
   ValidateControl,
@@ -24,7 +25,13 @@ import {
 import { CommonModule } from '@angular/common';
 import { IDropdownSettings, NgMultiSelectDropDownModule } from 'ng-multiselect-dropdown';
 import { ActivatedRoute, Params, Router } from '@angular/router';
-import { Base, IConvertImageParams, ImageSizeConst, ImageTypeEnum, initialConvertImageParam } from '@portal/core';
+import {
+  Base,
+  IConvertImageParams,
+  ImageSizeConst,
+  ImageTypeEnum,
+  initialConvertImageParam,
+} from '@portal/core';
 import { IConvertImageResult } from '@portal/core';
 import { IGenericComboResponse } from '../../banner/banner.model';
 import {
@@ -38,34 +45,41 @@ import {
   IVariantData,
 } from '../product.model';
 import { arrayToJson, convertImagesToBase64Array, logInvalidControls } from '@portal/core';
+import { ProductService } from '../product-service';
 
 @Component({
   selector: 'app-product-upsert',
+  standalone: true,
   imports: [
     ReactiveFormsModule,
     CommonModule,
     FormsModule,
     NgMultiSelectDropDownModule,
     ValidateControl,
+    NoLeadingTrailingSpaceDirective,
   ],
   templateUrl: './product-upsert.html',
   styleUrl: './product-upsert.scss',
+  providers: [],
 })
 export class ProductUpsert extends Base implements OnInit {
   public categoryCombo: IGenericComboResponse[] = [];
+  public collectionCombo: IGenericComboResponse[] = [];
   public genders: MStringEnumToArray[] = stringEnumToArray(GenderTypeEnum);
   public descriptionTypeEnumList: MStringEnumToArray[] = stringEnumToArray(EDescriptionType);
   public stockSize: MStringEnumToArray[] = stringEnumToArray(EStockSize);
   public ShowDescription: boolean = false;
   public readonly EDescriptionType = EDescriptionType;
+  public collection: string = '';
   public setAllQtyInput = new FormControl<number | null>(
     null,
     patternWithMessage(/^[1-9]\d*$/, 'Only numbers are allowed')
   );
+
   public setAllQty: WritableSignal<number> = signal(0);
   public productForm: FormGroup<IProductForm> = initializeIProductForm();
   public dropdownSettings: IDropdownSettings = {
-    singleSelection: false,
+    singleSelection: true,
     idField: 'id',
     textField: 'name',
     selectAllText: 'Select All',
@@ -74,15 +88,18 @@ export class ProductUpsert extends Base implements OnInit {
     allowSearchFilter: false,
     defaultOpen: false,
   };
-
   public ImageSizeConst = ImageSizeConst;
 
-  constructor(private activatedRoute: ActivatedRoute, public router: Router) {
+  constructor(
+    private activatedRoute: ActivatedRoute,
+    public router: Router,
+    private productService: ProductService
+  ) {
     super();
   }
 
   ngOnInit(): void {
-    this.getCategoryCombo();
+    // this.getCategoryCombo();
 
     // add one default value
     this.productForm.controls.color.push(new FormControl<string>('#9c1c1c'));
@@ -101,17 +118,17 @@ export class ProductUpsert extends Base implements OnInit {
   }
 
   // GET CATEGORY COMBO
-  private getCategoryCombo() {
-    this.httpGetPromise<IRGeneric<IGenericComboResponse[]>>(ApiRoutes.CATEGORY.GET_COMBO)
-      .then((response) => {
-        if (response) {
-          if (response.data) {
-            this.categoryCombo = response.data;
-          }
-        }
-      })
-      .catch((error) => {});
-  }
+  // private getCategoryCombo() {
+  //   this.httpGetPromise<IRGeneric<IGenericComboResponse[]>>(ApiRoutes.CATEGORY.GET_COMBO)
+  //     .then((response) => {
+  //       if (response) {
+  //         if (response.data) {
+  //           this.categoryCombo = response.data;
+  //         }
+  //       }
+  //     })
+  //     .catch((error) => {});
+  // }
 
   public mutateColorControl(index: number | null) {
     if (index == null) {
@@ -218,9 +235,16 @@ export class ProductUpsert extends Base implements OnInit {
   }
 
   public upsertProduct() {
+    // const collId = parseInt(this.productForm.controls.collectionId.value)
+    //console.log(this.productForm.controls.collectionId.value);
+    this.productForm.markAllAsTouched();
+    this.productForm.updateValueAndValidity();
     const invalidControls: { path: string; errors: any }[] = logInvalidControls(this.productForm);
-    if (this.productForm.valid) {
+
+    debugger;
+    if (this.productForm.valid && invalidControls.length == 0) {
       // return;
+
       const data = this.productForm.getRawValue();
       data.descriptions.forEach((desc: any) => {
         if (desc.descriptionType === EDescriptionType.Json) {
@@ -240,6 +264,8 @@ export class ProductUpsert extends Base implements OnInit {
       });
 
       delete (data as any).categoryIdsList;
+      //console.log(invalidControls, data)
+      // return;
 
       this.httpPostPromise<IRGeneric<number>, any>(ApiRoutes.PRODUCT.POST, data).then(
         (res: IRGeneric<number>) => {
@@ -252,7 +278,7 @@ export class ProductUpsert extends Base implements OnInit {
               type: EToastType.success,
               duration: 3000,
             });
-            this.productForm = initializeIProductForm();
+            // this.productForm = initializeIProductForm();
             this.router.navigate([this.appRoutes.PRODUCT]);
           } else {
             this.toastService.show({
@@ -264,7 +290,7 @@ export class ProductUpsert extends Base implements OnInit {
         }
       );
     } else {
-      console.log(invalidControls);
+      // //console.log(invalidControls);
 
       invalidControls.forEach((ic: { path: string; errors: any }) => {
         if (ic.path.includes('variantBase64') || ic.path.includes('productBase64')) {
@@ -286,9 +312,6 @@ export class ProductUpsert extends Base implements OnInit {
           });
         }
       });
-
-      this.productForm.markAllAsTouched();
-      this.productForm.updateValueAndValidity();
     }
   }
 
@@ -308,7 +331,23 @@ export class ProductUpsert extends Base implements OnInit {
       ApiRoutes.PRODUCT.GET_BY_ID(productId)
     ).then((res) => {
       if (res?.data) {
+        this.categoryCombo = res.data.categories;
         // this.patchProductData(res);
+        this.productService
+          .getCollectionByGender(res.data.gender as GenderTypeEnum)
+          .subscribe((response) => {
+            if (response && response.data != null) {
+              this.collectionCombo = response.data;
+              this.collectionCombo.find((c) => {
+                console.log(c, c.id, res.data.collectionId, c.id === res.data.collectionId);
+
+                if (c.id === res.data.collectionId) {
+                  this.productForm.controls.collectionId.patchValue(res.data.collectionId);
+                }
+              });
+            }
+          });
+
         const {
           id,
           name,
@@ -337,7 +376,7 @@ export class ProductUpsert extends Base implements OnInit {
         // Assuming categoryIds is the array of selected IDs (e.g., [1, 5, 9])
         const selectedCategoryObjects = categoryIds.map((id) => {
           // Find the full category object from the dropdown source data
-          const category = this.categoryCombo.find((c) => c.id === id);
+          const category = res.data.categories.find((c) => c.id === id);
 
           // Return the object expected by the dropdown (e.g., { id: 1, name: 'Fiction' })
           return {
@@ -386,21 +425,33 @@ export class ProductUpsert extends Base implements OnInit {
           const { header, descriptionType, shortDescription } = d;
           form.patchValue({ header, descriptionType, shortDescription });
 
-          if (d.descriptionType == EDescriptionType.Json) {
+          if (d.descriptionType === EDescriptionType.Json) {
             jsonToArray(JSON.parse(d.description)).forEach((v) => {
-              form.controls.jsonText.push(initializeJsonTextForm({ key: v.key, value: v.value }));
+              const jsonForm = initializeJsonTextForm({
+                key: v.key,
+                value: v.value,
+              });
+
+              form.controls.jsonText.push(jsonForm);
             });
           } else {
             form.controls.description.setValue(d.description);
           }
 
+          // 👉 PUSH FIRST
           this.productForm.controls.descriptions.push(form);
+
+          // 👉 THEN mark state
+          form.markAllAsTouched();
+          form.markAllAsDirty();
+          form.updateValueAndValidity({ emitEvent: false });
 
           form.controls.description.clearValidators();
           form.controls.description.updateValueAndValidity({ emitEvent: false });
         });
 
         this.productForm.controls.stocks.disable();
+        // console.log(this.productForm.errors);
       }
     });
   }
@@ -416,5 +467,48 @@ export class ProductUpsert extends Base implements OnInit {
       // this.productForm.controls.stocks.updateValueAndValidity();
       this.setAllQtyInput.reset();
     }
+  }
+
+  public getCollectionByGender() {
+    console.log('getCollectionByGender called');
+    // this.productForm.controls.collectionId.reset();
+    // this.productForm.controls.categoryIdsList.reset();
+    this.categoryCombo = [];
+    const gender = this.productForm.controls.gender.value || '';
+    this.httpGetPromise<IRGeneric<IGenericComboResponse[]>>(
+      ApiRoutes.COLLECTION.GET_BY_GENDER_COLLECTION(gender)
+    )
+      .then((res) => {
+        //console.log(res)
+        if (res && res.data != null) {
+          this.collectionCombo = res.data;
+        }
+      })
+      .catch((error) => {
+        // error handle
+      });
+  }
+
+  public getCategoryByCollectionId() {
+    // this.productForm.controls.categoryIdsList.reset();
+    console.log(
+      'getCategoryByCollectionId called',
+      this.productForm.controls.collectionId.value,
+      typeof this.productForm.controls.collectionId.value
+    );
+    this.categoryCombo = [];
+    const id = Number(this.productForm.controls.collectionId.value) || 0;
+    //console.log(id);
+    this.httpGetPromise<IRGeneric<IGenericComboResponse[]>>(
+      ApiRoutes.CATEGORY.GET_BY_ID_CATEGORY(id)
+    )
+      .then((response) => {
+        if (response) {
+          if (response.data != null) {
+            this.categoryCombo = response.data;
+          }
+        }
+      })
+      .catch((error) => {});
   }
 }

@@ -1,7 +1,7 @@
 import { Component, inject, OnInit, signal, WritableSignal } from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
-import { Router, RouterLink } from '@angular/router';
-import { Base, handlePagination } from '@portal/core';
+import { Router} from '@angular/router';
+import { handlePagination } from '@portal/core';
 import { initializePagInationPayload } from '../../../core/interface/request/genericPayload';
 import { IGenericResponse } from '../../../core/interface/response/genericResponse';
 
@@ -23,7 +23,7 @@ import { IProduct, IProductPagination, IProductResponseRoot } from '../product.m
   styleUrl: './product-list.scss',
 })
 export class ProductList extends SearchBase<IRGeneric<IProductResponseRoot>> implements OnInit {
-  public readonly dialog = inject(MatDialog);
+  // public readonly dialog = inject(MatDialog);
   protected override payLoad: IProductPagination = {
     ...initializePagInationPayload(),
     categoryId: null,

@@ -4,7 +4,7 @@ import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
 import { CommonModule } from '@angular/common';
 import { EmployeeList } from '../employee-list/employee-list';
 import { Base } from '../../../core/base/base';
-import { ApiRoutes, NumberOnlyValidators, patternWithMessage, ToastService, ValidateControl } from '@shared';
+import { ApiRoutes, NoLeadingTrailingSpaceDirective, NumberOnlyValidators, patternWithMessage, ToastService, ValidateControl } from '@shared';
 import { IEmployee, IEmployeeForm } from '../employee.model';
 
 
@@ -15,7 +15,8 @@ import { IEmployee, IEmployeeForm } from '../employee.model';
     CommonModule,
     ReactiveFormsModule,
     ValidateControl,
-    NumberOnlyValidators
+    NumberOnlyValidators,
+    NoLeadingTrailingSpaceDirective
   ],
   templateUrl: './employee-upsert.html',
   styleUrl: './employee-upsert.scss',
@@ -27,17 +28,14 @@ export class EmployeeUpsert extends Base implements OnInit {
 
   public employeeForm = new FormGroup<IEmployeeForm>({
     id: new FormControl(0),
-    firstName: new FormControl('', [Validators.required, Validators.minLength(3), Validators.maxLength(15),
-    patternWithMessage(/^[A-Za-z0-9]+$/, 'This field not allowed any space'), patternWithMessage(/^[A-Za-z ]*$/, 'No special characters and number allowed')]),
-    lastName: new FormControl('', [Validators.required, Validators.minLength(3), Validators.maxLength(15),
-    patternWithMessage(/^[A-Za-z0-9]+$/, 'This field not allowed any space'), patternWithMessage(/^[A-Za-z ]*$/, 'No special characters and number allowed')]),
-    email: new FormControl('', [Validators.required, patternWithMessage(/^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/, 'Enter a valid email address')]),
+    firstName: new FormControl('', [Validators.required, Validators.minLength(3), Validators.maxLength(15)]),
+    lastName: new FormControl('', [Validators.required, Validators.minLength(3), Validators.maxLength(15),]),
+    email: new FormControl('', [Validators.required]),
     contact: new FormControl('', [Validators.required, patternWithMessage(/^[6-9]\d{9}$/, 'Enter a valid contact number.')]),
     userType: new FormControl('',),
-    address: new FormControl('', [Validators.required, Validators.maxLength(70),
-    patternWithMessage(/^\S(.*\S)?$/, 'starting and ending space not allowed')]),
-    username: new FormControl(null, [Validators.minLength(3), Validators.maxLength(30), patternWithMessage(/^\S*$/, 'This field does not allow any spaces')]),
-    password: new FormControl(null, [Validators.minLength(8), Validators.maxLength(8), patternWithMessage(/^\S*$/, 'This field does not allow any spaces')]),
+    address: new FormControl('', [Validators.required, Validators.maxLength(70)]),
+    username: new FormControl(null, [Validators.minLength(3), Validators.maxLength(30)]),
+    password: new FormControl(null, [Validators.minLength(8), Validators.maxLength(8)]),
     isLogin: new FormControl(false),
   });
   public isLoginMode: boolean = false;

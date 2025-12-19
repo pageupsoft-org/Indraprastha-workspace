@@ -23,28 +23,49 @@ export class ValidateControl implements AfterViewInit, OnDestroy {
     private renderer: Renderer2,
     @Optional() private ngControl: NgControl,
     @Optional() private formGroupDir: FormGroupDirective
-  ) {
-  }
+  ) {}
+
+  // ngAfterViewInit() {
+
+  //   if (!this.ngControl || !this.ngControl.control) return;
+
+  //   this.wrapInputInRelativeContainer();
+  //   this.createErrorToast();
+  //   this.registerListeners();
+
+  //   if (this.formGroupDir) {
+  //     this.sub.add(
+  //       this.formGroupDir.ngSubmit.subscribe(() => {
+  //         // this.formGroupDir.directives.filter(control => {
+  //         //   console.log(control)
+  //         //    const rawValue = control.value;
+  //         //    console.log(rawValue)
+  //         //    const trimValue = String(rawValue).trim();
+  //         //    console.log(trimValue)
+  //         // })
+  //         trimFormValue(this.ngControl)
+  //         this.formGroupDir.control.markAllAsTouched();
+  //         this.updateMessage();
+  //       })
+  //     );
+  //   }
+  // }
 
   ngAfterViewInit() {
-
     if (!this.ngControl || !this.ngControl.control) return;
 
     this.wrapInputInRelativeContainer();
     this.createErrorToast();
     this.registerListeners();
 
+    // ✅ IMPORTANT: force initial validation render
+    setTimeout(() => {
+      this.updateMessage();
+    });
+
     if (this.formGroupDir) {
       this.sub.add(
         this.formGroupDir.ngSubmit.subscribe(() => {
-          // this.formGroupDir.directives.filter(control => {
-          //   console.log(control)
-          //    const rawValue = control.value;
-          //    console.log(rawValue)
-          //    const trimValue = String(rawValue).trim(); 
-          //    console.log(trimValue)
-          // })
-          trimFormValue(this.ngControl)
           this.formGroupDir.control.markAllAsTouched();
           this.updateMessage();
         })
@@ -52,21 +73,33 @@ export class ValidateControl implements AfterViewInit, OnDestroy {
     }
   }
 
-
   ngOnDestroy() {
     this.sub.unsubscribe();
   }
 
   /** When input loses focus */
+  // @HostListener('blur')
+  // onBlur() {
+  //   const control = this.ngControl.control;
+  //   if (!control) return;
+
+  //   control.markAsTouched();
+  //   this.updateMessage();
+  // }
   @HostListener('blur')
   onBlur() {
     const control = this.ngControl.control;
     if (!control) return;
 
+    if (typeof control.value === 'string') {
+      control.setValue(control.value.trim(), { emitEvent: false });
+    }
+
     control.markAsTouched();
+    control.updateValueAndValidity();
     this.updateMessage();
   }
-
+  
   /** Wrap input to allow absolute-positioned toast above */
   private wrapInputInRelativeContainer() {
     const inputEl = this.el.nativeElement;
@@ -129,7 +162,7 @@ export class ValidateControl implements AfterViewInit, OnDestroy {
   }
 
   private getError(control: AbstractControl): string {
-    const e = control.errors;    
+    const e = control.errors;
 
     if (!e) return '';
 
@@ -139,7 +172,7 @@ export class ValidateControl implements AfterViewInit, OnDestroy {
     if (e['maxlength']) return `Maximum length is ${e['maxlength'].requiredLength}.`;
     if (e['pattern']) return e['pattern'].message || 'Invalid format.';
     if (e['max']) return `Value must not exceed ${e['max'].max}.`;
-    if (e['leadingOrTrailingSpace']) return `Starting and ending space not allowed`
+    if (e['leadingOrTrailingSpace']) return `Starting and ending space not allowed`;
     return 'Invalid input.';
   }
 }

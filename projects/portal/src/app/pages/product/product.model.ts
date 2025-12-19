@@ -5,6 +5,7 @@ import { EDescriptionType, EStockSize, GenderTypeEnum, IPaginationPayload, patte
 export interface IProductForm {
   id: FormControl<number | null>;
   categoryIds: FormControl<Array<number> | null>;
+  collectionId: FormControl<number | null>
   categoryIdsList: FormControl<Array<{ id: number; name: string }> | null>;
   name: FormControl<string | null>;
   isCustomSize: FormControl<boolean | null>;
@@ -77,10 +78,8 @@ export const initializeJsonTextForm = (
   data: IJsonTextFormData | null
 ): FormGroup<IJsonTextForm> => {
   const form = new FormGroup<IJsonTextForm>({
-    key: new FormControl<string>('', [Validators.required, Validators.maxLength(40), 
-      patternWithMessage(/^\S(.*\S)?$/, 'starting and ending space not allowed')]),
-    value: new FormControl<string>('', [Validators.required,  Validators.maxLength(100), 
-      patternWithMessage(/^\S(.*\S)?$/, 'starting and ending space not allowed')]),
+    key: new FormControl<string>('', [Validators.required, Validators.maxLength(40)]),
+    value: new FormControl<string>('', [Validators.required,  Validators.maxLength(100)]),
   });
 
   if (data) {
@@ -94,12 +93,10 @@ export const initializeDescriptionForm = (
   data: IDescriptionData | null
 ): FormGroup<IDescriptionForm> => {
   const form = new FormGroup<IDescriptionForm>({
-    header: new FormControl<string | null>(null, [Validators.required, Validators.maxLength(40), 
-       patternWithMessage(/^\S(.*\S)?$/, 'starting and ending space not allowed'), patternWithMessage(/^[A-Za-z ]*$/, 'No special characters and number allowed')]),
+    header: new FormControl<string | null>(null, [Validators.required, Validators.maxLength(40)]),
     descriptionType: new FormControl<EDescriptionType | null>(EDescriptionType.SingleText),
-    description: new FormControl<string | null>(null, [Validators.required, Validators.maxLength(300), 
-      patternWithMessage(/^\S(.*\S)?$/, 'starting and ending space not allowed')]),
-    shortDescription: new FormControl<string | null>(null, [Validators.maxLength(70),  patternWithMessage(/^\S(.*\S)?$/, 'starting and ending space not allowed')]),
+    description: new FormControl<string | null>(null, [Validators.required, Validators.maxLength(400),]),
+    shortDescription: new FormControl<string | null>(null, [Validators.maxLength(70)]),
     jsonText: new FormArray<FormGroup<IJsonTextForm>>([]),
   });
   if (data) {
@@ -113,11 +110,10 @@ export const initializeVariantForm = (data: IVariantData | null): FormGroup<IVar
   const form = new FormGroup<IVariantForm>({
     id: new FormControl<number | null>(0),
     productId: new FormControl<number | null>(0),
-    name: new FormControl<string | null>(null, [Validators.required, Validators.maxLength(40), 
-      patternWithMessage(/^\S(.*\S)?$/, 'starting and ending space not allowed'), patternWithMessage(/^[A-Za-z ]*$/, 'No special characters and number allowed')]),
-    description: new FormControl<string | null>(null,[Validators.maxLength(170), 
-      patternWithMessage(/^\S(.*\S)?$/, 'starting and ending space not allowed')]),
-    mrp: new FormControl<number | null>(null, [Validators.required, Validators.maxLength(10), patternWithMessage(/^\d+(\.\d{1,2})?$/, 'enter a valid price')]),
+    name: new FormControl<string | null>(null, [Validators.required, Validators.maxLength(40)]),
+    description: new FormControl<string | null>(null,[Validators.maxLength(170)]),
+    mrp: new FormControl<number | null>(null, [Validators.required, Validators.maxLength(10), 
+      patternWithMessage(/^\d+(\.\d{1,2})?$/, 'enter a valid price')]),
     stocks: new FormGroup({
       quantity: new FormControl<number | null>(null, [Validators.required, Validators.maxLength(4), patternWithMessage(/^[1-9]\d*$/, 'Please enter a valid quantity')]),
     }),
@@ -146,9 +142,9 @@ export const initializeIProductForm = (): FormGroup<IProductForm> =>
   new FormGroup<IProductForm>({
     id: new FormControl<number | null>(0),
     categoryIds: new FormControl<number[]>([]),
+    collectionId: new FormControl<number | null>(null, Validators.required),
     categoryIdsList: new FormControl<Array<{ id: number; name: string }> | null>([]),
-    name: new FormControl<string | null>(null, [Validators.required, Validators.maxLength(70), 
-       patternWithMessage(/^\S(.*\S)?$/, 'starting and ending space not allowed'), patternWithMessage(/^[A-Za-z ]*$/, 'No special characters and number allowed')]),
+    name: new FormControl<string | null>(null, [Validators.required, Validators.maxLength(70)]),
     isCustomSize: new FormControl<boolean | null>(false,),
     customSizeName: new FormControl<string | null>(''),
     color: new FormArray<FormControl<string | null>>([]),

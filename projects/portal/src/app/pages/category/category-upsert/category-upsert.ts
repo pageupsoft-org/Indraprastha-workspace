@@ -4,13 +4,13 @@ import { Base } from '../../../core/base/base';
 import { IGenericResponse } from '../../../core/interface/response/genericResponse';
 import { CategoryList } from '../category-list/category-list';
 import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
-import { ApiRoutes, EToastType, ICategory, patternWithMessage, ToastService, ValidateControl } from '@shared';
+import { ApiRoutes, EToastType, ICategory, NoLeadingTrailingSpaceDirective, patternWithMessage, ToastService, ValidateControl } from '@shared';
 import { IGenericComboResponse } from '../../banner/banner.model';
 import { ICategoryForm } from '../category.model';
 
 @Component({
   selector: 'app-category-upsert',
-  imports: [ReactiveFormsModule, ValidateControl],
+  imports: [ReactiveFormsModule, ValidateControl, NoLeadingTrailingSpaceDirective],
   templateUrl: './category-upsert.html',
   styleUrl: './category-upsert.scss',
 })
@@ -22,11 +22,9 @@ export class CategoryUpsert extends Base implements OnInit {
 
   public categoryForm = new FormGroup<ICategoryForm>({
     id: new FormControl(0),
-    name: new FormControl('', [Validators.required, Validators.minLength(3), Validators.maxLength(30), 
-       patternWithMessage(/^\S(.*\S)?$/, 'starting and ending space not allowed'), patternWithMessage(/^[A-Za-z ]*$/, 'No special characters and number allowed')]),
+    name: new FormControl('', [Validators.required, Validators.minLength(3), Validators.maxLength(30)]),
     gst: new FormControl(0),
-    description: new FormControl('', 
-        [patternWithMessage(/^\S(.*\S)?$/, 'starting and ending space not allowed')]),
+    description: new FormControl('', [Validators.maxLength(200)]),
     collectionId: new FormControl(null, [Validators.required]),
   })
 

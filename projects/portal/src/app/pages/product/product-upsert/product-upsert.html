@@ -48,36 +48,10 @@
             <input
               [formControl]="productForm.controls.name"
               libValidateControl
+              libNoLeadingTrailingSpaceDirective
               type="text"
               placeholder="Enter product name"
               maxlength="70"
-              class="w-full border border-slate-300 rounded-[5px] px-3 py-2 text-sm placeholder-slate-400 focus:ring-[#82181A] focus:outline-none focus:border-[#82181A] transition duration-200 text-base"
-            />
-          </div>
-
-          <!-- Category (single select) -->
-          <div>
-            <label class="block text-sm font-medium text-slate-700 mb-1">Category</label>
-
-            <ng-multiselect-dropdown
-              [settings]="dropdownSettings"
-              [data]="categoryCombo"
-              [formControl]="productForm.controls.categoryIdsList"
-              class="focus:ring-[#82181A] focus:outline-none focus:border-[#82181A] transition duration-200 text-base"
-            >
-            </ng-multiselect-dropdown>
-          </div>
-
-          <!-- MRP -->
-          <div>
-            <label class="block text-sm font-medium text-slate-700 mb-1">MRP</label>
-            <input
-              [formControl]="productForm.controls.mrp"
-              libValidateControl
-              type="text"
-              placeholder="Enter MRP"
-              step="0.01"
-              maxlength="10"
               class="w-full border border-slate-300 rounded-[5px] px-3 py-2 text-sm placeholder-slate-400 focus:ring-[#82181A] focus:outline-none focus:border-[#82181A] transition duration-200 text-base"
             />
           </div>
@@ -89,15 +63,58 @@
             <select
               [formControl]="productForm.controls.gender"
               libValidateControl
+              (change)="getCollectionByGender()"
               class="w-full border border-slate-200 rounded-[5px] px-3 py-2 text-sm bg-white focus:ring-[#82181A] focus:outline-none focus:border-[#82181A] transition duration-200 text-base"
             >
               <option [ngValue]="null" disabled>— Select Gender —</option>
-
               @for (item of genders; track $index) {
               <option [ngValue]="item.key">{{ item.value }}</option>
               }
             </select>
           </div>
+
+          <div>
+            <label class="block text-sm font-medium text-slate-700 mb-1">Collection</label>
+
+            <select
+              libValidateControl
+              (change)="getCategoryByCollectionId()"
+              [formControl]="productForm.controls.collectionId"
+              class="w-full border border-slate-200 rounded-[5px] px-3 py-2 text-sm bg-white focus:ring-[#82181A] focus:outline-none focus:border-[#82181A] transition duration-200 text-base"
+            >
+              <option [ngValue]="null">— Select Collection—</option>
+
+              @for (item of collectionCombo; track $index) {
+              <option [ngValue]="item.id">{{ item.name }}</option>
+              }
+            </select>
+          </div>
+
+          <!-- Category (single select) -->
+          <div>
+            <label class="block text-sm font-medium text-slate-700 mb-1">Category</label>
+            <ng-multiselect-dropdown
+              [settings]="dropdownSettings"
+              [data]="categoryCombo"
+              [formControl]="productForm.controls.categoryIdsList"
+              class="focus:ring-[#82181A] focus:outline-none focus:border-[#82181A] transition duration-200 text-base"
+            >
+            </ng-multiselect-dropdown>
+          </div>
+        </div>
+
+        <!-- MRP -->
+        <div class="mt-4 col-span-full">
+          <label class="block text-sm font-medium text-slate-700 mb-1">MRP</label>
+          <input
+            [formControl]="productForm.controls.mrp"
+            libValidateControl
+            type="text"
+            placeholder="Enter MRP"
+            step="0.01"
+            maxlength="10"
+            class="w-[25%] border border-slate-300 rounded-[5px] px-3 py-2 text-sm placeholder-slate-400 focus:ring-[#82181A] focus:outline-none focus:border-[#82181A] transition duration-200 text-base"
+          />
         </div>
 
         <!--  color section -->
@@ -194,6 +211,7 @@
                   placeholder="Enter variant name"
                   maxlength="40"
                   [formControl]="variant.controls.name"
+                  libNoLeadingTrailingSpaceDirective
                   libValidateControl
                 />
               </div>
@@ -219,6 +237,7 @@
                   placeholder="Enter variant description"
                   [formControl]="variant.controls.description"
                   libValidateControl
+                  libNoLeadingTrailingSpaceDirective
                   maxlength="170"
                 ></textarea>
               </div>
@@ -259,8 +278,11 @@
 
                 @if(variant.controls.variantBase64.value == null){
                 <span id="placeholder1" class="text-gray-500 text-center text-sm leading-tight">
-                  Upload Image<br />({{ ImageSizeConst.productVariant.width
-                  }}x{{ ImageSizeConst.productVariant.height }})
+                  Upload Image<br />({{ ImageSizeConst.productVariant.width }}x{{
+                    ImageSizeConst.productVariant.height
+                  }})
+                  <br />
+                  2 mb(max)
                 </span>
                 }
               </div>
@@ -366,6 +388,7 @@
                 placeholder="Enter header"
                 [formControl]="description.controls.header"
                 libValidateControl
+                libNoLeadingTrailingSpaceDirective
                 maxlength="40"
               />
             </div>
@@ -391,10 +414,11 @@
             <textarea
               [formControl]="description.controls.description"
               libValidateControl
+              libNoLeadingTrailingSpaceDirective
               rows="4"
               class="w-full border border-gray-300 rounded-[5px] px-3 py-2 text-sm text-gray-700 focus:ring-[#82181A] focus:outline-none focus:border-[#82181A] transition duration-200 text-base"
               placeholder="Write detailed description..."
-              maxlength="300"
+              maxlength="400"
             ></textarea>
           </div>
           } @else {
@@ -419,6 +443,7 @@
                 [formControl]="jsonText.controls.key"
                 maxlength="40"
                 libValidateControl
+                libNoLeadingTrailingSpaceDirective
                 class="w-1/2 border border-gray-300 rounded-[5px] px-3 py-2 text-sm text-gray-700 focus:ring-[#82181A] focus:outline-none focus:border-[#82181A] transition duration-200 text-base"
               />
 
@@ -428,6 +453,7 @@
                 maxlength="100"
                 [formControl]="jsonText.controls.value"
                 libValidateControl
+                libNoLeadingTrailingSpaceDirective
                 class="w-1/2 border border-gray-300 rounded-[5px] px-3 py-2 text-sm text-gray-700 focus:ring-[#82181A] focus:outline-none focus:border-[#82181A] transition duration-200 text-base"
               />
 
@@ -451,6 +477,7 @@
               type="text"
               [formControl]="description.controls.shortDescription"
               libValidateControl
+              libNoLeadingTrailingSpaceDirective
               class="w-full border border-gray-300 rounded-[5px] px-3 py-2 text-sm text-gray-700 focus:ring-[#82181A] focus:outline-none focus:border-[#82181A] transition duration-200 text-base"
               placeholder="Enter short summary"
               maxlength="70"
@@ -527,6 +554,8 @@
               Upload Image<br />({{ ImageSizeConst.product.width }}×{{
                 ImageSizeConst.product.height
               }})
+              <br />
+              2 mb(max)
             </span>
             }
           </div>

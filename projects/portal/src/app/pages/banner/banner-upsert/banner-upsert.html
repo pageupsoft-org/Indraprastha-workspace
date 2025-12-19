@@ -37,7 +37,7 @@
           </svg>
         </div>
 
-        <input formControlName="name" libValidateControl type="text" placeholder="Enter banner name" minlength="3"
+        <input formControlName="name" libNoLeadingTrailingSpaceDirective libValidateControl type="text" placeholder="Enter banner name" minlength="3"
           maxlength="30"
           class="w-full border border-slate-300 rounded-[5px] px-3 py-2 pl-10 pr-10 text-sm text-gray-800 placeholder-slate-400 focus:ring-[#82181A] focus:outline-none focus:border-[#82181A] transition duration-200 text-base" />
       </div>
@@ -155,7 +155,7 @@
           </svg>
         </div>
 
-        <textarea formControlName="description" rows="3" placeholder="Write short description..." maxlength="250" libValidateControl
+        <textarea formControlName="description" libNoLeadingTrailingSpaceDirective rows="3" placeholder="Write short description..." maxlength="250" libValidateControl
           class="w-full border border-slate-300 rounded-[5px] px-3 py-2 pl-10 text-sm resize-none placeholder-slate-400 focus:ring-[#82181A] focus:outline-none focus:border-[#82181A] transition duration-200 text-base"></textarea>
       </div>
     </div>
@@ -164,7 +164,7 @@
     <div class="md:col-span-3 flex items-center justify-between">
       <div class="flex items-center gap-3">
         <h3 class="text-lg font-medium text-slate-900">Banner Image</h3>
-        <p class="text-xs text-slate-500">Recommended: 1536 × 1024 (3:2)</p>
+        <p class="text-xs text-slate-500">Recommended: 1536 × 1024 | 2 mb(max)</p>
       </div>
     </div>
 
