@@ -45,7 +45,6 @@ export class WishlistService {
   }
 
   public addToWishlist(id: number): Promise<boolean> {
-    this.activeProdId.update(()=> id);
     const promise = new Promise<boolean>((resolve, reject) => {
       httpPost<IRGeneric<number>, { productId: number }>(
         ApiRoutes.WISH.ADD,
@@ -70,7 +69,6 @@ export class WishlistService {
 
             resolve(false);
           }
-          this.activeProdId.update(()=> 0);
         },
         error: (error) => {
           this.toastService.show({
@@ -123,6 +121,7 @@ export class WishlistService {
     event.stopPropagation();
 
     if (this.utilService.isUserLoggedIn()) {
+      this.activeProdId.update(()=> product[prodcutIdKey]);
       this.isWishlistLoading.update(() => true);
       if (product[isWishListKey]) {
         this.removeFromWishList(product[prodcutIdKey])
@@ -133,6 +132,7 @@ export class WishlistService {
           })
           .finally(() => {
             this.isWishlistLoading.update(() => false);
+            this.activeProdId.update(()=> 0);
           });
       } else {
         this.addToWishlist(product[prodcutIdKey])
@@ -143,6 +143,7 @@ export class WishlistService {
           })
           .finally(() => {
             this.isWishlistLoading.update(() => false);
+            this.activeProdId.update(()=> 0);
           });
       }
     } else {
