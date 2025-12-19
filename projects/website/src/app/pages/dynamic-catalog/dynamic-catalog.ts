@@ -111,6 +111,8 @@ export class DynamicCatalog implements AfterViewInit {
       this.payloadGenderMenu.update((payload) => {
         return {
           ...payload,
+          maxPrice: this.maxLimit(),
+          minPrice: this.minLimit(),
           newlyAdded: this.baseUrl() == appRoutes.WHATS_NEW,
         };
       });
@@ -181,10 +183,26 @@ export class DynamicCatalog implements AfterViewInit {
     }
   }
 
+  // public setFiltersOpen(isOpen: boolean): void {
+  //   this.filtersOpen = isOpen;
+  //   const sidebar = this.filterSidebar.nativeElement;
+  //   const sidebarInner = sidebar.querySelector('div');
+
+  //   if (isOpen) {
+  //     sidebar.style.marginLeft = '0';
+  //     sidebarInner?.classList.remove('opacity-0');
+  //   } else {
+  //     sidebar.style.marginLeft = '-15rem';
+  //     sidebarInner?.classList.add('opacity-0');
+  //   }
+  // }
   public setFiltersOpen(isOpen: boolean): void {
     this.filtersOpen = isOpen;
-    const sidebar = this.filterSidebar.nativeElement;
-    const sidebarInner = sidebar.querySelector('div');
+
+    if (!this.filterSidebar) return; // ✅ prevent crash
+
+    const sidebar = this.filterSidebar.nativeElement as HTMLElement;
+    const sidebarInner = sidebar.querySelector('div') as HTMLElement | null;
 
     if (isOpen) {
       sidebar.style.marginLeft = '0';
@@ -334,6 +352,7 @@ export class DynamicCatalog implements AfterViewInit {
 
     this.payloadGenderMenu().categoryIds = categoryIds;
     this.payloadGenderMenu().colors = colors;
+    this.payloadGenderMenu().pageIndex = 1;
     this.getData();
     const newUrl = createUrlFromObject(this.payloadGenderMenu(), this.baseUrl());
     this.location.go(newUrl);
