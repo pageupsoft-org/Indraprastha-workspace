@@ -142,7 +142,7 @@ export const initializeIProductForm = (): FormGroup<IProductForm> =>
   new FormGroup<IProductForm>({
     id: new FormControl<number | null>(0),
     categoryIds: new FormControl<number[]>([]),
-    collectionId: new FormControl<number | null>(null),
+    collectionId: new FormControl<number | null>(null, Validators.required),
     categoryIdsList: new FormControl<Array<{ id: number; name: string }> | null>([]),
     name: new FormControl<string | null>(null, [Validators.required, Validators.maxLength(70)]),
     isCustomSize: new FormControl<boolean | null>(false,),
