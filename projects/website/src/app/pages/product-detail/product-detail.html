@@ -1,11 +1,11 @@
 @if(!isProductNotFound()){
-<div class="w-full mx-auto px-4 sm:px-6 lg:px-32 py-12 lg:py-20 bg-white">
+<div class="w-full mx-auto px-4 sm:px-6 xl:px-32 py-12 xl:py-20 bg-white">
   <div class="flex grid grid-cols-5 lg:flex-row gap-14">
     <!-- Product Image Gallery and Main Image -->
-    <div class="flex col-span-2 lg:flex-row lg:space-x-4 w-full sticky top-[150px] max-h-[100%]">
+    <div class="flex col-span-2 lg:flex-row space-x-4 w-full lg:sticky top-[150px] max-h-[80vh]">
       <!-- Left Image Gallery (Thumbnails) -->
       <div
-        class="flex flex-row lg:flex-col space-x-3 lg:space-x-0 lg:space-y-4 mb-8 lg:mb-0 overflow-y-auto scrollbar-thin"
+        class="flex flex-col space-x-3 lg:space-x-0 space-y-4 mb-8 lg:mb-0 overflow-y-auto scrollbar-thin"
       >
         @let dummyArr = [1, 2, 3, 4]; @if(isShowloader()){ @for (item of dummyArr; track $index) {
         <ngx-skeleton-loader
@@ -17,7 +17,7 @@
         <img
           [src]="productImage"
           (click)="enlargeImage(productImage)"
-          class="thumbnail-img w-16 sm:w-24 h-20 sm:h-28 object-cover rounded-lg transition-all cursor-pointer selected-thumb"
+          class="thumbnail-img w-16 xl:w-24 h-20 xl:h-28 sm:h-12 sm:w-10 object-cover rounded-lg transition-all cursor-pointer selected-thumb"
         />
         } }
       </div>
@@ -43,10 +43,10 @@
     </div>
 
     <!-- Product Details Section -->
-    <div class="flex col-span-3 flex-col space-y-4">
+    <div class="flex col-span-3 flex-col lg:space-y-4">
       <h2
         id="modal-product-name"
-        class="text-3xl md:text-4xl font-bold text-gray-900 leading-tight"
+        class="text-2xl lg:text-4xl font-bold text-gray-900 leading-tight"
       >
         @if(isShowloader()){
         <ngx-skeleton-loader count="1" appearance="line" />
@@ -54,7 +54,7 @@
         {{ productDetail().name }}
         }
       </h2>
-      <p class="text-xl text-gray-700">
+      <p class="text-md lg:text-xl text-gray-700">
         @if(isShowloader()){
         <ngx-skeleton-loader count="1" appearance="line" />
         }@else{
@@ -64,7 +64,7 @@
       <p class="text-sm text-gray-500">(MRP inclusive of all Taxes)</p>
 
       <!-- Options -->
-      <div class="space-y-4 mt-6">
+      <div class="lg:space-y-4 space-y-2 lg:mt-6 mt-2">
         <div>
           <p class="font-semibold text-gray-800 mb-2">SIZE</p>
           <div class="flex flex-wrap gap-2">
@@ -88,7 +88,7 @@
 
             <label
               [for]="radioId"
-              class="cursor-pointer px-4 py-2 border rounded"
+              class="cursor-pointer lg:px-4 lg:py-2 px-2 py-1 border rounded"
               [ngClass]="{
                 'peer-checked:bg-[#680C01] peer-checked:text-white':
                   stockSize.stockId == cartForm.value.stockId,
@@ -215,7 +215,7 @@
           class="mb-0"
           (clicked)="addToCartWithDescription()"
           [btnClass]="
-            'w-full cursor-pointer px-6 py-3 font-semibold text-black border border-gray-300 bg-white rounded-[5px] hover:bg-gray-300 transition-colors duration-200 focus:outline-none'
+            'w-full cursor-pointer lg:px-6 lg:py-3 px-3 py-2 font-semibold text-black border border-gray-300 bg-white rounded-[5px] hover:bg-gray-300 transition-colors duration-200 focus:outline-none'
           "
           [conditionalClass]="'cursor-not-allowed!'"
           [addConditionClass]="!cartForm.value.stockId"
@@ -225,7 +225,7 @@
         <button
           (click)="buyNow()"
           [disabled]="!cartForm.value.stockId"
-          class="cursor-pointer px-6 py-3 font-semibold text-white bg-[#680C01] rounded-[5px] focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-red-500"
+          class="cursor-pointer lg:px-6 lg:py-3 px-3 py-2 font-semibold text-white bg-[#680C01] rounded-[5px] focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-red-500"
           [ngClass]="{ 'cursor-not-allowed!': !cartForm.value.stockId }"
         >
           BUY IT NOW
