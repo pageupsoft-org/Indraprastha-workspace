@@ -5,7 +5,7 @@ import { EDescriptionType, EStockSize, GenderTypeEnum, IPaginationPayload, patte
 export interface IProductForm {
   id: FormControl<number | null>;
   categoryIds: FormControl<Array<number> | null>;
-  collection: FormControl<number | null>
+  collectionId: FormControl<number | null>
   categoryIdsList: FormControl<Array<{ id: number; name: string }> | null>;
   name: FormControl<string | null>;
   isCustomSize: FormControl<boolean | null>;
@@ -142,7 +142,7 @@ export const initializeIProductForm = (): FormGroup<IProductForm> =>
   new FormGroup<IProductForm>({
     id: new FormControl<number | null>(0),
     categoryIds: new FormControl<number[]>([]),
-    collection: new FormControl<number | null>(null),
+    collectionId: new FormControl<number | null>(null),
     categoryIdsList: new FormControl<Array<{ id: number; name: string }> | null>([]),
     name: new FormControl<string | null>(null, [Validators.required, Validators.maxLength(70)]),
     isCustomSize: new FormControl<boolean | null>(false,),
