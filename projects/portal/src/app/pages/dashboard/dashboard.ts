@@ -105,9 +105,9 @@ export class Dashboard extends Base implements OnInit {
         },
       },
 
-      theme: {
-        mode: 'dark',
-      },
+      // theme: {
+      //   mode: 'dark',
+      // },
     };
 
     this.pieOptions = {
@@ -130,9 +130,9 @@ export class Dashboard extends Base implements OnInit {
           },
         },
       ],
-      theme: {
-        mode: 'dark',
-      },
+      // theme: {
+      //   mode: 'dark',
+      // },
     };
 
     const observer = new MutationObserver(() => {

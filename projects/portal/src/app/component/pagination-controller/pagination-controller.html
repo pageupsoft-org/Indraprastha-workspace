@@ -2,18 +2,18 @@
 <nav class="grid grid-cols-2 p-4 -inset-[0]">
     <div class="col-span-1 flex ">
         <select [formControl]="top" (change)="topChanged()"
-            class="cursor-pointer bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-md block w-[60px] p-2.5 dark:bg-gray-600 dark:border-gray-500 dark:placeholder-gray-400 dark:text-white">
+            class="cursor-pointer bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-md block w-[60px] p-2.5">
             <option value="10">10</option>
             <option value="20">20</option>
             <option value="30">30</option>
             <option value="40">50</option>
         </select>
 
-        <span class="text-sm text-gray-700 dark:text-gray-400 ml-2 pt-2">
+        <span class="text-sm text-gray-700 ml-2 pt-2">
             Showing <span
-                class="font-semibold text-gray-900 dark:text-white">{{paginationControlMetaData().fromCount}}</span>
-            to <span class="font-semibold text-gray-900 dark:text-white">{{paginationControlMetaData().toCount}}</span> of
-            <span class="font-semibold text-gray-900 dark:text-white">{{paginationControlMetaData().recordCount}}</span>
+                class="font-semibold text-gray-900">{{paginationControlMetaData().fromCount}}</span>
+            to <span class="font-semibold text-gray-900">{{paginationControlMetaData().toCount}}</span> of
+            <span class="font-semibold text-gray-900">{{paginationControlMetaData().recordCount}}</span>
             {{(paginationControlMetaData().recordCount == 1)?'Entry':'Entries'}}
         </span>
     </div>
@@ -23,7 +23,7 @@
             <li>
                 <a (click)="currentPage() > 1 && getClickedPage(currentPage() - 1)"
                     [class.pointer-events-none]="currentPage() <= 1" [class.opacity-50]="currentPage() <= 1"
-                    class="flex items-center justify-center px-3 h-8 ms-0 leading-tight text-gray-500 bg-white border border-e-0 border-gray-300 rounded-s-md hover:bg-gray-100 hover:text-gray-700 dark:bg-gray-800 dark:border-gray-700 dark:text-gray-400 dark:hover:bg-gray-700 dark:hover:text-white">
+                    class="flex items-center justify-center px-3 h-8 ms-0 leading-tight text-gray-500 bg-white border border-e-0 border-gray-300 rounded-s-md hover:bg-gray-100 hover:text-gray-700">
 
                     <span class="sr-only">Previous</span>
                     <svg class="w-2.5 h-2.5 rtl:rotate-180" aria-hidden="true" xmlns="http://www.w3.org/2000/svg"
@@ -47,7 +47,7 @@
                 <a (click)="currentPage() < paginationControlMetaData().totalPages && getClickedPage(currentPage() + 1)"
                     [class.pointer-events-none]="currentPage() >= paginationControlMetaData().totalPages"
                     [class.opacity-50]="currentPage() >= paginationControlMetaData().totalPages"
-                    class="flex items-center justify-center px-3 h-8 leading-tight text-gray-500 bg-white border border-gray-300 rounded-e-md hover:bg-gray-100 hover:text-gray-700 dark:bg-gray-800 dark:border-gray-700 dark:text-gray-400 dark:hover:bg-gray-700 dark:hover:text-white">
+                    class="flex items-center justify-center px-3 h-8 leading-tight text-gray-500 bg-white border border-gray-300 rounded-e-md hover:bg-gray-100 hover:text-gray-700">
 
                     <span class="sr-only">Next</span>
                     <svg class="w-2.5 h-2.5 rtl:rotate-180" aria-hidden="true" xmlns="http://www.w3.org/2000/svg"
