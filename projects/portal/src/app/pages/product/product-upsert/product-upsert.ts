@@ -235,13 +235,11 @@ export class ProductUpsert extends Base implements OnInit {
   }
 
   public upsertProduct() {
-    // const collId = parseInt(this.productForm.controls.collectionId.value)
-    //console.log(this.productForm.controls.collectionId.value);
+    console.log(this.productForm.value);
     this.productForm.markAllAsTouched();
     this.productForm.updateValueAndValidity();
     const invalidControls: { path: string; errors: any }[] = logInvalidControls(this.productForm);
 
-    debugger;
     if (this.productForm.valid && invalidControls.length == 0) {
       // return;
 
@@ -412,6 +410,8 @@ export class ProductUpsert extends Base implements OnInit {
           };
           this.productForm.controls.variants.push(initializeVariantForm(newV));
         });
+
+        console.log(this.productForm.controls.variants.value, variants);
 
         this.productForm.controls.stocks.controls.forEach((x) => {
           x.controls.quantity.setValue(
