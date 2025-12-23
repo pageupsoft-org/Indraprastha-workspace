@@ -56,7 +56,6 @@ import { ProductService } from '../product-service';
     FormsModule,
     NgMultiSelectDropDownModule,
     ValidateControl,
-    NoLeadingTrailingSpaceDirective,
   ],
   templateUrl: './product-upsert.html',
   styleUrl: './product-upsert.scss',
@@ -235,7 +234,6 @@ export class ProductUpsert extends Base implements OnInit {
   }
 
   public upsertProduct() {
-    console.log(this.productForm.value);
     this.productForm.markAllAsTouched();
     this.productForm.updateValueAndValidity();
     const invalidControls: { path: string; errors: any }[] = logInvalidControls(this.productForm);
