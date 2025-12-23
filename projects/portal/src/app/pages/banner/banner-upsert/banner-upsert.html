@@ -1,233 +1,121 @@
-<!-- outer wrapper limits height and makes form scrollable when long -->
-<!-- <div class="w-full max-w-5xl mx-auto p-4"> -->
-
-<div class="bg-white rounded-4xl shadow-sm border border-slate-200 max-h-[80vh] md:max-h-[72vh] overflow-auto">
-  <form [formGroup]="bannerForm" class="grid gap-3 grid-cols-1 md:grid-cols-3 p-6">
+<div class="bg-white rounded-4xl shadow-sm border border-slate-200">
+  <form [formGroup]="bannerForm" class="p-4">
     <!-- Header -->
-    <div class="md:col-span-3 flex items-center justify-between mb-2">
+    <div class="flex items-center justify-between mb-4">
       <div class="flex items-center gap-3">
         <!-- Banner icon -->
-        <div class="w-12 h-12 bg-[#fef5e0] rounded-full flex items-center justify-center flex-shrink-0">
-          <svg class="w-10 h-10 text-[#82181A]" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"
+        <div class="w-10 h-10 bg-[#fef5e0] rounded-full flex items-center justify-center flex-shrink-0">
+          <svg class="w-5 h-5 text-[#82181A]" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"
             stroke="currentColor" aria-hidden="true">
-            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.8" d="M3 7v10a2 2 0 002 2h14" />
-            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.8"
-              d="M21 7V5a2 2 0 00-2-2H7l-4 4v10" />
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 002 2v12a2 2 0 002 2z" />
           </svg>
         </div>
         <div>
-          <h2 class="text-xl font-semibold text-slate-800">Add / Edit Banner</h2>
-          <p class="text-sm text-slate-500">Create beautiful banners for your storefront</p>
+          <h2 class="text-lg font-semibold text-slate-800">Update Banner</h2>
+          <p class="text-xs text-slate-500">Upload a new banner image or video</p>
         </div>
       </div>
     </div>
 
-    <!-- Row 1 -->
-    <div>
-      <label class="block text-sm font-medium text-slate-700 mb-1">Name</label>
-
-      <!-- added relative wrapper + left icon -->
-      <div class="relative">
-        <!-- left icon -->
-        <div class="absolute left-3 top-2.5 pointer-events-none">
-          <svg class="w-5 h-5 text-slate-400" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"
-            stroke="currentColor" aria-hidden="true">
-            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-              d="M3 7a4 4 0 014-4h10a4 4 0 014 4v10a4 4 0 01-4 4H7a4 4 0 01-4-4V7z" />
-          </svg>
-        </div>
-
-        <input formControlName="name" libNoLeadingTrailingSpaceDirective libValidateControl type="text" placeholder="Enter banner name" minlength="3"
-          maxlength="30"
-          class="w-full border border-slate-300 rounded-[5px] px-3 py-2 pl-10 pr-10 text-sm text-gray-800 placeholder-slate-400 focus:ring-[#82181A] focus:outline-none focus:border-[#82181A] transition duration-200 text-base" />
-      </div>
-    </div>
-
-    <div>
-      <label class="block text-sm font-medium text-slate-700 mb-1">Banner Connection Type</label>
-
-      <!-- wrapper + left icon -->
-      <div class="relative">
-        <div class="absolute left-3 top-3 pointer-events-none">
-          <svg class="w-4 h-4 text-slate-400" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"
-            stroke="currentColor" aria-hidden="true">
-            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16" />
-          </svg>
-        </div>
-
-        <select formControlName="bannerConnectionType" (change)="selectBannerConnectionType()" libValidateControl
-          class="w-full border border-slate-300 rounded-[5px] px-3 py-2 pl-10 pr-10 text-sm text-gray-800 placeholder-slate-400 focus:ring-[#82181A] focus:outline-none focus:border-[#82181A] transition duration-200 text-base">
-          <!-- options -->
-          @for (item of bannerConnectionTypes; track $index) {
-          <option [ngValue]="item.value">{{ item.value }}</option>
-          }
-        </select>
-      </div>
-    </div>
-
-    <div>
-      <label class="block text-sm font-medium text-slate-700 mb-1">Banner Type</label>
-
-      <div class="relative">
-        <div class="absolute left-3 top-3 pointer-events-none">
-          <svg class="w-4 h-4 text-slate-400" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"
-            stroke="currentColor" aria-hidden="true">
-            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 7v10a2 2 0 002 2h14" />
-          </svg>
-        </div>
-
-        <select formControlName="bannerType" libValidateControl
-          class="w-full border border-slate-300 rounded-[5px] px-3 py-2 pl-10 pr-10 text-sm text-gray-800 placeholder-slate-400 focus:ring-[#82181A] focus:outline-none focus:border-[#82181A] transition duration-200 text-base">
-          <option [ngValue]="null" selected disabled>Select Banner Type</option>
-          @for (item of bannerTypes; track $index) {
-          <option [ngValue]="item.key">{{ item.value }}</option>
-          }
-        </select>
-      </div>
-    </div>
-
-    <div class="md:col-span-3 grid grid-cols-1 md:grid-cols-2 gap-3">
-      <!-- Row 2 -->
-      <div>
-        <label class="block text-sm font-medium text-slate-700 mb-1">Gender</label>
-
-        <div class="relative">
-          <div class="absolute left-3 top-3 pointer-events-none">
-            <svg class="w-4 h-4 text-slate-400" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"
-              stroke="currentColor" aria-hidden="true">
-              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                d="M12 4a4 4 0 110 8 4 4 0 010-8zM6 20v-2a4 4 0 014-4h4a4 4 0 014 4v2" />
-            </svg>
-          </div>
-
-          <select formControlName="gender" libValidateControl
-            class="w-full border border-slate-300 rounded-[5px] px-3 py-2 pl-10 pr-10 text-sm text-gray-800 placeholder-slate-400 focus:ring-[#82181A] focus:outline-none focus:border-[#82181A] transition duration-200 text-base">
-            <option [ngValue]="null" selected disabled>-- Select Gender --</option>
-            @for (item of genders; track $index) {
-            <option [ngValue]="item.key">{{ item.value }}</option>
-            }
-          </select>
-        </div>
-      </div>
-
-      <!-- Category / Product selector -->
-       @if(selectConnectionType !== 'None'){
-      <div>
-        <label class="block text-sm font-medium text-slate-700 mb-1">{{
-          selectConnectionType || 'Select Connection'
-          }}</label>
-
-        <div class="relative">
-          <div class="absolute left-3 top-3 pointer-events-none">
-            <svg class="w-4 h-4 text-slate-400" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"
-              stroke="currentColor" aria-hidden="true">
-              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 7h18M3 12h18M3 17h18" />
-            </svg>
-          </div>
-
-          <select formControlName="bannerValueId" libValidateControl
-            class="w-full border border-slate-300 rounded-[5px] px-3 py-2 pl-10 pr-10 text-sm focus:ring-[#82181A] focus:outline-none focus:border-[#82181A] transition duration-200 text-base">
-            @if(selectConnectionType === 'Category'){
-            <option [ngValue]="null" selected disabled>-- Select Category --</option>
-            @for (item of categoryCombo; track item.id) {
-            <option [ngValue]="item.id">{{ item.name }}</option>
-            } } @else{
-            <option [ngValue]="null" selected disabled>-- Select Product --</option>
-            @for (item of productCombo; track item.id) {
-            <option [ngValue]="item.id">{{ item.name }}</option>
-            } } 
-            
-          </select>
-        </div>
-      </div>
-    }
-    </div>
-
-    <!-- Description -->
-    <div class="md:col-span-3">
-      <label class="block text-sm font-medium text-slate-700 mb-1">Description</label>
-
-      <div class="relative">
-        <div class="absolute left-3 top-3 pointer-events-none">
-          <svg class="w-4 h-4 text-slate-400" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"
-            stroke="currentColor" aria-hidden="true">
-            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 16h8M8 12h8M8 8h8M4 20h16" />
-          </svg>
-        </div>
-
-        <textarea formControlName="description" libNoLeadingTrailingSpaceDirective rows="3" placeholder="Write short description..." maxlength="250" libValidateControl
-          class="w-full border border-slate-300 rounded-[5px] px-3 py-2 pl-10 text-sm resize-none placeholder-slate-400 focus:ring-[#82181A] focus:outline-none focus:border-[#82181A] transition duration-200 text-base"></textarea>
-      </div>
-    </div>
-
-    <!-- image section header -->
-    <div class="md:col-span-3 flex items-center justify-between">
-      <div class="flex items-center gap-3">
-        <h3 class="text-lg font-medium text-slate-900">Banner Image</h3>
-        <p class="text-xs text-slate-500">Recommended: 1536 × 1024 | 2 mb(max)</p>
-      </div>
-    </div>
-
-    <!-- Image Upload Section -->
-    @if(this.bannerForm.controls.bannerBase64.value) {
-    <div class="md:col-span-3">
-      <div class="bg-gray-100 border border-dashed border-gray-400 rounded-xl relative overflow-hidden">
-        <div class="w-full aspect-[3/2] relative">
+    <!-- Image/Video Upload Section -->
+    <div class="mb-4">
+      @if(this.bannerForm.controls.bannerBase64.value) {
+      <!-- Media Preview with Remove Option -->
+      <div class="bg-gray-100 border border-dashed border-gray-400 rounded-lg relative overflow-hidden">
+        <div class="w-full h-80 relative">
           <button type="button" (click)="removeBannerImage()"
-            class="absolute top-3 right-3 z-30 bg-white/90 shadow-md rounded-full p-1.5 hover:bg-white transition">
+            class="absolute top-2 right-2 z-30 bg-white/90 shadow-md rounded-full p-1.5 hover:bg-white transition-all duration-200">
             <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor"
-              class="w-5 h-5 text-red-600">
+              class="w-4 h-4 text-red-600">
               <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
             </svg>
           </button>
 
-          <!-- image preview -->
-          @if(bannerForm.controls.bannerBase64.value){
-          <ng-container>
-            <img [src]="bannerForm.controls.bannerBase64.value" class="absolute inset-0 w-full h-full object-cover" />
-          </ng-container>
-          } @else{
-          <h1>no image</h1>
+          <!-- Current media preview -->
+          @if (isVideo(bannerForm.controls.bannerBase64.value)) {
+          <!-- Video Preview -->
+          <video 
+            [src]="bannerForm.controls.bannerBase64.value" 
+            class="absolute inset-0 w-full h-full object-cover rounded-lg"
+            controls
+            muted
+            loop
+          >
+            Your browser does not support the video tag.
+          </video>
+          } @else {
+          <!-- Image Preview -->
+          <img [src]="bannerForm.controls.bannerBase64.value" 
+               class="absolute inset-0 w-full h-full object-cover rounded-lg" 
+               alt="Banner preview" />
           }
+          
+          <!-- Overlay for new upload -->
+          <div class="absolute inset-0 bg-black/40 opacity-0 hover:opacity-100 transition-opacity duration-200 flex items-center justify-center rounded-lg">
+            <input #fileInput type="file" accept="image/*,video/*" 
+                   class="absolute inset-0 opacity-0 cursor-pointer z-20"
+                   (change)="onBannerImageChange($event)" />
+            <div class="text-white text-center">
+              <svg class="w-8 h-8 mx-auto mb-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-8l-4-4m0 0L8 8m4-4v12" />
+              </svg>
+              <p class="text-xs font-medium">Click to change</p>
+            </div>
+          </div>
         </div>
       </div>
-    </div>
-    }@else{
-    <!-- Image Upload Section -->
-    <div class="md:col-span-3">
-      <div class="bg-gray-100 border border-dashed border-gray-400 rounded-xl relative overflow-hidden">
-        <div class="w-full aspect-[3/1] relative">
-          <!-- invisible file input sits on top so clicks go to it -->
-          <input #fileInput type="file" accept="image/*" class="absolute inset-0 opacity-0 cursor-pointer z-30"
-            (change)="onBannerImageChange($event)" />
+      } @else {
+      <!-- Upload Area -->
+      <div class="bg-gray-100 border-2 border-dashed border-gray-300 rounded-lg relative overflow-hidden hover:border-[#82181A] transition-colors duration-200">
+        <div class="w-full h-80 relative">
+          <!-- File input -->
+          <input #fileInput type="file" accept="image/*,video/*" 
+                 class="absolute inset-0 opacity-0 cursor-pointer z-30"
+                 (change)="onBannerImageChange($event)" />
 
-          <!-- if image exists show it, otherwise render the "upload" placeholder -->
-          @if(this.bannerForm.controls.bannerBase64.value) {
-          <img [src]="bannerForm.controls.bannerBase64.value"
-            class="absolute inset-0 w-full w-full h-full object-cover z-10" />
-          } @else {
-          <!-- only show placeholder visually when user toggled uploader on -->
-          <div class="absolute inset-0 flex items-center justify-center z-10">
-            <span class="text-gray-500 text-sm text-center">Upload Image (1536 × 1024)</span>
+          <!-- Upload placeholder -->
+          <div class="absolute inset-0 flex flex-col items-center justify-center text-gray-500">
+            <svg class="w-12 h-12 mb-2 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-8l-4-4m0 0L8 8m4-4v12" />
+            </svg>
+            <p class="text-sm font-medium text-gray-600 mb-1">Upload Banner</p>
+            <p class="text-xs text-gray-500">Images or Videos</p>
+            <p class="text-xs text-gray-400 mt-1">Max: 10MB</p>
           </div>
-          }
         </div>
+      </div>
+      }
+    </div>
+
+    <!-- Description Section (Conditional) -->
+    @if (data.showDescription) {
+    <div class="mb-4">
+      <label class="block text-sm font-medium text-slate-700 mb-2">Description</label>
+      <textarea 
+        [formControl]="bannerForm.controls.description"
+        rows="3" 
+        placeholder="Enter banner description..." 
+        maxlength="250"
+        class="w-full border border-slate-300 rounded-lg px-3 py-2 text-sm resize-none placeholder-slate-400 focus:ring-[#82181A] focus:outline-none focus:border-[#82181A] transition duration-200"
+      ></textarea>
+      <div class="text-xs text-gray-500 mt-1">
+        {{ bannerForm.controls.description.value?.length || 0 }}/250 characters
       </div>
     </div>
     }
 
-    <!-- Actions (bottom) -->
-    <div class="md:col-span-3 flex justify-end gap-3 mt-2 pb-4">
-      <button (click)="onCancel()"
-        class="px-6 py-2 rounded-[5px] border border-[#B89E70] text-[#82181A] hover:bg-slate-50 font-medium transition cursor-pointer">
+    <!-- Actions -->
+    <div class="flex justify-end gap-3 pt-3 border-t border-gray-200">
+      <button type="button" (click)="onCancel()"
+        class="px-4 py-2 rounded-[5px] border border-[#B89E70] text-[#82181A] hover:bg-slate-50 font-medium transition-all duration-200 cursor-pointer text-sm">
         Cancel
       </button>
 
       <button type="submit" (click)="onBannerSubmit()"
-        class="px-7 py-2 rounded-[5px] bg-[#82181A] hover:bg-[#A33A3C] text-white font-medium shadow-lg transition cursor-pointer">
+        [disabled]="!bannerForm.controls.bannerBase64.value"
+        class="px-5 py-2 rounded-[5px] bg-[#82181A] hover:bg-[#A33A3C] disabled:bg-gray-300 disabled:cursor-not-allowed text-white font-medium shadow-lg transition-all duration-200 cursor-pointer text-sm">
         Save Banner
       </button>
     </div>
   </form>
 </div>
-<!-- </div> -->

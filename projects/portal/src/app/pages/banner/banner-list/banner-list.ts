@@ -9,21 +9,32 @@ import { BannerUpsert } from '../banner-upsert/banner-upsert';
 import { Base } from '../../../core/base/base';
 import { IGenericResponse } from '../../../core/interface/response/genericResponse';
 import { CommonModule } from '@angular/common';
-import { ApiRoutes, EToastType, IBanner, IBannerPagination, IBannerResponse, MConfirmationModalData, ToastService } from '@shared';
-import { PaginationController } from "../../../component/pagination-controller/pagination-controller";
-import { createPaginationMetadata, PaginationControlMetadata } from '../../../core/interface/model/pagination-detail.model';
+import {
+  ApiRoutes,
+  EToastType,
+  IBanner,
+  IBannerPagination,
+  IBannerResponse,
+  MConfirmationModalData,
+  ToastService,
+} from '@shared';
+import { PaginationController } from '../../../component/pagination-controller/pagination-controller';
+import {
+  createPaginationMetadata,
+  PaginationControlMetadata,
+} from '../../../core/interface/model/pagination-detail.model';
 import { handlePagination } from '@portal/core';
-import { SearchBar } from "../../../component/search-bar/search-bar";
+import { SearchBar } from '../../../component/search-bar/search-bar';
 import { SearchBase } from '../../../core/base/search-base';
 import { Observable } from 'rxjs';
+import { IModalDataSharing } from '../banner.model';
 
 @Component({
   selector: 'app-banner-list',
-  imports: [CommonModule, PaginationController, SearchBar],
+  imports: [CommonModule, SearchBar],
   templateUrl: './banner-list.html',
   styleUrl: './banner-list.scss',
 })
-
 export class BannerList extends SearchBase<IGenericResponse<IBannerResponse>> {
   readonly dialog = inject(MatDialog);
   protected override payLoad: IBannerPagination = {
@@ -33,7 +44,7 @@ export class BannerList extends SearchBase<IGenericResponse<IBannerResponse>> {
     gender: null,
   };
   public banners: IBanner[] = [];
-  public paginationMetaData: PaginationControlMetadata = createPaginationMetadata()
+  public paginationMetaData: PaginationControlMetadata = createPaginationMetadata();
 
   constructor(private toaster: ToastService) {
     super();
@@ -42,36 +53,38 @@ export class BannerList extends SearchBase<IGenericResponse<IBannerResponse>> {
   protected override getData(): Observable<IGenericResponse<IBannerResponse>> {
     return this.httpPostObservable<IGenericResponse<IBannerResponse>, IBannerPagination>(
       ApiRoutes.BANNER.GET,
-      this.payLoad
+      this.payLoad,
     );
   }
 
   protected override dataLoadedHandler(response: IGenericResponse<IBannerResponse>): void {
     if (response.data && response.data.total) {
-      this.banners = response.data.banners
+      this.banners = response.data.banners;
       handlePagination(
         this.paginationMetaData,
         response.data.total,
         this.payLoad.pageIndex,
-        this.payLoad.top
-      )
-    }else{
-      this.banners = []
+        this.payLoad.top,
+      );
+    } else {
+      this.banners = [];
     }
   }
 
-  public openModel(id: number = 0) {
+  public openModel(id: number = 0, index: number) {
+    const data: IModalDataSharing = {
+      id: id,
+      showDescription: ((index == 0) || (index==3)),
+    };
     const dialogRef = this.dialog.open(BannerUpsert, {
       width: '80%',
       maxWidth: '900px',
-      data: {
-        id: id,
-      },
+      data: data,
     });
 
     dialogRef.afterClosed().subscribe((result: boolean) => {
       if (result) {
-        this.search()
+        this.search();
       }
     });
   }
@@ -81,7 +94,7 @@ export class BannerList extends SearchBase<IGenericResponse<IBannerResponse>> {
       heading: 'Confirm Delete',
       body: 'Are you sure you want to delete this Banner?',
       yesText: 'Yes',
-      noText: 'No'
+      noText: 'No',
     };
 
     this.objConfirmationUtil.getConfirmation(modalData).then((res: boolean) => {
@@ -90,14 +103,25 @@ export class BannerList extends SearchBase<IGenericResponse<IBannerResponse>> {
           .then((response) => {
             if (response) {
               if (response.data) {
-                this.toaster.show({ message: 'Delete Successful', duration: 3000, type: EToastType.success });
+                this.toaster.show({
+                  message: 'Delete Successful',
+                  duration: 3000,
+                  type: EToastType.success,
+                });
               }
             }
           })
-          .catch((error) => { });
+          .catch((error) => {});
       }
-    })
-
+    });
   }
 
+  public isVideo(url: string): boolean {
+    if (!url) return false;
+
+    const videoExtensions = ['.mp4', '.webm', '.ogg', '.avi', '.mov', '.wmv', '.flv', '.mkv'];
+    const lowerUrl = url.toLowerCase();
+
+    return videoExtensions.some((ext) => lowerUrl.includes(ext));
+  }
 }

@@ -11,17 +11,17 @@ import { IConvertImageParams, IConvertImageResult, initialConvertImageParam } fr
 import { ImageSizeConst, ImageTypeEnum } from '../../../core/enum/image.enum';
 import { convertImagesToBase64Array } from '../../../core/utils/portal-utility.util';
 import { Router } from '@angular/router';
-import { IBannerForm, IBannerFormValue, IGenericComboResponse } from '../banner.model';
+import { IBannerForm, IBannerFormValue, IGenericComboResponse, IModalDataSharing } from '../banner.model';
 
 @Component({
   selector: 'app-banner-upsert',
-  imports: [ReactiveFormsModule, CommonModule, ValidateControl, NoLeadingTrailingSpaceDirective],
+  imports: [ReactiveFormsModule, CommonModule],
   templateUrl: './banner-upsert.html',
   styleUrl: './banner-upsert.scss',
 })
 export class BannerUpsert extends Base implements OnInit {
   readonly dialogRef = inject(MatDialogRef<BannerList>);
-  readonly data = inject(MAT_DIALOG_DATA);
+  readonly data: IModalDataSharing = inject(MAT_DIALOG_DATA);
   public bannerConnectionTypes: MStringEnumToArray[] = stringEnumToArray(EBannerConnectionType);
   public bannerTypes: MStringEnumToArray[] = stringEnumToArray(EbannerTypes);
   public genders: MStringEnumToArray[] = stringEnumToArray(GenderTypeEnum);
@@ -162,34 +162,68 @@ export class BannerUpsert extends Base implements OnInit {
   }
 
   public onBannerImageChange(event: any) {
-    const param: IConvertImageParams = initialConvertImageParam({
-      event,
-      allowedTypes: [ImageTypeEnum.webp, ImageTypeEnum.png, ImageTypeEnum.jpeg],
-      expectedImgWidth: ImageSizeConst.banner.width,
-      expectedImgHeight: ImageSizeConst.banner.height,
-      maxSize: 2
-    });
+    const file = event.target.files?.[0];
+    if (!file) return;
 
-    convertImagesToBase64Array(param).then((res: IConvertImageResult) => {
-      if (res) {
-        if (res.validBase64Files.length) {
-          this.bannerForm.controls.bannerBase64.setValue(res.validBase64Files[0] as string);
-        }
-        if (res.invalidFiles.length) {
-          this.toastService.show({
-            message: 'Some files were invalid (type, size, or dimensions) and were skipped',
-            type: EToastType.warning,
-            duration: 2000,
-          });
-        }
+    // Check if it's a video file
+    if (file.type.startsWith('video/')) {
+      // Handle video files
+      if (file.size > 15 * 1024 * 1024) { // 10MB limit for videos
+        this.toastService.show({
+          message: 'Video file size should be less than 15MB',
+          type: EToastType.error,
+          duration: 3000,
+        });
+        event.target.value = null;
+        return;
       }
-    });
+
+      const reader = new FileReader();
+      reader.onload = (e) => {
+        const result = e.target?.result as string;
+        this.bannerForm.controls.bannerBase64.setValue(result);
+      };
+      reader.readAsDataURL(file);
+    } else {
+      // Handle image files (existing logic)
+      const param: IConvertImageParams = initialConvertImageParam({
+        event,
+        allowedTypes: [ImageTypeEnum.webp, ImageTypeEnum.png, ImageTypeEnum.jpeg],
+        expectedImgWidth: ImageSizeConst.banner.width,
+        expectedImgHeight: ImageSizeConst.banner.height,
+        maxSize: 2
+      });
+
+      convertImagesToBase64Array(param).then((res: IConvertImageResult) => {
+        if (res) {
+          if (res.validBase64Files.length) {
+            this.bannerForm.controls.bannerBase64.setValue(res.validBase64Files[0] as string);
+          }
+          if (res.invalidFiles.length) {
+            this.toastService.show({
+              message: 'Some files were invalid (type, size, or dimensions) and were skipped',
+              type: EToastType.warning,
+              duration: 2000,
+            });
+          }
+        }
+      });
+    }
 
     event.target.value = null;
   }
 
   public removeBannerImage() {
     this.bannerForm.controls.bannerBase64.setValue('');
+  }
+
+  public isVideo(url: string): boolean {
+    if (!url) return false;
+    
+    const videoExtensions = ['.mp4', '.webm', '.ogg', '.avi', '.mov', '.wmv', '.flv', '.mkv'];
+    const lowerUrl = url.toLowerCase();
+    
+    return videoExtensions.some(ext => lowerUrl.includes(ext));
   }
 
 
