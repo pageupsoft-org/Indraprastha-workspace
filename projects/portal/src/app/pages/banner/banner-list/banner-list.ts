@@ -74,8 +74,10 @@ export class BannerList extends SearchBase<IGenericResponse<IBannerResponse>> {
   public openModel(id: number = 0, index: number) {
     const data: IModalDataSharing = {
       id: id,
-      showDescription: ((index == 0) || (index==3)),
+      index: index,
+      showDescription: index === 0 || index === 3,
     };
+
     const dialogRef = this.dialog.open(BannerUpsert, {
       width: '80%',
       maxWidth: '900px',
@@ -85,6 +87,7 @@ export class BannerList extends SearchBase<IGenericResponse<IBannerResponse>> {
     dialogRef.afterClosed().subscribe((result: boolean) => {
       if (result) {
         this.search();
+        console.log('call get data:', result);
       }
     });
   }
@@ -111,7 +114,7 @@ export class BannerList extends SearchBase<IGenericResponse<IBannerResponse>> {
               }
             }
           })
-          .catch((error) => {});
+          .catch((error) => { });
       }
     });
   }

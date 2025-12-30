@@ -31,4 +31,5 @@ export interface IGenericComboResponse {
 export interface IModalDataSharing {
   id: number;
   showDescription: boolean;
+  index: number;
 }
