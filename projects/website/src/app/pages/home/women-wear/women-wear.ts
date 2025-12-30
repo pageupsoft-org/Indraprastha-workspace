@@ -2,13 +2,15 @@ import {
   AfterViewInit,
   Component,
   ElementRef,
+  Input,
+  OnInit,
   QueryList,
   signal,
   ViewChild,
   ViewChildren,
   WritableSignal,
 } from '@angular/core';
-import { GenderTypeEnum, PlatformService } from '@shared';
+import { GenderTypeEnum, IBanner, PlatformService } from '@shared';
 import { IResponseCollection } from '../../../core/interface/response/collection.response';
 import { Collection } from '../../../core/services/collection';
 import { CommonModule } from '@angular/common';
@@ -23,6 +25,7 @@ export class WomenWear implements AfterViewInit {
   @ViewChildren('slide') slidesRef!: QueryList<ElementRef<HTMLDivElement>>;
   @ViewChild('videoPlayer') videoPlayer!: ElementRef<HTMLVideoElement>;
   public isMuted = signal(true);
+  @Input() smallBanners: IBanner | null = null;
 
   public canScrollPrev: WritableSignal<boolean> = signal(false);
   public canScrollNext: WritableSignal<boolean> = signal(false);
@@ -35,6 +38,10 @@ export class WomenWear implements AfterViewInit {
   constructor(private platformService: PlatformService, private collectionService: Collection) {
     this.collectionService.getCollection(GenderTypeEnum.Women, this.womensWearList);
   }
+
+  // ngOnInit(): void {
+  //  console.log('Women Wear Small Banners:', this.smallBanners);
+  // }
 
   ngAfterViewInit(): void {
     if (this.platformService.isBrowser) {
@@ -104,6 +111,7 @@ export class WomenWear implements AfterViewInit {
   onVideoLoaded() {
     this.isMuted.update(() => this.videoPlayer?.nativeElement.muted ?? true);
   }
+  
   public openProductPage(collectionId: number) {
     this.collectionService.openProductPage(collectionId, GenderTypeEnum.Women);
   }

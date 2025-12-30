@@ -53,10 +53,10 @@ export class ApiCallService {
 
   public getBannerData(
     payload: IBannerPagination,
-    type: 'top' | 'middle'
+    type: 'Top' | 'Middle' | 'Bottom' | 'Small'
   ): Observable<IRGeneric<IBannerResponse>> {
     const cacheKey = `${type}-${JSON.stringify(payload)}`;
-
+    // console.log(payload);
     if (!this.bannerCache.has(cacheKey)) {
       const observable$ = httpPost<IRGeneric<IBannerResponse>, IBannerPagination>(
         ApiRoutes.BANNER.GET,

@@ -1,4 +1,4 @@
-import { AfterViewInit, Component, ElementRef, OnInit, signal, ViewChild } from '@angular/core';
+import { AfterViewInit, Component, ElementRef, Input, OnInit, signal, ViewChild } from '@angular/core';
 import AOS from 'aos';
 import { ProductSlider } from './product-slider/product-slider';
 import { WomenWear } from './women-wear/women-wear';
@@ -34,10 +34,13 @@ import { ApiCallService } from '@website/core';
 export class Home extends Base implements AfterViewInit, OnInit {
   @ViewChild('videoPlayer') videoPlayer!: ElementRef<HTMLVideoElement>;
   public readonly DashboardProductTypeStringEnum = DashboardProductTypeStringEnum;
-  public topBanners: string | null = null;
-  public middleBanners: string | null = null;
   public productList = signal<Product[]>([]);
   public isMuted = signal(true);
+  public topMostBanners: IBanner | null = null;
+  public middleBanners: IBanner | null = null;
+  public smallBanners: IBanner | null = null;
+  public bottomBanners: IBanner | null = null;
+  public bannerData: IBanner | null = null;
 
   private payload: IDashboadRequest = {
     ...initializePagInationPayload(),
@@ -57,6 +60,7 @@ export class Home extends Base implements AfterViewInit, OnInit {
     }
 
     this.getDashboardProduct();
+    // this.callAllBannerApis()
   }
 
   public toggleMute() {
@@ -75,24 +79,36 @@ export class Home extends Base implements AfterViewInit, OnInit {
     }
 
     if (this.platformService.isBrowser && this.videoPlayer) {
-      this.videoPlayer.nativeElement.play().catch((e) => console.log('Autoplay prevented:', e));
+      this.videoPlayer.nativeElement.play().catch(() => { });
     }
   }
 
   public callAllBannerApis() {
     const topPayload = this.buildBannerPayload(
       EbannerTypes.Top,
-      EBannerConnectionType.Category,
+      EBannerConnectionType.None,
       GenderTypeEnum.Women
     );
     const middlePayload = this.buildBannerPayload(
       EbannerTypes.Middle,
-      EBannerConnectionType.Category,
+      EBannerConnectionType.None,
+      GenderTypeEnum.Men
+    );
+    const smallPayload = this.buildBannerPayload(
+      EbannerTypes.Small,
+      EBannerConnectionType.None,
+      GenderTypeEnum.Women
+    );
+    const bottomPayload = this.buildBannerPayload(
+      EbannerTypes.Bottom,
+      EBannerConnectionType.None,
       GenderTypeEnum.Men
     );
 
-    this.getBannerData(topPayload, 'top');
-    this.getBannerData(middlePayload, 'middle');
+    this.getBannerData(topPayload, 'Top');
+    this.getBannerData(middlePayload, 'Middle');
+    this.getBannerData(smallPayload, 'Small');
+    this.getBannerData(bottomPayload, 'Bottom');
   }
 
   public buildBannerPayload(
@@ -108,21 +124,35 @@ export class Home extends Base implements AfterViewInit, OnInit {
     };
   }
 
-  public getBannerData(payload: IBannerPagination, type: 'top' | 'middle') {
+  public getBannerData(payload: IBannerPagination, type: 'Top' | 'Middle' | 'Bottom' | 'Small') {
     this.apiCallService.getBannerData(payload, type).subscribe({
       next: (response) => {
         if (response) {
           if (response.data) {
-            const banners = response.data.banners?.length ? response.data.banners[0].bannerURL : '';
-            if (type === 'top') {
-              this.topBanners = banners;
-            } else {
-              this.middleBanners = banners;
+            // console.log('Banner Response:', response);
+            switch (type) {
+              case 'Top':
+                this.topMostBanners = response.data.banners[0];
+                break;
+
+              case 'Middle':
+                this.middleBanners = response.data.banners[0];
+                break;
+
+              case 'Small':
+                this.smallBanners = response.data.banners[0];
+                break;
+
+              case 'Bottom':
+                this.bottomBanners = response.data.banners[0];
+                break;
             }
           }
+          console.log(`${type} Banner Data:`, response.data);
         }
-      },
-    });
+      }
+    },
+    );
   }
 
   private getDashboardProduct() {
@@ -135,16 +165,17 @@ export class Home extends Base implements AfterViewInit, OnInit {
         }
       },
       error: (error) => {
-        console.error('Dashboard Product Error: ', error);
+        //console.error('Dashboard Product Error:', error);
       },
     });
   }
 
-  onBannerError(type: 'top' | 'middle') {
-    if (type === 'top') {
-      this.topBanners = 'assets/images/banner-image2.png';
-    } else {
-      this.middleBanners = 'assets/images/banner-image2.png';
-    }
+  public onBannerError(type: 'top' | 'middle') {
+    // if (type === 'top') {
+    //   this.topBanners = 'assets/images/banner-image2.png';
+    // } else {
+    //   this.middleBanners = 'assets/images/banner-image2.png';
+    // }
   }
+
 }

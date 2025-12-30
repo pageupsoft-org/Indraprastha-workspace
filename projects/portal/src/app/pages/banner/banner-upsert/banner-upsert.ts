@@ -15,7 +15,7 @@ import { IBannerForm, IBannerFormValue, IGenericComboResponse, IModalDataSharing
 
 @Component({
   selector: 'app-banner-upsert',
-  imports: [ReactiveFormsModule, CommonModule],
+  imports: [ReactiveFormsModule, CommonModule, ValidateControl, NoLeadingTrailingSpaceDirective],
   templateUrl: './banner-upsert.html',
   styleUrl: './banner-upsert.scss',
 })
@@ -29,11 +29,12 @@ export class BannerUpsert extends Base implements OnInit {
   public productCombo: IGenericComboResponse[] = [];
   public selectConnectionType: string | null = 'None';
   public base64Image: string | ArrayBuffer | null = null;
+  public index!: number
 
   public bannerForm = new FormGroup<IBannerForm>({
     id: new FormControl(0),
     name: new FormControl(null, [Validators.required, Validators.maxLength(30)]),
-    description: new FormControl(null, [Validators.maxLength(250)]),
+    description: new FormControl(null, [Validators.required, Validators.maxLength(250)]),
     bannerConnectionType: new FormControl('None'),
     bannerType: new FormControl(null, [Validators.required]),
     gender: new FormControl(null, [Validators.required]),
@@ -49,9 +50,11 @@ export class BannerUpsert extends Base implements OnInit {
 
   ngOnInit(): void {
     const id = this.data.id;
+    const index = this.data.index;
     if (id) {
       this.getBannerById(id);
     }
+    this.index = index;
   }
 
   public onCancel(isSuccess?: boolean) {
@@ -67,13 +70,16 @@ export class BannerUpsert extends Base implements OnInit {
   }
 
   public onBannerSubmit() {
+    console.log(this.bannerForm.getRawValue());
     if (this.bannerForm.controls.bannerBase64.value === null) {
       this.toaster.show({ message: 'Please upload banner image', duration: 3000, type: EToastType.error });
       return;
     }
 
     if (this.bannerForm.valid) {
+
       const payload = this.bannerForm.getRawValue();
+      // console.log(payload);
 
       const previousImage = payload.bannerBase64
       if (previousImage && previousImage.startsWith('https')) {
@@ -91,6 +97,7 @@ export class BannerUpsert extends Base implements OnInit {
               this.toaster.show({ message: 'Banner Add Successful', duration: 3000, type: EToastType.success })
             }
             else {
+              // console.log('update success', payload);
               this.onCancel(true)
               this.toaster.show({ message: 'Banner Update Successful', duration: 3000, type: EToastType.success })
             }
@@ -149,7 +156,7 @@ export class BannerUpsert extends Base implements OnInit {
               this.bannerForm.patchValue({
                 ...response.data,
                 bannerBase64: response.data.bannerURL
-              
+
               });
               this.selectConnectionType = response.data.bannerConnectionType;
             }
@@ -161,16 +168,92 @@ export class BannerUpsert extends Base implements OnInit {
     }
   }
 
-  public onBannerImageChange(event: any) {
+  // public onBannerImageChange(event: any) {
+  //   const file = event.target.files?.[0];
+  //   if (!file) return;
+
+  //   // Check if it's a video file
+  //   if (file.type.startsWith('video/')) {
+  //     // Handle video files
+  //     if (file.size > 15 * 1024 * 1024) { // 10MB limit for videos
+  //       this.toastService.show({
+  //         message: 'Video file size should be less than 15MB',
+  //         type: EToastType.error,
+  //         duration: 3000,
+  //       });
+  //       event.target.value = null;
+  //       return;
+  //     }
+
+  //     const reader = new FileReader();
+  //     reader.onload = (e) => {
+  //       const result = e.target?.result as string;
+  //       this.bannerForm.controls.bannerBase64.setValue(result);
+  //     };
+  //     reader.readAsDataURL(file);
+  //   } else {
+  //     // Handle image files (existing logic)
+  //     const param: IConvertImageParams = initialConvertImageParam({
+  //       event,
+  //       allowedTypes: [ImageTypeEnum.webp, ImageTypeEnum.png, ImageTypeEnum.jpeg],
+  //       expectedImgWidth: ImageSizeConst.banner.width,
+  //       expectedImgHeight: ImageSizeConst.banner.height,
+  //       maxSize: 2
+  //     });
+
+  //     convertImagesToBase64Array(param).then((res: IConvertImageResult) => {
+  //       if (res) {
+  //         if (res.validBase64Files.length) {
+  //           this.bannerForm.controls.bannerBase64.setValue(res.validBase64Files[0] as string);
+  //         }
+  //         if (res.invalidFiles.length) {
+  //           this.toastService.show({
+  //             message: 'Some files were invalid (type, size, or dimensions) and were skipped',
+  //             type: EToastType.warning,
+  //             duration: 2000,
+  //           });
+  //         }
+  //       }
+  //     });
+  //   }
+
+  //   event.target.value = null;
+  // }
+
+
+  public onBannerImageChange(event: any, index: number): void {
     const file = event.target.files?.[0];
     if (!file) return;
 
-    // Check if it's a video file
-    if (file.type.startsWith('video/')) {
-      // Handle video files
-      if (file.size > 15 * 1024 * 1024) { // 10MB limit for videos
+    const isVideoSection = index === 0 || index === 2;
+    const isVideoFile = file.type.startsWith('video/');
+    const isImageFile = file.type.startsWith('image/');
+
+    if (isVideoSection && !isVideoFile) {
+      this.toastService.show({
+        message: 'Only Video files are allowed in this section',
+        type: EToastType.error,
+        duration: 3000,
+      });
+      event.target.value = null;
+      return;
+    }
+
+    if (!isVideoSection && !isImageFile) {
+      this.toastService.show({
+        message: 'Only Image files are allowed in this section',
+        type: EToastType.error,
+        duration: 3000,
+      });
+      event.target.value = null;
+      return;
+    }
+
+    if (isVideoFile) {
+
+      if (file.size > 15 * 1024 * 1024) {
         this.toastService.show({
-          message: 'Video file size should be less than 15MB',
+          message: 'Video size must be less than 15MB',
           type: EToastType.error,
           duration: 3000,
         });
@@ -179,33 +262,46 @@ export class BannerUpsert extends Base implements OnInit {
       }
 
       const reader = new FileReader();
-      reader.onload = (e) => {
-        const result = e.target?.result as string;
+
+      reader.onload = () => {
+        const result = reader.result as string;
+
         this.bannerForm.controls.bannerBase64.setValue(result);
+        console.log(this.bannerForm.controls.bannerBase64.value);
+
       };
+
       reader.readAsDataURL(file);
-    } else {
-      // Handle image files (existing logic)
+    }
+
+
+    if (isImageFile) {
+
       const param: IConvertImageParams = initialConvertImageParam({
         event,
-        allowedTypes: [ImageTypeEnum.webp, ImageTypeEnum.png, ImageTypeEnum.jpeg],
+        allowedTypes: [
+          ImageTypeEnum.webp,
+          ImageTypeEnum.png,
+          ImageTypeEnum.jpeg
+        ],
         expectedImgWidth: ImageSizeConst.banner.width,
         expectedImgHeight: ImageSizeConst.banner.height,
-        maxSize: 2
+        maxSize: 2 // MB
       });
 
       convertImagesToBase64Array(param).then((res: IConvertImageResult) => {
-        if (res) {
-          if (res.validBase64Files.length) {
-            this.bannerForm.controls.bannerBase64.setValue(res.validBase64Files[0] as string);
-          }
-          if (res.invalidFiles.length) {
-            this.toastService.show({
-              message: 'Some files were invalid (type, size, or dimensions) and were skipped',
-              type: EToastType.warning,
-              duration: 2000,
-            });
-          }
+
+        if (res?.validBase64Files.length) {
+          this.bannerForm.controls.bannerBase64.setValue(res.validBase64Files[0] as string);
+        }
+        //console.log(this.bannerForm.controls.bannerBase64.value);
+
+        if (res?.invalidFiles.length) {
+          this.toastService.show({
+            message: 'Some images were invalid and skipped',
+            type: EToastType.warning,
+            duration: 2000,
+          });
         }
       });
     }
@@ -218,14 +314,28 @@ export class BannerUpsert extends Base implements OnInit {
   }
 
   public isVideo(url: string): boolean {
+    console.log(url.startsWith('https'));
+
     if (!url) return false;
-    
-    const videoExtensions = ['.mp4', '.webm', '.ogg', '.avi', '.mov', '.wmv', '.flv', '.mkv'];
-    const lowerUrl = url.toLowerCase();
-    
-    return videoExtensions.some(ext => lowerUrl.includes(ext));
+
+    if (url.startsWith('https')) {
+      const videoExtensions = ['.mp4', '.webm', '.ogg', '.avi', '.mov', '.wmv', '.flv', '.mkv'];
+      const lowerUrl = url.toLowerCase();
+
+      videoExtensions.some(ext => lowerUrl.includes(ext))
+      return videoExtensions.some(ext => lowerUrl.includes(ext));
+    }
+
+    if (url.startsWith('data:video/')) {
+      return true;
+    }
+
+
+    return false;
+
   }
 
+  
 
 
 }
