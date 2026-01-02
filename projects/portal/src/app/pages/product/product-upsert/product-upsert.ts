@@ -43,6 +43,8 @@ import {
   initializeVariantForm,
   IProductForm,
   IVariantData,
+  stepperFormSteps,
+  IStepperStep,
 } from '../product.model';
 import { arrayToJson, convertImagesToBase64Array, logInvalidControls } from '@portal/core';
 import { ProductService } from '../product-service';
@@ -73,8 +75,14 @@ export class ProductUpsert extends Base implements OnInit {
   public collection: string = '';
   public setAllQtyInput = new FormControl<number | null>(
     null,
-    patternWithMessage(/^[1-9]\d*$/, 'Only numbers are allowed')
+    patternWithMessage(/^[1-9]\d*$/, 'Only numbers are allowed'),
   );
+
+  // Stepper functionality
+  public currentStep: number = 1;
+  public totalSteps: number = 5;
+  public stepperSteps: IStepperStep[] = stepperFormSteps;
+  public stepTitles: string[] = stepperFormSteps.map((step) => step.title);
 
   public setAllQty: WritableSignal<number> = signal(0);
   public productForm: FormGroup<IProductForm> = initializeIProductForm();
@@ -89,11 +97,12 @@ export class ProductUpsert extends Base implements OnInit {
     defaultOpen: false,
   };
   public ImageSizeConst = ImageSizeConst;
+  public Math = Math;
 
   constructor(
     private activatedRoute: ActivatedRoute,
     public router: Router,
-    private productService: ProductService
+    private productService: ProductService,
   ) {
     super();
   }
@@ -287,7 +296,7 @@ export class ProductUpsert extends Base implements OnInit {
               duration: 3000,
             });
           }
-        }
+        },
       );
     } else {
       // //console.log(invalidControls);
@@ -297,8 +306,8 @@ export class ProductUpsert extends Base implements OnInit {
           const pType: string = ic.path.includes('variantBase64')
             ? 'Variant'
             : ic.path.includes('productBase64')
-            ? 'Product'
-            : '';
+              ? 'Product'
+              : '';
           this.toastService.show({
             message: `${pType} image is required`,
             type: EToastType.error,
@@ -328,7 +337,7 @@ export class ProductUpsert extends Base implements OnInit {
 
   private getProductById(productId: number) {
     this.httpGetPromise<IRGeneric<IRProductDetailRoot>>(
-      ApiRoutes.PRODUCT.GET_BY_ID(productId)
+      ApiRoutes.PRODUCT.GET_BY_ID(productId),
     ).then((res) => {
       if (res?.data) {
         this.categoryCombo = res.data.categories;
@@ -371,6 +380,7 @@ export class ProductUpsert extends Base implements OnInit {
           color,
           mrp,
           gender,
+          categoryId: res.data.categoryIds[0],
         });
 
         // Assuming categoryIds is the array of selected IDs (e.g., [1, 5, 9])
@@ -415,7 +425,7 @@ export class ProductUpsert extends Base implements OnInit {
 
         this.productForm.controls.stocks.controls.forEach((x) => {
           x.controls.quantity.setValue(
-            stocks.find((f) => f.size == x.controls.size.value)?.quantity ?? 0
+            stocks.find((f) => f.size == x.controls.size.value)?.quantity ?? 0,
           );
         });
 
@@ -476,7 +486,7 @@ export class ProductUpsert extends Base implements OnInit {
     this.categoryCombo = [];
     const gender = this.productForm.controls.gender.value || '';
     this.httpGetPromise<IRGeneric<IGenericComboResponse[]>>(
-      ApiRoutes.COLLECTION.GET_BY_GENDER_COLLECTION(gender)
+      ApiRoutes.COLLECTION.GET_BY_GENDER_COLLECTION(gender),
     )
       .then((res) => {
         //console.log(res)
@@ -494,13 +504,13 @@ export class ProductUpsert extends Base implements OnInit {
     console.log(
       'getCategoryByCollectionId called',
       this.productForm.controls.collectionId.value,
-      typeof this.productForm.controls.collectionId.value
+      typeof this.productForm.controls.collectionId.value,
     );
     this.categoryCombo = [];
     const id = Number(this.productForm.controls.collectionId.value) || 0;
     //console.log(id);
     this.httpGetPromise<IRGeneric<IGenericComboResponse[]>>(
-      ApiRoutes.CATEGORY.GET_BY_ID_CATEGORY(id)
+      ApiRoutes.CATEGORY.GET_BY_ID_CATEGORY(id),
     )
       .then((response) => {
         if (response) {
@@ -510,5 +520,78 @@ export class ProductUpsert extends Base implements OnInit {
         }
       })
       .catch((error) => {});
+  }
+
+  // Stepper Navigation Methods
+  public nextStep(): void {
+    // debugger
+    console.log("hello");
+    
+    if (this.currentStep < this.totalSteps) {
+      this.currentStep++;
+    }
+  }
+
+  public previousStep(): void {
+    if (this.currentStep > 1) {
+      this.currentStep--;
+    }
+  }
+
+  public goToStep(step: number): void {
+    if (step >= 1 && step <= this.totalSteps) {
+      this.currentStep = step;
+    }
+  }
+
+  public isStepCompleted(step: number): boolean {
+    // Add validation logic for each step
+    switch (step) {
+      case 1:
+        // Basic validation - at least name and gender are required
+        return this.isStepOneValid();
+      case 2:
+        // At least one image and one color
+        const hasValidImages = this.productForm.controls.productBase64.controls.some(
+          (control) => control.value && control.value.trim() !== '',
+        );
+        const hasValidColors = this.productForm.controls.color.controls.some(
+          (control) => control.value && control.value.trim() !== '',
+        );
+        return hasValidImages && hasValidColors;
+      case 3:
+        return true; // Variants are optional
+      case 4:
+        return true; // Stock is optional for now
+      case 5:
+        return true; // Descriptions are optional
+      default:
+        return false;
+    }
+  }
+
+  private isStepOneValid(): boolean {
+    return (
+      this.productForm.controls.name.valid &&
+      this.productForm.controls.gender.valid &&
+      this.productForm.controls.collectionId.valid &&
+      this.productForm.controls.categoryId.valid &&
+      this.productForm.controls.mrp.valid
+    );
+  }
+
+  public canProceedToNextStep(): boolean {
+    return this.isStepCompleted(this.currentStep);
+  }
+
+  // Helper method to get current step configuration
+  public getCurrentStepConfig(): IStepperStep {
+    return this.stepperSteps[this.currentStep - 1];
+  }
+
+  // Helper method to get next step button text
+  public getNextButtonText(): string {
+    const currentConfig = this.getCurrentStepConfig();
+    return currentConfig.nextButtonText || 'Next';
   }
 }

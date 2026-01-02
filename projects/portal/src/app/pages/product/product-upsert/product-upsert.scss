@@ -1,0 +1,146 @@
+/* Enhanced Product Upsert Styles */
+
+/* Slide-in animation for steps */
+@keyframes slideInUp {
+  from {
+    opacity: 0;
+    transform: translateY(30px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* Enhanced color picker styling */
+input[type="color"] {
+  -webkit-appearance: none;
+  -moz-appearance: none;
+  appearance: none;
+  border: none;
+  cursor: pointer;
+  
+  &::-webkit-color-swatch-wrapper {
+    padding: 0;
+    border: none;
+    border-radius: 12px;
+  }
+  
+  &::-webkit-color-swatch {
+    border: none;
+    border-radius: 12px;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+  }
+  
+  &::-moz-color-swatch {
+    border: none;
+    border-radius: 12px;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+  }
+}
+
+/* Enhanced transitions for all interactive elements */
+input, select, textarea, button {
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+/* Enhanced focus states */
+input:focus, select:focus, textarea:focus {
+  outline: none;
+  box-shadow: 0 0 0 4px rgba(130, 24, 26, 0.1);
+  transform: translateY(-1px);
+}
+
+/* Custom multiselect dropdown styling */
+.custom-multiselect {
+  .multiselect-dropdown {
+    border: 2px solid #e5e7eb !important;
+    border-radius: 12px !important;
+    transition: all 0.3s ease !important;
+    
+    &:hover {
+      border-color: #d1d5db !important;
+    }
+    
+    &.dropdown-btn-focus {
+      border-color: #82181A !important;
+      box-shadow: 0 0 0 4px rgba(130, 24, 26, 0.1) !important;
+    }
+  }
+  
+  .dropdown-btn {
+    padding: 12px 16px !important;
+    font-size: 14px !important;
+  }
+}
+
+/* Hover effects for cards */
+.hover\:border-gray-300:hover {
+  border-color: #d1d5db;
+}
+
+.hover\:border-gray-400:hover {
+  border-color: #9ca3af;
+}
+
+.hover\:border-purple-300:hover {
+  border-color: #d8b4fe;
+}
+
+.hover\:border-purple-400:hover {
+  border-color: #c084fc;
+}
+
+.hover\:border-pink-300:hover {
+  border-color: #f9a8d4;
+}
+
+/* Enhanced button hover effects */
+button:hover {
+  transform: translateY(-1px);
+}
+
+button:active {
+  transform: translateY(0);
+}
+
+/* Progress ring animation */
+.progress-ring {
+  transition: stroke-dasharray 0.5s ease-in-out;
+}
+
+/* Gradient text effect */
+.gradient-text {
+  background: linear-gradient(135deg, #82181A, #a01e21);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+/* Enhanced shadow effects */
+.shadow-enhanced {
+  box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04);
+}
+
+.shadow-enhanced:hover {
+  box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04);
+}
+
+/* Custom scrollbar */
+::-webkit-scrollbar {
+  width: 8px;
+}
+
+::-webkit-scrollbar-track {
+  background: #f1f5f9;
+  border-radius: 4px;
+}
+
+::-webkit-scrollbar-thumb {
+  background: linear-gradient(135deg, #82181A, #a01e21);
+  border-radius: 4px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: linear-gradient(135deg, #6f1416, #8a1b1d);
+}

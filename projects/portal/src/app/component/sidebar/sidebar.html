@@ -1,12 +1,9 @@
 <div
-  class="min-h-screen bg-red-200 flex w-[250px] h-full bg-red-200 fixed top-0 left-0 z-99 shadow-[-1px_6px_27px_-13px_rgba(0,0,0,0.20)]"
->
+  class="min-h-screen bg-red-200 flex w-[250px] h-full bg-red-200 fixed top-0 left-0 z-99 shadow-[-1px_6px_27px_-13px_rgba(0,0,0,0.20)]">
   <!-- SIDEBAR -->
-  <aside
-    class="sidebar-outline w-[297px] h-full bg-[#FFFFFF] border-r border-gray-100 flex flex-col p-4"
-  >
+  <aside class="sidebar-outline w-[297px] h-full bg-[#FFFFFF] border-r border-gray-100 flex flex-col p-4">
     <!-- logo area -->
-    <div class="flex flex-col items-center pb-3 border-b border-gray-100">
+    <div class="flex flex-col items-center pb-3 border-b border-gray-200">
       <!-- replace src with your real logo path -->
       <img src="assets/image/portal-logo.png" alt="logo" class="w-36 object-contain mb-2" />
     </div>
@@ -16,41 +13,24 @@
       <ul class="space-y-2 font-medium">
         @for (item of menuItems(); track $index; let i = $index) { @if(item.child.length){
         <li>
-          <button
-            type="button"
+          <button type="button"
             class="flex items-center w-full p-2 text-base text-gray-900 cursor-pointer transition duration-75 rounded-lg group hover:bg-[#82181A]"
-            [attr.aria-controls]="'dropdown-' + i"
-            [attr.data-collapse-toggle]="'dropdown-' + i"
-          >
+            [attr.aria-controls]="'dropdown-' + i" [attr.data-collapse-toggle]="'dropdown-' + i">
             <i class="text-xl" [ngClass]="item.icon"></i>
             <span class="flex-1 ms-3 text-left rtl:text-right whitespace-nowrap">{{
               item.name
-            }}</span>
-            <svg
-              class="w-3 h-3"
-              aria-hidden="true"
-              xmlns="http://www.w3.org/2000/svg"
-              fill="none"
-              viewBox="0 0 10 6"
-            >
-              <path
-                stroke="currentColor"
-                stroke-linecap="round"
-                stroke-linejoin="round"
-                stroke-width="2"
-                d="m1 1 4 4 4-4"
-              />
+              }}</span>
+            <svg class="w-3 h-3" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 10 6">
+              <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                d="m1 1 4 4 4-4" />
             </svg>
           </button>
           <ul [id]="'dropdown-' + i" class="hidden py-2 space-y-2">
             @for (childI of item.child; track $index) {
             <li>
-              <a
-                [routerLink]="childI.route"
-                routerLinkActive="bg-[#FFF0F0] text-[#000] font-medium"
+              <a [routerLink]="childI.route" routerLinkActive="bg-[#FFF0F0] text-[#000] font-medium"
                 [routerLinkActiveOptions]="{ exact: true }"
-                class="flex items-center w-full p-2 text-gray-900 transition duration-75 rounded-lg pl-6 group hover:bg-[#FFF0F0]"
-              >
+                class="flex items-center w-full p-2 text-gray-900 transition duration-75 rounded-lg pl-6 group hover:bg-[#FFF0F0]">
                 <i class="text-xl" [ngClass]="childI.icon"></i>
                 <span class="ms-3">{{ childI.name }}</span>
               </a>
@@ -60,11 +40,9 @@
         </li>
         } @else {
         <li>
-          <a
-            [routerLink]="item.route"
-            routerLinkActive="bg-[#FFF0F0] text-[#630A00] font-medium"
-            class="flex items-center p-2 text-gray-900 rounded-lg hover:bg-[#FFF0F0] group"
-          >
+          <a [routerLink]="item.route"
+            routerLinkActive="bg-[#FFF0F0] text-[#630A00] font-medium border-l-3 border-[#630A00]"
+            class="flex items-center p-2 text-gray-900 rounded-tr-lg rounded-br-lg hover:bg-[#FFF0F0] group">
             <i class="text-xl" [ngClass]="item.icon"></i>
             <span class="ms-3 group-hover:text-[#630A00]">{{ item.name }}</span>
           </a>

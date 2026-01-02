@@ -37,19 +37,19 @@ export const MenuItems: IMenuSideBarItem[] = [
         child: [],
     },
      {
-        name: 'Collection',
+        name: 'Collection/Category',
         route: AppRoutes.COLLECTION,
         icon: 'bx bxs-store-alt',
         userType: [],
         child: [],
     },
-      {
-        name: 'Category',
-        route: AppRoutes.CATEGORY,
-        icon: 'bx bx-layer',
-        userType: [],
-        child: [],
-    },
+    //   {
+    //     name: 'Category',
+    //     route: AppRoutes.CATEGORY,
+    //     icon: 'bx bx-layer',
+    //     userType: [],
+    //     child: [],
+    // },
     {
         name: 'Banner',
         route: AppRoutes.BANNER,
