@@ -13,6 +13,7 @@ export interface IProductForm {
   customSizeName: FormControl<string | null>;
   color: FormArray<FormControl<string | null>>;
   mrp: FormControl<number | null>;
+  isVariant: FormControl<boolean | null>;
   gender: FormControl<string | null>;
   variants: FormArray<FormGroup<IVariantForm>>;
   stocks: FormArray<FormGroup<stocks>>;
@@ -151,6 +152,7 @@ export const initializeIProductForm = (): FormGroup<IProductForm> =>
     customSizeName: new FormControl<string | null>(''),
     color: new FormArray<FormControl<string | null>>([]),
     mrp: new FormControl<number | null>(null, [Validators.required, Validators.maxLength(10), patternWithMessage(/^\d+(\.\d{1,2})?$/, 'Enter a valid price')]),
+    isVariant: new FormControl<boolean | null>(false),
     gender: new FormControl<GenderTypeEnum | null>(null, Validators.required),
     variants: new FormArray<FormGroup<IVariantForm>>([]),
     stocks: new FormArray<FormGroup<stocks>>([]),
@@ -213,16 +215,16 @@ export const stepperFormSteps: IStepperStep[] = [
     icon: 'M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2 2v12a2 2 0 002 2z',
     nextButtonText: 'Next: Variants'
   },
+  // {
+  //   step: 3,
+  //   title: 'Product Variants',
+  //   shortTitle: 'Variants',
+  //   description: 'Create different versions of your product (optional)',
+  //   icon: 'M20 7l-8-4-8 4m16 0l-8 4m8-4v10l-8 4m0-10L4 7m8 4v10M4 7v10l8 4',
+  //   nextButtonText: 'Next: Stock'
+  // },
   {
     step: 3,
-    title: 'Product Variants',
-    shortTitle: 'Variants',
-    description: 'Create different versions of your product (optional)',
-    icon: 'M20 7l-8-4-8 4m16 0l-8 4m8-4v10l-8 4m0-10L4 7m8 4v10M4 7v10l8 4',
-    nextButtonText: 'Next: Stock'
-  },
-  {
-    step: 4,
     title: 'Stock Management',
     shortTitle: 'Stock',
     description: 'Set inventory quantities for each size',
@@ -230,7 +232,7 @@ export const stepperFormSteps: IStepperStep[] = [
     nextButtonText: 'Next: Details'
   },
   {
-    step: 5,
+    step: 4,
     title: 'Product Descriptions',
     shortTitle: 'Details',
     description: 'Add detailed descriptions for your product (optional)',

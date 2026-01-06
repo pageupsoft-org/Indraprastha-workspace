@@ -7,7 +7,7 @@ export const AppRoutes = {
   COLLECTION: 'collection',
   BANNER: 'banner',
   PRODUCT: 'product',
-  PRODUCT_UPSERT: 'product-upsert',
+  PRODUCT_UPSERT: 'product/upsert',
   ORDERS: 'order-list',
   ORDERS_UPSERT: 'order-upsert',
   FALLBACK: 'fallback'

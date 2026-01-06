@@ -80,12 +80,13 @@ export class ProductUpsert extends Base implements OnInit {
 
   // Stepper functionality
   public currentStep: number = 1;
-  public totalSteps: number = 5;
+  public totalSteps: number = 4;
   public stepperSteps: IStepperStep[] = stepperFormSteps;
   public stepTitles: string[] = stepperFormSteps.map((step) => step.title);
 
   public setAllQty: WritableSignal<number> = signal(0);
   public productForm: FormGroup<IProductForm> = initializeIProductForm();
+  // public variants: { name: string; price: number }[] = [];
   public dropdownSettings: IDropdownSettings = {
     singleSelection: true,
     idField: 'id',
@@ -126,19 +127,6 @@ export class ProductUpsert extends Base implements OnInit {
     });
   }
 
-  // GET CATEGORY COMBO
-  // private getCategoryCombo() {
-  //   this.httpGetPromise<IRGeneric<IGenericComboResponse[]>>(ApiRoutes.CATEGORY.GET_COMBO)
-  //     .then((response) => {
-  //       if (response) {
-  //         if (response.data) {
-  //           this.categoryCombo = response.data;
-  //         }
-  //       }
-  //     })
-  //     .catch((error) => {});
-  // }
-
   public mutateColorControl(index: number | null) {
     if (index == null) {
       this.productForm.controls.color.push(new FormControl<string>('#9c1c1c'));
@@ -173,7 +161,15 @@ export class ProductUpsert extends Base implements OnInit {
 
   public mutateImageControl(index: number | null) {
     if (index == null) {
-      this.productForm.controls.productBase64.push(new FormControl(null, Validators.required));
+      if(this.productForm.controls.productBase64.length >= 6){
+        this.toastService.show({
+          type: EToastType.info,
+          message: 'Cannot upload more than six image',
+          duration: 2000
+        })
+      }else{
+        this.productForm.controls.productBase64.push(new FormControl(null, Validators.required));
+      }
     } else {
       this.productForm.controls.productBase64.removeAt(index);
     }
@@ -250,7 +246,6 @@ export class ProductUpsert extends Base implements OnInit {
     this.productForm.updateValueAndValidity();
     const invalidControls: { path: string; errors: any }[] = logInvalidControls(this.productForm);
 
-    debugger;
     if (this.productForm.valid && invalidControls.length == 0) {
       // return;
 
@@ -348,8 +343,6 @@ export class ProductUpsert extends Base implements OnInit {
             if (response && response.data != null) {
               this.collectionCombo = response.data;
               this.collectionCombo.find((c) => {
-                console.log(c, c.id, res.data.collectionId, c.id === res.data.collectionId);
-
                 if (c.id === res.data.collectionId) {
                   this.productForm.controls.collectionId.patchValue(res.data.collectionId);
                 }
@@ -381,6 +374,7 @@ export class ProductUpsert extends Base implements OnInit {
           mrp,
           gender,
           categoryId: res.data.categoryIds[0],
+          isVariant: variants && variants.length > 0,
         });
 
         // Assuming categoryIds is the array of selected IDs (e.g., [1, 5, 9])
@@ -421,6 +415,12 @@ export class ProductUpsert extends Base implements OnInit {
             variantBase64: v.variantURL,
           };
           this.productForm.controls.variants.push(initializeVariantForm(newV));
+          
+          // Also populate the simple variants array for the new UI
+          // this.variants.push({
+          //   name: v.name || '',
+          //   price: v.mrp || 0
+          // });
         });
 
         this.productForm.controls.stocks.controls.forEach((x) => {
@@ -523,10 +523,7 @@ export class ProductUpsert extends Base implements OnInit {
   }
 
   // Stepper Navigation Methods
-  public nextStep(): void {
-    // debugger
-    console.log("hello");
-    
+  public nextStep(): void {   
     if (this.currentStep < this.totalSteps) {
       this.currentStep++;
     }
@@ -548,7 +545,6 @@ export class ProductUpsert extends Base implements OnInit {
     // Add validation logic for each step
     switch (step) {
       case 1:
-        // Basic validation - at least name and gender are required
         return this.isStepOneValid();
       case 2:
         // At least one image and one color
@@ -561,7 +557,8 @@ export class ProductUpsert extends Base implements OnInit {
         return hasValidImages && hasValidColors;
       case 3:
         return true; // Variants are optional
-      case 4:
+
+      case 4: //stocks
         return true; // Stock is optional for now
       case 5:
         return true; // Descriptions are optional
@@ -571,13 +568,20 @@ export class ProductUpsert extends Base implements OnInit {
   }
 
   private isStepOneValid(): boolean {
-    return (
-      this.productForm.controls.name.valid &&
-      this.productForm.controls.gender.valid &&
-      this.productForm.controls.collectionId.valid &&
-      this.productForm.controls.categoryId.valid &&
-      this.productForm.controls.mrp.valid
-    );
+    const nameValid = this.productForm.controls.name.valid;
+    const genderValid = this.productForm.controls.gender.valid;
+    const collectionValid = this.productForm.controls.collectionId.valid;
+    const categoryValid = this.productForm.controls.categoryId.valid;
+    const mrpValid = this.productForm.controls.mrp.valid;
+    return nameValid && genderValid && collectionValid && categoryValid && mrpValid;
+  }
+
+  private isVariantValid(): boolean{
+    console.log();
+    
+
+
+    return true
   }
 
   public canProceedToNextStep(): boolean {

@@ -1,4 +1,13 @@
-import { Component, inject, OnInit, signal, WritableSignal } from '@angular/core';
+import {
+  Component,
+  computed,
+  effect,
+  inject,
+  model,
+  OnInit,
+  signal,
+  WritableSignal,
+} from '@angular/core';
 import { Base, handlePagination } from '@portal/core';
 
 import { MAT_DIALOG_DATA, MatDialog } from '@angular/material/dialog';
@@ -11,6 +20,7 @@ import {
   ApiRoutes,
   ConfirmationDialog,
   EToastType,
+  GenderTypeEnum,
   MConfirmationModalData,
   ToastService,
 } from '@shared';
@@ -44,10 +54,48 @@ export class CollectionList
   public collections: ICollection[] = [];
   public paginationMetaData: PaginationControlMetadata = createPaginationMetadata();
   public activeView: 'collections' | 'categories' | 'unified' = 'unified';
-  public genderFilter: 'all' | 'Men' | 'Women' = 'all';
+  private categoryPayload: IPaginationPayload = {
+    ...initializePagInationPayload(),
+  };
+  public readonly GenderTypeEnum = GenderTypeEnum;
+  public genderFilter: WritableSignal<GenderTypeEnum> = signal(GenderTypeEnum.Both);
+
+  public filteredCollectionList = computed(() => {
+    const gender = this.genderFilter();
+
+    if (gender === GenderTypeEnum.Both) {
+      return this.collectionList();
+    }
+
+    return this.collectionList().filter(
+      (collection) => collection.gender?.toLowerCase() === gender.toLowerCase(),
+    );
+  });
+
+  public filteredCategoryList = computed<ICategory[]>(() => {
+    const gender = this.genderFilter();
+
+    if (gender === GenderTypeEnum.Both) {
+      return this.categories();
+    }
+
+    return this.categories().filter((category) => {
+      const parentCollection = this.collectionList().find(
+        (collection) =>
+          collection.name === category.collectionName &&
+          collection.gender?.toLowerCase() === gender.toLowerCase(),
+      );
+
+      return !!parentCollection;
+    });
+  });
+
+  public defaultSearchText: WritableSignal<string | null> = signal(null);
 
   constructor(private toaster: ToastService) {
     super();
+    this.payLoad.isPaginate = false;
+    this.categoryPayload.isPaginate = false;
   }
 
   override ngOnInit(): void {
@@ -58,7 +106,7 @@ export class CollectionList
   protected override getData(): Observable<IGenericResponse<ICollectionResponse>> {
     return this.httpPostObservable<IGenericResponse<ICollectionResponse>, IPaginationPayload>(
       ApiRoutes.COLLECTION.ALL,
-      this.payLoad
+      this.payLoad,
     );
   }
 
@@ -69,7 +117,7 @@ export class CollectionList
         this.paginationMetaData,
         response.data.total,
         this.payLoad.pageIndex,
-        this.payLoad.top
+        this.payLoad.top,
       );
     } else {
       this.collectionList.set([]);
@@ -77,14 +125,9 @@ export class CollectionList
   }
 
   private loadCategories(): void {
-    const categoryPayload: IPaginationPayload = {
-      ...initializePagInationPayload(),
-      top: 1000 // Load all categories
-    };
-
     this.httpPostObservable<IGenericResponse<ICategoryResponse>, IPaginationPayload>(
       ApiRoutes.CATEGORY.GET,
-      categoryPayload
+      this.categoryPayload,
     ).subscribe({
       next: (response) => {
         if (response?.data && response.data?.categories) {
@@ -96,33 +139,25 @@ export class CollectionList
       error: (error) => {
         console.error('Error loading categories:', error);
         this.categories.set([]);
-      }
+      },
     });
   }
 
   public setActiveView(view: 'collections' | 'categories' | 'unified'): void {
+    this.payLoad.search = '';
+    this.categoryPayload.search = '';
     this.activeView = view;
-  }
-
-  public setGenderFilter(gender: 'all' | 'Men' | 'Women'): void {
-    this.genderFilter = gender;
-  }
-
-  public getFilteredCollections(): ICollection[] {
-    if (this.genderFilter === 'all') {
-      return this.collectionList();
+    
+    if(this.defaultSearchText()){
+      this.loadCategories();
+      this.search();
     }
-    return this.collectionList().filter(collection => 
-      collection.gender && collection.gender.toLowerCase() === this.genderFilter.toLowerCase()
-    );
+
+    this.defaultSearchText.update(() => '');
   }
 
-  public getCategoriesForCollection(collectionName: string): ICategory[] {
-    return this.categories().filter(category => {
-      if (!category.collectionName) return false;
-      const categoryCollectionName = String(category.collectionName);
-      return categoryCollectionName.toLowerCase() === collectionName.toLowerCase();
-    });
+  public setGenderFilter(gender: GenderTypeEnum): void {
+    this.genderFilter.update(() => gender);
   }
 
   // Open Collection PopUp
@@ -216,6 +251,21 @@ export class CollectionList
             .catch((error) => {});
         }
       });
+    }
+  }
+
+  public override searchText(searchText: string): void {
+    this.defaultSearchText.update(() => searchText);
+    if (this.activeView === 'categories') {
+      this.categoryPayload.search = searchText;
+      this.searchString$.next(searchText);
+      this.categoryPayload.pageIndex = 1;
+      this.loadCategories();
+    } else {
+      this.payLoad.search = searchText;
+      this.searchString$.next(searchText);
+      this.payLoad.pageIndex = 1;
+      super.search();
     }
   }
 }

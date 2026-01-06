@@ -14,7 +14,7 @@ export interface ICategory{
     name:string;
     gst:number;
     description:string;
-    collectionName:number;
+    collectionName:string;
 }
 
 

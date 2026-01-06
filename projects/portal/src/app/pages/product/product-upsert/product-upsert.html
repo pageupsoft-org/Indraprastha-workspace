@@ -3,13 +3,7 @@
   <div class="max-w-6xl mx-auto px-3 sm:px-4 lg:px-6">
 
     <!-- Unified Header with Integrated Stepper Navigation -->
-    <div class="bg-white rounded-xl shadow-lg border border-gray-200 p-6 mb-6 mt-[100px] relative overflow-hidden">
-      <!-- Background Pattern -->
-      <div class="absolute inset-0 opacity-5">
-        <div class="absolute inset-0"
-          style="background-image: radial-gradient(circle at 1px 1px, #82181A 1px, transparent 0); background-size: 20px 20px;">
-        </div>
-      </div>
+    <div class="bg-white rounded-xl shadow-lg border border-gray-200 p-6 mb-6 mt-[100px] ">
 
       <!-- Main Header Section -->
       <div class="relative flex items-center justify-between mb-6">
@@ -113,10 +107,12 @@
       <!-- Main Form -->
       <form [formGroup]="productForm" class="mt-4">
 
+        @switch (currentStep) {
+        @case (1) {
         <!-- Step 1: Basic Information -->
         <div
           class="bg-white rounded-xl shadow-xl border border-gray-200 overflow-hidden transition-all duration-500 transform"
-          *ngIf="currentStep === 1" style="animation: slideInUp 0.6s ease-out;">
+          style="animation: slideInUp 0.6s ease-out;">
           <div class="p-3 bg-gradient-to-r from-[#82181A]/5 to-[#a01e21]/5 border-b border-gray-200">
             <div class="flex items-center space-x-4">
               <div
@@ -229,8 +225,7 @@
                   Category *
                 </label>
                 <div class="relative">
-                  <select libValidateControl
-                    [formControl]="productForm.controls.categoryId"
+                  <select libValidateControl [formControl]="productForm.controls.categoryId"
                     class="w-full border-2 border-gray-200 rounded-lg px-3 py-2 focus:ring-4 focus:ring-[#82181A]/20 focus:border-[#82181A] transition-all duration-300 text-gray-900 group-hover:border-gray-300 appearance-none bg-white">
                     <option [ngValue]="null">Select collection</option>
                     @for (item of categoryCombo; track $index) {
@@ -244,17 +239,17 @@
                     </svg>
                   </div>
                   <!-- <ng-multiselect-dropdown
-                    [settings]="dropdownSettings"
-                    [data]="categoryCombo"
-                    [formControl]="productForm.controls.categoryIdsList"
-                    class="custom-multiselect"
-                  >
-                  </ng-multiselect-dropdown> -->
+                        [settings]="dropdownSettings"
+                        [data]="categoryCombo"
+                        [formControl]="productForm.controls.categoryIdsList"
+                        class="custom-multiselect"
+                      >
+                      </ng-multiselect-dropdown> -->
                 </div>
               </div>
             </div>
 
-            <!-- MRP -->
+            <!-- MRP and Has Variants -->
             <div class="max-w-sm">
               <label class="block text-sm font-semibold text-gray-700 mb-1 flex items-center">
                 <svg class="w-4 h-4 mr-2 text-[#82181A]" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -264,29 +259,120 @@
                 </svg>
                 Maximum Retail Price (MRP) *
               </label>
-              <div class="relative group">
-                <div class="absolute inset-y-0 left-0 pl-4 flex items-center pointer-events-none">
-                  <span class="text-[#82181A] font-semibold text-lg">₹</span>
+              <div class="flex items-center space-x-3">
+                <div class="relative group flex-1">
+                  <div class="absolute inset-y-0 left-0 pl-4 flex items-center pointer-events-none">
+                    <span class="text-[#82181A] font-semibold text-lg">₹</span>
+                  </div>
+                  <input [formControl]="productForm.controls.mrp" libValidateControl type="text" placeholder="0.00"
+                    step="0.01" maxlength="10"
+                    class="w-full border-2 border-gray-200 rounded-lg pl-12 px-3 py-2 focus:ring-4 focus:ring-[#82181A]/20 focus:border-[#82181A] transition-all duration-300 text-gray-900 placeholder-gray-400 group-hover:border-gray-300 text-lg font-medium" />
+                  <div class="absolute inset-y-0 right-0 pr-3 flex items-center pointer-events-none">
+                    <svg class="w-5 h-5 text-gray-400 group-hover:text-[#82181A] transition-colors" fill="none"
+                      stroke="currentColor" viewBox="0 0 24 24">
+                      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                        d="M9 7h6m0 10v-3m-3 3h.01M9 17h.01M9 14h.01M12 14h.01M15 11h.01M12 11h.01M9 11h.01M7 21h10a2 2 0 002-2V5a2 2 0 00-2-2H7a2 2 0 00-2 2v14a2 2 0 002 2z">
+                      </path>
+                    </svg>
+                  </div>
                 </div>
-                <input [formControl]="productForm.controls.mrp" libValidateControl type="text" placeholder="0.00"
-                  step="0.01" maxlength="10"
-                  class="w-full border-2 border-gray-200 rounded-lg pl-12 px-3 py-2 focus:ring-4 focus:ring-[#82181A]/20 focus:border-[#82181A] transition-all duration-300 text-gray-900 placeholder-gray-400 group-hover:border-gray-300 text-lg font-medium" />
-                <div class="absolute inset-y-0 right-0 pr-3 flex items-center pointer-events-none">
-                  <svg class="w-5 h-5 text-gray-400 group-hover:text-[#82181A] transition-colors" fill="none"
-                    stroke="currentColor" viewBox="0 0 24 24">
-                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                      d="M9 7h6m0 10v-3m-3 3h.01M9 17h.01M9 14h.01M12 14h.01M15 11h.01M12 11h.01M9 11h.01M7 21h10a2 2 0 002-2V5a2 2 0 00-2-2H7a2 2 0 00-2 2v14a2 2 0 002 2z">
-                    </path>
-                  </svg>
+                <!-- Has Variants Checkbox -->
+                <div class="flex items-center space-x-2 whitespace-nowrap">
+                  <input type="checkbox" id="isVariant" [formControl]="productForm.controls.isVariant"
+                    class="w-4 h-4 text-[#82181A] bg-gray-100 border-gray-300 rounded focus:ring-[#82181A] focus:ring-2" />
+                  <label for="isVariant" class="text-sm font-medium text-gray-700 cursor-pointer">
+                    Has Variants
+                  </label>
+                </div>
+              </div>
+            </div>
+
+            <!-- Variants Section -->
+            <div *ngIf="productForm.controls.isVariant.value" class="col-span-full mt-4">
+              <div class="bg-gray-50 rounded-lg p-4 border border-gray-200">
+                <div class="flex items-center justify-between mb-3">
+                  <h3 class="text-base font-semibold text-gray-800 flex items-center">
+                    <svg class="w-4 h-4 mr-2 text-[#82181A]" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                        d="M19 11H5m14 0a2 2 0 012 2v6a2 2 0 01-2 2H5a2 2 0 01-2-2v-6a2 2 0 012-2m14 0V9a2 2 0 00-2-2M5 11V9a2 2 0 012-2m0 0V5a2 2 0 012-2h6a2 2 0 012 2v2M7 7h10">
+                      </path>
+                    </svg>
+                    Product Variants
+                  </h3>
+                  <button type="button" (click)="mutateVariantControl(null)"
+                    class="flex items-center space-x-1 px-3 py-1.5 bg-[#82181A] text-white rounded-md hover:bg-[#6f1416] transition-all duration-300 text-sm font-medium">
+                    <svg class="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                        d="M12 6v6m0 0v6m0-6h6m-6 0H6"></path>
+                    </svg>
+                    <span>Add</span>
+                  </button>
+                </div>
+
+                <!-- Variants List -->
+                <div class="space-y-2">
+                  @for (variant of productForm.controls.variants.controls; track $index) {
+                  <div class="bg-white rounded-md p-3 border border-gray-200">
+                    <div class="flex items-center gap-3">
+                      <!-- Variant Number -->
+                      <div class="flex-shrink-0">
+                        <span
+                          class="inline-flex items-center justify-center w-6 h-6 bg-gray-100 text-gray-600 rounded-full text-xs font-medium">
+                          {{ $index + 1 }}
+                        </span>
+                      </div>
+
+                      <!-- Variant Name -->
+                      <div class="flex-1">
+                        <input type="text" [formControl]="variant.controls.name"
+                          placeholder="Variant name (e.g., Small, Red)"
+                          class="w-full border border-gray-300 rounded-md px-2 py-1.5 text-sm focus:ring-2 focus:ring-[#82181A]/20 focus:border-[#82181A] transition-all duration-300" />
+                      </div>
+
+                      <!-- Variant Price -->
+                      <div class="flex-shrink-0 w-24">
+                        <div class="relative">
+                          <span
+                            class="absolute left-2 top-1/2 transform -translate-y-1/2 text-[#82181A] font-medium text-sm">₹</span>
+                          <input type="number" [formControl]="variant.controls.mrp" placeholder="0.00" step="0.01"
+                            min="0"
+                            class="w-full border border-gray-300 rounded-md pl-6 pr-2 py-1.5 text-sm focus:ring-2 focus:ring-[#82181A]/20 focus:border-[#82181A] transition-all duration-300" />
+                        </div>
+                      </div>
+
+                      <!-- Delete Button -->
+                      <button type="button" (click)="mutateVariantControl($index)"
+                        class="flex-shrink-0 text-red-500 hover:text-red-700 transition-colors duration-200 p-1 cursor-pointer">
+                        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                            d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16">
+                          </path>
+                        </svg>
+                      </button>
+                    </div>
+                  </div>
+                  }
+
+                  <!-- Empty State -->
+                  @if(productForm.controls.variants.controls.length === 0){
+                  <div class="text-center py-6">
+                    <svg class="w-8 h-8 mx-auto text-gray-400 mb-2" fill="none" stroke="currentColor"
+                      viewBox="0 0 24 24">
+                      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                        d="M20 7l-8-4-8 4m16 0l-8 4m8-4v10l-8 4m0-10L4 7m8 4v10M4 7v10l8 4"></path>
+                    </svg>
+                    <p class="text-gray-500 text-xs">No variants added yet. Click "Add" to get started.</p>
+                  </div>
+                  }
                 </div>
               </div>
             </div>
           </div>
 
           <!-- Enhanced Step Navigation -->
-          <div class="p-4 bg-gray-50 border-t border-gray-200 flex justify-end">
-            <button type="button" (click)="nextStep()"
-              class="group px-5 py-2 bg-gradient-to-r from-[#82181A] to-[#a01e21] text-white rounded-lg hover:from-[#6f1416] hover:to-[#8a1b1d] transition-all duration-300 disabled:from-gray-300 disabled:to-gray-400 disabled:cursor-not-allowed font-semibold shadow-lg hover:shadow-xl transform hover:scale-105 disabled:transform-none flex items-center space-x-2">
+          <div class="p-4 bg-gray-50 border-t border-gray-200 flex justify-end relative z-10">
+            <button type="button" (click)="nextStep()" [disabled]="!canProceedToNextStep()"
+              class="group px-5 py-2 bg-gradient-to-r from-[#82181A] to-[#a01e21] text-white rounded-lg hover:from-[#6f1416] hover:to-[#8a1b1d] transition-all duration-300 disabled:from-gray-300 disabled:to-gray-400 disabled:cursor-not-allowed font-semibold shadow-lg hover:shadow-xl transform hover:scale-105 disabled:transform-none flex items-center space-x-2 cursor-pointer">
               <span>{{ getNextButtonText() }}</span>
               <svg class="w-5 h-5 group-hover:translate-x-1 transition-transform duration-200" fill="none"
                 stroke="currentColor" viewBox="0 0 24 24">
@@ -296,12 +382,32 @@
             </button>
           </div>
         </div>
+        }
 
+        @case (2) {
         <!-- Step 2: Images & Colors -->
         <div
           class="bg-white rounded-xl shadow-xl border border-gray-200 overflow-hidden transition-all duration-500 transform"
-          *ngIf="currentStep === 2" style="animation: slideInUp 0.6s ease-out;">
-          <div class="p-3 bg-gradient-to-r from-purple-50 to-pink-50 border-b border-gray-200">
+          style="animation: slideInUp 0.6s ease-out;">
+          <div class="p-3 bg-gradient-to-r from-[#82181A]/5 to-[#a01e21]/5 border-b border-gray-200">
+            <div class="flex items-center space-x-4">
+              <div
+                class="w-9 h-9 bg-gradient-to-r from-[#82181A] to-[#a01e21] rounded-xl flex items-center justify-center text-white text-lg font-bold shadow-lg">
+                {{ getCurrentStepConfig().step }}
+              </div>
+              <div>
+                <h2 class="text-lg font-bold text-gray-900">{{ getCurrentStepConfig().title }}</h2>
+                <p class="text-xs text-gray-600 flex items-center">
+                  <svg class="w-4 h-4 mr-2 text-[#82181A]" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                      d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+                  </svg>
+                  {{ getCurrentStepConfig().description }}
+                </p>
+              </div>
+            </div>
+          </div>
+          <!-- <div class="p-3 bg-gradient-to-r from-purple-50 to-pink-50 border-b border-gray-200">
             <div class="flex items-center space-x-4">
               <div
                 class="w-9 h-9 bg-gradient-to-r from-purple-500 to-pink-500 rounded-xl flex items-center justify-center text-white text-lg font-bold shadow-lg">
@@ -319,13 +425,13 @@
                 </p>
               </div>
             </div>
-          </div>
+          </div> -->
 
           <div class="p-8">
-            <div class="grid grid-cols-1 lg:grid-cols-2 gap-12">
+            <div class="grid grid-cols-1 lg:grid-cols-3 gap-8">
 
               <!-- Enhanced Product Images Section -->
-              <div class="space-y-6">
+              <div class="lg:col-span-2 space-y-6">
                 <div class="flex items-center justify-between">
                   <div>
                     <h3 class="text-xl font-bold text-gray-900 flex items-center">
@@ -338,14 +444,23 @@
                     </h3>
                     <p class="text-sm text-gray-500 mt-1">High-quality images showcase your product best</p>
                   </div>
-                  <button type="button" (click)="mutateImageControl(null)"
-                    class="group px-3 py-2 bg-gradient-to-r from-purple-500 to-pink-500 text-white rounded-lg hover:from-purple-600 hover:to-pink-600 transition-all duration-300 text-sm font-medium shadow-lg hover:shadow-xl transform hover:scale-105 flex items-center space-x-2">
+
+                  <button type="button" (click)="mutateImageControl(null)" class="group px-3 py-2 bg-[#9c1c1c] text-white rounded-lg
+         hover:bg-[#7f1616]
+         transition-all duration-300 text-sm font-medium
+         shadow-lg hover:shadow-xl transform hover:scale-105
+         flex items-center space-x-2" [ngClass]="(productForm.controls.productBase64?.value?.length ?? 0) < 6
+    ? 'cursor-pointer'
+    : 'cursor-default'">
+
                     <svg class="w-4 h-4 group-hover:rotate-90 transition-transform duration-300" fill="none"
                       stroke="currentColor" viewBox="0 0 24 24">
                       <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"></path>
                     </svg>
+
                     <span>Add Image</span>
                   </button>
+
                 </div>
 
                 @if(!productForm.controls.productBase64.controls.length){
@@ -364,7 +479,7 @@
                 </div>
                 }
 
-                <div class="grid grid-cols-2 gap-6">
+                <div class="grid grid-cols-3 gap-4">
                   @for (productBase of productForm.controls.productBase64.controls; track $index) {
                   <div
                     class="group relative border-2 border-dashed border-gray-300 rounded-xl overflow-hidden aspect-[4/5] hover:border-purple-400 transition-all duration-300 bg-gradient-to-br from-gray-50 to-gray-100">
@@ -416,7 +531,7 @@
               </div>
 
               <!-- Enhanced Color Picker Section -->
-              <div class="space-y-6">
+              <div class="lg:col-span-1 space-y-6">
                 <div class="flex items-center justify-between">
                   <div>
                     <h3 class="text-xl font-bold text-gray-900 flex items-center">
@@ -429,15 +544,20 @@
                     </h3>
                     <p class="text-sm text-gray-500 mt-1">Pick colors from your images or choose custom colors</p>
                   </div>
-                  <button type="button"
-                    class="group px-3 py-2 bg-gradient-to-r from-pink-500 to-purple-500 text-white rounded-lg hover:from-pink-600 hover:to-purple-600 transition-all duration-300 text-sm font-medium shadow-lg hover:shadow-xl transform hover:scale-105 flex items-center space-x-2"
-                    (click)="mutateColorControl(null)">
+                  <button type="button" class="group px-3 py-2 bg-[#9c1c1c] text-white rounded-lg
+         hover:bg-[#7f1616]
+         transition-all duration-300 text-sm font-medium
+         shadow-lg hover:shadow-xl transform hover:scale-105
+         flex items-center space-x-2" (click)="mutateColorControl(null)">
+
                     <svg class="w-4 h-4 group-hover:rotate-90 transition-transform duration-300" fill="none"
                       stroke="currentColor" viewBox="0 0 24 24">
                       <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"></path>
                     </svg>
+
                     <span>Add Color</span>
                   </button>
+
                 </div>
 
                 @if(!productForm.controls.color.controls.length){
@@ -456,7 +576,7 @@
                 </div>
                 }
 
-                <div class="grid grid-cols-2 gap-4">
+                <div class="grid grid-cols-1 gap-4">
                   @for (color of productForm.controls.color.controls; track $index) {
                   <div
                     class="group flex items-center space-x-4 p-2 border-2 border-gray-200 rounded-xl hover:border-pink-300 transition-all duration-300 bg-gradient-to-r from-white to-gray-50 hover:shadow-md">
@@ -500,9 +620,9 @@
           </div>
 
           <!-- Enhanced Step Navigation -->
-          <div class="px-8 py-6 bg-gray-50 border-t border-gray-200 flex justify-between">
+          <div class="p-3 bg-gray-50 border-t border-gray-200 flex justify-between relative z-10">
             <button type="button" (click)="previousStep()"
-              class="group px-6 py-3 border-2 border-gray-300 text-gray-700 rounded-xl hover:bg-gray-100 hover:border-gray-400 transition-all duration-300 font-medium shadow-sm hover:shadow-md transform hover:scale-105 flex items-center space-x-2">
+              class="group px-3 py-2 border-2 border-gray-300 text-gray-700 rounded-xl hover:bg-gray-100 hover:border-gray-400 transition-all duration-300 font-medium shadow-sm hover:shadow-md transform hover:scale-105 flex items-center space-x-2 cursor-pointer">
               <svg class="w-5 h-5 group-hover:-translate-x-1 transition-transform duration-200" fill="none"
                 stroke="currentColor" viewBox="0 0 24 24">
                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 17l-5-5m0 0l5-5m-5 5h12">
@@ -511,7 +631,7 @@
               <span>Back</span>
             </button>
             <button type="button" (click)="nextStep()" [disabled]="!canProceedToNextStep()"
-              class="group px-8 py-3 bg-gradient-to-r from-purple-500 to-pink-500 text-white rounded-xl hover:from-purple-600 hover:to-pink-600 transition-all duration-300 disabled:from-gray-300 disabled:to-gray-400 disabled:cursor-not-allowed font-semibold shadow-lg hover:shadow-xl transform hover:scale-105 disabled:transform-none flex items-center space-x-2">
+              class="group px-3 py-2 bg-gradient-to-r from-purple-500 to-pink-500 text-white rounded-xl hover:from-purple-600 hover:to-pink-600 transition-all duration-300 disabled:from-gray-300 disabled:to-gray-400 disabled:cursor-not-allowed font-semibold shadow-lg hover:shadow-xl transform hover:scale-105 disabled:transform-none flex items-center space-x-2 cursor-pointer">
               <span>{{ getNextButtonText() }}</span>
               <svg class="w-5 h-5 group-hover:translate-x-1 transition-transform duration-200" fill="none"
                 stroke="currentColor" viewBox="0 0 24 24">
@@ -521,148 +641,11 @@
             </button>
           </div>
         </div>
+        }
 
-        <!-- Step 3: Product Variants -->
-        <div class="bg-white rounded-lg shadow-sm border border-gray-200" *ngIf="currentStep === 3">
-          <div class="p-3 border-b border-gray-200">
-            <div class="flex items-center justify-between">
-              <div class="flex items-center space-x-3">
-                <div
-                  class="w-8 h-8 bg-[#82181A] rounded-full flex items-center justify-center text-white text-sm font-medium">
-                  {{ getCurrentStepConfig().step }}
-                </div>
-                <div>
-                  <h2 class="text-lg font-medium text-gray-900">{{ getCurrentStepConfig().title }}</h2>
-                  <p class="text-xs text-gray-500">{{ getCurrentStepConfig().description }}</p>
-                </div>
-              </div>
-              <button (click)="mutateVariantControl(null)"
-                class="px-3 py-1 bg-[#82181A] text-white rounded-md hover:bg-[#6f1416] transition-colors">
-                Add Variant
-              </button>
-            </div>
-          </div>
-
-          <div class="p-6">
-            @if(!productForm.controls.variants.controls.length){
-            <div class="text-center py-8">
-              <svg class="w-12 h-12 mx-auto text-gray-400 mb-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                  d="M20 7l-8-4-8 4m16 0l-8 4m8-4v10l-8 4m0-10L4 7m8 4v10M4 7v10l8 4"></path>
-              </svg>
-              <h3 class="text-lg font-medium text-gray-900 mb-2">No variants added</h3>
-              <p class="text-gray-500">Variants are optional. You can skip this step or add different product options.
-              </p>
-            </div>
-            }
-
-            <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
-              @for (variant of productForm.controls.variants.controls; track $index) {
-              <div class="group relative border border-gray-200 rounded-lg p-4">
-                <!-- Remove Button -->
-                <button (click)="mutateVariantControl($index)"
-                  class="absolute top-3 right-3 text-gray-400 hover:text-red-500 transition-colors"
-                  title="Remove variant">
-                  <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12">
-                    </path>
-                  </svg>
-                </button>
-
-                <div class="flex flex-col lg:flex-row gap-4">
-                  <!-- Variant Details -->
-                  <div class="flex-1 space-y-4">
-                    <h3 class="text-lg font-medium text-gray-900">Variant {{ $index + 1 }}</h3>
-
-                    <!-- Variant Name -->
-                    <div>
-                      <label class="block text-sm font-medium text-gray-700 mb-1">Variant Name</label>
-                      <input type="text"
-                        class="w-full border border-gray-300 rounded-md px-3 py-2 focus:ring-2 focus:ring-[#82181A] focus:border-[#82181A] transition-colors"
-                        placeholder="Enter variant name" maxlength="40" [formControl]="variant.controls.name"
-                        libNoLeadingTrailingSpaceDirective libValidateControl />
-                    </div>
-
-                    <!-- Variant Price -->
-                    <div>
-                      <label class="block text-sm font-medium text-gray-700 mb-1">Price (MRP)</label>
-                      <div class="relative">
-                        <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
-                          <span class="text-gray-500">₹</span>
-                        </div>
-                        <input type="text" min="0"
-                          class="w-full border border-gray-300 rounded-md pl-8 pr-3 py-2 focus:ring-2 focus:ring-[#82181A] focus:border-[#82181A] transition-colors"
-                          placeholder="0.00" [formControl]="variant.controls.mrp" maxlength="10" libValidateControl />
-                      </div>
-                    </div>
-
-                    <!-- Description -->
-                    <div>
-                      <label class="block text-sm font-medium text-gray-700 mb-1">Description</label>
-                      <textarea rows="3"
-                        class="w-full border border-gray-300 rounded-md px-3 py-2 focus:ring-2 focus:ring-[#82181A] focus:border-[#82181A] transition-colors resize-none"
-                        placeholder="Describe this variant" [formControl]="variant.controls.description"
-                        libValidateControl libNoLeadingTrailingSpaceDirective maxlength="170"></textarea>
-                    </div>
-
-                    <!-- Stock Quantity -->
-                    <div>
-                      <label class="block text-sm font-medium text-gray-700 mb-1">Stock Quantity</label>
-                      <input type="text" min="0" maxlength="4"
-                        class="w-full border border-gray-300 rounded-md px-3 py-2 focus:ring-2 focus:ring-[#82181A] focus:border-[#82181A] transition-colors"
-                        placeholder="Enter quantity" [formControl]="variant.controls.stocks.controls.quantity"
-                        libValidateControl />
-                    </div>
-                  </div>
-
-                  <!-- Image Upload -->
-                  <div class="w-full lg:w-48">
-                    <label class="block text-sm font-medium text-gray-700 mb-1">Variant Image</label>
-                    <div
-                      class="relative border-2 border-dashed border-gray-300 rounded-lg aspect-[9/16] flex items-center justify-center hover:border-gray-400 transition-colors cursor-pointer">
-                      <input type="file" accept="image/*" title="" class="absolute inset-0 opacity-0 cursor-pointer"
-                        (change)="onVariantImageChange($event, $index)" />
-
-                      @if(variant.controls.variantBase64.value) {
-                      <img [src]="variant.controls.variantBase64.value" alt="Variant"
-                        class="object-cover w-full h-full rounded-lg" />
-                      } @else {
-                      <div class="text-center p-4">
-                        <svg class="w-8 h-8 mx-auto text-gray-400 mb-2" fill="none" stroke="currentColor"
-                          viewBox="0 0 24 24">
-                          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4">
-                          </path>
-                        </svg>
-                        <p class="text-sm text-gray-500 mb-1">Upload Image</p>
-                        <p class="text-xs text-gray-400">
-                          {{ ImageSizeConst.productVariant.width }}×{{ ImageSizeConst.productVariant.height }}<br>
-                          Max 2MB
-                        </p>
-                      </div>
-                      }
-                    </div>
-                  </div>
-                </div>
-              </div>
-              }
-            </div>
-          </div>
-
-          <!-- Step Navigation -->
-          <div class="px-6 py-4 border-t border-gray-200 flex justify-between">
-            <button type="button" (click)="previousStep()"
-              class="px-6 py-2 border border-gray-300 text-gray-700 rounded-md hover:bg-gray-50 transition-colors">
-              ← Back
-            </button>
-            <button type="button" (click)="nextStep()"
-              class="px-6 py-2 bg-[#82181A] text-white rounded-md hover:bg-[#6f1416] transition-colors">
-              {{ getNextButtonText() }} →
-            </button>
-          </div>
-        </div>
-
+        @case (3) {
         <!-- Step 4: Stock by Size -->
-        <div class="bg-white rounded-lg shadow-sm border border-gray-200" *ngIf="currentStep === 4">
+        <div class="bg-white rounded-lg shadow-sm border border-gray-200">
           <div class="p-3 border-b border-gray-200">
             <div class="flex items-center justify-between">
               <div class="flex items-center space-x-3">
@@ -699,9 +682,10 @@
                 </div>
 
                 <!-- Quantity Input -->
-                <input type="text" min="0"
-                  class="w-24 text-center border border-gray-300 rounded-md py-2 px-2 focus:ring-2 focus:ring-[#82181A] focus:border-[#82181A] transition-colors"
-                  placeholder="0" [formControl]="stock.controls.quantity" libValidateControl maxlength="4" />
+                <input type="tel" min="0"
+                  class="w-24 text-center disabled:bg-gray-200
+                  border border-gray-300 rounded-md py-2 px-2 focus:ring-2 focus:ring-[#82181A] focus:border-[#82181A] transition-colors"
+                  placeholder="0" [formControl]="stock.controls.quantity" libValidateControl maxlength="3" />
 
                 <p class="text-xs text-gray-500 mt-2">Quantity</p>
               </div>
@@ -715,15 +699,23 @@
               class="px-6 py-2 border border-gray-300 text-gray-700 rounded-md hover:bg-gray-50 transition-colors">
               ← Back
             </button>
+
             <button type="button" (click)="nextStep()" [disabled]="!canProceedToNextStep()"
-              class="px-6 py-2 bg-[#82181A] text-white rounded-md hover:bg-[#6f1416] transition-colors disabled:bg-gray-300 disabled:cursor-not-allowed">
-              {{ getNextButtonText() }} →
+              class="group px-5 py-2 bg-gradient-to-r from-[#82181A] to-[#a01e21] text-white rounded-lg hover:from-[#6f1416] hover:to-[#8a1b1d] transition-all duration-300 disabled:from-gray-300 disabled:to-gray-400 disabled:cursor-not-allowed font-semibold shadow-lg hover:shadow-xl transform hover:scale-105 disabled:transform-none flex items-center space-x-2 cursor-pointer">
+              <span>{{ getNextButtonText() }}</span>
+              <svg class="w-5 h-5 group-hover:translate-x-1 transition-transform duration-200" fill="none"
+                stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 7l5 5m0 0l-5 5m5-5H6">
+                </path>
+              </svg>
             </button>
           </div>
         </div>
+        }
 
+        @case (4) {
         <!-- Step 5: Description Section -->
-        <div class="bg-white border border-gray-200 rounded-lg shadow-sm" *ngIf="currentStep === 5">
+        <div class="bg-white border border-gray-200 rounded-lg shadow-sm">
           <div class="p-3 border-b border-gray-200">
             <div class="flex items-center justify-between">
               <div class="flex items-center space-x-3">
@@ -851,12 +843,15 @@
               class="px-3 py-2 border border-gray-300 text-gray-700 rounded-md hover:bg-gray-50 transition-colors">
               ← Back
             </button>
-            <button type="submit" (click)="upsertProduct()"
-              class="px-3 py-2 bg-green-600 text-white rounded-md hover:bg-green-700 transition-colors font-medium">
+            <button type="submit" (click)="upsertProduct()" [disabled]="productForm.controls.descriptions.invalid"
+              class="px-3 py-2 bg-green-600 text-white rounded-md hover:bg-green-700 transition-colors font-medium disabled:bg-gray-300 disabled:text-black disabled:cursor-default disabled:transform-none cursor-pointer">
               {{ productForm.controls.id.value === 0 ? '🚀 Create Product' : '💫 Update Product' }}
             </button>
           </div>
         </div>
+        }
+
+        }
       </form>
     </div>
 

@@ -1,5 +1,6 @@
 import { FormControl } from "@angular/forms"
 import { GenderTypeEnum } from "@shared"
+import { ICategory } from "../category/category.model"
 
 
 export interface ICollectionForm{
@@ -18,6 +19,7 @@ export interface ICollection {
     id: number;
     name: string;
     gender: GenderTypeEnum;
+    categories: ICategory[];
     description:string;
 }
 

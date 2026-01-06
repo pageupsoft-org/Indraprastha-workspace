@@ -31,7 +31,7 @@
       <div class="flex flex-col lg:flex-row gap-4 mb-6">
         <!-- Search Bar -->
         <div class="flex-1">
-          <app-search-bar (emitText)="searchText($event)"
+          <app-search-bar (emitText)="searchText($event)" [(defaultSearchText)]="defaultSearchText"
             [placeholderText]="'Search collections and categories...'"></app-search-bar>
         </div>
 
@@ -40,17 +40,17 @@
           <!-- Gender Filter -->
           <div class="flex items-center gap-2">
             <div class="flex bg-gray-100 rounded-lg p-1">
-              <button (click)="setGenderFilter('all')"
-                [class]="genderFilter === 'all' ? 'bg-white text-gray-800 shadow-sm' : 'text-gray-600 hover:text-gray-800'"
+              <button (click)="setGenderFilter(GenderTypeEnum.Both)"
+                [class]="genderFilter() === GenderTypeEnum.Both ? 'bg-white text-gray-800 shadow-sm' : 'text-gray-600 hover:text-gray-800'"
                 class="px-3 py-1.5 rounded-md transition-all duration-200 text-sm font-medium flex items-center gap-1.5">
                 <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                   <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
                     d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0zm6 3a2 2 0 11-4 0 2 2 0 014 0zM7 10a2 2 0 11-4 0 2 2 0 014 0z" />
                 </svg>
-                All
+                Both
               </button>
-              <button (click)="setGenderFilter('Men')"
-                [class]="genderFilter === 'Men' ? 'bg-blue-500 text-white shadow-sm' : 'text-gray-600 hover:text-gray-800'"
+              <button (click)="setGenderFilter(GenderTypeEnum.Men)"
+                [class]="genderFilter() === GenderTypeEnum.Men ? 'bg-blue-500 text-white shadow-sm' : 'text-gray-600 hover:text-gray-800'"
                 class="px-3 py-1.5 rounded-md transition-all duration-200 text-sm font-medium flex items-center gap-1.5">
                 <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                   <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
@@ -58,8 +58,8 @@
                 </svg>
                 Men
               </button>
-              <button (click)="setGenderFilter('Women')"
-                [class]="genderFilter === 'Women' ? 'bg-pink-500 text-white shadow-sm' : 'text-gray-600 hover:text-gray-800'"
+              <button (click)="setGenderFilter(GenderTypeEnum.Women)"
+                [class]="genderFilter() === GenderTypeEnum.Women ? 'bg-pink-500 text-white shadow-sm' : 'text-gray-600 hover:text-gray-800'"
                 class="px-3 py-1.5 rounded-md transition-all duration-200 text-sm font-medium flex items-center gap-1.5">
                 <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                   <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
@@ -96,12 +96,12 @@
       <div class="space-y-4">
         <div class="flex items-center justify-between">
           <h2 class="text-xl font-semibold text-gray-800">Collections</h2>
-          <span class="text-sm text-gray-500">{{ getFilteredCollections().length }} collection{{
-            getFilteredCollections().length !== 1 ? 's' : '' }}</span>
+          <span class="text-sm text-gray-500">{{ filteredCollectionList().length }} collection{{
+            filteredCollectionList().length !== 1 ? 's' : '' }}</span>
         </div>
 
         <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 card-grid">
-          @for (collection of getFilteredCollections(); track collection.id) {
+          @for (collection of filteredCollectionList(); track collection.id) {
           <div
             class="bg-white rounded-xl border border-gray-200 shadow-sm p-6 group collection-card card-item">
             <div class="flex items-start justify-between mb-4">
@@ -131,7 +131,7 @@
 
             <!-- Categories count for this collection -->
             <div class="text-xs text-gray-400 bg-gray-50 rounded-lg px-3 py-2">
-              <span>{{ getCategoriesForCollection(collection.name).length }} categories</span>
+              <span>{{ collection?.categories?.length ?? 0 }} categories</span>
             </div>
           </div>
           } @empty {
@@ -155,12 +155,12 @@
       <div class="space-y-4">
         <div class="flex items-center justify-between">
           <h2 class="text-xl font-semibold text-gray-800">Categories</h2>
-          <span class="text-sm text-gray-500">{{ categories().length }} categor{{ categories().length !== 1 ? 'ies' :
+          <span class="text-sm text-gray-500">{{ filteredCategoryList().length }} categor{{ categories().length !== 1 ? 'ies' :
             'y' }}</span>
         </div>
 
         <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 card-grid">
-          @for (category of categories(); track category.id) {
+          @for (category of filteredCategoryList(); track category.id) {
           <div
             class="bg-white rounded-xl border border-gray-200 shadow-sm p-6 group category-card card-item">
             <div class="flex items-start justify-between mb-4">
@@ -212,12 +212,12 @@
       <div class="space-y-6">
         <div class="flex items-center justify-between">
           <h2 class="text-xl font-semibold text-gray-800">Collections & Categories</h2>
-          <span class="text-sm text-gray-500">{{ getFilteredCollections().length }} collections, {{ categories().length
+          <span class="text-sm text-gray-500">{{ filteredCollectionList().length }} collections, {{ categories().length
             }} categories</span>
         </div>
 
         <div class="space-y-6 card-grid">
-        @for (collection of getFilteredCollections(); track collection.id) {
+        @for (collection of filteredCollectionList  (); track collection.id) {
         <div class="bg-white rounded-xl border border-gray-200 shadow-sm p-6 unified-collection-container card-item">
           <!-- Collection Header -->
           <div class="flex items-center justify-between mb-4 pb-4 border-b border-gray-100">
@@ -232,7 +232,7 @@
               <div>
                 <h3 class="text-xl font-semibold text-gray-900">{{ collection.name }}</h3>
                 <p class="text-sm text-gray-500">{{ collection.gender }} • {{
-                  getCategoriesForCollection(collection.name).length }} categories</p>
+                  collection?.categories?.length ?? 0 }} categories</p>
               </div>
             </div>
             <div class="flex gap-2">
@@ -249,7 +249,7 @@
 
           <!-- Categories Grid -->
           <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
-            @for (category of getCategoriesForCollection(collection.name); track category.id) {
+            @for (category of collection.categories; track category.id) {
             <div class="bg-gray-100 rounded-lg p-4 transition-colors group card-hover-subtle">
               <div class="flex items-start justify-between">
                 <div class="flex-1">
@@ -300,12 +300,12 @@
       }
 
       <!-- Pagination -->
-      @if(getFilteredCollections().length && activeView !== 'categories') {
+      <!-- @if(getFilteredCollections().length && activeView !== 'categories') {
       <div class="mt-6 pt-6 border-t border-gray-200">
         <app-pagination-controller [paginationControlMetaData]="paginationMetaData" (ETopChanged)="topChange($event)"
           (pageChanged)="pageChange($event)"></app-pagination-controller>
       </div>
-      }
+      } -->
     </div>
   </div>
 </div>
