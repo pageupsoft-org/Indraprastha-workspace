@@ -1,11 +1,13 @@
-import { Injectable, WritableSignal } from '@angular/core';
+import { Injectable, signal, WritableSignal } from '@angular/core';
 import {
   ApiRoutes,
   CustomToken,
   httpGet,
   httpPost,
+  IBanner,
   IBannerPagination,
   IBannerResponse,
+  initializePagInationPayload,
   IOrderPagination,
   IOrderResponse,
   IRGeneric,
@@ -22,16 +24,21 @@ export class ApiCallService {
   private newArrival$!: Observable<IRGeneric<DashboardResponseRoot>>;
   private collectionCache = new Map<string, Observable<IRGeneric<IResponseCollection[]>>>();
   private bannerCache = new Map<string, Observable<IRGeneric<IBannerResponse>>>();
+  public bannerList: WritableSignal<IBanner[]> = signal([]);
+
+  constructor() {
+    this.getAllBannerData();
+  }
 
   public getDashboardProduct(
-    payload: IDashboadRequest
+    payload: IDashboadRequest,
   ): Observable<IRGeneric<DashboardResponseRoot>> {
     if (!this.newArrival$) {
       this.newArrival$ = httpPost<IRGeneric<DashboardResponseRoot>, IDashboadRequest>(
         ApiRoutes.PRODUCT.DASHBOARD,
         payload,
         false,
-        [{ key: CustomToken.AUTH_REQUIRED, value: false }]
+        [{ key: CustomToken.AUTH_REQUIRED, value: false }],
       ).pipe(shareReplay({ bufferSize: 1, refCount: true }));
     }
     return this.newArrival$;
@@ -42,7 +49,7 @@ export class ApiCallService {
       const observable$ = httpGet<IRGeneric<IResponseCollection[]>>(
         ApiRoutes.COLLECTION.GET_BY_GENDER(gender),
         false,
-        [{ key: CustomToken.AUTH_REQUIRED, value: false }]
+        [{ key: CustomToken.AUTH_REQUIRED, value: false }],
       ).pipe(shareReplay({ bufferSize: 1, refCount: true }));
 
       this.collectionCache.set(gender, observable$);
@@ -53,7 +60,7 @@ export class ApiCallService {
 
   public getBannerData(
     payload: IBannerPagination,
-    type: 'top' | 'middle'
+    type: 'top' | 'middle',
   ): Observable<IRGeneric<IBannerResponse>> {
     const cacheKey = `${type}-${JSON.stringify(payload)}`;
 
@@ -62,7 +69,7 @@ export class ApiCallService {
         ApiRoutes.BANNER.GET,
         payload,
         false,
-        [{ key: CustomToken.AUTH_REQUIRED, value: false }]
+        [{ key: CustomToken.AUTH_REQUIRED, value: false }],
       ).pipe(shareReplay({ bufferSize: 1, refCount: true }));
 
       this.bannerCache.set(cacheKey, observable$);
@@ -71,4 +78,24 @@ export class ApiCallService {
     return this.bannerCache.get(cacheKey)!;
   }
 
+  public getAllBannerData() {
+    const payload: IBannerPagination = {
+      ...initializePagInationPayload(),
+      bannerType: null,
+      bannerConnectionType: null,
+      gender: null,
+    };
+    httpPost<IRGeneric<IBannerResponse>, IBannerPagination>(
+      ApiRoutes.BANNER.GET,
+      payload,
+    ).subscribe({
+      next: (res) => {
+        if (res.data) {
+          this.bannerList.set(res.data.banners);
+        } else {
+          this.bannerList.set([]);
+        }
+      },
+    });
+  }
 }

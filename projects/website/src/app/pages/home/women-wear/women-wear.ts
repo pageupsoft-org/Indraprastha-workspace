@@ -12,6 +12,7 @@ import { GenderTypeEnum, PlatformService } from '@shared';
 import { IResponseCollection } from '../../../core/interface/response/collection.response';
 import { Collection } from '../../../core/services/collection';
 import { CommonModule } from '@angular/common';
+import { ApiCallService } from '@website/core';
 @Component({
   selector: 'app-women-wear',
   imports: [CommonModule],
@@ -32,7 +33,7 @@ export class WomenWear implements AfterViewInit {
   slideWidth = 0;
   slideMargin = 16; // matches your 16px margin
 
-  constructor(private platformService: PlatformService, private collectionService: Collection) {
+  constructor(private platformService: PlatformService, private collectionService: Collection, public apiCallService: ApiCallService) {
     this.collectionService.getCollection(GenderTypeEnum.Women, this.womensWearList);
   }
 

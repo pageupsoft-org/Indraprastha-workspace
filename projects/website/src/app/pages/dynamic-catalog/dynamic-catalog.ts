@@ -57,9 +57,9 @@ export class DynamicCatalog implements AfterViewInit {
   @ViewChild('gridViewControls') gridViewControls!: ElementRef;
   @ViewChild('productGrid', { read: ElementRef }) grid!: ElementRef;
 
-  filtersOpen = true;
+  filtersOpen = false;
   sortOpen = false;
-  public currentCols: WritableSignal<number> = signal(6);
+  public currentCols: WritableSignal<4 | 3 | 2> = signal(4);
 
   public priceMax: WritableSignal<number> = signal(0);
   public selectedPrice: WritableSignal<number> = signal(0);
@@ -86,7 +86,7 @@ export class DynamicCatalog implements AfterViewInit {
   public baseUrl: WritableSignal<string> = signal('');
 
   public dynamicData: WritableSignal<IResponseDynamicCatalogue> = signal(
-    initializeIResponseDynamicCatalogue()
+    initializeIResponseDynamicCatalogue(),
   );
 
   constructor(
@@ -95,7 +95,7 @@ export class DynamicCatalog implements AfterViewInit {
     private toastService: ToastService,
     private router: Router,
     private location: Location,
-    public wishlistService: WishlistService
+    public wishlistService: WishlistService,
   ) {
     activatedRoute.url.subscribe((url: any) => {
       const { baseUrl, params } = getObjectFromUrl((url as Array<UrlSegment>)[0].path, [
@@ -152,10 +152,10 @@ export class DynamicCatalog implements AfterViewInit {
     this.selectedPrice.set(value);
   }
 
-  public changeGrid(cols: number): void {
+  public changeGrid(cols: 4 | 3 | 2): void {
     this.currentCols.set(cols);
     const gridDiv = this.grid.nativeElement;
-    gridDiv.classList.remove('lg:grid-cols-3', 'lg:grid-cols-4', 'lg:grid-cols-6');
+    gridDiv.classList.remove('lg:grid-cols-3', 'lg:grid-cols-4', 'lg:grid-cols-4');
     gridDiv.classList.add(`lg:grid-cols-${cols}`);
   }
 
@@ -183,19 +183,6 @@ export class DynamicCatalog implements AfterViewInit {
     }
   }
 
-  // public setFiltersOpen(isOpen: boolean): void {
-  //   this.filtersOpen = isOpen;
-  //   const sidebar = this.filterSidebar.nativeElement;
-  //   const sidebarInner = sidebar.querySelector('div');
-
-  //   if (isOpen) {
-  //     sidebar.style.marginLeft = '0';
-  //     sidebarInner?.classList.remove('opacity-0');
-  //   } else {
-  //     sidebar.style.marginLeft = '-15rem';
-  //     sidebarInner?.classList.add('opacity-0');
-  //   }
-  // }
   public setFiltersOpen(isOpen: boolean): void {
     this.filtersOpen = isOpen;
 
@@ -230,7 +217,7 @@ export class DynamicCatalog implements AfterViewInit {
     httpPost<IRGeneric<IResponseDynamicCatalogue>, IRequestProductMenu>(
       ApiRoutes.PRODUCT.MENU,
       this.payloadGenderMenu(),
-      false
+      false,
     ).subscribe({
       next: (res: IRGeneric<IResponseDynamicCatalogue>) => {
         if (res?.data && res.data.total) {
