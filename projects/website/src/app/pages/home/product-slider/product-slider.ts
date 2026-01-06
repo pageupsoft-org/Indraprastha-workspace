@@ -102,7 +102,7 @@ export class ProductSlider implements AfterViewInit {
       panelClass: 'product-detail-dialog',
       width: '900px',
       maxWidth: '90vw',
-      height: '1000px',
+      height: 'auto',
       maxHeight: '90vh',
       data: data,
     });

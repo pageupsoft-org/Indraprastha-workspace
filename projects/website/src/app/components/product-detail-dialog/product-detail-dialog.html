@@ -1,11 +1,11 @@
-<div class="flex items-center justify-center bg-white h-full">
+<div class="modal-content bg-white">
   <div class="relative p-3 md:p-12 w-full">
     <button
       (click)="close()"
-      class="md:absolute top-4 right-4 p-2 text-gray-600 hover:text-gray-800 transition-colors duration-200 sticky z-1000 btn-close cursor-pointer"
+      class="btn-close p-2 text-gray-600 hover:text-gray-800 transition-colors duration-200 cursor-pointer"
     >
       <svg
-        class="md:w-8 md:h-8 h-4 w-4"
+        class="md:w-6 md:h-6 h-4 w-4"
         fill="none"
         stroke="currentColor"
         viewBox="0 0 24 24"
@@ -14,7 +14,7 @@
         <path
           stroke-linecap="round"
           stroke-linejoin="round"
-          stroke-width="1"
+          stroke-width="2"
           d="M6 18L18 6M6 6l12 12"
         ></path>
       </svg>
@@ -34,7 +34,7 @@
           id="modal-product-image"
           [src]="productDetail().productURL[0]"
           alt="Product Image"
-          class="w-full h-full object-cover md:h-auto rounded-xl shadow-lg sticky top-[50px]"
+          class="w-full h-full object-cover md:h-auto rounded-xl shadow-lg"
         />
         }
       </div>
@@ -62,6 +62,7 @@
                 [value]="stockSize.stockId"
                 class="hidden peer"
                 [formControl]="cartForm.controls.stockId"
+                (change)="onSizeChange()"
               />
 
               <label
@@ -78,6 +79,12 @@
               </label>
               }
             </div>
+            @for (stockSize of stockSizeArrayWithIds; track stockSize.value) {
+              @let selectedStockQuantity = stockSize.stockId == cartForm.controls.stockId.value ? stockSize.quantity : 0;
+              @if(selectedStockQuantity > 0){
+                <p class="text-red-500 text-sm mt-2">Only {{selectedStockQuantity}} in stock</p>
+              }
+            }
           </div>
 
           <!-- variant -->
@@ -114,57 +121,63 @@
 
           <p class="font-semibold text-gray-800 mb-2">Quantity</p>
           <div class="py-2 px-3 inline-block bg-white border border-gray-200 rounded-lg">
-            <div class="flex items-center gap-x-1.5">
-              <button
-                type="button"
-                (click)="alterQuantityCnt(CartAlterEnum.decrease)"
-                class="size-6 inline-flex justify-center items-center gap-x-2 text-sm font-medium rounded-md border border-gray-200 bg-white text-gray-800 shadow-2xs hover:bg-gray-50 focus:outline-hidden focus:bg-gray-50 disabled:opacity-50 disabled:pointer-events-none cursor-pointer"
-                [disabled]="(cartForm.controls.quantity.value ?? 0) <= 1"
-              >
-                <svg
-                  class="shrink-0 size-3.5"
-                  xmlns="http://www.w3.org/2000/svg"
-                  width="24"
-                  height="24"
-                  viewBox="0 0 24 24"
-                  fill="none"
-                  stroke="currentColor"
-                  stroke-width="1"
-                  stroke-linecap="round"
-                  stroke-linejoin="round"
-                >
-                  <path d="M5 12h14"></path>
-                </svg>
-              </button>
-              <input
-                readonly
-                class="p-0 w-6 bg-transparent border-0 text-gray-800 text-center focus:ring-0 [&::-webkit-inner-spin-button]:appearance-none [&::-webkit-outer-spin-button]:appearance-none"
-                style="-moz-appearance: textfield"
-                type="number"
-                [formControl]="cartForm.controls.quantity"
-              />
-              <button
-                type="button"
-                (click)="alterQuantityCnt(CartAlterEnum.increase)"
-                class="size-6 inline-flex justify-center items-center gap-x-2 text-sm font-medium rounded-md border border-gray-200 bg-white text-gray-800 shadow-2xs hover:bg-gray-50 focus:outline-hidden focus:bg-gray-50 disabled:opacity-50 disabled:pointer-events-none cursor-pointer"
-              >
-                <svg
-                  class="shrink-0 size-3.5"
-                  xmlns="http://www.w3.org/2000/svg"
-                  width="24"
-                  height="24"
-                  viewBox="0 0 24 24"
-                  fill="none"
-                  stroke="currentColor"
-                  stroke-width="1"
-                  stroke-linecap="round"
-                  stroke-linejoin="round"
-                >
-                  <path d="M5 12h14"></path>
-                  <path d="M12 5v14"></path>
-                </svg>
-              </button>
-            </div>
+            @for (stockSize of stockSizeArrayWithIds; track stockSize.value) {
+              @let selectedStockQuantity = stockSize.stockId == cartForm.controls.stockId.value ? stockSize.quantity : 0;
+              @if(stockSize.stockId == cartForm.controls.stockId.value) {
+                <div class="flex items-center gap-x-1.5">
+                  <button
+                    type="button"
+                    (click)="alterQuantityCnt(CartAlterEnum.decrease)"
+                    class="size-6 inline-flex justify-center items-center gap-x-2 text-sm font-medium rounded-md border border-gray-200 bg-white text-gray-800 shadow-2xs hover:bg-gray-50 focus:outline-hidden focus:bg-gray-50 disabled:opacity-50 disabled:pointer-events-none cursor-pointer"
+                    [disabled]="(cartForm.controls.quantity.value ?? 0) <= 1"
+                  >
+                    <svg
+                      class="shrink-0 size-3.5"
+                      xmlns="http://www.w3.org/2000/svg"
+                      width="24"
+                      height="24"
+                      viewBox="0 0 24 24"
+                      fill="none"
+                      stroke="currentColor"
+                      stroke-width="1"
+                      stroke-linecap="round"
+                      stroke-linejoin="round"
+                    >
+                      <path d="M5 12h14"></path>
+                    </svg>
+                  </button>
+                  <input
+                    readonly
+                    class="p-0 w-6 bg-transparent border-0 text-gray-800 text-center focus:ring-0 [&::-webkit-inner-spin-button]:appearance-none [&::-webkit-outer-spin-button]:appearance-none"
+                    style="-moz-appearance: textfield; appearance: textfield;"
+                    type="number"
+                    [formControl]="cartForm.controls.quantity"
+                  />
+                  <button
+                    type="button"
+                    (click)="alterQuantityCnt(CartAlterEnum.increase)"
+                    class="size-6 inline-flex justify-center items-center gap-x-2 text-sm font-medium rounded-md border border-gray-200 bg-white text-gray-800 shadow-2xs hover:bg-gray-50 focus:outline-hidden focus:bg-gray-50 disabled:opacity-50 disabled:pointer-events-none cursor-pointer"
+                    [disabled]="(cartForm.controls.quantity.value ?? 0) >= selectedStockQuantity || (cartForm.controls.quantity.value ?? 0) >= 5"
+                  >
+                    <svg
+                      class="shrink-0 size-3.5"
+                      xmlns="http://www.w3.org/2000/svg"
+                      width="24"
+                      height="24"
+                      viewBox="0 0 24 24"
+                      fill="none"
+                      stroke="currentColor"
+                      stroke-width="1"
+                      stroke-linecap="round"
+                      stroke-linejoin="round"
+                    >
+                      <path d="M5 12h14"></path>
+                      <path d="M12 5v14"></path>
+                    </svg>
+                  </button>
+                </div>
+              }
+            }
           </div>
           <!-- End Input Number -->
         </div>

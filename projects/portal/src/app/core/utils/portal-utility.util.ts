@@ -118,19 +118,19 @@ export function convertImagesToBase64Array(param: IConvertImageParams): Promise<
   return new Promise((resolve, reject) => {
     const input = param.event.target as HTMLInputElement;
     const files = input.files;
-
+    
     if (!files || files.length === 0) {
       reject('No files selected');
       return;
     }
-
+    
     const fileArray = Array.from(files);
-
+    
     const validFiles = fileArray.filter((f) => param.allowedTypes.includes(f.type));
     const invalidFiles = fileArray
-      .filter((f) => !param.allowedTypes.includes(f.type))
-      .map((f) => f.name);
-
+    .filter((f) => !param.allowedTypes.includes(f.type))
+    .map((f) => f.name);
+    
     if (validFiles.length === 0) {
       resolve({
         validBase64Files: [],

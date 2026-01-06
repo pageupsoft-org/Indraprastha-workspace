@@ -21,9 +21,7 @@ import {
 import { CommonModule } from '@angular/common';
 import { ActivatedRoute, Router, RouterModule } from '@angular/router';
 import {
-  ApiCallService,
   appRoutes,
-  CartService,
   CartUpdateOperation,
   ProductDetailBase,
 } from '@website/core';
@@ -238,8 +236,10 @@ export class Checkout extends ProductDetailBase implements OnInit {
             id: data.cartVariant.variantId,
             name: data.cartVariant.name,
             mrp: data.cartVariant.mrp,
+            stockQuantity: data.cartVariant.stockQuantity,
           }
         : undefined,
+      stockQuantity: data.stockQuantity,
       isShowDelete: !this.isRedirectedFromBuyNow(),
     };
   }
@@ -275,7 +275,7 @@ export class Checkout extends ProductDetailBase implements OnInit {
       return updated;
     });
   }
-  public alterQuantityCnt(operation: CartUpdateOperation, index: number) {
+  public alterCheckoutQuantity(operation: CartUpdateOperation, index: number) {
     if (this.isRedirectedFromBuyNow()) {
       this.checkoutData.update((state) => {
         const products = [...state.products];

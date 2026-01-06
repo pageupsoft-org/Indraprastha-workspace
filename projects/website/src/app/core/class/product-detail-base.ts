@@ -26,6 +26,7 @@ import { FormControl, FormGroup } from '@angular/forms';
 import { CartService } from '../services/cart-service';
 import { defaultIRCartRoot, IRCartRoot } from '../../components/shopping-cart/shopping-cart.model';
 import { Product } from '../../pages/home/product-slider/dashboard.response';
+import { CartUpdateOperation } from '../enum/cart.enum';
 
 export class ProductDetailBase {
   public isShowloader: WritableSignal<boolean> = signal(false);
@@ -230,5 +231,44 @@ export class ProductDetailBase {
         duration: 2000,
       });
     }
+  }
+
+  public getStockQuantity(stockId: number): number {
+    const variant = this.productDetail().variants.find((variant) => variant.stocks.id === stockId);
+    return variant?.stocks.quantity ?? 0;
+  }
+
+  public alterQuantityCnt(operation: CartUpdateOperation) {
+    const quantity = this.cartForm.controls.quantity.value ?? 0;
+    const selectedStockId = this.cartForm.controls.stockId.value ?? 0;
+    const selectedStock = this.stockSizeArrayWithIds.find(stock => stock.stockId === selectedStockId);
+    const availableStock = selectedStock?.quantity ?? 0;
+
+    if (operation === CartUpdateOperation.increase) {
+      if (quantity >= availableStock) {
+        this.toastService.show({
+          message: `Only ${availableStock} items available in stock`,
+          type: EToastType.info,
+          duration: 2000
+        });
+      } else if (quantity >= 5) {
+        this.toastService.show({
+          message: 'Cannot order more than five quantity',
+          type: EToastType.info,
+          duration: 2000
+        });
+      } else {
+        this.cartForm.controls.quantity.setValue(quantity + 1);
+      }
+    } else {
+      if (quantity > 1) {
+        this.cartForm.controls.quantity.setValue(quantity - 1);
+      }
+    }
+  }
+
+  public onSizeChange() {
+    // Reset quantity to 1 when size changes
+    this.cartForm.controls.quantity.setValue(1);
   }
 }

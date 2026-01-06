@@ -1,23 +1,11 @@
 import {
   Component,
-  computed,
   ElementRef,
-  Signal,
   signal,
   viewChild,
   WritableSignal,
 } from '@angular/core';
-import {
-  ApiRoutes,
-  ConfirmationUtil,
-  EToastType,
-  getDefaultConfirmationModalData,
-  httpDelete,
-  IRGeneric,
-  Loader,
-  setLocalStorageItem,
-  ToastService,
-} from '@shared';
+import { Loader } from '@shared';
 import { CommonModule, CurrencyPipe } from '@angular/common';
 import { Router } from '@angular/router';
 import {
@@ -25,7 +13,6 @@ import {
   appRoutes,
   UtilityService,
   CartService,
-  LocalStorageEnum,
 } from '@website/core';
 import { ProductCardSizeEdit } from '../product-card-size-edit/product-card-size-edit';
 import { IProductCardSizeDT } from '../product-card-size-edit/product-card-size-edit.model';
@@ -79,26 +66,33 @@ export class ShoppingCart {
   }
   public getDataForCard(index: number): IProductCardSizeDT {
     const data: IRCartRoot = this.cartService.cartData()[index];
+    
+    // Safety check to prevent runtime errors
+    if (!data) {
+      throw new Error(`Cart data at index ${index} is undefined`);
+    }
 
     return {
-      imageUrl: data.productURL,
-      name: data.name,
-      mrp: data.mrp,
+      imageUrl: data.productURL || [],
+      name: data.name || '',
+      mrp: data.mrp || 0,
       color: data.color?.[0] ?? '',
-      qty: data.cartQuantity,
+      qty: data.cartQuantity || 0,
       stock: {
-        id: data.stockId,
-        name: data.size,
+        id: data.stockId || 0,
+        name: data.size || '',
       },
 
-      variant: data.cartVariant
+      variant: data.cartVariant && data.cartVariant.variantId
         ? {
             id: data.cartVariant.variantId,
-            name: data.cartVariant.name,
-            mrp: data.cartVariant.mrp,
+            name: data.cartVariant.name || '',
+            mrp: data.cartVariant.mrp || 0,
+            stockQuantity: data.cartVariant.stockQuantity || 0,
           }
         : undefined,
 
+      stockQuantity: data.stockQuantity || 0,
       isShowDelete: true,
     };
   }

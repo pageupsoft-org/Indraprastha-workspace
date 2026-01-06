@@ -23,7 +23,7 @@ import {
   createPaginationMetadata,
   PaginationControlMetadata,
 } from '../../../core/interface/model/pagination-detail.model';
-import { handlePagination } from '@portal/core';
+import { handlePagination, ImageSizeConst } from '@portal/core';
 import { SearchBar } from '../../../component/search-bar/search-bar';
 import { SearchBase } from '../../../core/base/search-base';
 import { Observable } from 'rxjs';
@@ -72,9 +72,34 @@ export class BannerList extends SearchBase<IGenericResponse<IBannerResponse>> {
   }
 
   public openModel(id: number = 0, index: number) {
+    let imageDimension;
+    
+    // Determine image dimensions based on index
+    if (index === 1) {
+      // Index 1 uses midBanner dimensions
+      imageDimension = {
+        height: ImageSizeConst.midBanner.height,
+        width: ImageSizeConst.midBanner.width
+      };
+    } else if (index === 3) {
+      // Index 3 uses lastBanner dimensions
+      imageDimension = {
+        height: ImageSizeConst.lastBanner.height,
+        width: ImageSizeConst.lastBanner.width
+      };
+    } else {
+      // Index 0 and 2 use banner dimensions (for video)
+      imageDimension = {
+        height: ImageSizeConst.banner.height,
+        width: ImageSizeConst.banner.width
+      };
+    }
+
     const data: IModalDataSharing = {
       id: id,
       showDescription: ((index == 0) || (index==3)),
+      imageDimension: imageDimension,
+      index: index
     };
     const dialogRef = this.dialog.open(BannerUpsert, {
       width: '80%',

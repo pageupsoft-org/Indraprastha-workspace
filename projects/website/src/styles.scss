@@ -694,9 +694,14 @@ body {
 }
 
 .product-detail-dialog {
-  height: 85vh;
-  max-height: none;
-  scrollbar-width: thin;
+  .mat-mdc-dialog-container {
+    --mdc-dialog-container-elevation: 0;
+    border-radius: 12px;
+  }
+  
+  .mdc-dialog__surface {
+    border-radius: 12px;
+  }
 }
 
 .blur-backdrop {

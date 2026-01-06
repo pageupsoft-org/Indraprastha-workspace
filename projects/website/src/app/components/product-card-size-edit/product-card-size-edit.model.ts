@@ -12,7 +12,8 @@ export interface IProductCardSizeDT {
     id: number;
     name: string;
     mrp: number;
+    stockQuantity?: number;
   };
-
+  stockQuantity: number;
   isShowDelete: boolean;
 }

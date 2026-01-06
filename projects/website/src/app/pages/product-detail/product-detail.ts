@@ -74,18 +74,6 @@ export class ProductDetail extends ProductDetailBase implements OnInit {
     this.router.navigate([appRoutes.HOME]);
   }
 
-  public alterQuantityCnt(operation: CartUpdateOperation) {
-    const quantity = this.cartForm.controls.quantity.value ?? 0;
-
-    if (operation === CartUpdateOperation.increase) {
-      this.cartForm.controls.quantity.setValue(quantity + 1);
-    } else {
-      if (quantity > 1) {
-        this.cartForm.controls.quantity.setValue(quantity - 1);
-      }
-    }
-  }
-
   public enlargeImage(img: string) {
     this.productDetail().activeImage = img;
   }

@@ -17,7 +17,7 @@ import {
   Toast,
 } from '@shared';
 import AOS from 'aos';
-import { environment, IResponseGenderMenuRoot, UtilityService } from '@website/core';
+import { ApiCallService, environment, IResponseGenderMenuRoot, UtilityService } from '@website/core';
 
 @Component({
   selector: 'app-root',
@@ -32,7 +32,8 @@ export class App implements OnInit {
     private httpClient: HttpClient,
     private firebaseService: FirebaseService,
     private platformService: PlatformService,
-    private utilityService: UtilityService
+    private utilityService: UtilityService,
+    private apiCallService: ApiCallService
   ) {
     setHttpClient(httpClient, environment.baseUrl);
 
@@ -43,6 +44,9 @@ export class App implements OnInit {
 
     this.checkUserLoginStatus();
     this.getGenderMenu();
+    
+    // Initialize banner data on app startup
+    this.apiCallService.getAllBannerData();
   }
   ngOnInit(): void {
     // setLocalStorageItem(

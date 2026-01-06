@@ -36,7 +36,7 @@
           <!-- Video Preview -->
           <video 
             [src]="bannerForm.controls.bannerBase64.value" 
-            class="absolute inset-0 w-full h-full object-cover rounded-lg"
+            class="absolute inset-0 w-full h-full object-contain rounded-lg bg-gray-50"
             controls
             muted
             loop
@@ -46,7 +46,7 @@
           } @else {
           <!-- Image Preview -->
           <img [src]="bannerForm.controls.bannerBase64.value" 
-               class="absolute inset-0 w-full h-full object-cover rounded-lg" 
+               class="absolute inset-0 w-full h-full object-contain rounded-lg bg-gray-50" 
                alt="Banner preview" />
           }
           

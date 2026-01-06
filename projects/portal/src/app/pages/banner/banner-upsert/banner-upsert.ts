@@ -5,13 +5,36 @@ import { IGenericResponse } from '../../../core/interface/response/genericRespon
 import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
 import { BannerList } from '../banner-list/banner-list';
 import { CommonModule } from '@angular/common';
-import { ApiRoutes, convertImageToBase64, EBannerConnectionType, EbannerTypes, EToastType, GenderTypeEnum, IBanner, IBannerResponse, MStringEnumToArray, NoLeadingTrailingSpaceDirective, patternWithMessage, stringEnumToArray, ToastService, ValidateControl } from '@shared';
+import {
+  ApiRoutes,
+  EBannerConnectionType,
+  EbannerTypes,
+  EToastType,
+  GenderTypeEnum,
+  IBanner,
+  IBannerResponse,
+  MStringEnumToArray,
+  NoLeadingTrailingSpaceDirective,
+  patternWithMessage,
+  stringEnumToArray,
+  ToastService,
+  ValidateControl,
+} from '@shared';
 
-import { IConvertImageParams, IConvertImageResult, initialConvertImageParam } from '../../../core/interface/model/portal-util.model';
+import {
+  IConvertImageParams,
+  IConvertImageResult,
+  initialConvertImageParam,
+} from '../../../core/interface/model/portal-util.model';
 import { ImageSizeConst, ImageTypeEnum } from '../../../core/enum/image.enum';
 import { convertImagesToBase64Array } from '../../../core/utils/portal-utility.util';
 import { Router } from '@angular/router';
-import { IBannerForm, IBannerFormValue, IGenericComboResponse, IModalDataSharing } from '../banner.model';
+import {
+  IBannerForm,
+  IBannerFormValue,
+  IGenericComboResponse,
+  IModalDataSharing,
+} from '../banner.model';
 
 @Component({
   selector: 'app-banner-upsert',
@@ -41,10 +64,13 @@ export class BannerUpsert extends Base implements OnInit {
     bannerBase64: new FormControl(null, [Validators.required]),
   });
 
-  constructor(private toaster: ToastService, private router: Router) {
+  constructor(
+    private toaster: ToastService,
+    private router: Router,
+  ) {
     super();
     this.getCategoryCombo();
-    this.getProductCombo()
+    this.getProductCombo();
   }
 
   ngOnInit(): void {
@@ -58,41 +84,44 @@ export class BannerUpsert extends Base implements OnInit {
     this.dialogRef.close(isSuccess);
   }
 
-  public async onImageChange(event: Event) {
-    try {
-      this.base64Image = await convertImageToBase64(event);
-      this.bannerForm.controls.bannerBase64.setValue(this.base64Image as string);
-    } catch (error) {
-    }
-  }
-
   public onBannerSubmit() {
     if (this.bannerForm.controls.bannerBase64.value === null) {
-      this.toaster.show({ message: 'Please upload banner image', duration: 3000, type: EToastType.error });
+      this.toaster.show({
+        message: 'Please upload banner image',
+        duration: 3000,
+        type: EToastType.error,
+      });
       return;
     }
 
     if (this.bannerForm.valid) {
       const payload = this.bannerForm.getRawValue();
 
-      const previousImage = payload.bannerBase64
+      const previousImage = payload.bannerBase64;
       if (previousImage && previousImage.startsWith('https')) {
-        payload.bannerBase64 = ""
+        payload.bannerBase64 = '';
       }
 
       this.httpPostPromise<IGenericResponse<boolean>, IBannerFormValue>(
         ApiRoutes.BANNER.BASE,
-        payload as IBannerFormValue
+        payload as IBannerFormValue,
       ).then((response) => {
         if (response) {
           if (response.data) {
             if (this.data.id === 0) {
-              this.onCancel(true)
-              this.toaster.show({ message: 'Banner Add Successful', duration: 3000, type: EToastType.success })
-            }
-            else {
-              this.onCancel(true)
-              this.toaster.show({ message: 'Banner Update Successful', duration: 3000, type: EToastType.success })
+              this.onCancel(true);
+              this.toaster.show({
+                message: 'Banner Add Successful',
+                duration: 3000,
+                type: EToastType.success,
+              });
+            } else {
+              this.onCancel(true);
+              this.toaster.show({
+                message: 'Banner Update Successful',
+                duration: 3000,
+                type: EToastType.success,
+              });
             }
           }
         }
@@ -109,7 +138,7 @@ export class BannerUpsert extends Base implements OnInit {
           }
         }
       })
-      .catch((error) => { });
+      .catch((error) => {});
   }
 
   private getProductCombo() {
@@ -121,7 +150,7 @@ export class BannerUpsert extends Base implements OnInit {
           }
         }
       })
-      .catch((error) => { });
+      .catch((error) => {});
   }
 
   public selectBannerConnectionType() {
@@ -148,8 +177,7 @@ export class BannerUpsert extends Base implements OnInit {
             if (response.data) {
               this.bannerForm.patchValue({
                 ...response.data,
-                bannerBase64: response.data.bannerURL
-              
+                bannerBase64: response.data.bannerURL,
               });
               this.selectConnectionType = response.data.bannerConnectionType;
             }
@@ -167,8 +195,9 @@ export class BannerUpsert extends Base implements OnInit {
 
     // Check if it's a video file
     if (file.type.startsWith('video/')) {
-      // Handle video files
-      if (file.size > 15 * 1024 * 1024) { // 10MB limit for videos
+      // Handle video files - for index 0 and 2
+      if (file.size > 15 * 1024 * 1024) {
+        // 15MB limit for videos
         this.toastService.show({
           message: 'Video file size should be less than 15MB',
           type: EToastType.error,
@@ -185,13 +214,20 @@ export class BannerUpsert extends Base implements OnInit {
       };
       reader.readAsDataURL(file);
     } else {
-      // Handle image files (existing logic)
+      // Handle image files with proper dimensions based on index
+      const imageDimensions = this.data?.imageDimension || ImageSizeConst.banner;
+      
       const param: IConvertImageParams = initialConvertImageParam({
         event,
-        allowedTypes: [ImageTypeEnum.webp, ImageTypeEnum.png, ImageTypeEnum.jpeg],
-        expectedImgWidth: ImageSizeConst.banner.width,
-        expectedImgHeight: ImageSizeConst.banner.height,
-        maxSize: 2
+        allowedTypes: [
+          ImageTypeEnum.webp,
+          ImageTypeEnum.png,
+          ImageTypeEnum.jpeg,
+          ImageTypeEnum.jpg,
+        ],
+        expectedImgWidth: imageDimensions.width,
+        expectedImgHeight: imageDimensions.height,
+        maxSize: 2,
       });
 
       convertImagesToBase64Array(param).then((res: IConvertImageResult) => {
@@ -219,13 +255,10 @@ export class BannerUpsert extends Base implements OnInit {
 
   public isVideo(url: string): boolean {
     if (!url) return false;
-    
+
     const videoExtensions = ['.mp4', '.webm', '.ogg', '.avi', '.mov', '.wmv', '.flv', '.mkv'];
     const lowerUrl = url.toLowerCase();
-    
-    return videoExtensions.some(ext => lowerUrl.includes(ext));
+
+    return videoExtensions.some((ext) => lowerUrl.includes(ext));
   }
-
-
-
 }

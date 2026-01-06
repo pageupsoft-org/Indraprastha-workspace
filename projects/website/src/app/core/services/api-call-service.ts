@@ -24,10 +24,12 @@ export class ApiCallService {
   private newArrival$!: Observable<IRGeneric<DashboardResponseRoot>>;
   private collectionCache = new Map<string, Observable<IRGeneric<IResponseCollection[]>>>();
   private bannerCache = new Map<string, Observable<IRGeneric<IBannerResponse>>>();
+  private allBannersCache$!: Observable<IRGeneric<IBannerResponse>>;
   public bannerList: WritableSignal<IBanner[]> = signal([]);
 
   constructor() {
-    this.getAllBannerData();
+    // Constructor should only initialize properties, not make API calls
+    // API calls will be made when explicitly requested
   }
 
   public getDashboardProduct(
@@ -79,23 +81,44 @@ export class ApiCallService {
   }
 
   public getAllBannerData() {
-    const payload: IBannerPagination = {
-      ...initializePagInationPayload(),
-      bannerType: null,
-      bannerConnectionType: null,
-      gender: null,
-    };
-    httpPost<IRGeneric<IBannerResponse>, IBannerPagination>(
-      ApiRoutes.BANNER.GET,
-      payload,
-    ).subscribe({
-      next: (res) => {
-        if (res.data) {
-          this.bannerList.set(res.data.banners);
-        } else {
-          this.bannerList.set([]);
-        }
-      },
-    });
+    // Check if data is already present in the signal
+    if (this.bannerList().length > 0) {
+      return; // Don't make API call if data already exists
+    }
+
+    // Check if we already have a cached observable
+    if (!this.allBannersCache$) {
+      const payload: IBannerPagination = {
+        ...initializePagInationPayload(),
+        bannerType: null,
+        bannerConnectionType: null,
+        gender: null,
+      };
+
+      this.allBannersCache$ = httpPost<IRGeneric<IBannerResponse>, IBannerPagination>(
+        ApiRoutes.BANNER.GET,
+        payload,
+      ).pipe(
+        tap((res) => {
+          if (res.data) {
+            this.bannerList.set(res.data.banners);
+          } else {
+            this.bannerList.set([]);
+          }
+        }),
+        shareReplay({ bufferSize: 1, refCount: true })
+      );
+    }
+
+    // Subscribe to the cached observable
+    this.allBannersCache$.subscribe();
+  }
+
+  /**
+   * Clear all banner cache and force refresh on next call
+   */
+  public clearBannerCache() {
+    this.allBannersCache$ = null!;
+    this.bannerList.set([]);
   }
 }

@@ -1,7 +1,7 @@
-import { Component, input, OnInit, output, signal, WritableSignal } from '@angular/core';
+import { Component, input, OnInit, output } from '@angular/core';
 import { IProductCardSizeDT } from './product-card-size-edit.model';
 import { CommonModule } from '@angular/common';
-import { FormControl, FormsModule, ReactiveFormsModule } from '@angular/forms';
+import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { CartUpdateOperation } from '@website/core';
 
 @Component({
@@ -22,9 +22,34 @@ export class ProductCardSizeEdit implements OnInit {
   ngOnInit(): void {
   }
 
+  public isOutOfStock(): boolean {
+    const prod = this.prod();
+    if (!prod) return false;
+    
+    const mainOutOfStock = prod.stockQuantity === 0;
+    const variantOutOfStock = prod.variant ? (prod.variant.stockQuantity === 0) : false;
+    
+    return mainOutOfStock || variantOutOfStock;
+  }
+
+  public isLowStock(): boolean {
+    const prod = this.prod();
+    if (!prod) return false;
+    
+    const mainStock = prod.stockQuantity;
+    const variantStock = prod.variant?.stockQuantity;
+    
+    // Consider low stock if main product has 1-3 items or variant has 1-3 items
+    const mainLowStock = mainStock > 0 && mainStock <= 3;
+    const variantLowStock = variantStock !== undefined && variantStock > 0 && variantStock <= 3;
+    
+    return mainLowStock || variantLowStock;
+  }
+
   public alterQuantityCnt(operation: CartUpdateOperation) {
     this.alterQty.emit(operation);
   }
+  
   public removeItemFromCart() {
     this.emitDelete.emit();
   }

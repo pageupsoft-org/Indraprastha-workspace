@@ -233,7 +233,7 @@
       @for(prod of checkoutData().products; track $index){
       <app-product-card-size-edit
         [prod]="getDataForCard($index)"
-        (alterQty)="alterQuantityCnt($event, $index)"
+        (alterQty)="alterCheckoutQuantity($event, $index)"
         (emitDelete)="removeItemFromCart(prod.cartId, $index)"
       ></app-product-card-size-edit>
       }
