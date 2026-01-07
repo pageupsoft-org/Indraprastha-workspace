@@ -126,7 +126,7 @@
   <!-- last section -->
   <!-- Main Container -->
   <section class="bg-red-900 maroon-bg">
-    <div class="relative w-full max-w-7xl mx-auto">
+    <div class="relative w-full mx-auto">
       <!-- Content Flexbox Container -->
       <div class="flex flex-col md:flex-row text-white">
         <!-- Left Section: Image -->
@@ -138,7 +138,7 @@
             [src]="apiCallService.bannerList()[3]?.bannerURL"
             onerror="this.src='https://placehold.co/1000x1200/5a2226/ffffff?text=Image+Unavailable'"
             alt="A fashion model walking down a runway in a flowing red dress, showcasing a high-fashion look."
-            class="object-cover w-full h-full transform transition-transform duration-500 hover:scale-105"
+            class="object-cover w-full h-full transform transition-transform duration-500 hover:scale-105 img-default-h"
           />
           } @else {
           <img
@@ -157,13 +157,13 @@
         >
           <!-- Title -->
           <h1
-            class="text-3xl md:text-4xl lg:text-[80px] text-white text-center mt-4 md:mt-0 lg:mb-6"
+            class="text-3xl md:text-4xl lg:text-[90px] text-white text-center mt-4 md:mt-0 lg:mb-6"
           >
             Indraprastha
           </h1>
 
           <!-- Description -->
-          <p class="text-sm sm:text-base lg:text-lg max-w-xl font-light leading-relaxed">
+          <p class="text-sm sm:text-base lg:text-[20px] max-w-2xl font-light leading-relaxed">
             {{apiCallService.bannerList()[3]?.description || ''}}
           </p>
 

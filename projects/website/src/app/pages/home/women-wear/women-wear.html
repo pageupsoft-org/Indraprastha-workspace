@@ -1,8 +1,9 @@
-<section class="bg-[#FEF5E0] py-4 md:py-8 bg-image-com">
-  <div class="w-full block">
+<section class="bg-[#FEF5E0] bg-image-com py-16">
+ 
+ <div class="w-full max-w-4xl mx-auto">
     <!-- Title for the slider -->
     <h1
-      class="text-3xl lg:text-4xl xl:text-5xl text-gray-800 text-center"
+      class="text-3xl lg:text-4xl xl:text-5xl text-gray-800 text-center mb-14"
       data-aos="fade-up"
       data-aos-duration="1000"
     >
@@ -10,14 +11,14 @@
     </h1>
   </div>
   <div
-    class="overflow-hidden w-full flex flex-col md:flex-row mx-auto px-5 xl:px-32 xl:mt-10 lg:mt-5"
+    class="overflow-hidden w-full flex flex-col md:flex-row mx-auto px-5 xl:px-32"
     data-aos="fade-up"
     data-aos-duration="1000"
   >
     <!-- Left Panel: Static Image/Video -->
     <div class="relative w-full md:w-2/5 lg:w-1/3 flex-shrink-0">
       <!-- Container for the left panel content, with a gold border as seen in the image -->
-      <div class="relative w-full h-full p-2 md:p-6 lg:p-8">
+      <div class="relative w-full h-full px-5">
         <div class="absolute"></div>
         <!-- This div is for the gold border effect -->
         <div class="absolute"></div>
@@ -33,8 +34,7 @@
             playsinline
             class="w-full h-full object-cover md:h-[400px] xl:min-h-[600px]"
           >
-            <!-- <source src="assets/videos/women-collection-row.mp4" type="video/mp4" /> -->
-            <source [src]="apiCallService.bannerList()[2]?.bannerURL" type="video/mp4" />
+            <source src="assets/videos/women-collection-row.mp4" type="video/mp4" />
           </video>
 
           <!-- Mute/Unmute Button -->
@@ -82,7 +82,7 @@
     </div>
 
     <!-- Right Panel: Slider with assets/images and controls -->
-    <div class="relative w-full md:w-3/5 lg:w-2/3 py-2 md:py-6 lg:py-8 flex flex-col">
+    <div class="relative w-full md:w-3/5 lg:w-2/3 flex flex-col">
       <!-- Slider Container -->
       <div class="relative w-full">
         <!-- Left Arrow -->
