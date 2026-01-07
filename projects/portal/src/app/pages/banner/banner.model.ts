@@ -31,9 +31,5 @@ export interface IGenericComboResponse {
 export interface IModalDataSharing {
   id: number;
   showDescription: boolean;
-  imageDimension: { //in px
-    height: number;
-    width: number;
-  },
   index: number;
 }

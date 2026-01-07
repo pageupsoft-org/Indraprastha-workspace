@@ -43,14 +43,14 @@
           <h2 class="text-xl font-semibold text-gray-800">Update Banners</h2>
           <!-- <p class="text-sm text-gray-600 mt-1">Manage your promotional content</p> -->
         </div>
-        <div class="text-sm text-gray-500">
-          {{ banners.length }} banner{{ banners.length !== 1 ? 's' : '' }}
-        </div>
+        <!-- <div class="text-sm text-gray-500">
+          {{ banners().length }} banner{{ banners().length !== 1 ? 's' : '' }}
+        </div> -->
       </div>
 
       <!-- Banner Cards Grid -->
       <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-      @for (item of banners.slice(0, 4); track item.id || $index; let index = $index) {
+      @for (item of banners().slice(0, 4); track item.id || $index; let index = $index) {
       <div class="bg-gradient-to-br from-white via-gray-50/20 to-white rounded-[15px] border border-gray-200 shadow-lg hover:shadow-2xl hover:-translate-y-2 transition-all duration-300 overflow-hidden group relative backdrop-blur-sm">
         <!-- Edit Icon -->
         <div class="absolute top-3 right-3 z-10">
@@ -81,7 +81,7 @@
           } @else {
           <!-- Image -->
           <img 
-            [src]="item.bannerURL || 'assets/image/default-banner.jpg'" 
+            [src]="getBannerImageUrl(item.bannerURL)" 
             [alt]="item.name || 'Banner'"
             class="w-full h-full object-cover"
           />

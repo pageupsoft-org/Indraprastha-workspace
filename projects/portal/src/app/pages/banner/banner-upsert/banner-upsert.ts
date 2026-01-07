@@ -35,6 +35,7 @@ import {
   IGenericComboResponse,
   IModalDataSharing,
 } from '../banner.model';
+import { Variable } from '../../../core/const/variable.const';
 
 @Component({
   selector: 'app-banner-upsert',
@@ -78,6 +79,44 @@ export class BannerUpsert extends Base implements OnInit {
     if (id) {
       this.getBannerById(id);
     }
+  }
+
+  private getImageDimensions(): { width: number; height: number } {
+    const index = this.data.index;
+    
+    // Determine image dimensions based on index
+    if (index === 1) {
+      // Index 1 uses midBanner dimensions
+      return {
+        height: ImageSizeConst.midBanner.height,
+        width: ImageSizeConst.midBanner.width
+      };
+    } else if (index === 3) {
+      // Index 3 uses lastBanner dimensions
+      return {
+        height: ImageSizeConst.lastBanner.height,
+        width: ImageSizeConst.lastBanner.width
+      };
+    } else {
+      // Index 0 and 2 use banner dimensions (for video)
+      return {
+        height: ImageSizeConst.banner.height,
+        width: ImageSizeConst.banner.width
+      };
+    }
+  }
+
+  public isVideoNeeded(): boolean {
+    // Video is supported for index 0 and 2
+    return this.data.index === 0 || this.data.index === 2;
+  }
+
+  public get maxVideoSize(): number {
+    return Variable.bannerVideoSizeMb;
+  }
+
+  public get maxImageSize(): number {
+    return Variable.bannerImageSizeMb;
   }
 
   public onCancel(isSuccess?: boolean) {
@@ -195,11 +234,11 @@ export class BannerUpsert extends Base implements OnInit {
 
     // Check if it's a video file
     if (file.type.startsWith('video/')) {
-      // Handle video files - for index 0 and 2
-      if (file.size > 15 * 1024 * 1024) {
+      // Handle video files - validate size limit
+      if (file.size > Variable.bannerVideoSizeMb * 1024 * 1024) {
         // 15MB limit for videos
-        this.toastService.show({
-          message: 'Video file size should be less than 15MB',
+        this.toaster.show({
+          message: `Video file size should be less than ${Variable.bannerVideoSizeMb}MB`,
           type: EToastType.error,
           duration: 3000,
         });
@@ -207,6 +246,7 @@ export class BannerUpsert extends Base implements OnInit {
         return;
       }
 
+      // Convert video to base64 for preview and storage
       const reader = new FileReader();
       reader.onload = (e) => {
         const result = e.target?.result as string;
@@ -215,7 +255,7 @@ export class BannerUpsert extends Base implements OnInit {
       reader.readAsDataURL(file);
     } else {
       // Handle image files with proper dimensions based on index
-      const imageDimensions = this.data?.imageDimension || ImageSizeConst.banner;
+      const imageDimensions = this.getImageDimensions();
       
       const param: IConvertImageParams = initialConvertImageParam({
         event,
@@ -227,7 +267,7 @@ export class BannerUpsert extends Base implements OnInit {
         ],
         expectedImgWidth: imageDimensions.width,
         expectedImgHeight: imageDimensions.height,
-        maxSize: 2,
+        maxSize: Variable.bannerImageSizeMb,
       });
 
       convertImagesToBase64Array(param).then((res: IConvertImageResult) => {
@@ -236,7 +276,7 @@ export class BannerUpsert extends Base implements OnInit {
             this.bannerForm.controls.bannerBase64.setValue(res.validBase64Files[0] as string);
           }
           if (res.invalidFiles.length) {
-            this.toastService.show({
+            this.toaster.show({
               message: 'Some files were invalid (type, size, or dimensions) and were skipped',
               type: EToastType.warning,
               duration: 2000,
@@ -246,16 +286,24 @@ export class BannerUpsert extends Base implements OnInit {
       });
     }
 
+    // Clear input to allow re-uploading same file
     event.target.value = null;
   }
 
   public removeBannerImage() {
+    // Clear the banner image/video from form
     this.bannerForm.controls.bannerBase64.setValue('');
   }
 
   public isVideo(url: string): boolean {
     if (!url) return false;
 
+    // Check for base64 video data (when uploaded locally)
+    if (url.startsWith('data:video/')) {
+      return true;
+    }
+
+    // Check for video file extensions (when loaded from server URL)
     const videoExtensions = ['.mp4', '.webm', '.ogg', '.avi', '.mov', '.wmv', '.flv', '.mkv'];
     const lowerUrl = url.toLowerCase();
 

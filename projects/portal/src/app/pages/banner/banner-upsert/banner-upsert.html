@@ -52,7 +52,8 @@
           
           <!-- Overlay for new upload -->
           <div class="absolute inset-0 bg-black/40 opacity-0 hover:opacity-100 transition-opacity duration-200 flex items-center justify-center rounded-lg">
-            <input #fileInput type="file" accept="image/*,video/*" 
+            <input #fileInput type="file" 
+                   [accept]="isVideoNeeded() ? 'image/*,video/*' : 'image/*'"
                    class="absolute inset-0 opacity-0 cursor-pointer z-20"
                    (change)="onBannerImageChange($event)" />
             <div class="text-white text-center">
@@ -64,12 +65,23 @@
           </div>
         </div>
       </div>
+      
+      <!-- File size notes for preview -->
+      <div class="mt-2 text-xs text-gray-500 space-y-1">
+        @if (isVideoNeeded()) {
+          <div>• Videos: Max {{ maxVideoSize }}MB</div>
+          <div>• Images: Max {{ maxImageSize }}MB</div>
+        } @else {
+          <div>• Images: Max {{ maxImageSize }}MB</div>
+        }
+      </div>
       } @else {
       <!-- Upload Area -->
       <div class="bg-gray-100 border-2 border-dashed border-gray-300 rounded-lg relative overflow-hidden hover:border-[#82181A] transition-colors duration-200">
         <div class="w-full h-80 relative">
           <!-- File input -->
-          <input #fileInput type="file" accept="image/*,video/*" 
+          <input #fileInput type="file" 
+                 [accept]="isVideoNeeded() ? 'image/*,video/*' : 'image/*'"
                  class="absolute inset-0 opacity-0 cursor-pointer z-30"
                  (change)="onBannerImageChange($event)" />
 
@@ -79,10 +91,25 @@
               <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-8l-4-4m0 0L8 8m4-4v12" />
             </svg>
             <p class="text-sm font-medium text-gray-600 mb-1">Upload Banner</p>
-            <p class="text-xs text-gray-500">Images or Videos</p>
-            <p class="text-xs text-gray-400 mt-1">Max: 10MB</p>
+            <p class="text-xs text-gray-500">
+              @if (isVideoNeeded()) {
+                Images or Videos
+              } @else {
+                Images only
+              }
+            </p>
           </div>
         </div>
+      </div>
+      
+      <!-- File size notes -->
+      <div class="mt-2 text-xs text-gray-500 space-y-1">
+        @if (isVideoNeeded()) {
+          <div>• Videos: Max {{ maxVideoSize }}MB</div>
+          <div>• Images: Max {{ maxImageSize }}MB</div>
+        } @else {
+          <div>• Images: Max {{ maxImageSize }}MB</div>
+        }
       </div>
       }
     </div>
