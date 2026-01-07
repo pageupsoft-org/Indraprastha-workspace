@@ -34,6 +34,8 @@ export class ProductList extends SearchBase<IRGeneric<IProductResponseRoot>> imp
 
   constructor(private router: Router, private toaster: ToastService) {
     super();
+
+    this.payLoad.ordersBy.push({fieldName: 'Id', sort: 'Desc'});
   }
 
   protected override getData(): Observable<IRGeneric<IProductResponseRoot>> {

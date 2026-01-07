@@ -1,12 +1,10 @@
-import { Component, inject, OnInit } from '@angular/core';
+import { Component, inject, signal, WritableSignal } from '@angular/core';
 
 import { MatDialog } from '@angular/material/dialog';
 import {
   initializePagInationPayload,
-  IPaginationPayload,
 } from '../../../core/interface/request/genericPayload';
 import { BannerUpsert } from '../banner-upsert/banner-upsert';
-import { Base } from '../../../core/base/base';
 import { IGenericResponse } from '../../../core/interface/response/genericResponse';
 import { CommonModule } from '@angular/common';
 import {
@@ -18,12 +16,11 @@ import {
   MConfirmationModalData,
   ToastService,
 } from '@shared';
-import { PaginationController } from '../../../component/pagination-controller/pagination-controller';
 import {
   createPaginationMetadata,
   PaginationControlMetadata,
 } from '../../../core/interface/model/pagination-detail.model';
-import { handlePagination, ImageSizeConst } from '@portal/core';
+import { handlePagination } from '@portal/core';
 import { SearchBar } from '../../../component/search-bar/search-bar';
 import { SearchBase } from '../../../core/base/search-base';
 import { Observable } from 'rxjs';
@@ -43,8 +40,11 @@ export class BannerList extends SearchBase<IGenericResponse<IBannerResponse>> {
     bannerType: null,
     gender: null,
   };
-  public banners: IBanner[] = [];
+  // Signal to store banner data
+  public banners: WritableSignal<IBanner[]> = signal([]);
   public paginationMetaData: PaginationControlMetadata = createPaginationMetadata();
+  // Cache timestamp to prevent browser image caching issues
+  private cacheTimestamp: number = Date.now();
 
   constructor(private toaster: ToastService) {
     super();
@@ -59,7 +59,10 @@ export class BannerList extends SearchBase<IGenericResponse<IBannerResponse>> {
 
   protected override dataLoadedHandler(response: IGenericResponse<IBannerResponse>): void {
     if (response.data && response.data.total) {
-      this.banners = response.data.banners;
+      // Update banners signal with new data
+      this.banners.set(response.data.banners);
+      // Refresh cache timestamp to force image reload
+      this.cacheTimestamp = Date.now();
       handlePagination(
         this.paginationMetaData,
         response.data.total,
@@ -67,38 +70,16 @@ export class BannerList extends SearchBase<IGenericResponse<IBannerResponse>> {
         this.payLoad.top,
       );
     } else {
-      this.banners = [];
+      // Clear banners if no data
+      this.banners.set([]);
+      this.cacheTimestamp = Date.now();
     }
   }
 
   public openModel(id: number = 0, index: number) {
-    let imageDimension;
-    
-    // Determine image dimensions based on index
-    if (index === 1) {
-      // Index 1 uses midBanner dimensions
-      imageDimension = {
-        height: ImageSizeConst.midBanner.height,
-        width: ImageSizeConst.midBanner.width
-      };
-    } else if (index === 3) {
-      // Index 3 uses lastBanner dimensions
-      imageDimension = {
-        height: ImageSizeConst.lastBanner.height,
-        width: ImageSizeConst.lastBanner.width
-      };
-    } else {
-      // Index 0 and 2 use banner dimensions (for video)
-      imageDimension = {
-        height: ImageSizeConst.banner.height,
-        width: ImageSizeConst.banner.width
-      };
-    }
-
     const data: IModalDataSharing = {
       id: id,
       showDescription: ((index == 0) || (index==3)),
-      imageDimension: imageDimension,
       index: index
     };
     const dialogRef = this.dialog.open(BannerUpsert, {
@@ -136,9 +117,17 @@ export class BannerList extends SearchBase<IGenericResponse<IBannerResponse>> {
               }
             }
           })
-          .catch((error) => {});
+          .catch(() => {});
       }
     });
+  }
+
+  public getBannerImageUrl(bannerURL: string): string {
+    if (!bannerURL) return 'assets/image/default-banner.jpg';
+    
+    // Add cache-busting timestamp to prevent browser caching issues
+    const separator = bannerURL.includes('?') ? '&' : '?';
+    return `${bannerURL}${separator}t=${this.cacheTimestamp}`;
   }
 
   public isVideo(url: string): boolean {
