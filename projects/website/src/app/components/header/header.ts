@@ -78,6 +78,7 @@ export class Header implements OnInit {
   };
 
   public isCheckoutPage: WritableSignal<boolean> = signal(false);
+  public isMobileMenuOpen: WritableSignal<boolean> = signal(false);
 
   constructor(
     public _utitlityService: UtilityService,
@@ -173,5 +174,13 @@ export class Header implements OnInit {
   @HostListener('document:click', ['$event'])
   clickOutside(event: Event) {
     this.dropdownOpen = false;
+  }
+
+  public toggleMobileMenu(): void {
+    this.isMobileMenuOpen.update(val => !val);
+  }
+
+  public closeMobileMenu(): void {
+    this.isMobileMenuOpen.set(false);
   }
 }

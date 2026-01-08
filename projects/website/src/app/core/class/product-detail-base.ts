@@ -5,12 +5,14 @@ import {
 } from '../interface/response/product.response';
 import {
   ApiRoutes,
+  ConfirmationUtil,
   DescriptionTypeStringEnum,
   EStockSize,
   EToastType,
   httpPost,
   IRGeneric,
   jsonToArray,
+  MConfirmationModalData,
   MStringEnumToArray,
   stringEnumToArray,
   ToastService,
@@ -19,6 +21,7 @@ import {
 import {
   ICartForm,
   IProductInfoPayload,
+  IQueryToCheckout,
   IStockWithIds,
 } from '../../pages/product-detail/product-detail.model';
 import { UtilityService } from '../services/utility-service';
@@ -27,6 +30,8 @@ import { CartService } from '../services/cart-service';
 import { defaultIRCartRoot, IRCartRoot } from '../../components/shopping-cart/shopping-cart.model';
 import { Product } from '../../pages/home/product-slider/dashboard.response';
 import { CartUpdateOperation } from '../enum/cart.enum';
+import { appRoutes } from '../const/appRoutes.const';
+import { Router } from '@angular/router';
 
 export class ProductDetailBase {
   public isShowloader: WritableSignal<boolean> = signal(false);
@@ -42,7 +47,7 @@ export class ProductDetailBase {
   public readonly stockSizeArrayWithIds: IStockWithIds[] = [];
 
   public productDetail: WritableSignal<IRProductDetailRoot> = signal(
-    initializeIRProductDetailRoot()
+    initializeIRProductDetailRoot(),
   );
   public relatedproductList = signal<Product[]>([]);
 
@@ -51,7 +56,10 @@ export class ProductDetailBase {
     isRelatedItem: false,
   };
 
+  public readonly objectCOnfirmationUtil: ConfirmationUtil = new ConfirmationUtil();
+
   public utilService: UtilityService = inject(UtilityService);
+  public router: Router = inject(Router);
   public toastService: ToastService = inject(ToastService);
   public cartService: CartService = inject(CartService);
 
@@ -62,7 +70,7 @@ export class ProductDetailBase {
     httpPost<IRGeneric<IRProductDetailRoot>, IProductInfoPayload>(
       ApiRoutes.PRODUCT.DETAIL_INFO,
       this.productInfoPayload,
-      true
+      true,
     ).subscribe({
       next: (res: IRGeneric<IRProductDetailRoot>) => {
         if (res?.data) {
@@ -106,7 +114,7 @@ export class ProductDetailBase {
               mrp: rp.mrp,
               gender: '',
               isWishList: rp?.isWishList,
-            }))
+            })),
           );
 
           this.stockSizeArray.forEach((ssd) => {
@@ -133,12 +141,12 @@ export class ProductDetailBase {
 
           if (this.productDetail().variants && this.productDetail().variants.length) {
             this.cartForm.controls.variantStockId.setValue(
-              this.productDetail().variants[0].stocks.id
+              this.productDetail().variants[0].stocks.id,
             );
           }
         } else {
-          this.productDetail.set(initializeIRProductDetailRoot()); 
-          this.isProductNotFound.update(() => true);         
+          this.productDetail.set(initializeIRProductDetailRoot());
+          this.isProductNotFound.update(() => true);
         }
         this.isShowloader.set(false);
       },
@@ -183,7 +191,7 @@ export class ProductDetailBase {
 
     const preQty: number = this.cartService.getProductQty(
       this.cartForm.value.stockId ?? 0,
-      this.cartForm.value.variantStockId ?? 0
+      this.cartForm.value.variantStockId ?? 0,
     );
 
     if (this.utilService.isUserLoggedIn()) {
@@ -194,7 +202,7 @@ export class ProductDetailBase {
 
       httpPost<IRGeneric<number>, Partial<ICartForm>>(
         ApiRoutes.CART.POST,
-        formData as Partial<ICartForm>
+        formData as Partial<ICartForm>,
       ).subscribe({
         next: (res) => {
           if (res?.data) {
@@ -241,7 +249,9 @@ export class ProductDetailBase {
   public alterQuantityCnt(operation: CartUpdateOperation) {
     const quantity = this.cartForm.controls.quantity.value ?? 0;
     const selectedStockId = this.cartForm.controls.stockId.value ?? 0;
-    const selectedStock = this.stockSizeArrayWithIds.find(stock => stock.stockId === selectedStockId);
+    const selectedStock = this.stockSizeArrayWithIds.find(
+      (stock) => stock.stockId === selectedStockId,
+    );
     const availableStock = selectedStock?.quantity ?? 0;
 
     if (operation === CartUpdateOperation.increase) {
@@ -249,13 +259,13 @@ export class ProductDetailBase {
         this.toastService.show({
           message: `Only ${availableStock} items available in stock`,
           type: EToastType.info,
-          duration: 2000
+          duration: 2000,
         });
       } else if (quantity >= 5) {
         this.toastService.show({
           message: 'Cannot order more than five quantity',
           type: EToastType.info,
-          duration: 2000
+          duration: 2000,
         });
       } else {
         this.cartForm.controls.quantity.setValue(quantity + 1);
@@ -264,6 +274,48 @@ export class ProductDetailBase {
       if (quantity > 1) {
         this.cartForm.controls.quantity.setValue(quantity - 1);
       }
+    }
+  }
+
+  public buyNow() {
+    if (this.utilService.isUserLoggedIn()) {
+      const payload: IQueryToCheckout = {
+        id: this.productDetail().id,
+        name: this.productDetail().name,
+        price: this.productDetail().mrp,
+        size:
+          this.stockSizeArrayWithIds.find(
+            (val) => val.stockId == this.cartForm.controls.stockId.value,
+          )?.value ?? '',
+        qty: this.cartForm.controls.quantity.value ?? 0,
+
+        stockId: this.cartForm.controls.stockId.value ?? 0,
+        variantStockId: this.cartForm.controls.variantStockId.value ?? 0,
+        variantName: this.productDetail().variants.length
+          ? (this.productDetail().variants.find(
+              (pv) => pv.id == this.cartForm.controls.variantStockId.value,
+            )?.name ?? '')
+          : '',
+      };
+
+      this.router.navigate([appRoutes.CHECKOUT], {
+        queryParams: {
+          buy_now: true,
+          data: JSON.stringify(payload),
+        },
+      });
+    } else {
+      const confirmation_model: MConfirmationModalData = {
+        heading: 'Login Needed',
+        body: 'Please login first to buy this item.',
+        noText: 'Cancel',
+        yesText: 'Sure',
+      };
+      this.objectCOnfirmationUtil.getConfirmation(confirmation_model).then((res: boolean) => {
+        if (res) {
+          this.utilService.openLoginForm.emit();
+        }
+      });
     }
   }
 

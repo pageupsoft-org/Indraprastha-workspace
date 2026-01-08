@@ -33,7 +33,11 @@ export class WomenWear implements AfterViewInit {
   slideWidth = 0;
   slideMargin = 16; // matches your 16px margin
 
-  constructor(private platformService: PlatformService, private collectionService: Collection, public apiCallService: ApiCallService) {
+  constructor(
+    private platformService: PlatformService,
+    private collectionService: Collection,
+    public apiCallService: ApiCallService,
+  ) {
     this.collectionService.getCollection(GenderTypeEnum.Women, this.womensWearList);
   }
 
@@ -55,7 +59,7 @@ export class WomenWear implements AfterViewInit {
         () => {
           this.updateButtonStates();
         },
-        { passive: true }
+        { passive: true },
       );
     }
   }
@@ -103,7 +107,25 @@ export class WomenWear implements AfterViewInit {
   }
 
   onVideoLoaded() {
-    this.isMuted.update(() => this.videoPlayer?.nativeElement.muted ?? true);
+    setTimeout(() => {
+      this.ensureVideoPlays();
+    }, 100);
+  }
+  private ensureVideoPlays(): void {
+    if (
+      this.platformService.isBrowser &&
+      this.videoPlayer?.nativeElement
+    ) {
+      const video = this.videoPlayer.nativeElement;
+
+      // Simple approach: just play the video
+      video.currentTime = 0;
+      video.muted = this.isMuted();
+
+      video.play().catch((e) => {
+        console.log('Autoplay prevented:', e);
+      });
+    }
   }
   public openProductPage(collectionId: number) {
     this.collectionService.openProductPage(collectionId, GenderTypeEnum.Women);

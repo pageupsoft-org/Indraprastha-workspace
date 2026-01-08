@@ -22,7 +22,6 @@ export class ProductDetailDialog extends ProductDetailBase implements OnInit {
     private dialogRef: MatDialogRef<ProductDetailDialog>,
     @Inject(MAT_DIALOG_DATA)
     public data: IProductDetailDT,
-    private router: Router
   ) {
     super();
   }

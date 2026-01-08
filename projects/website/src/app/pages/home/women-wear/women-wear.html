@@ -32,9 +32,11 @@
             autoplay
             loop
             playsinline
+            (loadeddata)="onVideoLoaded()"
             class="w-full h-full object-cover md:h-[400px] xl:min-h-[600px]"
+            [attr.key]="apiCallService.bannerList()[2]?.bannerURL"
           >
-            <source src="assets/videos/women-collection-row.mp4" type="video/mp4" />
+            <source [src]="apiCallService.bannerList()[2]?.bannerURL" type="video/mp4" />
           </video>
 
           <!-- Mute/Unmute Button -->

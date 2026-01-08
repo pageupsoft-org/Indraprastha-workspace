@@ -162,7 +162,6 @@ export class Checkout extends ProductDetailBase implements OnInit {
     private activatedRoute: ActivatedRoute,
     private matdialog: MatDialog,
     private platformService: PlatformService,
-    private router: Router
   ) {
     super();
 
