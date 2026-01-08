@@ -1,4 +1,4 @@
-<section class="bg-white pt-8 pb-12 w-full px-5 xl:px-40" data-aos="fade-up" data-aos-duration="1000">
+<section class="bg-white w-full px-5 xl:px-40 py-14" data-aos="fade-up" data-aos-duration="1000">
   <div class="w-full block">
     <h1 class="text-3xl md:text-4xl xl:text-5xl text-gray-800 text-center">MEN'S WEAR</h1>
   </div>
@@ -36,7 +36,7 @@
           [src]="mensWear.productURLs[0]"
           [alt]="mensWear.collectionName"
         />
-        <p class="text-center mt-2 text-gray-700 font-medium text-sm md:text-md">
+        <p class="text-center text-gray-700 font-medium text-sm md:text-md">
           {{ mensWear.collectionName }}
         </p>
       </div>
@@ -48,7 +48,7 @@
     <button
       (click)="next()"
       [disabled]="!canGoNext()"
-      class="next absolute right-0 top-1/2 -translate-y-1/2 z-10 p-2 md:p-2 bg-white backdrop-blur-sm rounded-full shadow-lg transition-transform duration-300 hover:scale-110 focus:outline-none focus:ring-2 focus:ring-[#cdb29c] focus:ring-offset-2"
+      class="next absolute right-0 top-1/2 -translate-y-1/2 z-10  p-2 md:p-[.5rem]  bg-white backdrop-blur-sm rounded-full shadow-lg transition-transform duration-300 hover:scale-110 focus:outline-none focus:ring-2 focus:ring-[#cdb29c] focus:ring-offset-2"
       [ngClass]="canGoNext() ? '':'!cursor-default !bg-[#ffffff69]'"
     >
       <svg

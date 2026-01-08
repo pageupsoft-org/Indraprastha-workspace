@@ -15,7 +15,7 @@ export class AppLoadingButton {
 
   // public btnClass = input<string>("bg-red-800 rounded-[5px] text-white font-semibold py-3 px-6 hover:bg-red-900 transition-colors duration-300 uppercase cursor-pointer");
   public btnClass = input<string>(
-    'bg-[#680C01] text-white px-14 py-2 md:text-md lg:text-lg cursor-pointer rounded-lg'
+    'bg-[#680C01] text-white px-14 py-2 border border-[#680c01] md:text-md lg:text-lg cursor-pointer rounded-lg'
   );
 
   public conditionalClass = input<string>();

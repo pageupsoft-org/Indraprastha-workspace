@@ -646,6 +646,19 @@ input[type='range']::-moz-range-thumb {
   // background-image: url(../images/maroon-bg.jpg);
   background-image: url(assets/images/maroon-bg.jpg);
 }
+.maroon-bg:before{
+    position: absolute;
+    content: '';
+    background: #82181a63;
+    height: 100%;
+    width: 100%;
+    left: 0;
+}
+.img-default-h{
+      height: 800px;
+    object-fit: cover;
+    object-position: 0px -180px;
+}
 
 /*Filter Category SLider*/
 .accordion-content {
