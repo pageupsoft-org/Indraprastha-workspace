@@ -28,10 +28,17 @@ export interface IVariantForm {
   name: FormControl<string | null>;
   description: FormControl<string | null>;
   mrp: FormControl<number | null>;
-  stocks: FormGroup<{
-    quantity: FormControl<number | null>;
-  }>;
-  variantBase64: FormControl<string | null>;
+  // stocks: FormGroup<{
+  //   quantity: FormControl<number | null>;
+  // }>;
+  // variantBase64: FormControl<string | null>;
+  
+  // update
+  variantBase64: FormArray<FormControl<string | null>>;
+  stocks: FormArray<FormGroup<stocks>>;
+  
+  // newly added
+  color: FormArray<FormControl<string | null>>;
 }
 export interface IVariantData {
   id: number | null;
@@ -112,18 +119,37 @@ export const initializeVariantForm = (data: IVariantData | null): FormGroup<IVar
   const form = new FormGroup<IVariantForm>({
     id: new FormControl<number | null>(0),
     productId: new FormControl<number | null>(0),
-    name: new FormControl<string | null>(null, [Validators.required, Validators.maxLength(40)]),
+    name: new FormControl<string | null>(null, [Validators.maxLength(40)]),
     description: new FormControl<string | null>(null,[Validators.maxLength(170)]),
     mrp: new FormControl<number | null>(null, [Validators.required, Validators.maxLength(10), 
       patternWithMessage(/^\d+(\.\d{1,2})?$/, 'enter a valid price')]),
-    stocks: new FormGroup({
-      quantity: new FormControl<number | null>(null, [Validators.required, Validators.maxLength(4), patternWithMessage(/^[1-9]\d*$/, 'Please enter a valid quantity')]),
-    }),
-    variantBase64: new FormControl<string | null>(null),
+    stocks: new FormArray<FormGroup<stocks>>([]),
+    variantBase64: new FormArray<FormControl<string | null>>([]),
+    color: new FormArray<FormControl<string | null>>([]),
   });
 
   if (data) {
-    form.patchValue(data);
+    // Patch basic fields
+    form.patchValue({
+      id: data.id,
+      productId: data.productId,
+      name: data.name,
+      description: data.description,
+      mrp: data.mrp,
+    });
+    
+    // Handle variantBase64 - convert string to array
+    if (data.variantBase64) {
+      form.controls.variantBase64.push(new FormControl<string | null>(data.variantBase64));
+    }
+    
+    // Handle stocks - convert single stock to array
+    if (data.stocks) {
+      form.controls.stocks.push(new FormGroup<stocks>({
+        quantity: new FormControl<number | null>(data.stocks.quantity, [Validators.required, Validators.maxLength(4), patternWithMessage(/^[0-9]\d*$/, 'Please enter a valid quantity')]),
+        size: new FormControl<EStockSize | null>(null),
+      }));
+    }
   }
 
   return form;
@@ -209,26 +235,18 @@ export const stepperFormSteps: IStepperStep[] = [
   },
   {
     step: 2,
-    title: 'Product Gallery & Colors',
-    shortTitle: 'Gallery',
-    description: 'Upload stunning images and select beautiful colors for your product',
+    title: 'Product Gallery, Colors & Stock',
+    shortTitle: 'Gallery & Stock',
+    description: 'Upload images, select colors, and set stock quantities',
     icon: 'M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2 2v12a2 2 0 002 2z',
     nextButtonText: 'Next: Variants'
   },
-  // {
-  //   step: 3,
-  //   title: 'Product Variants',
-  //   shortTitle: 'Variants',
-  //   description: 'Create different versions of your product (optional)',
-  //   icon: 'M20 7l-8-4-8 4m16 0l-8 4m8-4v10l-8 4m0-10L4 7m8 4v10M4 7v10l8 4',
-  //   nextButtonText: 'Next: Stock'
-  // },
   {
     step: 3,
-    title: 'Stock Management',
-    shortTitle: 'Stock',
-    description: 'Set inventory quantities for each size',
-    icon: 'M19 11H5m14 0a2 2 0 012 2v6a2 2 0 01-2 2H5a2 2 0 01-2-2v-6a2 2 0 012-2m14 0V9a2 2 0 00-2-2M5 11V9a2 2 0 012-2m0 0V5a2 2 0 012-2h6a2 2 0 012 2v2M7 7h10',
+    title: 'Product Variants',
+    shortTitle: 'Variants',
+    description: 'Create different color variants of your product (optional)',
+    icon: 'M20 7l-8-4-8 4m16 0l-8 4m8-4v10l-8 4m0-10L4 7m8 4v10M4 7v10l8 4',
     nextButtonText: 'Next: Details'
   },
   {

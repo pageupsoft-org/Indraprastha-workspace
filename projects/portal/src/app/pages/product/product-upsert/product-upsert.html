@@ -532,88 +532,86 @@
 
               <!-- Enhanced Color Picker Section -->
               <div class="lg:col-span-1 space-y-6">
-                <div class="flex items-center justify-between">
-                  <div>
-                    <h3 class="text-xl font-bold text-gray-900 flex items-center">
-                      <svg class="w-5 h-5 mr-2 text-pink-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                          d="M7 21a4 4 0 01-4-4V5a2 2 0 012-2h4a2 2 0 012 2v12a4 4 0 01-4 4zM21 5a2 2 0 00-2-2h-4a2 2 0 00-2 2v12a4 4 0 004 4h4a2 2 0 002-2V5z">
-                        </path>
-                      </svg>
-                      Product Colors
-                    </h3>
-                    <p class="text-sm text-gray-500 mt-1">Pick colors from your images or choose custom colors</p>
-                  </div>
-                  <button type="button" class="group px-3 py-2 bg-[#9c1c1c] text-white rounded-lg
-         hover:bg-[#7f1616]
-         transition-all duration-300 text-sm font-medium
-         shadow-lg hover:shadow-xl transform hover:scale-105
-         flex items-center space-x-2" (click)="mutateColorControl(null)">
-
-                    <svg class="w-4 h-4 group-hover:rotate-90 transition-transform duration-300" fill="none"
-                      stroke="currentColor" viewBox="0 0 24 24">
-                      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"></path>
-                    </svg>
-
-                    <span>Add Color</span>
+                <div class="flex items-center justify-between mb-2">
+                  <h5 class="text-sm font-semibold text-gray-700">Colors</h5>
+                  <button type="button" (click)="mutateColorControl(null)"
+                    class="text-xs px-1.5 py-0.5 bg-[#82181A] text-white rounded hover:bg-[#6f1416] transition-colors">
+                    Add
                   </button>
-
                 </div>
 
                 @if(!productForm.controls.color.controls.length){
                 <div
-                  class="text-center py-12 border-2 border-dashed border-gray-300 rounded-xl bg-gradient-to-br from-gray-50 to-gray-100 hover:border-pink-300 transition-all duration-300">
+                  class="text-center py-8 border-2 border-dashed border-gray-300 rounded-lg bg-gradient-to-br from-gray-50 to-gray-100 hover:border-[#82181A]/30 transition-all duration-300">
                   <div
-                    class="w-16 h-16 mx-auto mb-4 bg-gradient-to-r from-pink-100 to-purple-100 rounded-full flex items-center justify-center">
-                    <svg class="w-8 h-8 text-pink-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    class="w-12 h-12 mx-auto mb-3 bg-gradient-to-r from-[#82181A]/10 to-[#a01e21]/10 rounded-full flex items-center justify-center">
+                    <svg class="w-6 h-6 text-[#82181A]" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                       <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
                         d="M7 21a4 4 0 01-4-4V5a2 2 0 012-2h4a2 2 0 012 2v12a4 4 0 01-4 4zM21 5a2 2 0 00-2-2h-4a2 2 0 00-2 2v12a4 4 0 004 4h4a2 2 0 002-2V5z">
                       </path>
                     </svg>
                   </div>
-                  <h4 class="text-lg font-semibold text-gray-700 mb-2">No colors selected</h4>
-                  <p class="text-gray-500">Add colors to make your product more appealing</p>
+                  <h4 class="text-sm font-semibold text-gray-700 mb-1">No colors selected</h4>
+                  <p class="text-xs text-gray-500">Add colors to make your product appealing</p>
                 </div>
                 }
 
-                <div class="grid grid-cols-1 gap-4">
+                <div class="grid grid-cols-2 gap-1.5 mb-4">
                   @for (color of productForm.controls.color.controls; track $index) {
-                  <div
-                    class="group flex items-center space-x-4 p-2 border-2 border-gray-200 rounded-xl hover:border-pink-300 transition-all duration-300 bg-gradient-to-r from-white to-gray-50 hover:shadow-md">
-                    <!-- Enhanced Color Picker -->
-                    <div class="relative">
-                      <input type="color" [formControl]="color"
-                        class="w-10 h-10 rounded-xl border-3 border-white shadow-lg cursor-pointer transform hover:scale-110 transition-transform duration-300" />
-                      <div
-                        class="absolute -inset-1 bg-gradient-to-r from-pink-400 to-purple-400 rounded-xl opacity-0 group-hover:opacity-100 transition-opacity duration-300 -z-10">
-                      </div>
-                    </div>
-
-                    <!-- Color Info -->
-                    <div class="flex-1 min-w-0">
-                      <p class="text-xs font-bold text-gray-700 uppercase mb-1 flex items-center">
-                        <span class="w-2 h-2 rounded-full bg-gradient-to-r from-pink-400 to-purple-400 mr-2"></span>
-                        Color {{ $index + 1 }}
-                      </p>
-                      <div class="flex items-center space-x-3">
-                        <input type="text" readonly [value]="color.value"
-                          class="text-sm font-mono text-gray-700 bg-gray-100 border border-gray-200 rounded-lg px-3 py-1 w-24 flex-shrink-0 hover:bg-gray-200 transition-colors duration-200" />
-                      </div>
-                    </div>
-
-                    <!-- Remove Button -->
+                  <div class="flex items-center space-x-1 p-1 border border-gray-200 rounded hover:border-[#82181A]/30 transition-all duration-300">
+                    <input type="color" [formControl]="color"
+                      class="w-4 h-4 rounded border border-white shadow cursor-pointer flex-shrink-0" />
+                    <input type="text" readonly [value]="color.value"
+                      class="flex-1 text-xs font-mono text-gray-600 bg-gray-50 border-0 rounded px-1 py-0.5 min-w-0" />
                     @if(productForm.controls.color.length > 1){
                     <button (click)="mutateColorControl($index)" type="button"
-                      class="opacity-0 group-hover:opacity-100 text-gray-400 hover:text-red-500 transition-all duration-300 flex-shrink-0 w-8 h-8 rounded-full hover:bg-red-50 flex items-center justify-center transform hover:scale-110"
-                      title="Remove color">
-                      <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12">
-                        </path>
+                      class="text-red-500 hover:text-red-700 p-0.5 rounded transition-colors flex-shrink-0">
+                      <svg class="w-2.5 h-2.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path>
                       </svg>
                     </button>
                     }
                   </div>
                   }
+                </div>
+
+                <!-- Stock Management Section -->
+                <div class="border-t border-gray-200 pt-4">
+                  <div class="flex items-center justify-between mb-2">
+                    <h5 class="text-xs font-semibold text-gray-700 flex items-center">
+                      <svg class="w-3 h-3 mr-1 text-[#82181A]" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                          d="M19 11H5m14 0a2 2 0 012 2v6a2 2 0 01-2 2H5a2 2 0 01-2-2v-6a2 2 0 012-2m14 0V9a2 2 0 00-2-2M5 11V9a2 2 0 012-2m0 0V5a2 2 0 012-2h6a2 2 0 012 2v2M7 7h10"></path>
+                      </svg>
+                      Stock
+                    </h5>
+                    <div class="flex items-center space-x-1">
+                      <input type="number" min="0" placeholder="Qty" [formControl]="setAllQtyInput" libValidateControl
+                        class="w-10 text-xs border border-gray-300 rounded px-1 py-0.5 text-center focus:ring-1 focus:ring-[#82181A]/20 focus:border-[#82181A] transition-colors" />
+                      <button (click)="setAllSize()" type="button"
+                        class="text-xs px-1.5 py-0.5 bg-[#82181A] text-white rounded hover:bg-[#6f1416] transition-colors">
+                        Set
+                      </button>
+                    </div>
+                  </div>
+                  
+                  <div class="grid grid-cols-2 gap-1.5">
+                    @for (stock of productForm.controls.stocks.controls; track $index) {
+                    <div class="text-center p-1.5 border border-gray-200 rounded hover:border-[#82181A]/30 transition-all duration-300 bg-gray-50">
+                      <!-- Size Badge -->
+                      <div class="w-4 h-4 bg-[#82181A] text-white rounded-full flex items-center justify-center mx-auto mb-1">
+                        <span class="text-xs font-bold leading-none">
+                          {{ stock.controls.size.value }}
+                        </span>
+                      </div>
+                      
+                      <!-- Quantity Input -->
+                      <input type="number" min="0" max="9999"
+                        class="w-full text-center border border-gray-300 rounded px-0.5 py-0.5 focus:ring-1 focus:ring-[#82181A]/20 focus:border-[#82181A] transition-colors text-xs"
+                        placeholder="0" [formControl]="stock.controls.quantity" libValidateControl maxlength="4" />
+                    </div>
+                    }
+                  </div>
                 </div>
               </div>
             </div>
@@ -644,64 +642,222 @@
         }
 
         @case (3) {
-        <!-- Step 4: Stock by Size -->
-        <div class="bg-white rounded-lg shadow-sm border border-gray-200">
-          <div class="p-3 border-b border-gray-200">
-            <div class="flex items-center justify-between">
-              <div class="flex items-center space-x-3">
-                <div
-                  class="w-8 h-8 bg-[#82181A] rounded-full flex items-center justify-center text-white text-sm font-medium">
-                  {{ getCurrentStepConfig().step }}
-                </div>
-                <div>
-                  <h2 class="text-lg font-medium text-gray-900">{{ getCurrentStepConfig().title }}</h2>
-                  <p class="text-xs text-gray-500">{{ getCurrentStepConfig().description }}</p>
-                </div>
+        <!-- Step 3: Product Variants -->
+        <div
+          class="bg-white rounded-xl shadow-xl border border-gray-200 overflow-hidden transition-all duration-500 transform"
+          style="animation: slideInUp 0.6s ease-out;">
+          <div class="p-3 bg-gradient-to-r from-[#82181A]/5 to-[#a01e21]/5 border-b border-gray-200">
+            <div class="flex items-center space-x-4">
+              <div
+                class="w-9 h-9 bg-gradient-to-r from-[#82181A] to-[#a01e21] rounded-xl flex items-center justify-center text-white text-lg font-bold shadow-lg">
+                {{ getCurrentStepConfig().step }}
               </div>
-
-              <div class="flex items-center space-x-2">
-                <input type="text" min="0" placeholder="Set quantity" [formControl]="setAllQtyInput" libValidateControl
-                  class="border border-gray-300 rounded-md px-3 py-2 text-sm focus:ring-2 focus:ring-[#82181A] focus:border-[#82181A] transition-colors" />
-                <button (click)="setAllSize()" type="button"
-                  class="px-3 py-2 bg-[#82181A] text-white rounded-md hover:bg-[#6f1416] transition-colors text-sm w-full">
-                  Apply to all
-                </button>
+              <div>
+                <h2 class="text-lg font-bold text-gray-900">{{ getCurrentStepConfig().title }}</h2>
+                <p class="text-xs text-gray-600 flex items-center">
+                  <svg class="w-4 h-4 mr-2 text-[#82181A]" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                      d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+                  </svg>
+                  {{ getCurrentStepConfig().description }}
+                </p>
               </div>
             </div>
           </div>
 
-          <div class="p-3">
-            <div class="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 xl:grid-cols-8 gap-4">
-              @for (stock of productForm.controls.stocks.controls; track $index) {
-              <div class="border border-gray-200 rounded-lg py-2 text-center hover:border-gray-300 transition-colors">
-                <!-- Size Badge -->
-                <div class="w-8 h-8 mx-auto mb-3 bg-gray-100 rounded-full flex items-center justify-center">
-                  <span class="text-sm font-medium text-gray-700">
-                    {{ stock.controls.size.value }}
-                  </span>
+          <div class="p-6">
+            <div class="flex items-center justify-between mb-6">
+              <div>
+                <h3 class="text-xl font-bold text-gray-900 flex items-center">
+                  <svg class="w-5 h-5 mr-2 text-[#82181A]" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                      d="M20 7l-8-4-8 4m16 0l-8 4m8-4v10l-8 4m0-10L4 7m8 4v10M4 7v10l8 4"></path>
+                  </svg>
+                  Color Variants
+                </h3>
+                <p class="text-sm text-gray-500 mt-1">Create different color variations of your product</p>
+              </div>
+              <button type="button" (click)="mutateVariantControl(null)"
+                class="group px-4 py-2 bg-[#82181A] text-white rounded-lg hover:bg-[#6f1416] transition-all duration-300 text-sm font-medium shadow-lg hover:shadow-xl transform hover:scale-105 flex items-center space-x-2">
+                <svg class="w-4 h-4 group-hover:rotate-90 transition-transform duration-300" fill="none"
+                  stroke="currentColor" viewBox="0 0 24 24">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"></path>
+                </svg>
+                <span>Add Variant</span>
+              </button>
+            </div>
+
+            @if(!productForm.controls.variants.controls.length){
+            <div
+              class="text-center py-12 border-2 border-dashed border-gray-300 rounded-xl bg-gradient-to-br from-gray-50 to-gray-100 hover:border-[#82181A]/30 transition-all duration-300">
+              <div
+                class="w-16 h-16 mx-auto mb-4 bg-gradient-to-r from-[#82181A]/10 to-[#a01e21]/10 rounded-full flex items-center justify-center">
+                <svg class="w-8 h-8 text-[#82181A]" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                    d="M20 7l-8-4-8 4m16 0l-8 4m8-4v10l-8 4m0-10L4 7m8 4v10M4 7v10l8 4"></path>
+                </svg>
+              </div>
+              <h4 class="text-lg font-semibold text-gray-700 mb-2">No variants created yet</h4>
+              <p class="text-gray-500">Variants are optional. Skip this step or create color variations of your product.</p>
+            </div>
+            }
+
+            <div class="space-y-6">
+              @for (variant of productForm.controls.variants.controls; track $index; let variantIndex = $index) {
+              <div class="border-2 border-gray-200 rounded-xl p-6 hover:border-[#82181A]/30 transition-all duration-300 bg-gradient-to-r from-white to-gray-50">
+                <div class="flex items-center justify-between mb-4">
+                  <h4 class="text-lg font-semibold text-gray-800 flex items-center">
+                    <span class="w-6 h-6 bg-[#82181A] text-white rounded-full flex items-center justify-center text-sm font-bold mr-3">
+                      {{ $index + 1 }}
+                    </span>
+                    Variant {{ $index + 1 }}
+                  </h4>
+                  <button type="button" (click)="mutateVariantControl($index)"
+                    class="text-red-500 hover:text-red-700 hover:bg-red-50 p-2 rounded-lg transition-all duration-200">
+                    <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                        d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"></path>
+                    </svg>
+                  </button>
                 </div>
 
-                <!-- Quantity Input -->
-                <input type="tel" min="0"
-                  class="w-24 text-center disabled:bg-gray-200
-                  border border-gray-300 rounded-md py-2 px-2 focus:ring-2 focus:ring-[#82181A] focus:border-[#82181A] transition-colors"
-                  placeholder="0" [formControl]="stock.controls.quantity" libValidateControl maxlength="3" />
+                <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
+                  <!-- Variant Images -->
+                  <div class="col-span-2">
+                    <div class="flex items-center justify-between mb-3">
+                      <h5 class="text-sm font-semibold text-gray-700">Variant Images</h5>
+                      <span class="text-xs text-gray-500">6 slots available</span>
+                    </div>
+                    
+                    <div class="grid grid-cols-3 gap-3">
+                      @for (variantImage of variant.controls.variantBase64.controls; track variantImageIndex; let variantImageIndex = $index) {
+                      <div class="group relative border-2 border-dashed border-gray-300 rounded-lg overflow-hidden aspect-[4/5] hover:border-[#82181A]/50 transition-all duration-300 bg-gradient-to-br from-gray-50 to-gray-100">
+                        
+                        <!-- Cross icon only shows for images that have content -->
+                        @if(variantImage.value && variantImage.value.trim() !== ''){
+                        <button
+                          class="absolute top-2 right-2 z-20 w-6 h-6 bg-red-500 hover:bg-red-600 text-white rounded-full shadow-lg flex items-center justify-center opacity-0 group-hover:opacity-100 transition-all duration-300"
+                          title="Remove Image" type="button" (click)="mutateVariantImageControl($index, variantImageIndex)">
+                          <svg class="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path>
+                          </svg>
+                        </button>
+                        }
 
-                <p class="text-xs text-gray-500 mt-2">Quantity</p>
+                        <label class="absolute inset-0 cursor-pointer group-hover:bg-[#82181A]/5 transition-colors duration-300">
+                          <input type="file" accept="image/*" multiple class="opacity-0 w-full h-full"
+                            (change)="onVariantImageChange($event, $index, variantImageIndex)" />
+                        </label>
+
+                        @if(variantImage.value && variantImage.value.trim() !== '') {
+                        <img [src]="variantImage.value" alt="Variant Image"
+                          class="object-cover w-full h-full group-hover:scale-105 transition-transform duration-300" />
+                        } @else {
+                        <div class="flex items-center justify-center h-full p-4">
+                          <div class="text-center">
+                            <div class="w-8 h-8 mx-auto mb-2 bg-[#82181A]/10 rounded-full flex items-center justify-center">
+                              <svg class="w-4 h-4 text-[#82181A]" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"></path>
+                              </svg>
+                            </div>
+                            <p class="text-xs font-medium text-gray-600">Upload</p>
+                            <p class="text-xs text-gray-500">{{ ImageSizeConst.productVariant.width }}×{{ ImageSizeConst.productVariant.height }}</p>
+                          </div>
+                        </div>
+                        }
+                      </div>
+                      }
+                    </div>
+                  </div>
+
+                  <!-- Variant Colors & Stock -->
+                  <div class="col-span-1">
+                    <!-- Colors Section -->
+                    <div class="flex items-center justify-between mb-2">
+                      <h5 class="text-sm font-semibold text-gray-700">Colors</h5>
+                      <button type="button" (click)="mutateVariantColorControl($index, null)"
+                        class="text-xs px-1.5 py-0.5 bg-[#82181A] text-white rounded hover:bg-[#6f1416] transition-colors">
+                        Add
+                      </button>
+                    </div>
+                    
+                    <div class="grid grid-cols-2 gap-1.5 mb-4">
+                      @for (variantColor of variant.controls.color.controls; track variantColorIndex; let variantColorIndex = $index) {
+                      <div class="flex items-center space-x-1 p-1 border border-gray-200 rounded hover:border-[#82181A]/30 transition-all duration-300">
+                        <input type="color" [formControl]="variantColor"
+                          class="w-4 h-4 rounded border border-white shadow cursor-pointer flex-shrink-0" />
+                        <input type="text" readonly [value]="variantColor.value"
+                          class="flex-1 text-xs font-mono text-gray-600 bg-gray-50 border-0 rounded px-1 py-0.5 min-w-0" />
+                        @if(variant.controls.color.controls.length > 1){
+                        <button type="button" (click)="mutateVariantColorControl($index, variantColorIndex)"
+                          class="text-red-500 hover:text-red-700 p-0.5 rounded transition-colors flex-shrink-0">
+                          <svg class="w-2.5 h-2.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path>
+                          </svg>
+                        </button>
+                        }
+                      </div>
+                      }
+                    </div>
+
+                    <!-- Stock Section -->
+                    <div class="border-t border-gray-200 pt-3">
+                      <div class="flex items-center justify-between mb-2">
+                        <h5 class="text-xs font-semibold text-gray-700 flex items-center">
+                          <svg class="w-3 h-3 mr-1 text-[#82181A]" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                              d="M19 11H5m14 0a2 2 0 012 2v6a2 2 0 01-2 2H5a2 2 0 01-2-2v-6a2 2 0 012-2m14 0V9a2 2 0 00-2-2M5 11V9a2 2 0 012-2m0 0V5a2 2 0 012-2h6a2 2 0 012 2v2M7 7h10"></path>
+                          </svg>
+                          Stock
+                        </h5>
+                        <div class="flex items-center space-x-1">
+                          <input type="number" min="0" placeholder="Qty" #variantQtyInput
+                            class="w-20 text-xs border border-gray-300 rounded px-1 py-0.5 text-center focus:ring-1 focus:ring-[#82181A]/20 focus:border-[#82181A] transition-colors" />
+                          <button type="button" (click)="setAllVariantStock($index, variantQtyInput.value ? +variantQtyInput.value : 0); variantQtyInput.value = ''"
+                            class="text-xs px-1.5 py-0.5 bg-[#82181A] text-white rounded hover:bg-[#6f1416] transition-colors">
+                            Set
+                          </button>
+                        </div>
+                      </div>
+                      
+                      <div class="grid grid-cols-2 gap-1.5">
+                        @for (stock of variant.controls.stocks.controls; track stockIndex; let stockIndex = $index) {
+                        <div class="text-center p-1.5 border border-gray-200 rounded hover:border-[#82181A]/30 transition-all duration-300 bg-gray-50">
+                          <!-- Size Badge -->
+                          <div class="w-4 h-4 text-black rounded-full flex items-center justify-center mx-auto mb-1">
+                            <span class="text-xs font-bold leading-none">
+                              {{ stock.controls.size.value }}
+                            </span>
+                          </div>
+                          
+                          <!-- Quantity Input -->
+                          <input type="number" min="0" max="9999"
+                            class="w-full text-center border border-gray-300 rounded px-0.5 py-0.5 focus:ring-1 focus:ring-[#82181A]/20 focus:border-[#82181A] transition-colors text-xs"
+                            placeholder="0" [formControl]="stock.controls.quantity" libValidateControl maxlength="4" />
+                        </div>
+                        }
+                      </div>
+                    </div>
+                  </div>
+                </div>
               </div>
               }
             </div>
           </div>
 
           <!-- Step Navigation -->
-          <div class="px-6 py-4 border-t border-gray-200 flex justify-between">
+          <div class="p-4 bg-gray-50 border-t border-gray-200 flex justify-between">
             <button type="button" (click)="previousStep()"
-              class="px-6 py-2 border border-gray-300 text-gray-700 rounded-md hover:bg-gray-50 transition-colors">
-              ← Back
+              class="group px-4 py-2 border-2 border-gray-300 text-gray-700 rounded-lg hover:bg-gray-100 hover:border-gray-400 transition-all duration-300 font-medium shadow-sm hover:shadow-md transform hover:scale-105 flex items-center space-x-2">
+              <svg class="w-5 h-5 group-hover:-translate-x-1 transition-transform duration-200" fill="none"
+                stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 17l-5-5m0 0l5-5m-5 5h12">
+                </path>
+              </svg>
+              <span>Back</span>
             </button>
-
             <button type="button" (click)="nextStep()" [disabled]="!canProceedToNextStep()"
-              class="group px-5 py-2 bg-gradient-to-r from-[#82181A] to-[#a01e21] text-white rounded-lg hover:from-[#6f1416] hover:to-[#8a1b1d] transition-all duration-300 disabled:from-gray-300 disabled:to-gray-400 disabled:cursor-not-allowed font-semibold shadow-lg hover:shadow-xl transform hover:scale-105 disabled:transform-none flex items-center space-x-2 cursor-pointer">
+              class="group px-5 py-2 bg-gradient-to-r from-[#82181A] to-[#a01e21] text-white rounded-lg hover:from-[#6f1416] hover:to-[#8a1b1d] transition-all duration-300 disabled:from-gray-300 disabled:to-gray-400 disabled:cursor-not-allowed font-semibold shadow-lg hover:shadow-xl transform hover:scale-105 disabled:transform-none flex items-center space-x-2">
               <span>{{ getNextButtonText() }}</span>
               <svg class="w-5 h-5 group-hover:translate-x-1 transition-transform duration-200" fill="none"
                 stroke="currentColor" viewBox="0 0 24 24">
@@ -714,7 +870,7 @@
         }
 
         @case (4) {
-        <!-- Step 5: Description Section -->
+        <!-- Step 4: Description Section -->
         <div class="bg-white border border-gray-200 rounded-lg shadow-sm">
           <div class="p-3 border-b border-gray-200">
             <div class="flex items-center justify-between">

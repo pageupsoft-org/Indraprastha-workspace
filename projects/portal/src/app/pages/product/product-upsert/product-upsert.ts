@@ -1,4 +1,4 @@
-import { Component, Inject, Input, OnInit, signal, WritableSignal } from '@angular/core';
+import { Component, OnInit, signal, WritableSignal } from '@angular/core';
 import {
   FormControl,
   FormGroup,
@@ -137,9 +137,64 @@ export class ProductUpsert extends Base implements OnInit {
 
   public mutateVariantControl(index: number | null) {
     if (index == null) {
-      this.productForm.controls.variants.push(initializeVariantForm(null));
+      const newVariant = initializeVariantForm(null);
+      // Add default color for new variant
+      newVariant.controls.color.push(new FormControl<string>('#9c1c1c'));
+      
+      // Add 6 fixed image slots (all empty initially)
+      for (let i = 0; i < 6; i++) {
+        newVariant.controls.variantBase64.push(new FormControl<string | null>(null));
+      }
+      
+      // Add all stock sizes for the variant
+      this.stockSize.forEach((size) => {
+        newVariant.controls.stocks.push(initializeStockForm(0, size.key as EStockSize));
+      });
+      
+      this.productForm.controls.variants.push(newVariant);
     } else {
       this.productForm.controls.variants.removeAt(index);
+    }
+  }
+
+  public mutateVariantColorControl(variantIndex: number, colorIndex: number | null) {
+    const variant = this.productForm.controls.variants.at(variantIndex);
+    if (colorIndex == null) {
+      variant.controls.color.push(new FormControl<string>('#9c1c1c'));
+    } else {
+      variant.controls.color.removeAt(colorIndex);
+    }
+  }
+
+  public mutateVariantImageControl(variantIndex: number, imageIndex: number | null) {
+    debugger
+    // This method is no longer used for adding images since we have fixed slots
+    // Only used for removing images (clearing the slot)
+    if (imageIndex !== null) {
+      const variant = this.productForm.controls.variants.at(variantIndex);
+      const filledImages = variant.controls.variantBase64.controls.filter(control => control.value && control.value.trim() !== '').length;
+      
+      // Ensure at least 1 image remains
+      if (filledImages > 1) {
+        variant.controls.variantBase64.at(imageIndex).setValue(null);
+      } else {
+        this.toastService.show({
+          type: EToastType.warning,
+          message: 'At least one image is required for each variant',
+          duration: 2000
+        });
+      }
+    }
+  }
+
+  public setAllVariantStock(variantIndex: number, quantity: number | null) {
+    if (quantity !== null && quantity >= 0) {
+      const variant = this.productForm.controls.variants.at(variantIndex);
+      variant.controls.stocks.controls
+        .filter((x) => x.controls.size.value !== EStockSize.FreeSize)
+        .forEach((x) => {
+          x.controls.quantity.setValue(quantity);
+        });
     }
   }
 
@@ -175,10 +230,12 @@ export class ProductUpsert extends Base implements OnInit {
     }
   }
 
-  public onVariantImageChange(event: any, index: number) {
+  public onVariantImageChange(event: any, variantIndex: number, imageIndex: number) {
+    console.log(variantIndex, imageIndex);
+    
     const param: IConvertImageParams = initialConvertImageParam({
       event,
-      allowedTypes: [ImageTypeEnum.webp],
+      allowedTypes: [ImageTypeEnum.webp, ImageTypeEnum.jpeg, ImageTypeEnum.png, ImageTypeEnum.jpg],
       expectedImgWidth: ImageSizeConst.productVariant.width,
       expectedImgHeight: ImageSizeConst.productVariant.height,
       maxSize: 2,
@@ -187,9 +244,31 @@ export class ProductUpsert extends Base implements OnInit {
     convertImagesToBase64Array(param).then((res: IConvertImageResult) => {
       if (res) {
         if (res.validBase64Files.length) {
-          this.productForm.controls.variants
-            .at(index)
-            .controls.variantBase64.setValue(res.validBase64Files[0] as string);
+          const variant = this.productForm.controls.variants.at(variantIndex);
+          
+          if (res.validBase64Files.length === 1) {
+            // Single image - just set it to the current slot
+            variant.controls.variantBase64.at(imageIndex).setValue(res.validBase64Files[0] as string);
+          } else {
+            // Multiple images - spread from current imageIndex to next available slots
+            let currentSlotIndex = imageIndex;
+            
+            res.validBase64Files.forEach((imageBase64, fileIndex) => {
+              if (currentSlotIndex < 6) { // Ensure we don't exceed 6 slots
+                variant.controls.variantBase64.at(currentSlotIndex).setValue(imageBase64 as string);
+                currentSlotIndex++;
+              }
+            });
+            
+            // Show info if some images couldn't be added due to slot limit
+            if (res.validBase64Files.length > (6 - imageIndex)) {
+              this.toastService.show({
+                message: `Only ${6 - imageIndex} images could be added due to slot limit`,
+                type: EToastType.info,
+                duration: 2000,
+              });
+            }
+          }
         }
         if (res.invalidFiles.length) {
           this.toastService.show({
@@ -262,9 +341,7 @@ export class ProductUpsert extends Base implements OnInit {
 
       data.productBase64 = data.productBase64.filter((x) => !x?.startsWith('https://'));
       data.variants.forEach((v) => {
-        if (v.variantBase64?.startsWith('https://')) {
-          v.variantBase64 = '';
-        }
+        v.variantBase64 = v.variantBase64.filter((img) => !img?.startsWith('https://'));
       });
 
       delete (data as any).categoryIdsList;
@@ -403,24 +480,38 @@ export class ProductUpsert extends Base implements OnInit {
         });
 
         variants.forEach((v) => {
-          const newV: IVariantData = {
+          const newVariant = initializeVariantForm(null);
+          
+          // Set basic variant data
+          newVariant.patchValue({
             id: v.id,
             productId: v.productId,
             name: v.name,
             description: v.description,
             mrp: v.mrp,
-            stocks: {
-              quantity: v.stocks.quantity,
-            },
-            variantBase64: v.variantURL,
-          };
-          this.productForm.controls.variants.push(initializeVariantForm(newV));
+          });
           
-          // Also populate the simple variants array for the new UI
-          // this.variants.push({
-          //   name: v.name || '',
-          //   price: v.mrp || 0
-          // });
+          // Add default color for existing variants (since API doesn't have color field yet)
+          newVariant.controls.color.push(new FormControl('#9c1c1c'));
+          
+          // Add 6 fixed image slots
+          for (let i = 0; i < 6; i++) {
+            if (i === 0 && v.variantURL) {
+              // Put existing image in first slot
+              newVariant.controls.variantBase64.push(new FormControl(v.variantURL));
+            } else {
+              // Empty slots
+              newVariant.controls.variantBase64.push(new FormControl<string | null>(null));
+            }
+          }
+          
+          // Add all stock sizes for the variant
+          this.stockSize.forEach((size) => {
+            const existingStock = v.stocks && v.stocks.size === size.key ? v.stocks.quantity : 0;
+            newVariant.controls.stocks.push(initializeStockForm(existingStock, size.key as EStockSize));
+          });
+          
+          this.productForm.controls.variants.push(newVariant);
         });
 
         this.productForm.controls.stocks.controls.forEach((x) => {
@@ -557,10 +648,7 @@ export class ProductUpsert extends Base implements OnInit {
         return hasValidImages && hasValidColors;
       case 3:
         return true; // Variants are optional
-
-      case 4: //stocks
-        return true; // Stock is optional for now
-      case 5:
+      case 4:
         return true; // Descriptions are optional
       default:
         return false;
@@ -574,14 +662,6 @@ export class ProductUpsert extends Base implements OnInit {
     const categoryValid = this.productForm.controls.categoryId.valid;
     const mrpValid = this.productForm.controls.mrp.valid;
     return nameValid && genderValid && collectionValid && categoryValid && mrpValid;
-  }
-
-  private isVariantValid(): boolean{
-    console.log();
-    
-
-
-    return true
   }
 
   public canProceedToNextStep(): boolean {
