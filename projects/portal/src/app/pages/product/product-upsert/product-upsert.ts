@@ -40,9 +40,10 @@ import {
   initializeIProductForm,
   initializeJsonTextForm,
   initializeStockForm,
-  initializeVariantForm,
+  initializeColorVariantForm,
   IProductForm,
-  IVariantData,
+  IColorVariantData,
+  IColorVariantForm,
   stepperFormSteps,
   IStepperStep,
 } from '../product.model';
@@ -80,7 +81,7 @@ export class ProductUpsert extends Base implements OnInit {
 
   // Stepper functionality
   public currentStep: number = 1;
-  public totalSteps: number = 4;
+  public totalSteps: number = 3;
   public stepperSteps: IStepperStep[] = stepperFormSteps;
   public stepTitles: string[] = stepperFormSteps.map((step) => step.title);
 
@@ -111,13 +112,6 @@ export class ProductUpsert extends Base implements OnInit {
   ngOnInit(): void {
     // this.getCategoryCombo();
 
-    // add one default value
-    this.productForm.controls.color.push(new FormControl<string>('#9c1c1c'));
-
-    this.stockSize.forEach((size) => {
-      this.productForm.controls.stocks.push(initializeStockForm(0, size.key as EStockSize));
-    });
-
     this.mutateImageControl(null);
 
     this.activatedRoute.queryParams.subscribe((param: Params) => {
@@ -127,56 +121,30 @@ export class ProductUpsert extends Base implements OnInit {
     });
   }
 
-  public mutateColorControl(index: number | null) {
+  public mutateColorVariantControl(index: number | null) {
     if (index == null) {
-      this.productForm.controls.color.push(new FormControl<string>('#9c1c1c'));
-    } else {
-      this.productForm.controls.color.removeAt(index);
-    }
-  }
-
-  public mutateVariantControl(index: number | null) {
-    if (index == null) {
-      const newVariant = initializeVariantForm(null);
-      // Add default color for new variant
-      newVariant.controls.color.push(new FormControl<string>('#9c1c1c'));
-      
-      // Add 6 fixed image slots (all empty initially)
-      for (let i = 0; i < 6; i++) {
-        newVariant.controls.variantBase64.push(new FormControl<string | null>(null));
-      }
+      const newVariant = initializeColorVariantForm(null);
       
       // Add all stock sizes for the variant
       this.stockSize.forEach((size) => {
         newVariant.controls.stocks.push(initializeStockForm(0, size.key as EStockSize));
       });
       
-      this.productForm.controls.variants.push(newVariant);
+      this.productForm.controls.colorVariants.push(newVariant);
     } else {
-      this.productForm.controls.variants.removeAt(index);
+      this.productForm.controls.colorVariants.removeAt(index);
     }
   }
 
-  public mutateVariantColorControl(variantIndex: number, colorIndex: number | null) {
-    const variant = this.productForm.controls.variants.at(variantIndex);
-    if (colorIndex == null) {
-      variant.controls.color.push(new FormControl<string>('#9c1c1c'));
-    } else {
-      variant.controls.color.removeAt(colorIndex);
-    }
-  }
-
-  public mutateVariantImageControl(variantIndex: number, imageIndex: number | null) {
-    debugger
-    // This method is no longer used for adding images since we have fixed slots
-    // Only used for removing images (clearing the slot)
+  public mutateColorVariantImageControl(variantIndex: number, imageIndex: number | null) {
+    // This method is used for removing images (clearing the slot)
     if (imageIndex !== null) {
-      const variant = this.productForm.controls.variants.at(variantIndex);
-      const filledImages = variant.controls.variantBase64.controls.filter(control => control.value && control.value.trim() !== '').length;
+      const variant = this.productForm.controls.colorVariants.at(variantIndex);
+      const filledImages = variant.controls.colorVariantBase64.controls.filter(control => control.value && control.value.trim() !== '').length;
       
       // Ensure at least 1 image remains
       if (filledImages > 1) {
-        variant.controls.variantBase64.at(imageIndex).setValue(null);
+        variant.controls.colorVariantBase64.at(imageIndex).setValue(null);
       } else {
         this.toastService.show({
           type: EToastType.warning,
@@ -187,9 +155,9 @@ export class ProductUpsert extends Base implements OnInit {
     }
   }
 
-  public setAllVariantStock(variantIndex: number, quantity: number | null) {
+  public setAllColorVariantStock(variantIndex: number, quantity: number | null) {
     if (quantity !== null && quantity >= 0) {
-      const variant = this.productForm.controls.variants.at(variantIndex);
+      const variant = this.productForm.controls.colorVariants.at(variantIndex);
       variant.controls.stocks.controls
         .filter((x) => x.controls.size.value !== EStockSize.FreeSize)
         .forEach((x) => {
@@ -230,7 +198,7 @@ export class ProductUpsert extends Base implements OnInit {
     }
   }
 
-  public onVariantImageChange(event: any, variantIndex: number, imageIndex: number) {
+  public onColorVariantImageChange(event: any, variantIndex: number, imageIndex: number) {
     console.log(variantIndex, imageIndex);
     
     const param: IConvertImageParams = initialConvertImageParam({
@@ -244,18 +212,18 @@ export class ProductUpsert extends Base implements OnInit {
     convertImagesToBase64Array(param).then((res: IConvertImageResult) => {
       if (res) {
         if (res.validBase64Files.length) {
-          const variant = this.productForm.controls.variants.at(variantIndex);
+          const variant = this.productForm.controls.colorVariants.at(variantIndex);
           
           if (res.validBase64Files.length === 1) {
             // Single image - just set it to the current slot
-            variant.controls.variantBase64.at(imageIndex).setValue(res.validBase64Files[0] as string);
+            variant.controls.colorVariantBase64.at(imageIndex).setValue(res.validBase64Files[0] as string);
           } else {
             // Multiple images - spread from current imageIndex to next available slots
             let currentSlotIndex = imageIndex;
             
-            res.validBase64Files.forEach((imageBase64, fileIndex) => {
+            res.validBase64Files.forEach((imageBase64) => {
               if (currentSlotIndex < 6) { // Ensure we don't exceed 6 slots
-                variant.controls.variantBase64.at(currentSlotIndex).setValue(imageBase64 as string);
+                variant.controls.colorVariantBase64.at(currentSlotIndex).setValue(imageBase64 as string);
                 currentSlotIndex++;
               }
             });
@@ -336,12 +304,11 @@ export class ProductUpsert extends Base implements OnInit {
         delete desc.jsonText; // ✅ deletes the key from the object
       });
 
-      data.stocks = data.stocks.filter((x) => (x.quantity ?? 0) > 0);
       data.categoryIds = data.categoryIdsList?.map((x) => x.id) || [];
 
       data.productBase64 = data.productBase64.filter((x) => !x?.startsWith('https://'));
-      data.variants.forEach((v) => {
-        v.variantBase64 = v.variantBase64.filter((img) => !img?.startsWith('https://'));
+      data.colorVariants.forEach((v: any) => {
+        v.colorVariantBase64 = v.colorVariantBase64.filter((img: any) => !img?.startsWith('https://'));
       });
 
       delete (data as any).categoryIdsList;
@@ -374,8 +341,8 @@ export class ProductUpsert extends Base implements OnInit {
       // //console.log(invalidControls);
 
       invalidControls.forEach((ic: { path: string; errors: any }) => {
-        if (ic.path.includes('variantBase64') || ic.path.includes('productBase64')) {
-          const pType: string = ic.path.includes('variantBase64')
+        if (ic.path.includes('colorVariantBase64') || ic.path.includes('productBase64')) {
+          const pType: string = ic.path.includes('colorVariantBase64')
             ? 'Variant'
             : ic.path.includes('productBase64')
               ? 'Product'
@@ -433,7 +400,6 @@ export class ProductUpsert extends Base implements OnInit {
           categoryIds, //not working
           isCustomSize,
           customSizeName,
-          color,
           mrp,
           gender,
           productURL,
@@ -447,7 +413,6 @@ export class ProductUpsert extends Base implements OnInit {
           name,
           isCustomSize,
           customSizeName,
-          color,
           mrp,
           gender,
           categoryId: res.data.categoryIds[0],
@@ -469,55 +434,15 @@ export class ProductUpsert extends Base implements OnInit {
         // Use patchValue to update the FormControl bound to the dropdown
         this.productForm.controls.categoryIdsList.patchValue(selectedCategoryObjects);
 
-        this.productForm.controls.color.clear();
-        color.forEach((c) => {
-          this.productForm.controls.color.push(new FormControl(c));
-        });
-
         this.productForm.controls.productBase64.clear();
         productURL.forEach((p) => {
           this.productForm.controls.productBase64.push(new FormControl(p));
         });
 
         variants.forEach((v) => {
-          const newVariant = initializeVariantForm(null);
+          const newVariant = initializeColorVariantForm(v);
           
-          // Set basic variant data
-          newVariant.patchValue({
-            id: v.id,
-            productId: v.productId,
-            name: v.name,
-            description: v.description,
-            mrp: v.mrp,
-          });
-          
-          // Add default color for existing variants (since API doesn't have color field yet)
-          newVariant.controls.color.push(new FormControl('#9c1c1c'));
-          
-          // Add 6 fixed image slots
-          for (let i = 0; i < 6; i++) {
-            if (i === 0 && v.variantURL) {
-              // Put existing image in first slot
-              newVariant.controls.variantBase64.push(new FormControl(v.variantURL));
-            } else {
-              // Empty slots
-              newVariant.controls.variantBase64.push(new FormControl<string | null>(null));
-            }
-          }
-          
-          // Add all stock sizes for the variant
-          this.stockSize.forEach((size) => {
-            const existingStock = v.stocks && v.stocks.size === size.key ? v.stocks.quantity : 0;
-            newVariant.controls.stocks.push(initializeStockForm(existingStock, size.key as EStockSize));
-          });
-          
-          this.productForm.controls.variants.push(newVariant);
-        });
-
-        this.productForm.controls.stocks.controls.forEach((x) => {
-          x.controls.quantity.setValue(
-            stocks.find((f) => f.size == x.controls.size.value)?.quantity ?? 0,
-          );
+          this.productForm.controls.colorVariants.push(newVariant);
         });
 
         descriptions.forEach((d) => {
@@ -550,24 +475,8 @@ export class ProductUpsert extends Base implements OnInit {
           form.controls.description.clearValidators();
           form.controls.description.updateValueAndValidity({ emitEvent: false });
         });
-
-        this.productForm.controls.stocks.disable();
-        // console.log(this.productForm.errors);
       }
     });
-  }
-
-  public setAllSize() {
-    if (this.setAllQtyInput.valid) {
-      const qty = this.setAllQtyInput.value;
-      this.productForm.controls.stocks.controls
-        .filter((x) => x.controls.size.value !== EStockSize.FreeSize)
-        .forEach((x) => {
-          x.controls.quantity.setValue(qty);
-        });
-      // this.productForm.controls.stocks.updateValueAndValidity();
-      this.setAllQtyInput.reset();
-    }
   }
 
   public getCollectionByGender() {
@@ -585,7 +494,7 @@ export class ProductUpsert extends Base implements OnInit {
           this.collectionCombo = res.data;
         }
       })
-      .catch((error) => {
+      .catch(() => {
         // error handle
       });
   }
@@ -610,7 +519,7 @@ export class ProductUpsert extends Base implements OnInit {
           }
         }
       })
-      .catch((error) => {});
+      .catch(() => {});
   }
 
   // Stepper Navigation Methods
@@ -638,17 +547,8 @@ export class ProductUpsert extends Base implements OnInit {
       case 1:
         return this.isStepOneValid();
       case 2:
-        // At least one image and one color
-        const hasValidImages = this.productForm.controls.productBase64.controls.some(
-          (control) => control.value && control.value.trim() !== '',
-        );
-        const hasValidColors = this.productForm.controls.color.controls.some(
-          (control) => control.value && control.value.trim() !== '',
-        );
-        return hasValidImages && hasValidColors;
-      case 3:
         return true; // Variants are optional
-      case 4:
+      case 3:
         return true; // Descriptions are optional
       default:
         return false;
