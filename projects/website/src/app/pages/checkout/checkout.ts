@@ -17,6 +17,7 @@ import {
   IRGeneric,
   PlatformService,
   AppLoadingButton,
+  IRProductDetailRoot,
 } from '@shared';
 import { CommonModule } from '@angular/common';
 import { ActivatedRoute, Router, RouterModule } from '@angular/router';
@@ -105,7 +106,7 @@ export class Checkout extends ProductDetailBase implements OnInit {
 
     const product: Product = {
       name: pd.name,
-      color: '',
+      color: this.productDataFromQuery().color,
       mrp: pd.mrp,
       gender: pd.gender,
       productURL: pd._productURL,
@@ -154,6 +155,7 @@ export class Checkout extends ProductDetailBase implements OnInit {
     if (buyNow === 'true' && data) {
       if (this.productDataFromQuery().id) {
         this.getProductDetail(this.productDataFromQuery().id);
+        // this.getVariantDetailBydId(this.productDataFromQuery().colorId)
       }
       this.isRedirectedFromBuyNow.set(true);
     } else {
@@ -198,12 +200,19 @@ export class Checkout extends ProductDetailBase implements OnInit {
    * --------------------------------------------- */
   public getDataForCard(index: number): IProductCardSizeDT {
     const data = this.checkoutData().products[index];
+    console.log(this.productDetail());
+    
+    console.log(data);
+    const colorvarint = this.productDetail().colorVariants.find((cv) => cv.id == this.productDataFromQuery().colorId);
+
+
+    let stockQty: number = colorvarint?.stocks.find((s) => s.id == data.stockId)?.quantity ?? 0;
 
     return {
       imageUrl: data.productURL,
       name: data.name,
       mrp: data.mrp,
-      color: data.color ?? '',
+      color: data.color,
       qty: data.cartQuantity,
       stock: { id: data.stockId, name: data.size },
       variant: data.cartVariant
@@ -215,7 +224,7 @@ export class Checkout extends ProductDetailBase implements OnInit {
           }
         : undefined,
       // variant: null,
-      stockQuantity: data.stockQuantity,
+      stockQuantity: stockQty,
       isShowDelete: !this.isRedirectedFromBuyNow(),
     };
   }
@@ -355,5 +364,16 @@ export class Checkout extends ProductDetailBase implements OnInit {
         next: (res) => this.checkoutData.set(res?.data ?? initializeResponseCheckout()),
         error: () => this.checkoutData.set(initializeResponseCheckout()),
       });
+  }
+
+  private getVariantDetailBydId(colorVariantId: number){
+    httpGet<IRGeneric<IRProductDetailRoot>>(ApiRoutes.PRODUCT.COLORVARIANT(colorVariantId), true).subscribe({
+      next: (res: IRGeneric<IRProductDetailRoot>) => {
+        if(res.data){
+          console.log(res);
+          
+        }
+      }
+    })
   }
 }

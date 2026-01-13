@@ -55,6 +55,7 @@ export const ApiRoutes = {
     MENU: '/api/Product/Menu',
     DASHBOARD: '/api/Product/Dashboard',
     CART: '/api/Product/Cart',
+    COLORVARIANT: (colorVariantId: number) => `/api/Product/ColorVariant/${colorVariantId}`
   },
   WISH: {
     GET: '/api/Wish',

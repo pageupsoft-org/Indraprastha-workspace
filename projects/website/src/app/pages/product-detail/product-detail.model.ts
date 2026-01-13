@@ -31,26 +31,32 @@ export interface IProductInfoPayload {
 export interface IQueryToCheckout {
   id: number;
   name: string;
+  color: string;
+  colorId: number;
   price: number;
   qty: number;
+  stockQty: number;
   
   size: string;
   stockId: number;
 
-  // variantStockId: number;
-  // variantName: string;
+  variantId: number;
+  variantName: string;
 }
 
-export const initializeIQueryToCheckout = () => {
+export const initializeIQueryToCheckout = ():IQueryToCheckout => {
   return {
     id: 0,
+    colorId: 0,
     name: '',
+    color: '',
     price: 0,
     size: '',
     qty: 0,
+    stockQty: 0,
 
     stockId: 0,
-    variantStockId: 0,
+    variantId: 0,
     variantName: ''
   };
 };

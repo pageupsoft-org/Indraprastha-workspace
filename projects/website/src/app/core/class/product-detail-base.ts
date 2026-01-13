@@ -95,7 +95,7 @@ export class ProductDetailBase {
       next: (res: IRGeneric<IRProductDetailRoot>) => {
         if (res?.data) {
           this.productDetail.set(res.data);
-          console.log(this.productDetail());
+          // console.log(this.productDetail());
 
           this.productDetail.update((oldVal) => {
             if (!oldVal) return oldVal;
@@ -388,16 +388,30 @@ export class ProductDetailBase {
 
   public buyNow() {
     if (this.utilService.isUserLoggedIn()) {
+      const color: string =
+        this.productDetail().colorVariants.find(
+          (cv) => cv.id == this.cartForm.controls._colorVarintId.value,
+        )?.colorName ?? '';
       const payload: IQueryToCheckout = {
         id: this.productDetail().id,
         name: this.productDetail().name,
         price: this.productDetail().mrp,
+        color: color,
+        colorId: this.cartForm.controls._colorVarintId.value ?? 0,
         size:
           this.stockSizeArrayWithIds().find(
             (val) => val.stockId == this.cartForm.controls.stockId.value,
           )?.value ?? '',
         qty: this.cartForm.controls.quantity.value ?? 0,
+        stockQty:
+          this.stockSizeArrayWithIds().find(
+            (val) => val.stockId == this.cartForm.controls.stockId.value,
+          )?.quantity ?? 0,
         stockId: this.cartForm.controls.stockId.value ?? 0,
+        variantId: this.cartForm.controls.variantId.value ?? 0,
+        variantName:
+          this.productDetail().variants.find((v) => v.id === this.cartForm.controls.variantId.value)
+            ?.name ?? '',
       };
 
       this.router.navigate([appRoutes.CHECKOUT], {
@@ -544,7 +558,9 @@ export class ProductDetailBase {
 
     // 3️⃣ If variant is custom → tailor required
     if (variantId) {
-      const selectedVariant = this.productDetail().variants?.find((v) => String(v.id) === String(variantId));
+      const selectedVariant = this.productDetail().variants?.find(
+        (v) => String(v.id) === String(variantId),
+      );
 
       if (selectedVariant?.isCustom && !tailorId) {
         return true;
