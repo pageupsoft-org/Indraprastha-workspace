@@ -14,6 +14,7 @@ export interface ICartForm {
   // variantStockId: FormControl<number | null>; //id present in Variant -> Stocks -> Id
   _colorVarintId: FormControl<number | null>;
   tailorId: FormControl<number | null>;
+  variantId: FormControl<number | null>;
   // colorVariantStockId: FormControl<number | null>;
 }
 export interface ICartFormData {

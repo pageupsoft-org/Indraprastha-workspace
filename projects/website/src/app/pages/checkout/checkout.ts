@@ -206,15 +206,15 @@ export class Checkout extends ProductDetailBase implements OnInit {
       color: data.color ?? '',
       qty: data.cartQuantity,
       stock: { id: data.stockId, name: data.size },
-      // variant: data.cartVariant
-      //   ? {
-      //       id: data.cartVariant.variantId,
-      //       name: data.cartVariant.name,
-      //       mrp: data.cartVariant.mrp,
-      //       stockQuantity: data.cartVariant.stockQuantity,
-      //     }
-      //   : undefined,
-      variant: null,
+      variant: data.cartVariant
+        ? {
+            id: data.cartVariant.variantId,
+            name: data.cartVariant.name,
+            mrp: data.cartVariant.mrp,
+            stockQuantity: data.cartVariant.stockQuantity,
+          }
+        : undefined,
+      // variant: null,
       stockQuantity: data.stockQuantity,
       isShowDelete: !this.isRedirectedFromBuyNow(),
     };

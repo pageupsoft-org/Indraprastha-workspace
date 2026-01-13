@@ -102,14 +102,14 @@
       }
 
       <div class="text-gray-600 text-sm font-light space-y-1">
-        <!-- @if(prod().variant && prod().variant?.name){
+        @if(prod().variant && prod().variant?.name){
         <p class="">
           {{ prod().variant?.name }}
-          @if(prod().variant?.stockQuantity === 0) {
+          <!-- @if(prod().variant?.stockQuantity === 0) {
             <span class="text-red-600 font-medium ml-1">(Out of Stock)</span>
-          }
+          } -->
         </p>
-        } -->
+        }
         <!-- <p>Color - <input type="color" readonly [value]="prod().color"> <span class="mx-1 text-gray-300">|</span> Qty : 1</p> -->
         <p class="flex items-center">
           Color:

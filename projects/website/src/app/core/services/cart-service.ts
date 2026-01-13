@@ -163,6 +163,11 @@ export class CartService {
           ...currentData.slice(existingProductIndex + 1), // Items after the updated one
         ];
 
+        this.toastService.show({
+          message: 'Cart Updated',
+          type: EToastType.success,
+          duration: 2000,
+        });
         return newData; // Return the NEW array reference
       }
       // 3. If the product is NOT found
@@ -181,6 +186,11 @@ export class CartService {
         }
 
         // Add the new product to the list (IMMUTABILITY!)
+        this.toastService.show({
+          message: 'Cart Updated',
+          type: EToastType.success,
+          duration: 2000,
+        });
         return [...currentData, product]; // Return a NEW array with the new product added
       }
     });
@@ -349,8 +359,8 @@ export class CartService {
     return {
       ...product, // Copy all existing properties
       cartQuantity: newQuantity, // Update the root cartQuantity
-      // cartVariant: this.updateCartVariant(product.cartVariant, newQuantity), // Update the nested CartVariant
-      cartVariant: null,
+      cartVariant: this.updateCartVariant(product.cartVariant, newQuantity), // Update the nested CartVariant
+      // cartVariant: null,
     };
   }
 

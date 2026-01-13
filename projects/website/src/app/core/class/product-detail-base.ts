@@ -48,6 +48,7 @@ export class ProductDetailBase {
     quantity: new FormControl<number>(1),
     _colorVarintId: new FormControl<number>(1),
     tailorId: new FormControl(null),
+    variantId: new FormControl(null),
   });
   private readonly stockSizeArray: MStringEnumToArray[] = stringEnumToArray(EStockSize);
   // public readonly stockSizeArrayWithIds: IStockWithIds[] = [];
@@ -76,6 +77,10 @@ export class ProductDetailBase {
 
   constructor() {
     this.getCustomTailorCombo();
+
+    this.cartForm.controls.variantId.valueChanges.subscribe(() => {
+      this.cartForm.controls.tailorId.setValue(null);
+    });
   }
 
   public getProductDetail(productId: number) {
@@ -89,9 +94,8 @@ export class ProductDetailBase {
     ).subscribe({
       next: (res: IRGeneric<IRProductDetailRoot>) => {
         if (res?.data) {
-          console.log(res.data);
-
           this.productDetail.set(res.data);
+          console.log(this.productDetail());
 
           this.productDetail.update((oldVal) => {
             if (!oldVal) return oldVal;
@@ -178,7 +182,14 @@ export class ProductDetailBase {
             });
           });
 
+          this.stockSizeArrayWithIds.update((oldVal) => {
+            return oldVal.filter((stk) => stk.quantity);
+          });
+
           this.cartForm.controls.stockId.setValue(this.stockSizeArrayWithIds()[0].stockId);
+          this.cartForm.controls.variantId.setValue(
+            this.productDetail().variants.at(0)?.id ?? null,
+          );
           this.cartForm.controls._colorVarintId.setValue(
             this.stockSizeArrayWithIds()[0].colorVariantId,
           );
@@ -191,9 +202,21 @@ export class ProductDetailBase {
     });
   }
 
+  public isVariantWithCustomTailor(): boolean {
+    if (this.cartForm.controls.variantId.value) {
+      const varint = this.productDetail().variants.find(
+        (v) => v.id === this.cartForm.controls.variantId.value,
+      );
+      if (varint) {
+        return varint.isCustom;
+      }
+    }
+
+    return false;
+  }
+
   public addToCartWithDescription(): void {
     const detail = this.productDetail();
-    console.log(detail);
 
     // check the color first
     let colorVariantId: number = this.productDetail().colorVariants.at(0)?.id ?? 0; //by default 0th index color
@@ -239,19 +262,35 @@ export class ProductDetailBase {
       cartQuantity: 1,
       cartId: 0,
       productId: detail.id,
-      // cartVariant: {
-      //   name: '',
-      //   mrp: 0,
-      //   variantURL: '',
-      //   stockId: 0, // Adjust if stocks in variant is an object
-      //   stockQuantity: 0,
-      //   cartQuantity: 1,
-      //   variantId: 0,
-      // },
-      cartVariant: null,
+      cartVariant: {
+        name: '',
+        mrp: 0,
+        // variantURL: '',
+        // stockId: 0, // Adjust if stocks in variant is an object
+        stockQuantity: 0,
+        cartQuantity: 1,
+        variantId: 0,
+      },
+      // cartVariant: null,
       _isDisable: false,
       colorVariantId: colorVariantId,
     };
+
+    if (this.cartForm.controls.variantId.value) {
+      const variant = this.productDetail().variants.find(
+        (v) => v.id === this.cartForm.controls.variantId.value,
+      );
+      if (variant) {
+        newProduct.cartVariant = {
+          ...newProduct.cartVariant,
+          name: variant.name,
+          variantId: variant.id,
+          mrp: variant.mrp,
+        };
+      }
+    }
+
+    console.log(this.cartForm.value);
 
     this.addToCart(newProduct);
   }
@@ -311,10 +350,10 @@ export class ProductDetailBase {
     }
   }
 
-  public getStockQuantity(stockId: number): number {
-    const variant = this.productDetail().variants.find((variant) => variant.stocks.id === stockId);
-    return variant?.stocks.quantity ?? 0;
-  }
+  // public getStockQuantity(stockId: number): number {
+  //   const variant = this.productDetail().variants.find((variant) => variant.stocks.id === stockId);
+  //   return variant?.stocks.quantity ?? 0;
+  // }
 
   public alterQuantityCnt(operation: CartUpdateOperation) {
     const quantity = this.cartForm.controls.quantity.value ?? 0;
@@ -424,6 +463,10 @@ export class ProductDetailBase {
       });
     });
 
+    this.stockSizeArrayWithIds.update((oldVal) => {
+      return oldVal.filter((stk) => stk.quantity);
+    });
+
     this.cartForm.controls._colorVarintId.setValue(this.stockSizeArrayWithIds()[0].colorVariantId);
     this.cartForm.controls.stockId.setValue(this.stockSizeArrayWithIds()[0].stockId);
   }
@@ -447,31 +490,68 @@ export class ProductDetailBase {
       },
     });
   }
-  
+
+  // public isCartBuyNowDisabled(): boolean {
+  //   const stockId = this.cartForm.controls.stockId.value;
+  //   const tailorId = this.cartForm.controls.tailorId.value;
+
+  //   // ❌ No stock selected
+  //   if (!stockId) {
+  //     return true;
+  //   }
+
+  //   const stockList = this.stockSizeArrayWithIds();
+
+  //   const selectedStock = stockList.find((stk) => stk.stockId === stockId);
+
+  //   // ❌ Stock not found (safety)
+  //   if (!selectedStock) {
+  //     return true;
+  //   }
+
+  //   // ✅ Normal size → ENABLE
+  //   if (selectedStock.key != EStockSize.CustomSize) {
+  //     return false;
+  //   }
+
+  //   // 🧵 Custom size → Tailor REQUIRED
+  //   return !tailorId;
+  // }
+
   public isCartBuyNowDisabled(): boolean {
     const stockId = this.cartForm.controls.stockId.value;
     const tailorId = this.cartForm.controls.tailorId.value;
+    const variantId = this.cartForm.controls.variantId.value;
 
-    // ❌ No stock selected
+    // 1️⃣ No stock selected → disable
     if (!stockId) {
       return true;
     }
 
     const stockList = this.stockSizeArrayWithIds();
 
-    const selectedStock = stockList.find((stk) => stk.stockId === stockId);
+    const selectedStock = stockList.find((stk) => String(stk.stockId) === String(stockId));
 
-    // ❌ Stock not found (safety)
+    // Safety guard
     if (!selectedStock) {
       return true;
     }
 
-    // ✅ Normal size → ENABLE
-    if (selectedStock.key != EStockSize.CustomSize) {
-      return false;
+    // 2️⃣ If stock is CustomSize → tailor required
+    if (selectedStock.key === EStockSize.CustomSize && !tailorId) {
+      return true;
     }
 
-    // 🧵 Custom size → Tailor REQUIRED
-    return !tailorId;
+    // 3️⃣ If variant is custom → tailor required
+    if (variantId) {
+      const selectedVariant = this.productDetail().variants?.find((v) => String(v.id) === String(variantId));
+
+      if (selectedVariant?.isCustom && !tailorId) {
+        return true;
+      }
+    }
+
+    // ✅ All conditions satisfied → enable
+    return false;
   }
 }

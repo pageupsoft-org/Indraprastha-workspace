@@ -27,7 +27,7 @@
 
     <!-- Product Details Section -->
     <div class="flex col-span-3 flex-col lg:space-y-4">
-      <h2 class="text-2xl lg:text-4xl font-bold text-gray-900 leading-tight mb-0">
+      <h2 class="text-2xl lg:text-4xl font-bold text-gray-900 leading-tight mb-0" style="line-height: 35px;">
         @if(isShowloader()){
         <ngx-skeleton-loader count="1" appearance="line" />
         }@else{
@@ -63,19 +63,19 @@
             } }@else { @for (stockSize of stockSizeArrayWithIds(); let i = $index; track
             stockSize.stockId) { @let radioId = 'radio-' + stockSize.stockId;
 
-            @if(stockSize.quantity){
-              <input type="radio" name="stockSizeSelection" [id]="radioId" [value]="stockSize.stockId" class="hidden peer"
-                [formControl]="cartForm.controls.stockId" (change)="onSizeChange()" />
-  
-              <label [for]="radioId" class="cursor-pointer lg:px-4 lg:py-2 px-2 py-1 border rounded" [ngClass]="{
+            <!-- @if(stockSize.quantity){ -->
+            <input type="radio" name="stockSizeSelection" [id]="radioId" [value]="stockSize.stockId" class="hidden peer"
+              [formControl]="cartForm.controls.stockId" (change)="onSizeChange()" />
+
+            <label [for]="radioId" class="cursor-pointer lg:px-4 lg:py-2 px-2 py-1 border rounded" [ngClass]="{
                   'peer-checked:bg-[#680C01] peer-checked:text-white':
                     stockSize.stockId == cartForm.controls.stockId.value,
                   'cursor-not-allowed bg-gray-200 line-through pointer-events-none':
                     !stockSize.quantity
                 }">
-                {{ stockSize.value }}
-              </label>
-            }
+              {{ stockSize.value }}
+            </label>
+            <!-- } -->
 
             } }
           </div>
@@ -121,36 +121,28 @@
 
 
         <!-- variant -->
-        <!-- @if(productDetail().variants.length){
+        @if(productDetail().variants.length){
         <div>
           <p class="font-semibold text-gray-800 mb-2">Variants</p>
           <div class="flex flex-wrap gap-2">
             <div class="flex flex-wrap gap-2">
               @for (variant of productDetail().variants; track $index) {
-              <input
-                type="radio"
-                id="variant-{{ variant.id }}"
-                name="variantSelection"
-                [value]="variant.stocks.id"
-                [formControl]="cartForm.controls.variantStockId"
-                class="hidden peer"
-              />
+              <input type="radio" id="variant-{{ variant.id }}" name="variantSelection" [value]="variant.id"
+                [formControl]="cartForm.controls.variantId" class="hidden peer" />
 
-              <label
-                for="variant-{{ variant.id }}"
+              <label for="variant-{{ variant.id }}"
                 class="cursor-pointer px-4 py-2 border border-gray-300 rounded-[5px] text-sm text-gray-700 focus:outline-none"
                 [ngClass]="{
                   'peer-checked:bg-[#680C01] peer-checked:text-white peer-checked:border-[#680C01]':
-                    cartForm.value.variantStockId == variant.stocks.id
-                }"
-              >
+                    cartForm.value.variantId == variant.id
+                }">
                 {{ variant.name }}
               </label>
               }
             </div>
           </div>
         </div>
-        } -->
+        }
 
         <!-- <p class="font-semibold text-gray-800 mb-2">Quantity</p>
         <div class="py-2 px-3 inline-block bg-white border border-gray-200 rounded-lg">
@@ -186,12 +178,14 @@
           }
         </div> -->
 
-        <p class="font-semibold text-gray-800 mb-2">Quantity</p>
+        <p class="font-semibold text-gray-800 mb-2">Quantity
+        </p>
 
         <div class="flex items-center gap-4">
 
           <!-- Tailor Dropdown: Only visible when user selected custom tailored stock -->
-          @if(cartForm.controls.stockId.value|isShowCustomTailorDD:stockSizeArrayWithIds()){
+          @if((cartForm.controls.stockId.value|isShowCustomTailorDD:stockSizeArrayWithIds() )||
+          isVariantWithCustomTailor()){
           <select [formControl]="cartForm.controls.tailorId"
             class="h-9 px-3 bg-white border border-gray-200 rounded-lg text-sm text-gray-800 focus:outline-none focus:ring-1 focus:ring-gray-300">
             <option [ngValue]="null">Select Tailor</option>
@@ -256,7 +250,7 @@
         <ngx-skeleton-loader count="2" appearance="line" />
         }@else {
         <lib-app-loading-button [isLoading]="isBtnLoader()" label="ADD TO CART" type="submit" class="mb-0"
-          (clicked)="addToCartWithDescription()" [btnClass]="
+          (click)="addToCartWithDescription()" [btnClass]="
             'w-full cursor-pointer lg:px-6 lg:py-3 px-3 py-2 font-semibold text-black border border-gray-300 bg-white rounded-[5px] hover:bg-gray-300 transition-colors duration-200 focus:outline-none'
           " [conditionalClass]="'cursor-not-allowed!'" [addConditionClass]="isCartBuyNowDisabled()"
           [isButtonDisabled]="isCartBuyNowDisabled()"></lib-app-loading-button>

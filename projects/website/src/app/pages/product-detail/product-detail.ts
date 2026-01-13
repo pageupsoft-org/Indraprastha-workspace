@@ -80,6 +80,7 @@ export class ProductDetail extends ProductDetailBase implements OnInit {
   }
 
   public toggleWishList(event: any) {
+    console.log('❤️ Wishlist toggle clicked'); // Debug log
     this.wishlistService.toggleWishList<IRProductDetailRoot>(
       event,
       this.productDetail(),

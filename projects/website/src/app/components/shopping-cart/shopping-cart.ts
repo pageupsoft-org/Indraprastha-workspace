@@ -71,7 +71,15 @@ export class ShoppingCart {
         id: data.stockId || 0,
         name: data.size || '',
       },
-      variant: null,
+      // variant: null,
+      variant: data.cartVariant
+        ? {
+            id: data.cartVariant.variantId,
+            name: data.cartVariant.name,
+            mrp: data.cartVariant.mrp,
+            stockQuantity: data.cartVariant.stockQuantity,
+          }
+        : undefined,
 
       stockQuantity: data.stockQuantity || 0,
       isShowDelete: true,

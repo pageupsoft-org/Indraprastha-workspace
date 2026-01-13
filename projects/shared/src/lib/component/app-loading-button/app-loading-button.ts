@@ -24,6 +24,7 @@ export class AppLoadingButton {
   public clicked = output<void>();
 
   onClick() {
+    console.log('🔘 Button onClick triggered, isLoading:', this.isLoading());
     if (!this.isLoading()) {
       this.clicked.emit();
     }

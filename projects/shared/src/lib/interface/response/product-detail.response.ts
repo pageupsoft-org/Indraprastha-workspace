@@ -77,7 +77,7 @@ export interface Variant {
   description: string;
   mrp: number;
   variantURL: string;
-  stocks: Stock;
+  // stocks: Stock;
   isCustom: boolean;
 }
 

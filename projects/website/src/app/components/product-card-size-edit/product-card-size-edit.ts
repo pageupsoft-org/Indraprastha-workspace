@@ -20,7 +20,6 @@ export class ProductCardSizeEdit implements OnInit {
   constructor() {}
 
   ngOnInit(): void {
-    console.log(this.prod());
     
   }
 
