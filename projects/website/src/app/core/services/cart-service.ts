@@ -64,7 +64,7 @@ export class CartService {
                     ...x,
                     _isDisable: false,
                   };
-                })
+                }),
               );
             } else {
               this.cartData.set([]);
@@ -85,7 +85,7 @@ export class CartService {
               ...x,
               _isDisable: false,
             };
-          })
+          }),
         );
 
         resolve(true);
@@ -95,10 +95,8 @@ export class CartService {
     return promise;
   }
 
-  public getProductQty(stockId: number, variantStockId: number): number {
-    const existingProductIndex = this.cartData().findIndex(
-      (item) => item.stockId === stockId && (item?.cartVariant?.stockId ?? 0) === variantStockId
-    );
+  public getProductQty(stockId: number): number {
+    const existingProductIndex = this.cartData().findIndex((item) => item.stockId === stockId);
 
     if (existingProductIndex > -1) {
       return this.cartData()[existingProductIndex].cartQuantity;
@@ -111,15 +109,46 @@ export class CartService {
     this.cartData.update((currentData) => {
       // 1. Find the index of the existing product that matches both stockId and variantId
       const existingProductIndex = currentData.findIndex(
-        (item) =>
-          item.stockId === product.stockId &&
-          (item?.cartVariant?.stockId ?? 0) === product.cartVariant.stockId
+        (item) => item.stockId === product.stockId,
       );
 
       // 2. If the product is found (Index >= 0)
       if (existingProductIndex > -1) {
         // Get the current item
         const existingItem = currentData[existingProductIndex];
+
+        // Check if the user is already at max stock quantity
+        if (existingItem.cartQuantity >= product.stockQuantity) {
+          this.toastService.show({
+            message: 'You are already at max stock quantity',
+            type: EToastType.warning,
+            duration: 3000,
+          });
+          return currentData; // Return unchanged data
+        }
+
+        // Check if the new quantity would exceed stock quantity
+        if (product.cartQuantity > product.stockQuantity) {
+          // Calculate remaining quantity that can be added
+          const remainingQty = product.stockQuantity - existingItem.cartQuantity;
+          this.toastService.show({
+            message: `Only ${remainingQty} qty can be added because max limit will be reached`,
+            type: EToastType.warning,
+            duration: 3000,
+          });
+
+          // Set the quantity to maximum allowed instead of rejecting completely
+          const maxAllowedQuantity = product.stockQuantity;
+          const updatedItem = this.updateIRCartRoot(existingItem, maxAllowedQuantity);
+
+          const newData = [
+            ...currentData.slice(0, existingProductIndex),
+            updatedItem,
+            ...currentData.slice(existingProductIndex + 1),
+          ];
+
+          return newData;
+        }
 
         // Calculate the new total quantity
         const newQuantity = product.cartQuantity;
@@ -138,6 +167,19 @@ export class CartService {
       }
       // 3. If the product is NOT found
       else {
+        // Check if the new product quantity exceeds stock quantity
+        if (product.cartQuantity > product.stockQuantity) {
+          this.toastService.show({
+            message: `Only ${product.stockQuantity} qty available in stock`,
+            type: EToastType.warning,
+            duration: 3000,
+          });
+
+          // Add the product with maximum available quantity instead of rejecting
+          const adjustedProduct = { ...product, cartQuantity: product.stockQuantity };
+          return [...currentData, adjustedProduct];
+        }
+
         // Add the new product to the list (IMMUTABILITY!)
         return [...currentData, product]; // Return a NEW array with the new product added
       }
@@ -164,14 +206,14 @@ export class CartService {
 
       return {
         stockId: stockId,
-        variantId: cartVariant.variantId,
+        // variantId: cartVariant.variantId,
         quantity: cartQuantity,
       } as ICartFormData;
     });
 
     httpPost<IRGeneric<IRCartRoot[]>, Array<ICartFormData>>(
       ApiRoutes.PRODUCT.CART,
-      localStorageProd
+      localStorageProd,
     ).subscribe({
       next: (res: IRGeneric<IRCartRoot[]>) => {
         if (res?.data && res.data.length) {
@@ -193,12 +235,22 @@ export class CartService {
       return;
     }
 
+    // ❌ avoid increasing when qty would exceed stock quantity
+    if (operation === CartUpdateOperation.increase && item.cartQuantity >= item.stockQuantity) {
+      this.toastService.show({
+        message: 'You are already at max stock quantity',
+        type: EToastType.warning,
+        duration: 3000,
+      });
+      return;
+    }
+
     this.cartData()[index]._isDisable = true;
     const newQty =
       operation === CartUpdateOperation.increase ? item.cartQuantity + 1 : item.cartQuantity - 1; // this will now be >= 1 always
 
     const payload: ICartFormData = {
-      variantId: item.cartVariant?.variantId ?? null,
+      // variantId: item.cartVariant?.variantId ?? null,
       stockId: item.stockId,
       quantity: newQty,
     };
@@ -211,8 +263,18 @@ export class CartService {
     const cart = this.cartData();
     const item = cart[index];
 
+    // Check if the new quantity exceeds stock quantity
+    if (qty > item.stockQuantity) {
+      this.toastService.show({
+        message: `Only ${item.stockQuantity} qty available in stock`,
+        type: EToastType.warning,
+        duration: 3000,
+      });
+      return;
+    }
+
     const payload: ICartFormData = {
-      variantId: item.cartVariant?.variantId ?? null,
+      // variantId: item.cartVariant?.variantId ?? null,
       stockId: item.stockId,
       quantity: qty,
     };
@@ -224,7 +286,7 @@ export class CartService {
   public updateCartProductQuantity(
     data: ICartFormData,
     index: number,
-    operation: CartUpdateOperation
+    operation: CartUpdateOperation,
   ) {
     if (!this.utilService.isUserLoggedIn()) {
       this.updateServiceVariable(data, index);
@@ -241,7 +303,7 @@ export class CartService {
         this.cartData()[index]._isDisable = false;
         this.eventCartDataUpdated.emit({
           operation: operation,
-          index: index
+          index: index,
         });
       },
 
@@ -287,14 +349,18 @@ export class CartService {
     return {
       ...product, // Copy all existing properties
       cartQuantity: newQuantity, // Update the root cartQuantity
-      cartVariant: this.updateCartVariant(product.cartVariant, newQuantity), // Update the nested CartVariant
+      // cartVariant: this.updateCartVariant(product.cartVariant, newQuantity), // Update the nested CartVariant
+      cartVariant: null,
     };
   }
 
   public removeItemFromCart(cartId: number, index: number) {
     this.objCOnfirmationUtil
       .getConfirmation(
-        getDefaultConfirmationModalData('Remove item', 'Are you sure you want to remove this item?')
+        getDefaultConfirmationModalData(
+          'Remove item',
+          'Are you sure you want to remove this item?',
+        ),
       )
       .then((res: boolean) => {
         if (res) {
@@ -303,7 +369,7 @@ export class CartService {
               next: (res) => {
                 if (res?.data) {
                   this.cartData.update((currentCart) =>
-                    currentCart.filter((item) => item.cartId !== cartId)
+                    currentCart.filter((item) => item.cartId !== cartId),
                   );
 
                   this.toastService.show({
@@ -312,13 +378,13 @@ export class CartService {
                     duration: 2000,
                   });
 
-                  this.eventCartDataUpdated.emit({operation: CartUpdateOperation.delete, index})
+                  this.eventCartDataUpdated.emit({ operation: CartUpdateOperation.delete, index });
                 }
               },
             });
           } else {
             this.cartData.update((currentCart) =>
-              currentCart.filter((item, prodIndex) => prodIndex !== index)
+              currentCart.filter((item, prodIndex) => prodIndex !== index),
             );
             setLocalStorageItem(LocalStorageEnum.cartList, this.cartData());
             this.toastService.show({

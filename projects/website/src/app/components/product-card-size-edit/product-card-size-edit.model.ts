@@ -8,12 +8,13 @@ export interface IProductCardSizeDT {
     id: number;
     name: string;
   };
-  variant?: {
-    id: number;
-    name: string;
-    mrp: number;
-    stockQuantity?: number;
-  };
+  // variant?: {
+  //   id: number;
+  //   name: string;
+  //   mrp: number;
+  //   stockQuantity?: number;
+  // };
+  variant?: null;
   stockQuantity: number;
   isShowDelete: boolean;
 }

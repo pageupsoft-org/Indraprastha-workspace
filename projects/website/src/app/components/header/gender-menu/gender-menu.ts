@@ -1,13 +1,11 @@
 import {
   Component,
   effect,
-  input,
   model,
   OnDestroy,
   OnInit,
-  Signal,
-  signal,
   WritableSignal,
+  signal,
 } from '@angular/core';
 import { IRequestProductMenu } from '../../../core/interface/model/header.model';
 import { Router, RouterLink } from '@angular/router';
@@ -49,10 +47,9 @@ export class GenderMenu implements OnInit, OnDestroy {
     newlyAdded: false,
   };
 
-  // this will hold the collection id based on category id,
-  // private categoriesCollectionMap: Map<number, number> = new Map<number, number>();
-  private categoriesCollectionMap: WritableSignal<Map<number, Collection>> = signal(
-    new Map<number, Collection>()
+  // this will hold the category id based on collection id,
+  private categoryCollectionMap: WritableSignal<Map<number, Collection[]>> = signal(
+    new Map<number, Collection[]>()
   );
 
   constructor(private router: Router, private utilityService: UtilityService) {
@@ -83,24 +80,36 @@ export class GenderMenu implements OnInit, OnDestroy {
         menuData.filter((val) => val.gender === this.genderType()).flatMap((val) => val.products)
       );
 
-      // ✅ Update signals
-      this.collectionList.set(combinedCollections);
-      if (combinedCollections.length > 0) {
-        this.categoryList.set(combinedCollections[0].categories);
+      // ✅ Update signals - Show all categories initially, collections will be shown on hover
+      const allCategories = combinedCollections.flatMap(collection => collection.categories);
+      this.categoryList.set(allCategories);
+      
+      // Initially show collections from first category if available
+      if (allCategories.length > 0) {
+        this.updateCollection(allCategories[0]);
       }
     });
   }
 
   ngOnInit(): void {
-    const map = new Map<number, Collection>();
+    const categoryCollectionMap = new Map<number, Collection[]>();
     this.utilityService.genderMenuData().forEach((menu: IResponseGenderMenuRoot) => {
       menu.collections.forEach((collection: Collection) => {
         collection.categories.forEach((category: Category) => {
-          map.set(category.id, collection);
+          const existingCollections = categoryCollectionMap.get(category.id) || [];
+          if (!existingCollections.find(c => c.id === collection.id)) {
+            existingCollections.push(collection);
+            categoryCollectionMap.set(category.id, existingCollections);
+          }
         });
       });
     });
-    this.categoriesCollectionMap.set(map);
+    this.categoryCollectionMap.set(categoryCollectionMap);
+  }
+
+  public updateCollection(category: Category) {
+    const collections = this.categoryCollectionMap().get(category.id) || [];
+    this.collectionList.set(collections);
   }
 
   public updatedCategory(menu: Category[]) {
@@ -123,9 +132,10 @@ export class GenderMenu implements OnInit, OnDestroy {
 
     if (category) {
       this.payloadGenderMenu.categoryIds.push(category.id);
-      this.payloadGenderMenu.collectionIds.push(
-        this.categoriesCollectionMap().get(category.id)?.id ?? 0
-      );
+      const collections = this.categoryCollectionMap().get(category.id) || [];
+      if (collections.length > 0) {
+        this.payloadGenderMenu.collectionIds.push(collections[0].id);
+      }
     }
 
     return createUrlFromObject(this.payloadGenderMenu, this.genderType());
@@ -142,9 +152,10 @@ export class GenderMenu implements OnInit, OnDestroy {
 
     if (category) {
       this.payloadGenderMenu.categoryIds.push(category.id);
-      this.payloadGenderMenu.collectionIds.push(
-        this.categoriesCollectionMap().get(category.id)?.id ?? 0
-      );
+      const collections = this.categoryCollectionMap().get(category.id) || [];
+      if (collections.length > 0) {
+        this.payloadGenderMenu.collectionIds.push(collections[0].id);
+      }
     }
     this.router.navigate([createUrlFromObject(this.payloadGenderMenu, this.genderType())]);
     this.genderType.set('');

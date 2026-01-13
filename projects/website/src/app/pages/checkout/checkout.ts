@@ -20,11 +20,7 @@ import {
 } from '@shared';
 import { CommonModule } from '@angular/common';
 import { ActivatedRoute, Router, RouterModule } from '@angular/router';
-import {
-  appRoutes,
-  CartUpdateOperation,
-  ProductDetailBase,
-} from '@website/core';
+import { appRoutes, CartUpdateOperation, ProductDetailBase } from '@website/core';
 import {
   initializeIQueryToCheckout,
   IQueryToCheckout,
@@ -61,7 +57,7 @@ export class Checkout extends ProductDetailBase implements OnInit {
   public selectedAddress = new FormControl<number | null>(null);
 
   public productDataFromQuery: WritableSignal<IQueryToCheckout> = signal(
-    initializeIQueryToCheckout()
+    initializeIQueryToCheckout(),
   );
 
   /* ---------------------------------------------
@@ -78,14 +74,10 @@ export class Checkout extends ProductDetailBase implements OnInit {
     if (!pd?.id) return true;
 
     // 📦 stock validation
-    const stockValid = pd.stocks.some((s) => s.id === query.stockId);
+    const stockValid = pd.colorVariants.some((s) =>
+      s.stocks.some((stk) => stk.id == query.stockId),
+    );
     if (!stockValid) return false;
-
-    // 🎯 variant validation (optional)
-    if (query.variantStockId) {
-      return pd.variants.some((v) => v.stocks.id === query.variantStockId);
-    }
-
     return true;
   });
 
@@ -113,10 +105,10 @@ export class Checkout extends ProductDetailBase implements OnInit {
 
     const product: Product = {
       name: pd.name,
-      color: pd.color,
+      color: '',
       mrp: pd.mrp,
       gender: pd.gender,
-      productURL: pd.productURL,
+      productURL: pd._productURL,
       _isDisable: false,
 
       stockId: query.stockId,
@@ -127,22 +119,6 @@ export class Checkout extends ProductDetailBase implements OnInit {
       productId: pd.id,
       cartVariant: undefined,
     };
-
-    if (query.variantStockId) {
-      const variant = pd.variants.find((v) => v.stocks.id === query.variantStockId);
-
-      if (variant) {
-        product.cartVariant = {
-          name: variant.name,
-          mrp: variant.mrp,
-          variantURL: '',
-          stockId: query.variantStockId,
-          stockQuantity: variant.stocks.quantity,
-          cartQuantity: 0,
-          variantId: variant.id,
-        };
-      }
-    }
 
     this.checkoutData.set({
       totalAmount: pd.mrp,
@@ -206,7 +182,7 @@ export class Checkout extends ProductDetailBase implements OnInit {
                   : prod.cartQuantity,
             })),
           }));
-        }
+        },
       );
     }
   }
@@ -227,17 +203,18 @@ export class Checkout extends ProductDetailBase implements OnInit {
       imageUrl: data.productURL,
       name: data.name,
       mrp: data.mrp,
-      color: data.color?.[0] ?? '',
+      color: data.color ?? '',
       qty: data.cartQuantity,
       stock: { id: data.stockId, name: data.size },
-      variant: data.cartVariant
-        ? {
-            id: data.cartVariant.variantId,
-            name: data.cartVariant.name,
-            mrp: data.cartVariant.mrp,
-            stockQuantity: data.cartVariant.stockQuantity,
-          }
-        : undefined,
+      // variant: data.cartVariant
+      //   ? {
+      //       id: data.cartVariant.variantId,
+      //       name: data.cartVariant.name,
+      //       mrp: data.cartVariant.mrp,
+      //       stockQuantity: data.cartVariant.stockQuantity,
+      //     }
+      //   : undefined,
+      variant: null,
       stockQuantity: data.stockQuantity,
       isShowDelete: !this.isRedirectedFromBuyNow(),
     };
@@ -305,7 +282,6 @@ export class Checkout extends ProductDetailBase implements OnInit {
 
     console.log(payload);
     // return
-    
 
     if (!payload.shippingAddressId) {
       this.toastService.show({

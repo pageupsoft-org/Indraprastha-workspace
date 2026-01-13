@@ -28,9 +28,9 @@ export const appConfig: ApplicationConfig = {
     provideRouter(routes),
     provideClientHydration(
       withEventReplay(),
-      withHttpTransferCacheOptions({
-        includePostRequests: true,
-      })
+      // withHttpTransferCacheOptions({
+      //   includePostRequests: true,
+      // })
     ),
     provideHttpClient(
       withFetch(),

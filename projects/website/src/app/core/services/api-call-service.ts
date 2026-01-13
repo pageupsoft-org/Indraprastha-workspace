@@ -16,12 +16,14 @@ import { DashboardResponseRoot } from '../../components/new-arrival-product-card
 import { IDashboadRequest } from '../../pages/home/product-slider/dashboard.request';
 import { Observable, of, shareReplay, tap } from 'rxjs';
 import { IResponseCollection } from '../interface/response/collection.response';
+import { RCustomTailoredCombo } from '../interface/response/tailor.response';
 
 @Injectable({
   providedIn: 'root',
 })
 export class ApiCallService {
   private newArrival$!: Observable<IRGeneric<DashboardResponseRoot>>;
+  private customTailored$!: Observable<IRGeneric<RCustomTailoredCombo[]>>;
   private collectionCache = new Map<string, Observable<IRGeneric<IResponseCollection[]>>>();
   private bannerCache = new Map<string, Observable<IRGeneric<IBannerResponse>>>();
   private allBannersCache$!: Observable<IRGeneric<IBannerResponse>>;
@@ -40,7 +42,7 @@ export class ApiCallService {
         ApiRoutes.PRODUCT.DASHBOARD,
         payload,
         false,
-        [{ key: CustomToken.AUTH_REQUIRED, value: false }],
+        [{ key: CustomToken.AUTH_REQUIRED, value: true }],
       ).pipe(shareReplay({ bufferSize: 1, refCount: true }));
     }
     return this.newArrival$;
@@ -106,7 +108,7 @@ export class ApiCallService {
             this.bannerList.set([]);
           }
         }),
-        shareReplay({ bufferSize: 1, refCount: true })
+        shareReplay({ bufferSize: 1, refCount: true }),
       );
     }
 
@@ -120,5 +122,16 @@ export class ApiCallService {
   public clearBannerCache() {
     this.allBannersCache$ = null!;
     this.bannerList.set([]);
+  }
+
+  public getCustomTailorCombo(): Observable<IRGeneric<RCustomTailoredCombo[]>> {
+    if (!this.customTailored$) {
+      this.customTailored$ = httpGet<IRGeneric<RCustomTailoredCombo[]>>(
+        ApiRoutes.TAILOR.TAILOR_COMBO,
+        false,
+        [{ key: CustomToken.AUTH_REQUIRED, value: false }],
+      ).pipe(shareReplay({ bufferSize: 1, refCount: true }));
+    }
+    return this.customTailored$;
   }
 }

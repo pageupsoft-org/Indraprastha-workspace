@@ -42,10 +42,9 @@ import {
   initializeStockForm,
   initializeColorVariantForm,
   IProductForm,
-  IColorVariantData,
-  IColorVariantForm,
   stepperFormSteps,
   IStepperStep,
+  initVariantForm,
 } from '../product.model';
 import { arrayToJson, convertImagesToBase64Array, logInvalidControls } from '@portal/core';
 import { ProductService } from '../product-service';
@@ -112,7 +111,7 @@ export class ProductUpsert extends Base implements OnInit {
   ngOnInit(): void {
     // this.getCategoryCombo();
 
-    this.mutateImageControl(null);
+    // this.mutateImageControl(null);
 
     this.activatedRoute.queryParams.subscribe((param: Params) => {
       if (param && param['id']) {
@@ -124,32 +123,44 @@ export class ProductUpsert extends Base implements OnInit {
   public mutateColorVariantControl(index: number | null) {
     if (index == null) {
       const newVariant = initializeColorVariantForm(null);
-      
+
       // Add all stock sizes for the variant
       this.stockSize.forEach((size) => {
         newVariant.controls.stocks.push(initializeStockForm(0, size.key as EStockSize));
       });
-      
+
       this.productForm.controls.colorVariants.push(newVariant);
     } else {
       this.productForm.controls.colorVariants.removeAt(index);
     }
   }
 
+  public addVariant() {
+    const newVariant = new FormGroup(initVariantForm());
+    this.productForm.controls.variants.push(newVariant);
+  }
+
+  public removeVariant(index: number) {
+    this.productForm.controls.variants.removeAt(index);
+  }
+
   public mutateColorVariantImageControl(variantIndex: number, imageIndex: number | null) {
     // This method is used for removing images (clearing the slot)
     if (imageIndex !== null) {
       const variant = this.productForm.controls.colorVariants.at(variantIndex);
-      const filledImages = variant.controls.colorVariantBase64.controls.filter(control => control.value && control.value.trim() !== '').length;
-      
+      const filledImages = variant.controls.colorVariantBase64.controls.filter(
+        (control) => control.value && control.value.trim() !== '',
+      ).length;
+
       // Ensure at least 1 image remains
       if (filledImages > 1) {
+        variant.controls.removeURL.push(new FormControl(variant.controls.colorVariantBase64.at(imageIndex).value));
         variant.controls.colorVariantBase64.at(imageIndex).setValue(null);
       } else {
         this.toastService.show({
           type: EToastType.warning,
           message: 'At least one image is required for each variant',
-          duration: 2000
+          duration: 2000,
         });
       }
     }
@@ -182,25 +193,25 @@ export class ProductUpsert extends Base implements OnInit {
     }
   }
 
-  public mutateImageControl(index: number | null) {
-    if (index == null) {
-      if(this.productForm.controls.productBase64.length >= 6){
-        this.toastService.show({
-          type: EToastType.info,
-          message: 'Cannot upload more than six image',
-          duration: 2000
-        })
-      }else{
-        this.productForm.controls.productBase64.push(new FormControl(null, Validators.required));
-      }
-    } else {
-      this.productForm.controls.productBase64.removeAt(index);
-    }
-  }
+  // public mutateImageControl(index: number | null) {
+  //   if (index == null) {
+  //     if(this.productForm.controls.productBase64.length >= 6){
+  //       this.toastService.show({
+  //         type: EToastType.info,
+  //         message: 'Cannot upload more than six image',
+  //         duration: 2000
+  //       })
+  //     }else{
+  //       this.productForm.controls.productBase64.push(new FormControl(null, Validators.required));
+  //     }
+  //   } else {
+  //     this.productForm.controls.productBase64.removeAt(index);
+  //   }
+  // }
 
   public onColorVariantImageChange(event: any, variantIndex: number, imageIndex: number) {
     console.log(variantIndex, imageIndex);
-    
+
     const param: IConvertImageParams = initialConvertImageParam({
       event,
       allowedTypes: [ImageTypeEnum.webp, ImageTypeEnum.jpeg, ImageTypeEnum.png, ImageTypeEnum.jpg],
@@ -213,23 +224,28 @@ export class ProductUpsert extends Base implements OnInit {
       if (res) {
         if (res.validBase64Files.length) {
           const variant = this.productForm.controls.colorVariants.at(variantIndex);
-          
+
           if (res.validBase64Files.length === 1) {
             // Single image - just set it to the current slot
-            variant.controls.colorVariantBase64.at(imageIndex).setValue(res.validBase64Files[0] as string);
+            variant.controls.colorVariantBase64
+              .at(imageIndex)
+              .setValue(res.validBase64Files[0] as string);
           } else {
             // Multiple images - spread from current imageIndex to next available slots
             let currentSlotIndex = imageIndex;
-            
+
             res.validBase64Files.forEach((imageBase64) => {
-              if (currentSlotIndex < 6) { // Ensure we don't exceed 6 slots
-                variant.controls.colorVariantBase64.at(currentSlotIndex).setValue(imageBase64 as string);
+              if (currentSlotIndex < 6) {
+                // Ensure we don't exceed 6 slots
+                variant.controls.colorVariantBase64
+                  .at(currentSlotIndex)
+                  .setValue(imageBase64 as string);
                 currentSlotIndex++;
               }
             });
-            
+
             // Show info if some images couldn't be added due to slot limit
-            if (res.validBase64Files.length > (6 - imageIndex)) {
+            if (res.validBase64Files.length > 6 - imageIndex) {
               this.toastService.show({
                 message: `Only ${6 - imageIndex} images could be added due to slot limit`,
                 type: EToastType.info,
@@ -251,40 +267,40 @@ export class ProductUpsert extends Base implements OnInit {
     event.target.value = null;
   }
 
-  public onProductImageChange(event: any, index: number) {
-    const param: IConvertImageParams = initialConvertImageParam({
-      event,
-      allowedTypes: [ImageTypeEnum.webp, ImageTypeEnum.png, ImageTypeEnum.jpeg],
-      expectedImgWidth: ImageSizeConst.product.width,
-      expectedImgHeight: ImageSizeConst.product.height,
-      maxSize: 2,
-    });
-    convertImagesToBase64Array(param).then((res: IConvertImageResult) => {
-      if (res) {
-        if (res.validBase64Files.length) {
-          if (res.validBase64Files.length == 1) {
-            this.productForm.controls.productBase64
-              .at(index)
-              .setValue(res.validBase64Files[0] as string);
-          } else {
-            this.productForm.controls.productBase64.removeAt(index);
-            res.validBase64Files.forEach((x) => {
-              this.productForm.controls.productBase64.push(new FormControl(x as string));
-            });
-          }
-        }
-        if (res.invalidFiles.length) {
-          this.toastService.show({
-            message: 'Some files were invalid or had incorrect dimensions and were skipped',
-            type: EToastType.warning,
-            duration: 2000,
-          });
-        }
-      }
-    });
+  // public onProductImageChange(event: any, index: number) {
+  //   const param: IConvertImageParams = initialConvertImageParam({
+  //     event,
+  //     allowedTypes: [ImageTypeEnum.webp, ImageTypeEnum.png, ImageTypeEnum.jpeg],
+  //     expectedImgWidth: ImageSizeConst.product.width,
+  //     expectedImgHeight: ImageSizeConst.product.height,
+  //     maxSize: 2,
+  //   });
+  //   convertImagesToBase64Array(param).then((res: IConvertImageResult) => {
+  //     if (res) {
+  //       if (res.validBase64Files.length) {
+  //         if (res.validBase64Files.length == 1) {
+  //           this.productForm.controls.productBase64
+  //             .at(index)
+  //             .setValue(res.validBase64Files[0] as string);
+  //         } else {
+  //           this.productForm.controls.productBase64.removeAt(index);
+  //           res.validBase64Files.forEach((x) => {
+  //             this.productForm.controls.productBase64.push(new FormControl(x as string));
+  //           });
+  //         }
+  //       }
+  //       if (res.invalidFiles.length) {
+  //         this.toastService.show({
+  //           message: 'Some files were invalid or had incorrect dimensions and were skipped',
+  //           type: EToastType.warning,
+  //           duration: 2000,
+  //         });
+  //       }
+  //     }
+  //   });
 
-    event.target.value = null;
-  }
+  //   event.target.value = null;
+  // }
 
   public upsertProduct() {
     // const collId = parseInt(this.productForm.controls.collectionId.value)
@@ -304,15 +320,18 @@ export class ProductUpsert extends Base implements OnInit {
         delete desc.jsonText; // ✅ deletes the key from the object
       });
 
-      data.categoryIds = data.categoryIdsList?.map((x) => x.id) || [];
+      // data.categoryIds = data.categoryIdsList?.map((x) => x.id) || [];
+      data.categoryIds = [data.categoryId ?? 0];
 
-      data.productBase64 = data.productBase64.filter((x) => !x?.startsWith('https://'));
+      // data.productBase64 = data.productBase64.filter((x) => !x?.startsWith('https://'));
       data.colorVariants.forEach((v: any) => {
-        v.colorVariantBase64 = v.colorVariantBase64.filter((img: any) => !img?.startsWith('https://'));
+        v.colorVariantBase64 = v.colorVariantBase64.filter(
+          (img: any) => img != null && !img.startsWith('https://'),
+        );
       });
 
       delete (data as any).categoryIdsList;
-      //console.log(invalidControls, data)
+      // console.log(invalidControls, data);
       // return;
 
       this.httpPostPromise<IRGeneric<number>, any>(ApiRoutes.PRODUCT.POST, data).then(
@@ -380,34 +399,33 @@ export class ProductUpsert extends Base implements OnInit {
     ).then((res) => {
       if (res?.data) {
         this.categoryCombo = res.data.categories;
-        // this.patchProductData(res);
+
+        // Load collection combo based on gender first
         this.productService
           .getCollectionByGender(res.data.gender as GenderTypeEnum)
           .subscribe((response) => {
             if (response && response.data != null) {
               this.collectionCombo = response.data;
-              this.collectionCombo.find((c) => {
-                if (c.id === res.data.collectionId) {
-                  this.productForm.controls.collectionId.patchValue(res.data.collectionId);
-                }
-              });
+              // Set collection after combo is loaded
+              this.productForm.controls.collectionId.patchValue(res.data.collectionId);
             }
           });
 
         const {
           id,
           name,
-          categoryIds, //not working
+          categoryIds,
+          collectionId,
           isCustomSize,
           customSizeName,
           mrp,
           gender,
-          productURL,
-          variants,
-          stocks,
+          colorVariants,
           descriptions,
+          variants,
         } = res.data;
 
+        // Patch basic product information
         this.productForm.patchValue({
           id,
           name,
@@ -415,66 +433,125 @@ export class ProductUpsert extends Base implements OnInit {
           customSizeName,
           mrp,
           gender,
-          categoryId: res.data.categoryIds[0],
-          isVariant: variants && variants.length > 0,
+          categoryId: categoryIds[0] || null,
+          collectionId,
+          isVariant: (colorVariants && colorVariants.length > 0) || (variants && variants.length > 0),
         });
 
-        // Assuming categoryIds is the array of selected IDs (e.g., [1, 5, 9])
-        const selectedCategoryObjects = categoryIds.map((id) => {
-          // Find the full category object from the dropdown source data
-          const category = res.data.categories.find((c) => c.id === id);
+        // Set categoryIds array
+        this.productForm.controls.categoryIds.patchValue(categoryIds);
 
-          // Return the object expected by the dropdown (e.g., { id: 1, name: 'Fiction' })
+        // Set category dropdown selection
+        const selectedCategoryObjects = categoryIds.map((id) => {
+          const category = res.data.categories.find((c) => c.id === id);
           return {
             id: id,
             name: category?.name ?? '',
           };
         });
-
-        // Use patchValue to update the FormControl bound to the dropdown
         this.productForm.controls.categoryIdsList.patchValue(selectedCategoryObjects);
 
-        this.productForm.controls.productBase64.clear();
-        productURL.forEach((p) => {
-          this.productForm.controls.productBase64.push(new FormControl(p));
-        });
+        // // Clear and populate product images
+        // this.productForm.controls.productBase64.clear();
+        // productURL.forEach((imageUrl) => {
+        //   this.productForm.controls.productBase64.push(new FormControl(imageUrl));
+        // });
 
-        variants.forEach((v) => {
-          const newVariant = initializeColorVariantForm(v);
-          
+        // Clear and populate color variants
+        this.productForm.controls.colorVariants.clear();
+        colorVariants.forEach((variant) => {
+          const newVariant = initializeColorVariantForm(null);
+
+          // Patch variant basic info
+          newVariant.patchValue({
+            id: variant.id,
+            productId: variant.productId,
+            colorName: variant.colorName,
+          });
+
+          // Clear and populate variant images (up to 6 slots)
+          newVariant.controls.colorVariantBase64.clear();
+          for (let i = 0; i < 6; i++) {
+            const imageUrl = variant.colorVariantURL[i] || null;
+            newVariant.controls.colorVariantBase64.push(new FormControl(imageUrl));
+          }
+
+          // Clear and populate stocks for this variant
+          newVariant.controls.stocks.clear();
+          variant.stocks.forEach((stock) => {
+            const stockForm = initializeStockForm(stock.quantity, stock.size as EStockSize);
+            newVariant.controls.stocks.push(stockForm);
+          });
+
           this.productForm.controls.colorVariants.push(newVariant);
         });
 
-        descriptions.forEach((d) => {
-          const form = initializeDescriptionForm(null);
-
-          const { header, descriptionType, shortDescription } = d;
-          form.patchValue({ header, descriptionType, shortDescription });
-
-          if (d.descriptionType === EDescriptionType.Json) {
-            jsonToArray(JSON.parse(d.description)).forEach((v) => {
-              const jsonForm = initializeJsonTextForm({
-                key: v.key,
-                value: v.value,
-              });
-
-              form.controls.jsonText.push(jsonForm);
+        // Clear and populate variants
+        this.productForm.controls.variants.clear();
+        if (variants && variants.length > 0) {
+          variants.forEach((variant) => {
+            const variantForm = new FormGroup(initVariantForm());
+            
+            // Patch variant data
+            variantForm.patchValue({
+              id: variant.id,
+              productId: variant.productId,
+              name: variant.name,
+              description: variant.description,
+              mrp: variant.mrp,
+              isCustom: variant.isCustom, // Set default or get from API if available
             });
+
+            this.productForm.controls.variants.push(variantForm);
+          });
+        }
+
+        // Clear and populate descriptions
+        this.productForm.controls.descriptions.clear();
+        descriptions.forEach((desc) => {
+          const descForm = initializeDescriptionForm(null);
+
+          // Patch basic description info
+          descForm.patchValue({
+            header: desc.header,
+            descriptionType: desc.descriptionType,
+            shortDescription: desc.shortDescription,
+          });
+
+          // Handle different description types
+          if (desc.descriptionType === EDescriptionType.Json) {
+            // Parse JSON and populate jsonText array
+            try {
+              const jsonData = jsonToArray(JSON.parse(desc.description));
+              jsonData.forEach((item) => {
+                const jsonForm = initializeJsonTextForm({
+                  key: item.key,
+                  value: item.value,
+                });
+                descForm.controls.jsonText.push(jsonForm);
+              });
+            } catch (error) {
+              console.error('Error parsing JSON description:', error);
+            }
+            // Clear description validators for JSON type
+            descForm.controls.description.clearValidators();
           } else {
-            form.controls.description.setValue(d.description);
+            // Set description value for non-JSON types
+            descForm.controls.description.setValue(desc.description);
+            descForm.controls.description.setValidators([Validators.required]);
           }
 
-          // 👉 PUSH FIRST
-          this.productForm.controls.descriptions.push(form);
+          // Add the description form to the main form
+          this.productForm.controls.descriptions.push(descForm);
 
-          // 👉 THEN mark state
-          form.markAllAsTouched();
-          form.markAllAsDirty();
-          form.updateValueAndValidity({ emitEvent: false });
-
-          form.controls.description.clearValidators();
-          form.controls.description.updateValueAndValidity({ emitEvent: false });
+          // Update validation state
+          descForm.markAllAsTouched();
+          descForm.updateValueAndValidity({ emitEvent: false });
         });
+
+        // Update form validation state
+        this.productForm.markAllAsTouched();
+        this.productForm.updateValueAndValidity();
       }
     });
   }
@@ -523,7 +600,7 @@ export class ProductUpsert extends Base implements OnInit {
   }
 
   // Stepper Navigation Methods
-  public nextStep(): void {   
+  public nextStep(): void {
     if (this.currentStep < this.totalSteps) {
       this.currentStep++;
     }

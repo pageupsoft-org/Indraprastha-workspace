@@ -1,19 +1,8 @@
-import {
-  Component,
-  ElementRef,
-  signal,
-  viewChild,
-  WritableSignal,
-} from '@angular/core';
+import { Component, ElementRef, signal, viewChild, WritableSignal } from '@angular/core';
 import { Loader } from '@shared';
 import { CommonModule, CurrencyPipe } from '@angular/common';
 import { Router } from '@angular/router';
-import {
-  CartUpdateOperation,
-  appRoutes,
-  UtilityService,
-  CartService,
-} from '@website/core';
+import { CartUpdateOperation, appRoutes, UtilityService, CartService } from '@website/core';
 import { ProductCardSizeEdit } from '../product-card-size-edit/product-card-size-edit';
 import { IProductCardSizeDT } from '../product-card-size-edit/product-card-size-edit.model';
 import { IRCartRoot } from './shopping-cart.model';
@@ -38,7 +27,7 @@ export class ShoppingCart {
     private utilService: UtilityService,
     public cartService: CartService,
     private router: Router,
-    public matDialog: MatDialog
+    public matDialog: MatDialog,
   ) {}
 
   public openCart() {
@@ -66,7 +55,7 @@ export class ShoppingCart {
   }
   public getDataForCard(index: number): IProductCardSizeDT {
     const data: IRCartRoot = this.cartService.cartData()[index];
-    
+
     // Safety check to prevent runtime errors
     if (!data) {
       throw new Error(`Cart data at index ${index} is undefined`);
@@ -76,21 +65,13 @@ export class ShoppingCart {
       imageUrl: data.productURL || [],
       name: data.name || '',
       mrp: data.mrp || 0,
-      color: data.color?.[0] ?? '',
+      color: data.color ?? '',
       qty: data.cartQuantity || 0,
       stock: {
         id: data.stockId || 0,
         name: data.size || '',
       },
-
-      variant: data.cartVariant && data.cartVariant.variantId
-        ? {
-            id: data.cartVariant.variantId,
-            name: data.cartVariant.name || '',
-            mrp: data.cartVariant.mrp || 0,
-            stockQuantity: data.cartVariant.stockQuantity || 0,
-          }
-        : undefined,
+      variant: null,
 
       stockQuantity: data.stockQuantity || 0,
       isShowDelete: true,

@@ -1,6 +1,7 @@
 export interface IRCartRoot {
   name: string;
-  color: string[];
+  // color: string[];
+  color: string;
   mrp: number;
   gender: string;
   productURL: string[];
@@ -10,7 +11,9 @@ export interface IRCartRoot {
   cartQuantity: number;
   cartId: number;
   productId: number;
-  cartVariant: CartVariant;
+  // cartVariant: CartVariant ;
+  cartVariant: null;
+  colorVariantId: number;
 
   _isDisable: boolean;
 }
@@ -41,7 +44,7 @@ export function defaultCartVariant(): CartVariant {
 export function defaultIRCartRoot(): IRCartRoot {
   return {
     name: '',
-    color: [],
+    color: '',
     mrp: 0,
     gender: '',
     productURL: [],
@@ -51,7 +54,9 @@ export function defaultIRCartRoot(): IRCartRoot {
     cartQuantity: 0,
     cartId: 0,
     productId: 0,
-    cartVariant: defaultCartVariant(), // Use the helper function for the nested object
+    // cartVariant: defaultCartVariant(), // Use the helper function for the nested object
+    cartVariant: null,
     _isDisable: false,
+    colorVariantId: 0
   };
 }

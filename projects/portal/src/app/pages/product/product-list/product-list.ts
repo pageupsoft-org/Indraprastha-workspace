@@ -26,6 +26,7 @@ export class ProductList extends SearchBase<IRGeneric<IProductResponseRoot>> imp
   // public readonly dialog = inject(MatDialog);
   protected override payLoad: IProductPagination = {
     ...initializePagInationPayload(),
+    collectionId: null,
     categoryId: null,
     gender: null,
   };

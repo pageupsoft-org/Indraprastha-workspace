@@ -10,9 +10,9 @@ export const ApiRoutes = {
     BASE: '/api/Customer',
     CUSTOMER_ALL: '/api/Customer/All',
     GET_BY_ID: (id: number) => `/api/Customer/${id}`,
-    SHIPPING_ADDRESS : '/api/Customer/ShippingAddress',
-    GET_SHIPPING_ADDRESS : '/api/Customer/ShippingAddress',
-    SHIPPIBG_DELETE_BY_ID: (id: number) => `/api/Customer/ShippingAddress/${id}`
+    SHIPPING_ADDRESS: '/api/Customer/ShippingAddress',
+    GET_SHIPPING_ADDRESS: '/api/Customer/ShippingAddress',
+    SHIPPIBG_DELETE_BY_ID: (id: number) => `/api/Customer/ShippingAddress/${id}`,
   },
   EMPLOYEE: {
     BASE: '/api/Employee',
@@ -39,7 +39,7 @@ export const ApiRoutes = {
     GET: '/api/Category/All',
     GET_COMBO: '/api/Category/Combo',
     GET_BY_ID: (id: number) => `/api/Category/${id}`,
-    GET_BY_ID_CATEGORY: (id:number) => `/api/Category/Combo/${id}`
+    GET_BY_ID_CATEGORY: (id: number) => `/api/Category/Combo/${id}`,
   },
   BANNER: {
     BASE: '/api/Banner',
@@ -69,17 +69,24 @@ export const ApiRoutes = {
     CHANGE_STATUS: '/api/Order/Status',
     GET_BY_ID: (id: number) => `/api/Order/${id}`,
     GET_BY_GUID: (GUID: string) => `/api/Order/${GUID}`,
-    MY_ORDERS: '/api/Order/Customer'
+    MY_ORDERS: '/api/Order/Customer',
   },
   DASHBOARD: {
     BASE: '/api/Dashboard',
   },
-  ABOUT:{
-   GET:'/api/About'
+  ABOUT: {
+    GET: '/api/About',
   },
-  PROFILE:{
-    BASE:'/api/Profile',
-    GET_BY_ID: (id:number) => `/api/Profile/${id}`
+  PROFILE: {
+    BASE: '/api/Profile',
+    GET_BY_ID: (id: number) => `/api/Profile/${id}`,
   },
-  
+  TAILOR: {
+    BASE: '/api/Tailor',
+    CREATE: '/api/Tailor',
+    GET_BY_ID: (id: number) => `/api/Tailor/${id}`,
+    DELETE_BY_ID: (id: number) => `/api/Tailor/${id}`,
+    TAILOR_ALL: '/api/Tailor/All',
+    TAILOR_COMBO: '/api/Tailor/Combo',
+  },
 };

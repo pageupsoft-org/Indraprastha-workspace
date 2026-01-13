@@ -7,6 +7,38 @@ import {
   patternWithMessage,
 } from '@shared';
 
+export interface IStepperStep {
+  step: number;
+  title: string;
+  shortTitle: string;
+  description?: string;
+  nextButtonText?: string;
+}
+
+export const stepperFormSteps: IStepperStep[] = [
+  {
+    step: 1,
+    title: 'Basic Information',
+    shortTitle: 'Basic Info',
+    description: 'Product details and categorization',
+    nextButtonText: 'Next',
+  },
+  {
+    step: 2,
+    title: 'Color Variants',
+    shortTitle: 'Variants',
+    description: 'Product variants and stock management',
+    nextButtonText: 'Next',
+  },
+  {
+    step: 3,
+    title: 'Descriptions',
+    shortTitle: 'Descriptions',
+    description: 'Product descriptions and additional information',
+    nextButtonText: 'Save Product',
+  },
+];
+
 export interface IProductForm {
   id: FormControl<number | null>;
   categoryIds: FormControl<Array<number> | null>;
@@ -16,16 +48,56 @@ export interface IProductForm {
   name: FormControl<string | null>;
   isCustomSize: FormControl<boolean | null>;
   customSizeName: FormControl<string | null>;
+  gender: FormControl<string | null>;
   color: FormArray<FormControl<string | null>>;
   mrp: FormControl<number | null>;
-  gender: FormControl<string | null>;
 
   isVariant: FormControl<boolean | null>;
-  // variants: FormArray<FormGroup<IVariantForm>>;
-  colorVariants: FormArray<FormGroup<IColorVariantForm>>;
+  colorVariants: FormArray<FormGroup<IColorVariantForm>>; // Changed from `variants` to `colorVariants` and `IVariantForm` to `IColorVariantForm`
   descriptions: FormArray<FormGroup<IDescriptionForm>>;
-  productBase64: FormArray<FormControl<string | null>>;
-  removeURL: FormControl<string[] | null>;
+  variants: FormArray<FormGroup<IVariantForm>>;
+  // productBase64: FormArray<FormControl<string | null>>;
+  // removeURL: FormControl<string[] | null>;
+}
+export const initializeIProductForm = (): FormGroup<IProductForm> => {
+  return new FormGroup<IProductForm>({
+    id: new FormControl<number | null>(0),
+    categoryIds: new FormControl<number[] | null>(null),
+    categoryId: new FormControl<number | null>(null),
+    collectionId: new FormControl<number | null>(null),
+    categoryIdsList: new FormControl<Array<{ id: number; name: string }> | null>(null),
+    name: new FormControl<string | null>(null),
+    isCustomSize: new FormControl<boolean | null>(false),
+    customSizeName: new FormControl<string | null>(null),
+    gender: new FormControl<string | null>(null),
+    color: new FormArray<FormControl<string | null>>([]),
+    mrp: new FormControl<number | null>(null),
+    isVariant: new FormControl<boolean | null>(false),
+    colorVariants: new FormArray<FormGroup<IColorVariantForm>>([]),
+    descriptions: new FormArray<FormGroup<IDescriptionForm>>([]),
+    variants: new FormArray<FormGroup<IVariantForm>>([]),
+    // productBase64: new FormArray<FormControl<string | null>>([]),
+    // removeURL: new FormControl<string[] | null>(null),
+  });
+};
+
+export interface IVariantForm {
+  id: FormControl<number | null>;
+  productId: FormControl<number | null>;
+  name: FormControl<string | null>;
+  description: FormControl<string | null>;
+  mrp: FormControl<number | null>;
+  isCustom: FormControl<boolean | null>;
+}
+export function initVariantForm(): IVariantForm {
+  return {
+    id: new FormControl<number | null>(0),
+    productId: new FormControl<number | null>(0),
+    name: new FormControl<string>('', [Validators.required]),
+    description: new FormControl<string>(''),
+    mrp: new FormControl<number | null>(0),
+    isCustom: new FormControl<boolean>(false),
+  };
 }
 
 export interface IColorVariantForm {
@@ -48,10 +120,29 @@ export interface IColorVariantForm {
   removeURL: FormArray<FormControl<string | null>>;
 }
 
+export interface IColorVariantData {
+  // Renamed from IVariantData
+  id: number | null;
+  productId: number | null;
+  name: string | null;
+  description: string | null;
+  mrp: number | null;
+  stocks: {
+    quantity: number | null;
+  };
+  variantURL: string | null; // Renamed from variantBase64 to variantURL
+}
+
 export interface stocks {
   quantity: FormControl<number | null>;
   size: FormControl<EStockSize | null>;
 }
+export const initializeStockForm = (quantity: number = 0, size: EStockSize): FormGroup<stocks> => {
+  return new FormGroup<stocks>({
+    quantity: new FormControl<number | null>(quantity),
+    size: new FormControl<EStockSize | null>(size),
+  });
+};
 
 export interface IDescriptionForm {
   header: FormControl<string | null>;
@@ -115,22 +206,22 @@ export const initializeDescriptionForm = (
 };
 
 export const initializeColorVariantForm = (data: any | null): FormGroup<IColorVariantForm> => {
+  // Changed type of data to any | null
   const form = new FormGroup<IColorVariantForm>({
     id: new FormControl<number | null>(0),
     productId: new FormControl<number | null>(0),
-    colorName: new FormControl<string | null>(null, [Validators.maxLength(40)]),
+    colorName: new FormControl<string | null>('#9d1e21', [Validators.maxLength(40)]),
     stocks: new FormArray<FormGroup<stocks>>([]),
-    colorVariantBase64: new FormArray<FormControl<string | null>>([]),
+    colorVariantBase64: new FormArray<FormControl<string | null>>([]), // Initialize as empty array
     productBase64: new FormArray<FormControl<string | null>>([]),
     removeURL: new FormArray<FormControl<string | null>>([]),
   });
 
   if (data) {
-    // Patch basic fields
     form.patchValue({
       id: data.id,
       productId: data.productId,
-      colorName: data.name,
+      colorName: data.name, // Changed from name to colorName
     });
 
     // Populate colorVariantBase64 with existing images (up to 6)
@@ -146,7 +237,6 @@ export const initializeColorVariantForm = (data: any | null): FormGroup<IColorVa
       form.controls.colorVariantBase64.push(new FormControl<string | null>(null));
     }
 
-    // Handle stocks
     if (data.stocks) {
       form.controls.stocks.push(
         new FormGroup<stocks>({
@@ -169,58 +259,17 @@ export const initializeColorVariantForm = (data: any | null): FormGroup<IColorVa
   return form;
 };
 
-export const initializeStockForm = (
-  quantity?: number | null,
-  size?: EStockSize | null,
-): FormGroup<stocks> =>
-  new FormGroup<stocks>({
-    quantity: new FormControl<number | null>(quantity ?? null, [
-      Validators.required,
-      Validators.maxLength(4),
-      patternWithMessage(/^[0-9]\d*$/, 'Please enter a valid quantity'),
-    ]),
-    size: new FormControl<EStockSize | null>(size ?? null),
-  });
-
-// --- Main Form Initialization ---
-export const initializeIProductForm = (): FormGroup<IProductForm> =>
-  new FormGroup<IProductForm>({
-    id: new FormControl<number | null>(0),
-    categoryIds: new FormControl<number[]>([]),
-    categoryId: new FormControl<number | null>(null, [Validators.required]),
-    collectionId: new FormControl<number | null>(null, Validators.required),
-    categoryIdsList: new FormControl<Array<{ id: number; name: string }> | null>([]),
-    name: new FormControl<string | null>(null, [Validators.required, Validators.maxLength(70)]),
-    isCustomSize: new FormControl<boolean | null>(false),
-    customSizeName: new FormControl<string | null>(''),
-    color: new FormArray<FormControl<string | null>>([]),
-    mrp: new FormControl<number | null>(null, [
-      Validators.required,
-      Validators.maxLength(10),
-      patternWithMessage(/^\d+(\.\d{1,2})?$/, 'Enter a valid price'),
-    ]),
-    isVariant: new FormControl<boolean | null>(false),
-    gender: new FormControl<GenderTypeEnum | null>(null, Validators.required),
-    colorVariants: new FormArray<FormGroup<IColorVariantForm>>([]),
-    descriptions: new FormArray<FormGroup<IDescriptionForm>>([]),
-    productBase64: new FormArray<FormControl<string | null>>([]),
-    removeURL: new FormControl<string[] | null>([]),
-  });
-
 export interface IProductPagination extends IPaginationPayload {
   categoryId: number | null;
-  gender: GenderTypeEnum | null;
-}
-
-export interface IProductResponseRoot {
-  total: number;
-  products: IProduct[];
+  collectionId: number | null;
+  gender: string | null;
 }
 
 export interface IProduct {
   name: string;
   isCustomSize: boolean;
   customSizeName: string;
+  collectionName: string;
   color: string[];
   mrp: number;
   gender: string;
@@ -232,38 +281,7 @@ export interface IProduct {
   id: number;
 }
 
-export interface IStepperStep {
-  step: number;
-  title: string;
-  shortTitle: string;
-  description: string;
-  icon: string;
-  nextButtonText?: string;
+export interface IProductResponseRoot {
+  total: number;
+  products: IProduct[];
 }
-
-export const stepperFormSteps: IStepperStep[] = [
-  {
-    step: 1,
-    title: 'Basic Information',
-    shortTitle: 'Basic Info',
-    description: 'Enter the essential details about your product',
-    icon: 'M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z',
-    nextButtonText: 'Next: Color Variants',
-  },
-  {
-    step: 2,
-    title: 'Color Variants',
-    shortTitle: 'Variants',
-    description: 'Create different color variants of your product (optional)',
-    icon: 'M20 7l-8-4-8 4m16 0l-8 4m8-4v10l-8 4m0-10L4 7m8 4v10M4 7v10l8 4',
-    nextButtonText: 'Next: Details',
-  },
-  {
-    step: 3,
-    title: 'Product Descriptions',
-    shortTitle: 'Details',
-    description: 'Add detailed descriptions for your product (optional)',
-    icon: 'M4 6h16M4 12h16M4 18h7',
-    nextButtonText: 'Create Product',
-  },
-];

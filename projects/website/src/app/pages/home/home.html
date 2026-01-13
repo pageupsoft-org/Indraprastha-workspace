@@ -3,7 +3,7 @@
   <!-- Banner section with image -->
   <section>
     @if(apiCallService.bannerList()[0]?.bannerURL) {
-    <video
+    <!-- <video
       #videoPlayer
       [muted]="isMuted()"
       autoplay
@@ -14,8 +14,18 @@
       (loadeddata)="onVideoLoaded()"
       [attr.key]="apiCallService.bannerList()[0]?.bannerURL"
     >
-      <!-- <source src="assets/videos/top-video.mp4" type="video/mp4" /> -->
       <source [src]="apiCallService.bannerList()[0]?.bannerURL" type="video/mp4"/>
+    </video> -->
+    <video
+      #videoPlayer
+      [muted]="isMuted()"
+      autoplay
+      loop
+      playsinline
+      preload="auto"
+      class="w-full object-cover h-[70vh] lg:h-screen"
+    >
+      <source src="assets/videos/top-video.mp4" type="video/mp4" />
     </video>
     } @else {
     <!-- Fallback content while loading -->

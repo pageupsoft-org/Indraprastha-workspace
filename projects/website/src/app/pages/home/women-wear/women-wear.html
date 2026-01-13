@@ -26,7 +26,7 @@
         <!-- Video or Image content goes here -->
         <div class="relative w-full h-full rounded-2xl overflow-hidden">
           <!-- <img class="w-full h-full object-cover" src="assets/images/womens-wear-1.png" /> -->
-          <video
+          <!-- <video
             #videoPlayer
             [muted]="isMuted()"
             autoplay
@@ -37,6 +37,16 @@
             [attr.key]="apiCallService.bannerList()[2]?.bannerURL"
           >
             <source [src]="apiCallService.bannerList()[2]?.bannerURL" type="video/mp4" />
+          </video> -->
+          <video
+            #videoPlayer
+            [muted]="isMuted()"
+            autoplay
+            loop
+            playsinline
+            class="w-full h-full object-cover md:h-[400px] xl:min-h-[600px]"
+          >
+            <source src="assets/videos/women-collection-row.mp4" type="video/mp4" />
           </video>
 
           <!-- Mute/Unmute Button -->

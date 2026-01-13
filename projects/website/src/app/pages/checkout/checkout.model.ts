@@ -104,7 +104,7 @@ export interface ShippingAddress {
 }
 export interface Product {
   name: string;
-  color: string[];
+  color: string;
   mrp: number;
   gender: string;
   productURL: string[];

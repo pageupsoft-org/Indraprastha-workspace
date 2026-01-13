@@ -72,11 +72,11 @@
         </div>
         <div class="flex-1">
           <h3 class="font-semibold text-lg text-gray-800">{{ prod.name }}</h3>
-          @if(prod.cartVariant && prod.cartVariant.variantId){
+          <!-- @if(prod.cartVariant && prod.cartVariant.variantId){
           <p class="text-sm text-gray-500">
             {{ prod.cartVariant.name }}
           </p>
-          }
+          } -->
           <p class="text-sm text-gray-500">Size: {{ prod.size }} | Color: As shown</p>
 
           <!-- Quantity Controls -->
@@ -132,21 +132,21 @@
           <p class="font-semibold text-lg text-gray-800 text-end">
             {{ prod.mrp | currency : 'INR' : 'symbol' : '1.0-0' : 'en-IN' }}
           </p>
-          @if(prod?.cartVariant && prod?.cartVariant?.variantId){
+          <!-- @if(prod?.cartVariant && prod?.cartVariant?.variantId){
           <p class="font-semibold text-lg text-gray-800 text-end">
             {{ prod?.cartVariant?.mrp | currency : 'INR' : 'symbol' : '1.0-0' : 'en-IN' }}
           </p>
-          }
+          } -->
 
           <hr />
 
-          @if(prod?.cartVariant?.mrp){
+          <!-- @if(prod?.cartVariant?.mrp){
             <p class="font-semibold text-lg text-gray-800 text-end">
               @let sum = (prod.mrp * prod.cartQuantity) +( ((prod?.cartVariant?.mrp) ?
               (prod?.cartVariant?.mrp) : 0) ?? 0);
               {{ sum | currency : 'INR' : 'symbol' : '1.0-0' : 'en-IN' }}
             </p>
-          }
+          } -->
         </div>
       </div>
       <app-product-card-size-edit [prod]="getDataForCard($index)" (alterQty)="alterQuantityCnt($event, $index)" (emitDelete)="removeItemFromCart(prod.cartId, $index)"></app-product-card-size-edit>

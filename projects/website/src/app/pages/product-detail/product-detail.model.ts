@@ -5,16 +5,20 @@ export interface IStockWithIds extends MStringEnumToArray {
   stockId: number;
   productId: number;
   quantity: number;
+  colorVariantId: number;
 }
 
 export interface ICartForm {
-  stockId: FormControl<number | null>;
-  variantStockId: FormControl<number | null>; //id present in Variant -> Stocks -> Id
+  stockId: FormControl<number | null>; //color variant stock id, present in colorVariant-> Stocks -> id
   quantity: FormControl<number | null>;
+  // variantStockId: FormControl<number | null>; //id present in Variant -> Stocks -> Id
+  _colorVarintId: FormControl<number | null>;
+  tailorId: FormControl<number | null>;
+  // colorVariantStockId: FormControl<number | null>;
 }
 export interface ICartFormData {
   stockId: number | null;
-  variantId: number | null;
+  // variantId: number | null;
   quantity: number | null;
 }
 
@@ -32,8 +36,8 @@ export interface IQueryToCheckout {
   size: string;
   stockId: number;
 
-  variantStockId: number;
-  variantName: string;
+  // variantStockId: number;
+  // variantName: string;
 }
 
 export const initializeIQueryToCheckout = () => {

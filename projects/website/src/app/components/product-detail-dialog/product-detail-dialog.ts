@@ -4,13 +4,13 @@ import { MatDialogRef, MAT_DIALOG_DATA, MatDialogModule } from '@angular/materia
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { AppLoadingButton, EToastType } from '@shared';
 import { ProductDetailBase, CartUpdateOperation, RNewArrivals, appRoutes } from '@website/core';
-import { Router } from '@angular/router';
 import { NgxSkeletonLoaderModule } from 'ngx-skeleton-loader';
 import { IProductDetailDT } from './product-detail-dialog.model';
+import { IsShowCustomTailorDDPipe } from "../../core/pipe/is-show-custom-tailor-dd-pipe";
 
 @Component({
   selector: 'app-product-detail-dialog',
-  imports: [CommonModule, MatDialogModule, ReactiveFormsModule, AppLoadingButton, FormsModule, NgxSkeletonLoaderModule],
+  imports: [CommonModule, MatDialogModule, ReactiveFormsModule, AppLoadingButton, FormsModule, NgxSkeletonLoaderModule, IsShowCustomTailorDDPipe],
   templateUrl: './product-detail-dialog.html',
   styleUrl: './product-detail-dialog.scss',
 })

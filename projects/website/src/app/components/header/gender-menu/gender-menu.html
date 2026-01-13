@@ -3,14 +3,14 @@
   <div class="flex flex-col md:flex-row md:space-x-8">
     <div class="w-full lg:w-2/5 sm:w-2/5 mb-6 md:mb-0 p-6 bg-white rounded-xl">
       <div class="flex md:w-2/5 lg:space-x-14 sm:space-x-5">
-        <!-- Collection -->
+        <!-- Categories -->
         <div class="mb-8 sm:mb-0">
-          <h2 class="text-lg font-semibold mb-3 text-gray-800 tracking-wide">COLLECTION</h2>
+          <h2 class="text-lg font-semibold mb-3 text-gray-800 tracking-wide">CATEGORIES</h2>
           <ul class="text-md text-gray-600 space-y-2 leading-[16px]">
-            @for (item of collectionList(); track $index) {
-            <li (mouseenter)="updatedCategory(item.categories)">
+            @for (item of categoryList(); track $index) {
+            <li (mouseenter)="updateCollection(item)">
               <a
-                [routerLink]="getProductPageUrl(item, null)"
+                [routerLink]="getProductPageUrl(null, item)"
                 (click)="clearGender(); $event.stopPropagation()"
                 class="hover:text-[#680c01] transition-colors cursor-pointer"
               >
@@ -20,14 +20,14 @@
             }
           </ul>
         </div>
-        <!-- Categories -->
+        <!-- Collection -->
         <div>
-          <h2 class="text-lg font-semibold mb-3 text-gray-800 tracking-wide">CATEGORIES</h2>
+          <h2 class="text-lg font-semibold mb-3 text-gray-800 tracking-wide">COLLECTION</h2>
           <ul class="text-sm text-gray-600 space-y-2">
-            @for (item of categoryList(); track $index) {
+            @for (item of collectionList(); track $index) {
             <li>
               <a
-                [routerLink]="getProductPageUrl(null, item)"
+                [routerLink]="getProductPageUrl(item, null)"
                 (click)="clearGender(); $event.stopPropagation()"
                 class="hover:text-[#680c01] transition-colors cursor-pointer"
                 >{{ item.name }}</a

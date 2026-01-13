@@ -1,27 +1,27 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, signal, WritableSignal } from '@angular/core';
 import { ProductSlider } from '../home/product-slider/product-slider';
 import {
-  DashboardProductTypeStringEnum,
   DescriptionTypeStringEnum,
   AppLoadingButton,
-  Loader,
   PlatformService,
-  ConfirmationUtil,
-  getDefaultConfirmationModalData,
-  MConfirmationModalData,
+  EDescriptionType,
+  IRProductDetailRoot,
+  IRGeneric,
 } from '@shared';
 import { ActivatedRoute, Params, Router } from '@angular/router';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { CommonModule } from '@angular/common';
 import { NgxSkeletonLoaderModule } from 'ngx-skeleton-loader';
 import {
+  ApiCallService,
   appRoutes,
   CartUpdateOperation,
-  IRProductDetailRoot,
+  // IRProductDetailRoot,
   ProductDetailBase,
   WishlistService,
 } from '@website/core';
-import { IQueryToCheckout } from './product-detail.model';
+import { RCustomTailoredCombo } from '../../core/interface/response/tailor.response';
+import { IsShowCustomTailorDDPipe } from "../../core/pipe/is-show-custom-tailor-dd-pipe";
 
 @Component({
   selector: 'app-product-detail',
@@ -32,12 +32,14 @@ import { IQueryToCheckout } from './product-detail.model';
     FormsModule,
     AppLoadingButton,
     NgxSkeletonLoaderModule,
-  ],
+    IsShowCustomTailorDDPipe
+],
   templateUrl: './product-detail.html',
   styleUrl: './product-detail.scss',
 })
 export class ProductDetail extends ProductDetailBase implements OnInit {
   public readonly DescriptionTypeStringEnum = DescriptionTypeStringEnum;
+  public readonly EDescriptionType = EDescriptionType;
   public readonly CartAlterEnum = CartUpdateOperation;
 
   public toggleAccordion(i: number) {
@@ -51,6 +53,7 @@ export class ProductDetail extends ProductDetailBase implements OnInit {
     private wishlistService: WishlistService,
   ) {
     super();
+
   }
 
   ngOnInit(): void {
@@ -68,12 +71,12 @@ export class ProductDetail extends ProductDetailBase implements OnInit {
     return item.stockId;
   }
 
-  public routeToHome(){
+  public routeToHome() {
     this.router.navigate([appRoutes.HOME]);
   }
 
   public enlargeImage(img: string) {
-    this.productDetail().activeImage = img;
+    this.productDetail()._activeImage = img;
   }
 
   public toggleWishList(event: any) {
@@ -81,7 +84,7 @@ export class ProductDetail extends ProductDetailBase implements OnInit {
       event,
       this.productDetail(),
       'isWishList',
-      'id'
+      'id',
     );
   }
 }
