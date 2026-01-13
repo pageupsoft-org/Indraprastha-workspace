@@ -13,6 +13,7 @@ import {
 import { Router } from '@angular/router';
 import { IResponseCollection } from '../interface/response/collection.response';
 import { ApiCallService } from './api-call-service';
+import { IProductResponseRoot } from '../../../../../portal/src/app/pages/product/product.model';
 
 @Injectable({
   providedIn: null,

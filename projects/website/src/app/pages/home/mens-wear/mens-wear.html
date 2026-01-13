@@ -25,9 +25,9 @@
     }
 
     <div #galleryRef class="gallery">
-      @for (mensWear of mensWearList(); track mensWear.collectionId) {
+      @for (mensWear of mensWearList(); track mensWear.id) {
       <div #itemRef class="item">
-        <img
+        <!-- <img
           (click)="
             $index == currentIndex
               ? openProductPage(mensWear.collectionId)
@@ -35,8 +35,17 @@
           "
           [src]="mensWear.productURLs[0]"
           [alt]="mensWear.collectionName"
+        /> -->
+        <img
+          (click)="
+            $index == currentIndex
+              ? openProductPage(mensWear.collectionId)
+              : zoomImage(itemRef, $index)
+          "
+          [src]="mensWear.productURL[0]"
+          [alt]="mensWear.collectionName"
         />
-        <p class="text-center text-gray-700 font-medium text-sm md:text-md">
+        <p class="text-center text-gray-700 font-medium text-sm md:text-md mt-2">
           {{ mensWear.collectionName }}
         </p>
       </div>

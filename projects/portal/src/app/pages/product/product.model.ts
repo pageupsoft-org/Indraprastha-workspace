@@ -270,6 +270,7 @@ export interface IProduct {
   isCustomSize: boolean;
   customSizeName: string;
   collectionName: string;
+  collectionId: number;
   color: string[];
   mrp: number;
   gender: string;

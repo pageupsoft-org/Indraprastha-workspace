@@ -8,11 +8,23 @@ import {
   ViewChildren,
   WritableSignal,
 } from '@angular/core';
-import { GenderTypeEnum, PlatformService } from '@shared';
+import {
+  ApiRoutes,
+  GenderTypeEnum,
+  httpPost,
+  initializePagInationPayload,
+  IRGeneric,
+  PlatformService,
+} from '@shared';
 import { CommonModule } from '@angular/common';
 import { appRoutes } from '@website/core';
 import { Collection } from '../../../core/services/collection';
 import { IResponseCollection } from '../../../core/interface/response/collection.response';
+import {
+  IProduct,
+  IProductPagination,
+  IProductResponseRoot,
+} from '../../../../../../portal/src/app/pages/product/product.model';
 
 @Component({
   selector: 'app-mens-wear',
@@ -27,14 +39,19 @@ export class MensWear implements AfterViewInit {
   public currentIndex = 2;
   private readonly visibleCount = 5;
 
-  public mensWearList: WritableSignal<IResponseCollection[]> = signal([]);
+  // public mensWearList: WritableSignal<IResponseCollection[]> = signal([]);
+  public mensWearList: WritableSignal<IProduct[]> = signal([]);
   public productDetailRoute = appRoutes.PRODUCT_DETAIL;
 
   public canGoNext: WritableSignal<boolean> = signal(false);
   public canGoBack: WritableSignal<boolean> = signal(false);
 
-  constructor(private platformService: PlatformService, private collectionService: Collection) {
-    this.collectionService.getCollection(GenderTypeEnum.Men, this.mensWearList);
+  constructor(
+    private platformService: PlatformService,
+    private collectionService: Collection,
+  ) {
+    // this.collectionService.getCollection(GenderTypeEnum.Men, this.mensWearList);
+    this.getMensProduct()
   }
 
   ngAfterViewInit(): void {
@@ -65,15 +82,15 @@ export class MensWear implements AfterViewInit {
     this.updateCanSlide();
   }
 
-  private updateCanSlide(){
+  private updateCanSlide() {
     // can go next
     let lastVisibleINdex: number = this.currentIndex + 2;
     let lengthWithVisibleCard: number = lastVisibleINdex + 1;
-    this.canGoNext.update(()=> lengthWithVisibleCard < this.mensWearList().length);
-   
+    this.canGoNext.update(() => lengthWithVisibleCard < this.mensWearList().length);
+
     // can go back
     let firstIndex: number = this.currentIndex - 2;
-    this.canGoBack.update(()=> firstIndex > 0)
+    this.canGoBack.update(() => firstIndex > 0);
   }
 
   prev(): void {
@@ -112,5 +129,29 @@ export class MensWear implements AfterViewInit {
 
   public openProductPage(collectionId: number) {
     this.collectionService.openProductPage(collectionId, GenderTypeEnum.Men);
+  }
+
+  private getMensProduct() {
+    const payLoad: IProductPagination = {
+      ...initializePagInationPayload(),
+      collectionId: null,
+      categoryId: null,
+      gender: GenderTypeEnum.Men,
+    };
+    httpPost<IRGeneric<IProductResponseRoot>, IProductPagination>(
+      ApiRoutes.PRODUCT.ALL,
+      payLoad,
+    ).subscribe({
+      next: (res) => {
+        if (res.data && res.data.products && res.data.products.length) {
+          this.mensWearList.set(res.data.products);
+        } else {
+          this.mensWearList.set([]);
+        }
+      },
+      error: (err) => {
+        this.mensWearList.set([]);
+      },
+    });
   }
 }
