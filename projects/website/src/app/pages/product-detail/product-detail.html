@@ -14,13 +14,16 @@
       </div>
 
       <!-- Main Product Image and Magnified View Container -->
-      <div class="relative w-full rounded-lg magnify-container image-container">
+      <div class="relative w-full rounded-lg magnify-container"
+           (mousemove)="magnify($event)"
+           (mouseleave)="hideMagnifier()">
         @if(isShowloader()){
         <ngx-skeleton-loader count="1" appearance="square" [theme]="{ height: '500px', width: '100%' }" />
         }@else {
-        <img id="main-product-image" [src]="productDetail()._activeImage" alt="Main Product"
+        <img #mainProductImage [src]="productDetail()._activeImage" alt="Main Product"
           class="w-full h-auto object-cover rounded-lg shadow-xl" />
-        <div id="magnified-view" class="absolute inset-0"></div>
+        <div #lens class="lens absolute hidden"></div>
+        <div #magnifiedView class="magnified-view absolute hidden"></div>
         }
       </div>
     </div>
