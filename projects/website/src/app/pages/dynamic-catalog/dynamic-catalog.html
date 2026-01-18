@@ -3,10 +3,8 @@
   <div class="flex flex-wrap justify-between items-center mb-8 pb-4 border-b border-gray-200 gap-4">
     <!-- Left Side: Filter Toggle & Product Count -->
     <div class="flex items-center space-x-6">
-      <button
-        (click)="setFiltersOpen(!filtersOpen)"
-        class="flex items-center space-x-2 text-sm font-semibold tracking-wider hover:text-gray-500 transition-colors cursor-pointer"
-      >
+      <button (click)="setFiltersOpen(!filtersOpen)"
+        class="flex items-center space-x-2 text-sm font-semibold tracking-wider hover:text-gray-500 transition-colors cursor-pointer">
         <img src="assets/images/filter.svg" class="h-4 w-4" alt="" />
         <span>{{ filtersOpen ? 'HIDE FILTERS' : 'SHOW FILTERS' }}</span>
       </button>
@@ -14,36 +12,28 @@
 
     <!-- Right Side: View & Sort Controls -->
     <div class="flex items-center space-x-6">
-      <div
-        #gridViewControls
-        class="hidden lg:flex items-center space-x-1 p-1 bg-gray-100 rounded-md"
-      >
-        <button
-          data-cols="4"
-          (click)="changeGrid(4)"
+      <div #gridViewControls class="hidden lg:flex items-center space-x-1 p-1 bg-gray-100 rounded-md">
+        <button data-cols="4" (click)="changeGrid(4)"
           class="grid-view-btn p-1.5 rounded-md hover:bg-gray-200 transition-colors cursor-pointer"
-          [ngClass]="currentCols() === 4 ? 'bg-white shadow text-gray-800' : 'text-gray-400'"
-        >
+          [ngClass]="currentCols() === 4 ? 'bg-white shadow text-gray-800' : 'text-gray-400'">
           <svg class="w-5 h-5" viewBox="0 0 24 24" fill="currentColor">
-            <path d="M2 2h4v4H2V2zm5 0h4v4H7V2zm5 0h4v4h-4V2zm5 0h4v4h-4V2zM2 7h4v4H2V7zm5 0h4v4H7V7zm5 0h4v4h-4V7zm5 0h4v4h-4V7zM2 12h4v4H2v-4zm5 0h4v4H7v-4zm5 0h4v4h-4v-4zm5 0h4v4h-4v-4zM2 17h4v4H2v-4zm5 0h4v4H7v-4zm5 0h4v4h-4v-4zm5 0h4v4h-4v-4z"></path>
+            <path
+              d="M2 2h4v4H2V2zm5 0h4v4H7V2zm5 0h4v4h-4V2zm5 0h4v4h-4V2zM2 7h4v4H2V7zm5 0h4v4H7V7zm5 0h4v4h-4V7zm5 0h4v4h-4V7zM2 12h4v4H2v-4zm5 0h4v4H7v-4zm5 0h4v4h-4v-4zm5 0h4v4h-4v-4zM2 17h4v4H2v-4zm5 0h4v4H7v-4zm5 0h4v4h-4v-4zm5 0h4v4h-4v-4z">
+            </path>
           </svg>
         </button>
-        <button
-          data-cols="3"
-          (click)="changeGrid(3)"
+        <button data-cols="3" (click)="changeGrid(3)"
           class="grid-view-btn p-1.5 rounded-md hover:bg-gray-200 transition-colors cursor-pointer"
-          [ngClass]="currentCols() === 3 ? 'bg-white shadow text-gray-800' : 'text-gray-400'"
-        >
+          [ngClass]="currentCols() === 3 ? 'bg-white shadow text-gray-800' : 'text-gray-400'">
           <svg class="w-5 h-5" viewBox="0 0 24 24" fill="currentColor">
-            <path d="M3 3h5v5H3V3zm7 0h5v5h-5V3zm7 0h5v5h-5V3zM3 10h5v5H3v-5zm7 0h5v5h-5v-5zm7 0h5v5h-5v-5zM3 17h5v5H3v-5zm7 0h5v5h-5v-5zm7 0h5v5h-5v-5z"></path>
+            <path
+              d="M3 3h5v5H3V3zm7 0h5v5h-5V3zm7 0h5v5h-5V3zM3 10h5v5H3v-5zm7 0h5v5h-5v-5zm7 0h5v5h-5v-5zM3 17h5v5H3v-5zm7 0h5v5h-5v-5zm7 0h5v5h-5v-5z">
+            </path>
           </svg>
         </button>
-        <button
-          data-cols="2"
-          (click)="changeGrid(2)"
+        <button data-cols="2" (click)="changeGrid(2)"
           class="grid-view-btn p-1.5 rounded-md transition-colors cursor-pointer"
-          [ngClass]="currentCols() === 2 ? 'bg-white shadow text-gray-800' : 'text-gray-400'"
-        >
+          [ngClass]="currentCols() === 2 ? 'bg-white shadow text-gray-800' : 'text-gray-400'">
           <svg class="w-5 h-5" viewBox="0 0 24 24" fill="currentColor">
             <path d="M3 3h8v8H3V3zm10 0h8v8h-8V3zM3 13h8v8H3v-8zm10 0h8v8h-8v-8z"></path>
           </svg>
@@ -51,40 +41,32 @@
       </div>
 
       <!-- Sort By Dropdown -->
-      <div class="relative">
-        <button
-          (click)="toggleSortOptions($event)"
-          class="flex items-center space-x-2 text-sm font-semibold tracking-wider hover:text-gray-500 transition-colors cursor-pointer"
-        >
+      <div class="relative cursor-pointer">
+        <button (click)="toggleSortOptions($event)"
+          class="flex items-center space-x-2 text-sm font-semibold tracking-wider hover:text-gray-500 transition-colors cursor-pointer">
           <span>SORT BY</span>
-          <svg
-            #sortArrow
-            xmlns="http://www.w3.org/2000/svg"
-            class="h-4 w-4 transform transition-transform duration-300"
-            fill="none"
-            viewBox="0 0 24 24"
-            stroke="currentColor"
-            stroke-width="2"
-          >
+          <svg #sortArrow xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 transform transition-transform duration-300"
+            fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
             <path stroke-linecap="round" stroke-linejoin="round" d="M19 9l-7 7-7-7" />
           </svg>
         </button>
-        <div
-          #sortOptions
-          class="hidden absolute right-0 mt-3 w-56 bg-white border border-gray-200 rounded-md shadow-lg z-[999] transition-all duration-300 origin-top-right"
-        >
-          <a class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-50 rounded-t-md"
+        <div #sortOptions
+          class="hidden absolute right-0 mt-3 w-56 bg-white border border-gray-200 rounded-md shadow-lg z-[999] transition-all duration-300 origin-top-right">
+          <!-- <a class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-50 rounded-t-md"
             >FEATURED</a
           >
-          <a class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-50">BEST SELLING</a>
-          <a class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-50">ALPHABETICALLY, A-Z</a>
+          <a class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-50">BEST SELLING</a> -->
+          @for (item of sortByCombo; track $index) {
+          <a class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-50" (click)="sort(item)">{{item.value}}</a>
+          }
+          <!-- <a class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-50">ALPHABETICALLY, A-Z</a>
           <a class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-50">ALPHABETICALLY, Z-A</a>
           <a class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-50">PRICE, LOW TO HIGH</a>
           <a class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-50">PRICE, HIGH TO LOW</a>
           <a class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-50">DATE, OLD TO NEW</a>
           <a class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-50 rounded-b-md"
             >DATE, NEW TO OLD</a
-          >
+          > -->
         </div>
       </div>
     </div>
@@ -94,145 +76,75 @@
   <main class="flex flex-row overflow-hidden">
     <!-- Filter Sidebar -->
 
-    <aside
-      #filterSidebar
+    <aside #filterSidebar
       class="flex-shrink-0 self-start md:sticky md:top-0 h-screen overflow-y-auto transition-all duration-500 ease-in-out mob-filter-sodebar"
-      style="margin-left: -15rem;"
-    >
+      style="margin-left: -15rem;">
       <div class="w-52 xl:w-64 pr-8 transition-opacity duration-300 opacity-0">
         <!-- Inner div to maintain width and padding -->
         <div class="space-y-6">
           <!-- Filter Section Template -->
           <div class="filter-group border-b pb-4">
-            <button
-              (click)="toggleFilter('category')"
-              class="font-semibold text-sm w-full flex justify-between items-center cursor-pointer"
-            >
+            <button (click)="toggleFilter('category')"
+              class="font-semibold text-sm w-full flex justify-between items-center cursor-pointer">
               <span>CATEGORY</span>
-              <svg
-                xmlns="http://www.w3.org/2000/svg"
-                class="h-4 w-4 transform transition-transform duration-300"
-                [class.rotate-180]="isActive('category')"
-                fill="none"
-                viewBox="0 0 24 24"
-                stroke="currentColor"
-              >
-                <path
-                  stroke-linecap="round"
-                  stroke-linejoin="round"
-                  stroke-width="2"
-                  d="M19 9l-7 7-7-7"
-                />
+              <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 transform transition-transform duration-300"
+                [class.rotate-180]="isActive('category')" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7" />
               </svg>
             </button>
 
-            <div
-              class="accordion-content mt-3 space-y-2 text-sm text-gray-700"
-              [class.active]="isActive('category')"
-            >
+            <div class="accordion-content mt-3 space-y-2 text-sm text-gray-700" [class.active]="isActive('category')">
               @for (category of dynamicData().filter.category; track $index) {
               <label class="flex items-center space-x-2 cursor-pointer hover:text-black">
-                <input
-                  type="checkbox"
-                  class="w-4 h-4 rounded border-gray-400 text-black"
-                  [(ngModel)]="category.isSelected"
-                />
+                <input type="checkbox" class="w-4 h-4 rounded border-gray-400 text-black"
+                  [(ngModel)]="category.isSelected" />
                 <span>{{ category.name }} ({{ category.count }})</span>
               </label>
               }
             </div>
           </div>
           <div class="filter-group border-b pb-4">
-            <button
-              (click)="toggleFilter('price')"
-              class="font-semibold text-sm w-full flex justify-between items-center cursor-pointer"
-            >
+            <button (click)="toggleFilter('price')"
+              class="font-semibold text-sm w-full flex justify-between items-center cursor-pointer">
               <span>PRICE</span>
-              <svg
-                xmlns="http://www.w3.org/2000/svg"
-                class="h-4 w-4 transform transition-transform duration-300"
-                [class.rotate-180]="isActive('price')"
-                fill="none"
-                viewBox="0 0 24 24"
-                stroke="currentColor"
-              >
-                <path
-                  stroke-linecap="round"
-                  stroke-linejoin="round"
-                  stroke-width="2"
-                  d="M19 9l-7 7-7-7"
-                />
+              <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 transform transition-transform duration-300"
+                [class.rotate-180]="isActive('price')" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7" />
               </svg>
             </button>
-            <div
-              class="accordion-content mt-3 space-y-3 text-sm text-gray-700"
-              [class.active]="isActive('price')"
-            >
+            <div class="accordion-content mt-3 space-y-3 text-sm text-gray-700" [class.active]="isActive('price')">
               <div class="relative h-6 flex items-center select-none">
                 <!-- Full track -->
                 <div class="absolute w-full h-1 bg-gray-300 rounded"></div>
                 <!-- Active (selected) range -->
                 <div class="absolute h-1 bg-black rounded" [ngStyle]="getRangeStyle()"></div>
                 <!-- Min slider -->
-                <input
-                  type="range"
-                  [min]="minLimit()"
-                  [max]="maxLimit()"
-                  step="1000"
-                  [value]="payloadGenderMenu().minPrice"
-                  (input)="onMinChange($event)"
-                  class="absolute w-full appearance-none bg-transparent accent-black pointer-events-auto"
-                />
+                <input type="range" [min]="minLimit()" [max]="maxLimit()" step="1000"
+                  [value]="payloadGenderMenu().minPrice" (input)="onMinChange($event)"
+                  class="absolute w-full appearance-none bg-transparent accent-black pointer-events-auto" />
                 <!-- Max slider -->
-                <input
-                  type="range"
-                  [min]="minLimit()"
-                  [max]="maxLimit()"
-                  step="1000"
-                  [value]="payloadGenderMenu().maxPrice"
-                  (input)="onMaxChange($event)"
-                  class="absolute w-full appearance-none bg-transparent accent-black pointer-events-auto"
-                />
+                <input type="range" [min]="minLimit()" [max]="maxLimit()" step="1000"
+                  [value]="payloadGenderMenu().maxPrice" (input)="onMaxChange($event)"
+                  class="absolute w-full appearance-none bg-transparent accent-black pointer-events-auto" />
               </div>
               <!-- Display values -->
               <div class="flex space-x-2">
-                <input
-                  type="text"
-                  [value]="'₹ ' + payloadGenderMenu().minPrice"
-                  class="w-1/2 border px-2 py-1 rounded text-sm focus:ring-1 focus:ring-black"
-                  readonly
-                />
-                <input
-                  type="text"
-                  [value]="'₹ ' + payloadGenderMenu().maxPrice"
-                  class="w-1/2 border px-2 py-1 rounded text-sm focus:ring-1 focus:ring-black"
-                  readonly
-                />
+                <input type="text" [value]="'₹ ' + payloadGenderMenu().minPrice"
+                  class="w-1/2 border px-2 py-1 rounded text-sm focus:ring-1 focus:ring-black" readonly />
+                <input type="text" [value]="'₹ ' + payloadGenderMenu().maxPrice"
+                  class="w-1/2 border px-2 py-1 rounded text-sm focus:ring-1 focus:ring-black" readonly />
               </div>
             </div>
           </div>
 
           <div class="filter-group border-b pb-4 hidden">
             <!-- filters.component.html -->
-            <button
-              (click)="toggleFilter('color')"
-              class="font-semibold text-sm w-full flex justify-between items-center cursor-pointer"
-            >
+            <button (click)="toggleFilter('color')"
+              class="font-semibold text-sm w-full flex justify-between items-center cursor-pointer">
               <span>COLOR</span>
-              <svg
-                xmlns="http://www.w3.org/2000/svg"
-                class="h-4 w-4 transform transition-transform duration-300"
-                [class.rotate-180]="isActive('color')"
-                fill="none"
-                viewBox="0 0 24 24"
-                stroke="currentColor"
-              >
-                <path
-                  stroke-linecap="round"
-                  stroke-linejoin="round"
-                  stroke-width="2"
-                  d="M19 9l-7 7-7-7"
-                />
+              <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 transform transition-transform duration-300"
+                [class.rotate-180]="isActive('color')" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7" />
               </svg>
             </button>
 
@@ -241,18 +153,11 @@
                 @for (color of dynamicData().filter.color; track $index) {
                 <label
                   class="relative w-8 h-8 mr-2 mb-2 rounded-full border shadow-sm hover:scale-110 transition-transform cursor-pointer inline-block"
-                  [style.background-color]="color.name"
-                >
-                  <input
-                    type="checkbox"
-                    class="absolute inset-0 opacity-0 cursor-pointer"
-                    [(ngModel)]="color.isSelected"
-                  />
+                  [style.background-color]="color.name">
+                  <input type="checkbox" class="absolute inset-0 opacity-0 cursor-pointer"
+                    [(ngModel)]="color.isSelected" />
                   @if(color.isSelected){
-                  <span
-                    class="absolute inset-0 flex items-center justify-center text-white text-sm font-bold"
-                    >✓</span
-                  >
+                  <span class="absolute inset-0 flex items-center justify-center text-white text-sm font-bold">✓</span>
 
                   }
                 </label>
@@ -261,10 +166,8 @@
             </div>
           </div>
 
-          <button
-            (click)="search()"
-            class="w-full bg-gray-900 text-white py-3 text-sm font-bold tracking-wider hover:bg-gray-700 transition-colors rounded-md cursor-pointer"
-          >
+          <button (click)="search()"
+            class="w-full bg-gray-900 text-white py-3 text-sm font-bold tracking-wider hover:bg-gray-700 transition-colors rounded-md cursor-pointer">
             APPLY FILTERS
           </button>
         </div>
@@ -272,106 +175,47 @@
     </aside>
 
     <!-- Product Grid -->
-    <section
-      class="flex-grow overflow-y-auto h-screen xl:pr-6 transition-all duration-500 ease-in-out main-panel"
-    >
+    <section class="flex-grow overflow-y-auto h-screen xl:pr-6 transition-all duration-500 ease-in-out main-panel">
       @if (isShowLoading() && payloadGenderMenu().pageIndex === 1) {
-      <div
-        class="grid grid-cols-6 sm:grid-cols-6 lg:grid-cols-6 gap-x-6 gap-y-10 pb-14 lg:pl-[35px] p-0"
-      >
+      <div class="grid grid-cols-4 sm:grid-cols-4 lg:grid-cols-4 gap-x-6 gap-y-10 pb-14 lg:pl-[35px] p-0">
         <ng-container *ngTemplateOutlet="skeletonLoader"></ng-container>
       </div>
 
       } @else {
-      <div
-        #productGrid
-        class="grid grid-cols-4 sm:grid-cols-4 lg:grid-cols-4 gap-x-6 gap-y-10 pb-14 pl-10"
-        infiniteScroll
-        [infiniteScrollDistance]="2"
-        [infiniteScrollThrottle]="50"
-        [infiniteScrollContainer]="selector"
-        [fromRoot]="true"
-        (scrolled)="onScrollDown()"
-      >
+      <div #productGrid class="grid grid-cols-4 sm:grid-cols-4 lg:grid-cols-4 gap-x-6 gap-y-10 pb-14 pl-10"
+        infiniteScroll [infiniteScrollDistance]="2" [infiniteScrollThrottle]="50" [infiniteScrollContainer]="selector"
+        [fromRoot]="true" (scrolled)="onScrollDown()">
         @for (item of dynamicData().products; track $index) {
-        <div
-          class="group cursor-pointer relative mt-5 xl:mt-0"
-          (click)="routeToProductDetail(item.id)"
-        >
-          <div
-            (click)="toggleWishList($event, item)"
-            class="w-[30px] h-[32px] like-btn absolute top-3 right-3 p-2 text-black bg-white rounded-[50%] cursor-pointer hover:bg-opacity-90 transition-all duration-300 z-20"
-          >
+        <div class="group cursor-pointer relative mt-5 xl:mt-0" (click)="routeToProductDetail(item.id)">
+          <div (click)="toggleWishList($event, item)"
+            class="w-[30px] h-[32px] like-btn absolute top-3 right-3 p-2 text-black bg-white rounded-[50%] cursor-pointer hover:bg-opacity-90 transition-all duration-300 z-20">
             <button class="cursor-pointer">
               @if(wishlistService.isWishlistLoading() && item.id == wishlistService.activeProdId()){
-              <svg
-                xmlns="http://www.w3.org/2000/svg"
-                class="h-4 w-4 animate-spin text-[#df1800]"
-                viewBox="0 0 24 24"
-                fill="none"
-              >
-                <circle
-                  cx="12"
-                  cy="12"
-                  r="10"
-                  stroke="currentColor"
-                  stroke-width="3"
-                  class="opacity-25"
-                />
-                <path
-                  fill="currentColor"
-                  class="opacity-75"
-                  d="M4 12a8 8 0 018-8v3a5 5 0 00-5 5H4z"
-                />
+              <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 animate-spin text-[#df1800]" viewBox="0 0 24 24"
+                fill="none">
+                <circle cx="12" cy="12" r="10" stroke="currentColor" stroke-width="3" class="opacity-25" />
+                <path fill="currentColor" class="opacity-75" d="M4 12a8 8 0 018-8v3a5 5 0 00-5 5H4z" />
               </svg>
 
               }@else { @if(item.isWishList){
-              <svg
-                xmlns="http://www.w3.org/2000/svg"
-                class="h-4 w-4 text-[#df1800]"
-                fill="currentColor"
-                viewBox="0 0 24 24"
-                stroke="currentColor"
-              >
-                <path
-                  stroke-linecap="round"
-                  stroke-linejoin="round"
-                  stroke-width="2"
-                  d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z"
-                />
+              <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 text-[#df1800]" fill="currentColor"
+                viewBox="0 0 24 24" stroke="currentColor">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                  d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z" />
               </svg>
               } @else {
-              <svg
-                xmlns="http://www.w3.org/2000/svg"
-                class="h-4 w-4"
-                fill="none"
-                viewBox="0 0 24 24"
-                stroke="currentColor"
-              >
-                <path
-                  stroke-linecap="round"
-                  stroke-linejoin="round"
-                  stroke-width="2"
-                  d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z"
-                />
+              <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="none" viewBox="0 0 24 24"
+                stroke="currentColor">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                  d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z" />
               </svg>
               } }
             </button>
           </div>
 
-          <div
-            class="aspect-w-1 image-wrapper aspect-h-1 h-[90%] w-full overflow-hidden rounded-lg bg-gray-200"
-          >
-            <img
-              [src]="item.productURL[0]"
-              alt="Product Image 1"
-              class="product-image image-main"
-            />
-            <img
-              [src]="item.productURL[1]"
-              alt="Product Image 1 Hover"
-              class="product-image image-secondary"
-            />
+          <div class="aspect-w-1 image-wrapper aspect-h-1 h-[90%] w-full overflow-hidden rounded-lg bg-gray-200">
+            <img [src]="item.productURL[0]" alt="Product Image 1" class="product-image image-main" />
+            <img [src]="item.productURL[1]" alt="Product Image 1 Hover" class="product-image image-secondary" />
           </div>
 
           <!-- Updated bottom section with animated underline -->
@@ -379,8 +223,8 @@
             <h3 class="mt-4 text-sm text-gray-700 truncate relative pb-1">
               <span>{{ item.name }}</span>
               <div
-                class="absolute bottom-0 left-0 w-0 h-0.5 bg-gradient-to-r from-[#800020] via-[#A52A2A] to-[#DC143C] group-hover:w-full transition-all duration-300 ease-in-out origin-left"
-              ></div>
+                class="absolute bottom-0 left-0 w-0 h-0.5 bg-gradient-to-r from-[#800020] via-[#A52A2A] to-[#DC143C] group-hover:w-full transition-all duration-300 ease-in-out origin-left">
+              </div>
             </h3>
             <p class="mt-1 text-lg font-medium text-gray-900">
               {{ item.mrp | currency : 'INR' : 'symbol' : '1.0-0' : 'en-IN' }}
@@ -405,18 +249,12 @@
   @let dummyArr = [1, 2, 3, 4, 5, 7, 8]; @for (item of dummyArr; track $index) {
   <div class="group m-2">
     <!-- Image Skeleton -->
-    <ngx-skeleton-loader
-      count="1"
-      appearance="square"
-      class="rounded-md"
-      [theme]="{ height: '400px', width: '100%', margin: '0px' }"
-    ></ngx-skeleton-loader>
+    <ngx-skeleton-loader count="1" appearance="square" class="rounded-md"
+      [theme]="{ height: '400px', width: '100%', margin: '0px' }"></ngx-skeleton-loader>
 
     <!-- Title + Price Skeleton -->
-    <ngx-skeleton-loader
-      count="2"
-      [theme]="{ height: '12px', width: '100%', 'margin-top': '4px' }"
-    ></ngx-skeleton-loader>
+    <ngx-skeleton-loader count="2"
+      [theme]="{ height: '12px', width: '100%', 'margin-top': '4px' }"></ngx-skeleton-loader>
   </div>
   }
 </ng-template>

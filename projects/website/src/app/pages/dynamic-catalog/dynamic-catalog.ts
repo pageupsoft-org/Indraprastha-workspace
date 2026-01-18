@@ -16,6 +16,7 @@ import {
   getObjectFromUrl,
   httpPost,
   initializePagInationPayload,
+  IOrdersBy,
   IRGeneric,
   PlatformService,
   ToastService,
@@ -34,6 +35,7 @@ import {
   ProductHeader,
 } from '@website/core';
 import { NoProductFound } from '../../core/component/no-product-found/no-product-found';
+import { sortByArray, SortByModel } from './dynamic-catalog.model';
 
 @Component({
   selector: 'app-dynamic-catalog',
@@ -83,6 +85,8 @@ export class DynamicCatalog implements AfterViewInit {
   // public isLoading = signal(false); // prevents duplicate calls
   public selector: string = '.main-panel';
 
+  public sortByCombo: SortByModel[] = sortByArray;
+
   public baseUrl: WritableSignal<string> = signal('');
 
   public dynamicData: WritableSignal<IResponseDynamicCatalogue> = signal(
@@ -129,6 +133,21 @@ export class DynamicCatalog implements AfterViewInit {
     }
 
     this.setFiltersOpen(false);
+  }
+
+  public sort(item: SortByModel) {
+    const sort: IOrdersBy = {
+      fieldName: item.key,
+      sort: item.sort,
+    };
+    this.payloadGenderMenu.update((val) => {
+      return {
+        ...val,
+        ordersBy: [sort],
+      };
+    });
+
+    this.getData();
   }
 
   public routeToProductDetail(productId: number) {
