@@ -51,7 +51,7 @@ export class MensWear implements AfterViewInit {
     private collectionService: Collection,
   ) {
     // this.collectionService.getCollection(GenderTypeEnum.Men, this.mensWearList);
-    this.getMensProduct()
+    this.getMensProduct();
   }
 
   ngAfterViewInit(): void {
@@ -138,20 +138,23 @@ export class MensWear implements AfterViewInit {
       categoryId: null,
       gender: GenderTypeEnum.Men,
     };
-    httpPost<IRGeneric<IProductResponseRoot>, IProductPagination>(
-      ApiRoutes.PRODUCT.ALL,
-      payLoad,
-    ).subscribe({
-      next: (res) => {
-        if (res.data && res.data.products && res.data.products.length) {
-          this.mensWearList.set(res.data.products);
-        } else {
-          this.mensWearList.set([]);
-        }
-      },
-      error: (err) => {
-        this.mensWearList.set([]);
-      },
+    this.collectionService.getAllProduct(payLoad).then((res: IProduct[]) => {
+      this.mensWearList.set(res);
     });
+    // httpPost<IRGeneric<IProductResponseRoot>, IProductPagination>(
+    //   ApiRoutes.PRODUCT.ALL,
+    //   payLoad,
+    // ).subscribe({
+    //   next: (res) => {
+    //     if (res.data && res.data.products && res.data.products.length) {
+    // this.mensWearList.set(res.data.products);
+    //     } else {
+    //       this.mensWearList.set([]);
+    //     }
+    //   },
+    //   error: (err) => {
+    //     this.mensWearList.set([]);
+    //   },
+    // });
   }
 }

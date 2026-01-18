@@ -6,6 +6,7 @@ import {
   CustomToken,
   GenderTypeEnum,
   httpGet,
+  httpPost,
   initializePagInationPayload,
   IRGeneric,
   UseFetch,
@@ -13,7 +14,11 @@ import {
 import { Router } from '@angular/router';
 import { IResponseCollection } from '../interface/response/collection.response';
 import { ApiCallService } from './api-call-service';
-import { IProductResponseRoot } from '../../../../../portal/src/app/pages/product/product.model';
+import {
+  IProduct,
+  IProductPagination,
+  IProductResponseRoot,
+} from '../../../../../portal/src/app/pages/product/product.model';
 
 @Injectable({
   providedIn: null,
@@ -56,5 +61,34 @@ export class Collection {
       .catch(() => {
         responseVar.set([]);
       });
+  }
+
+  public getAllProduct(payload: IProductPagination): Promise<IProduct[]> {
+    // const payLoad: IProductPagination = {
+    //   ...initializePagInationPayload(),
+    //   collectionId: null,
+    //   categoryId: null,
+    //   gender: GenderTypeEnum.Men,
+    // };
+    return new Promise((resolve, reject) => {
+      httpPost<IRGeneric<IProductResponseRoot>, IProductPagination>(
+        ApiRoutes.PRODUCT.ALL,
+        payload,
+      ).subscribe({
+        next: (res) => {
+          if (res.data && res.data.products && res.data.products.length) {
+            // this.mensWearList.set(res.data.products);
+            resolve(res.data.products);
+          } else {
+            // this.mensWearList.set([]);
+            resolve([]);
+          }
+        },
+        error: (err) => {
+          // this.mensWearList.set([]);
+          resolve([]);
+        },
+      });
+    });
   }
 }

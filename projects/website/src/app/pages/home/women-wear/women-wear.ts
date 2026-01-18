@@ -8,11 +8,15 @@ import {
   ViewChildren,
   WritableSignal,
 } from '@angular/core';
-import { GenderTypeEnum, PlatformService } from '@shared';
+import { GenderTypeEnum, initializePagInationPayload, PlatformService } from '@shared';
 import { IResponseCollection } from '../../../core/interface/response/collection.response';
 import { Collection } from '../../../core/services/collection';
 import { CommonModule } from '@angular/common';
 import { ApiCallService } from '@website/core';
+import {
+  IProduct,
+  IProductPagination,
+} from '../../../../../../portal/src/app/pages/product/product.model';
 @Component({
   selector: 'app-women-wear',
   imports: [CommonModule],
@@ -28,7 +32,8 @@ export class WomenWear implements AfterViewInit {
   public canScrollPrev: WritableSignal<boolean> = signal(false);
   public canScrollNext: WritableSignal<boolean> = signal(false);
 
-  public womensWearList: WritableSignal<IResponseCollection[]> = signal([]);
+  // public womensWearList: WritableSignal<IResponseCollection[]> = signal([]);
+  public womensWearList: WritableSignal<IProduct[]> = signal([]);
 
   slideWidth = 0;
   slideMargin = 16; // matches your 16px margin
@@ -38,7 +43,8 @@ export class WomenWear implements AfterViewInit {
     private collectionService: Collection,
     public apiCallService: ApiCallService,
   ) {
-    this.collectionService.getCollection(GenderTypeEnum.Women, this.womensWearList);
+    // this.collectionService.getCollection(GenderTypeEnum.Women, this.womensWearList);
+    this.getWomensProduct();
   }
 
   ngAfterViewInit(): void {
@@ -112,10 +118,7 @@ export class WomenWear implements AfterViewInit {
     }, 100);
   }
   private ensureVideoPlays(): void {
-    if (
-      this.platformService.isBrowser &&
-      this.videoPlayer?.nativeElement
-    ) {
+    if (this.platformService.isBrowser && this.videoPlayer?.nativeElement) {
       const video = this.videoPlayer.nativeElement;
 
       // Simple approach: just play the video
@@ -129,5 +132,17 @@ export class WomenWear implements AfterViewInit {
   }
   public openProductPage(collectionId: number) {
     this.collectionService.openProductPage(collectionId, GenderTypeEnum.Women);
+  }
+
+  private getWomensProduct() {
+    const payLoad: IProductPagination = {
+      ...initializePagInationPayload(),
+      collectionId: null,
+      categoryId: null,
+      gender: GenderTypeEnum.Women,
+    };
+    this.collectionService.getAllProduct(payLoad).then((res: IProduct[]) => {
+      this.womensWearList.set(res);
+    });
   }
 }
