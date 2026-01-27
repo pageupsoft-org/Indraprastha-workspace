@@ -22,7 +22,7 @@
           <!-- <img class="w-full h-full object-cover" src="assets/images/womens-wear-1.png" /> -->
           @if(apiCallService.bannerList()[2]?.bannerURL) {
           @if(showVideoLoader()){
-          <div class="w-full h-[70vh] lg:h-screen bg-gray-200 flex items-center justify-center">
+          <div class="w-full h-full lg:h-screen bg-gray-200 flex items-center justify-center">
             <div class="animate-spin rounded-full h-12 w-12 border-b-2 border-gray-900"></div>
           </div>
           }
@@ -34,7 +34,7 @@
           </video>
           }@else {
           <!-- Fallback content while loading -->
-          <div class="w-full h-[70vh] lg:h-screen bg-gray-200 flex items-center justify-center">
+          <div class="w-full h-full lg:h-screen bg-gray-200 flex items-center justify-center">
             <div class="text-gray-500">Loading video...</div>
           </div>
           }
