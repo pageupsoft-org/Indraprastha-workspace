@@ -31,6 +31,7 @@ export class WomenWear implements AfterViewInit {
 
   public canScrollPrev: WritableSignal<boolean> = signal(false);
   public canScrollNext: WritableSignal<boolean> = signal(false);
+  public showVideoLoader: WritableSignal<boolean> = signal(true);
 
   // public womensWearList: WritableSignal<IResponseCollection[]> = signal([]);
   public womensWearList: WritableSignal<IProduct[]> = signal([]);
@@ -113,6 +114,7 @@ export class WomenWear implements AfterViewInit {
   }
 
   onVideoLoaded() {
+    this.showVideoLoader.set(false);
     setTimeout(() => {
       this.ensureVideoPlays();
     }, 100);

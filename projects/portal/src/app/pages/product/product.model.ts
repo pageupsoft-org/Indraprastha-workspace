@@ -103,21 +103,13 @@ export function initVariantForm(): IVariantForm {
 export interface IColorVariantForm {
   id: FormControl<number | null>;
   productId: FormControl<number | null>;
-
-  // model: colorName
   colorName: FormControl<string | null>;
-
-  // model: stocks
   stocks: FormArray<FormGroup<stocks>>;
-
-  // model: colorVariantBase64
   colorVariantBase64: FormArray<FormControl<string | null>>;
-
-  // model: productBase64
   productBase64: FormArray<FormControl<string | null>>;
-
-  // model: removeURL
   removeURL: FormArray<FormControl<string | null>>;
+
+  _isFreesize: FormControl<boolean | null>;
 }
 
 export interface IColorVariantData {
@@ -137,11 +129,24 @@ export interface stocks {
   quantity: FormControl<number | null>;
   size: FormControl<EStockSize | null>;
 }
+// export const initializeStockForm = (quantity: number = 0, size: EStockSize): FormGroup<stocks> => {
+//   return new FormGroup<stocks>({
+//     quantity: new FormControl<number | null>(quantity),
+//     size: new FormControl<EStockSize | null>(size),
+//   });
+// };
 export const initializeStockForm = (quantity: number = 0, size: EStockSize): FormGroup<stocks> => {
-  return new FormGroup<stocks>({
+  const form = new FormGroup<stocks>({
     quantity: new FormControl<number | null>(quantity),
     size: new FormControl<EStockSize | null>(size),
   });
+
+
+  if(size == EStockSize.FreeSize && quantity == 0){
+    form.controls.quantity.disable();
+  }
+
+  return form;
 };
 
 export interface IDescriptionForm {
@@ -215,6 +220,7 @@ export const initializeColorVariantForm = (data: any | null): FormGroup<IColorVa
     colorVariantBase64: new FormArray<FormControl<string | null>>([]), // Initialize as empty array
     productBase64: new FormArray<FormControl<string | null>>([]),
     removeURL: new FormArray<FormControl<string | null>>([]),
+    _isFreesize: new FormControl<boolean>(false),
   });
 
   if (data) {

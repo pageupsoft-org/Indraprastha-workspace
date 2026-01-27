@@ -15,9 +15,11 @@ import { Collection } from '../../core/services/collection';
 import { ApiCallService, appRoutes } from '@website/core';
 import { Router, NavigationEnd } from '@angular/router';
 
+import { CommonModule } from '@angular/common';
+
 @Component({
   selector: 'app-home',
-  imports: [ProductSlider, WomenWear, MensWear],
+  imports: [ProductSlider, WomenWear, MensWear, CommonModule],
   providers: [Collection],
   templateUrl: './home.html',
   styleUrl: './home.scss',
@@ -29,6 +31,7 @@ export class Home extends Base implements AfterViewInit, OnInit, OnDestroy {
   public middleBanners: string | null = null;
   public productList = signal<Product[]>([]);
   public isMuted = signal(true);
+  public showVideoLoader = signal(true);
   private isComponentActive = true;
 
   private payload: IDashboadRequest = {
@@ -84,6 +87,7 @@ export class Home extends Base implements AfterViewInit, OnInit, OnDestroy {
   }
 
   public onVideoLoaded() {
+    this.showVideoLoader.set(false);
     // Called when video data is loaded, ensure it plays
     setTimeout(() => {
       this.ensureVideoPlays();

@@ -3,6 +3,11 @@
   <!-- Banner section with image -->
   <section>
     @if(apiCallService.bannerList()[0]?.bannerURL) {
+    @if(showVideoLoader()){
+    <div class="w-full h-[70vh] lg:h-screen bg-gray-200 flex items-center justify-center">
+      <div class="animate-spin rounded-full h-12 w-12 border-b-2 border-gray-900"></div>
+    </div>
+    }
     <video
       #videoPlayer
       [muted]="isMuted()"
@@ -10,23 +15,13 @@
       loop
       playsinline
       preload="auto"
+      [ngClass]="showVideoLoader() ? 'hidden' : 'block'"
       class="w-full object-cover h-[70vh] lg:h-screen"
       (loadeddata)="onVideoLoaded()"
       [attr.key]="apiCallService.bannerList()[0]?.bannerURL"
     >
       <source [src]="apiCallService.bannerList()[0]?.bannerURL" type="video/mp4"/>
     </video>
-    <!-- <video
-      #videoPlayer
-      [muted]="isMuted()"
-      autoplay
-      loop
-      playsinline
-      preload="auto"
-      class="w-full object-cover h-[70vh] lg:h-screen"
-    >
-      <source src="assets/videos/top-video.mp4" type="video/mp4" />
-    </video> -->
     } @else {
     <!-- Fallback content while loading -->
     <div class="w-full h-[70vh] lg:h-screen bg-gray-200 flex items-center justify-center">

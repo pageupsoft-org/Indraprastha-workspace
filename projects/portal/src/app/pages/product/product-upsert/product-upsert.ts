@@ -154,7 +154,9 @@ export class ProductUpsert extends Base implements OnInit {
 
       // Ensure at least 1 image remains
       if (filledImages > 1) {
-        variant.controls.removeURL.push(new FormControl(variant.controls.colorVariantBase64.at(imageIndex).value));
+        variant.controls.removeURL.push(
+          new FormControl(variant.controls.colorVariantBase64.at(imageIndex).value),
+        );
         variant.controls.colorVariantBase64.at(imageIndex).setValue(null);
       } else {
         this.toastService.show({
@@ -192,22 +194,6 @@ export class ProductUpsert extends Base implements OnInit {
       description.controls.jsonText.removeAt(index);
     }
   }
-
-  // public mutateImageControl(index: number | null) {
-  //   if (index == null) {
-  //     if(this.productForm.controls.productBase64.length >= 6){
-  //       this.toastService.show({
-  //         type: EToastType.info,
-  //         message: 'Cannot upload more than six image',
-  //         duration: 2000
-  //       })
-  //     }else{
-  //       this.productForm.controls.productBase64.push(new FormControl(null, Validators.required));
-  //     }
-  //   } else {
-  //     this.productForm.controls.productBase64.removeAt(index);
-  //   }
-  // }
 
   public onColorVariantImageChange(event: any, variantIndex: number, imageIndex: number) {
     console.log(variantIndex, imageIndex);
@@ -266,41 +252,6 @@ export class ProductUpsert extends Base implements OnInit {
 
     event.target.value = null;
   }
-
-  // public onProductImageChange(event: any, index: number) {
-  //   const param: IConvertImageParams = initialConvertImageParam({
-  //     event,
-  //     allowedTypes: [ImageTypeEnum.webp, ImageTypeEnum.png, ImageTypeEnum.jpeg],
-  //     expectedImgWidth: ImageSizeConst.product.width,
-  //     expectedImgHeight: ImageSizeConst.product.height,
-  //     maxSize: 2,
-  //   });
-  //   convertImagesToBase64Array(param).then((res: IConvertImageResult) => {
-  //     if (res) {
-  //       if (res.validBase64Files.length) {
-  //         if (res.validBase64Files.length == 1) {
-  //           this.productForm.controls.productBase64
-  //             .at(index)
-  //             .setValue(res.validBase64Files[0] as string);
-  //         } else {
-  //           this.productForm.controls.productBase64.removeAt(index);
-  //           res.validBase64Files.forEach((x) => {
-  //             this.productForm.controls.productBase64.push(new FormControl(x as string));
-  //           });
-  //         }
-  //       }
-  //       if (res.invalidFiles.length) {
-  //         this.toastService.show({
-  //           message: 'Some files were invalid or had incorrect dimensions and were skipped',
-  //           type: EToastType.warning,
-  //           duration: 2000,
-  //         });
-  //       }
-  //     }
-  //   });
-
-  //   event.target.value = null;
-  // }
 
   public upsertProduct() {
     // const collId = parseInt(this.productForm.controls.collectionId.value)
@@ -435,7 +386,8 @@ export class ProductUpsert extends Base implements OnInit {
           gender,
           categoryId: categoryIds[0] || null,
           collectionId,
-          isVariant: (colorVariants && colorVariants.length > 0) || (variants && variants.length > 0),
+          isVariant:
+            (colorVariants && colorVariants.length > 0) || (variants && variants.length > 0),
         });
 
         // Set categoryIds array
@@ -491,7 +443,7 @@ export class ProductUpsert extends Base implements OnInit {
         if (variants && variants.length > 0) {
           variants.forEach((variant) => {
             const variantForm = new FormGroup(initVariantForm());
-            
+
             // Patch variant data
             variantForm.patchValue({
               id: variant.id,
@@ -505,6 +457,10 @@ export class ProductUpsert extends Base implements OnInit {
             this.productForm.controls.variants.push(variantForm);
           });
         }
+
+        this.productForm.controls.isVariant.setValue(
+          this.productForm.controls.variants.length ? true : false,
+        );
 
         // Clear and populate descriptions
         this.productForm.controls.descriptions.clear();
@@ -533,8 +489,15 @@ export class ProductUpsert extends Base implements OnInit {
             } catch (error) {
               console.error('Error parsing JSON description:', error);
             }
-            // Clear description validators for JSON type
-            descForm.controls.description.clearValidators();
+            // // Clear description validators for JSON type
+            // descForm.controls.description.clearValidators();
+
+            // ✅ Remove required validator properly
+            const descriptionCtrl = descForm.controls.description;
+            descriptionCtrl.clearValidators();
+            descriptionCtrl.setValue(null); // optional but recommended
+            descriptionCtrl.updateValueAndValidity({ emitEvent: false });
+            
           } else {
             // Set description value for non-JSON types
             descForm.controls.description.setValue(desc.description);
@@ -554,6 +517,10 @@ export class ProductUpsert extends Base implements OnInit {
         this.productForm.updateValueAndValidity();
       }
     });
+  }
+
+  public isDescriptionInvalid(): boolean {
+    return this.productForm.controls.descriptions.invalid;
   }
 
   public getCollectionByGender() {

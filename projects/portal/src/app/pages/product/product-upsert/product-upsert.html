@@ -1,6 +1,6 @@
 <!-- Enhanced Stepper Product Upsert Form -->
 <div class="min-h-screen bg-gradient-to-br from-gray-50 to-gray-100 pt-4 pb-4">
-  <div class="max-w-6xl mx-auto px-3 sm:px-4 lg:px-6">
+  <div class="max-w-6xl mx-auto">
 
     <!-- Unified Header with Integrated Stepper Navigation -->
     <div class="bg-white rounded-xl shadow-lg border border-gray-200 p-6 mb-6 mt-[100px] ">
@@ -282,7 +282,8 @@
 
             <!-- Variant Form Section - Show when Has Variant is checked -->
             @if(productForm.controls.isVariant.value) {
-            <div class="mt-6 p-4 border-2 border-[#82181A]/20 rounded-lg bg-gradient-to-r from-[#82181A]/5 to-[#a01e21]/5">
+            <div
+              class="mt-6 p-4 border-2 border-[#82181A]/20 rounded-lg bg-gradient-to-r from-[#82181A]/5 to-[#a01e21]/5">
               <div class="flex items-center justify-between mb-4">
                 <h3 class="text-lg font-semibold text-gray-800 flex items-center">
                   <svg class="w-5 h-5 mr-2 text-[#82181A]" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -317,10 +318,12 @@
 
               <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
                 @for (variant of productForm.controls.variants.controls; track $index; let variantIndex = $index) {
-                <div class="bg-white border border-gray-200 rounded-lg p-4 hover:border-[#82181A]/30 transition-all duration-300">
+                <div
+                  class="bg-white border border-gray-200 rounded-lg p-4 hover:border-[#82181A]/30 transition-all duration-300">
                   <div class="flex items-center justify-between mb-4">
                     <h4 class="text-md font-semibold text-gray-800 flex items-center">
-                      <span class="w-6 h-6 bg-[#82181A] text-white rounded-full flex items-center justify-center text-sm font-bold mr-3">
+                      <span
+                        class="w-6 h-6 bg-[#82181A] text-white rounded-full flex items-center justify-center text-sm font-bold mr-3">
                         {{ $index + 1 }}
                       </span>
                       Variant {{ $index + 1 }}
@@ -531,12 +534,12 @@
                       <div class="flex items-center space-x-3">
                         <div class="flex items-center space-x-2">
                           <svg class="w-4 h-4 text-[#82181A]" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 21a4 4 0 01-4-4V5a2 2 0 012-2h4a2 2 0 012 2v12a4 4 0 01-4 4z"></path>
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                              d="M7 21a4 4 0 01-4-4V5a2 2 0 012-2h4a2 2 0 012 2v12a4 4 0 01-4 4z"></path>
                           </svg>
                           <span class="text-sm font-medium text-gray-700">Color:</span>
                         </div>
-                        <input type="color" 
-                          [formControl]="colorVariant.controls.colorName"
+                        <input type="color" [formControl]="colorVariant.controls.colorName"
                           class="w-10 h-8 border border-gray-300 rounded cursor-pointer shadow-sm hover:shadow-md transition-shadow"
                           title="Select variant color" />
                       </div>
@@ -554,6 +557,7 @@
                           </svg>
                           Stock Management
                         </h5>
+
                         <div class="flex items-center space-x-2 hidden">
                           <input type="number" min="0" placeholder="Qty" #colorVariantQtyInput
                             class="w-20 text-xs border border-gray-300 rounded px-2 py-1 text-center focus:ring-1 focus:ring-[#82181A]/20 focus:border-[#82181A] transition-colors" />
@@ -563,6 +567,13 @@
                             Set All
                           </button>
                         </div>
+                      </div>
+                      <div class="flex items-center space-x-2 whitespace-nowrap my-2">
+                        <input type="checkbox" id="isVariant" [formControl]="productForm.controls.isVariant"
+                          class="w-4 h-4 text-[#82181A] bg-gray-100 border-gray-300 rounded focus:ring-[#82181A] focus:ring-2" />
+                        <label for="isVariant" class="text-sm font-medium text-gray-700 cursor-pointer">
+                          Is Free size ?
+                        </label>
                       </div>
 
                       <div class="grid grid-cols-2 gap-3">
@@ -744,9 +755,13 @@
           <div class="p-3 border-t border-gray-200 flex justify-between">
             <button type="button" (click)="previousStep()"
               class="px-3 py-2 border border-gray-300 text-gray-700 rounded-md hover:bg-gray-50 transition-colors">
-              ← Back
+              ← Back {{productForm.controls.descriptions.errors | json}}{{productForm.controls.descriptions.invalid}}
             </button>
-            <button type="submit" (click)="upsertProduct()" [disabled]="productForm.controls.descriptions.invalid"
+            <!-- <button type="submit" (click)="upsertProduct()" [disabled]="productForm.controls.descriptions.invalid"
+              class="px-3 py-2 bg-green-600 text-white rounded-md hover:bg-green-700 transition-colors font-medium disabled:bg-gray-300 disabled:text-black disabled:cursor-default disabled:transform-none cursor-pointer">
+              {{ productForm.controls.id.value === 0 ? '🚀 Create Product' : '💫 Update Product' }}
+            </button> -->
+            <button type="submit" (click)="upsertProduct()" [disabled]="isDescriptionInvalid()"
               class="px-3 py-2 bg-green-600 text-white rounded-md hover:bg-green-700 transition-colors font-medium disabled:bg-gray-300 disabled:text-black disabled:cursor-default disabled:transform-none cursor-pointer">
               {{ productForm.controls.id.value === 0 ? '🚀 Create Product' : '💫 Update Product' }}
             </button>
