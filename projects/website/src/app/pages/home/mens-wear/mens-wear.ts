@@ -134,6 +134,7 @@ export class MensWear implements AfterViewInit {
   private getMensProduct() {
     const payLoad: IProductPagination = {
       ...initializePagInationPayload(),
+      ordersBy: [{fieldName: 'Id', sort: 'Desc'}],
       collectionId: null,
       categoryId: null,
       gender: GenderTypeEnum.Men,
