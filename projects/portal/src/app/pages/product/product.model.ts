@@ -142,9 +142,9 @@ export const initializeStockForm = (quantity: number = 0, size: EStockSize): For
   });
 
 
-  if(size == EStockSize.FreeSize && quantity == 0){
-    form.controls.quantity.disable();
-  }
+  // if(size == EStockSize.FreeSize && quantity == 0){
+  //   form.controls.quantity.disable();
+  // }
 
   return form;
 };

@@ -265,8 +265,8 @@ export class BannerUpsert extends Base implements OnInit {
           ImageTypeEnum.jpeg,
           ImageTypeEnum.jpg,
         ],
-        expectedImgWidth: imageDimensions.width,
-        expectedImgHeight: imageDimensions.height,
+        expectedImgWidth: 1900,
+        expectedImgHeight: 850,
         maxSize: Variable.bannerImageSizeMb,
       });
 

@@ -12,7 +12,7 @@
   >
     <!-- Header -->
     <div class="flex justify-between items-center p-6 border-b border-gray-200">
-      <h2 class="text-lg font-bold tracking-widest">Shopping Cart</h2>
+      <h1 class="text-lg font-bold tracking-widest">Shopping Cart</h1>
       <button
         (click)="hideCart()"
         class="text-gray-500 hover:text-gray-800 text-2xl cursor-pointer"
@@ -71,7 +71,7 @@
           />
         </div>
         <div class="flex-1">
-          <h3 class="font-semibold text-lg text-gray-800">{{ prod.name }}</h3>
+          <h3 class="font-medium text-lg text-gray-800">{{ prod.name }}</h3>
           <!-- @if(prod.cartVariant && prod.cartVariant.variantId){
           <p class="text-sm text-gray-500">
             {{ prod.cartVariant.name }}
