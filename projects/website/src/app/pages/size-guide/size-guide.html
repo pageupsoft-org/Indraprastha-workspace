@@ -1,54 +1,66 @@
-<div class="w-full mt-5">
-  <div class="flex justify-center w-full flex-col" style="align-items: center">
-    <div class="w-full max-w-4xl text-sm border-collapse flex justify-end mb-3">
-      <button
-        class="px-2 py-1 cursor-pointer border border-1"
-        [class.bg-black]="unit() === 'cm'"
-        [class.text-white]="unit() === 'cm'"
-        (click)="unit.set('cm')"
-      >
-        cm
-      </button>
-      <button
-        class="px-2 py-1 cursor-pointer border border-1"
-        [class.bg-black]="unit() === 'in'"
-        [class.text-white]="unit() === 'in'"
-        (click)="unit.set('in')"
-      >
-        in
-      </button>
-    </div>
+@if(showSizeGuide()){
+<div class="fixed top-0 left-0 w-full h-full z-[1000]" animate.enter="slide-in" animate.leave="slide-out">
+  <div (click)="onBackdropClick($event)" class="fixed inset-0 bg-white opacity-50 transition-opacity duration-500 z-40">
+  </div>
 
-    <table class="w-full max-w-4xl text-sm border-collapse">
-      <thead class="bg-[#f7f4ee]">
-        <tr>
-          <th class="border border-gray-300 px-4 py-2 text-left">Size</th>
-          <th class="border border-gray-300 px-4 py-2 text-left">Bust</th>
-          <th class="border border-gray-300 px-4 py-2 text-left">Waist</th>
-          <th class="border border-gray-300 px-4 py-2 text-left">Hip</th>
-        </tr>
-      </thead>
+  <div class="drawer fixed top-0 right-0 w-full md:w-[45%] h-full bg-white shadow-2xl flex flex-col z-50 overflow-y-auto">
+    <div class="w-full mt-5 px-4 pb-6">
+      <div class="relative mb-6">
+        <h2 class="text-xl font-bold text-center">Body Measurement</h2>
+        <button (click)="close()" class="absolute top-0 right-0 text-gray-500 hover:text-gray-700 text-2xl font-bold w-8 h-8 flex items-center justify-center rounded-full hover:bg-gray-100 transition-colors cursor-pointer">
+          ×
+        </button>
+      </div>
+      <div class="flex justify-center w-full flex-col" style="align-items: center">
+        <div class="w-full max-w-4xl text-sm border-collapse flex justify-end mb-3">
+          <button class="px-2 py-1 cursor-pointer border border-1" [class.bg-black]="unit() === 'cm'"
+            [class.text-white]="unit() === 'cm'" (click)="unit.set('cm')">
+            cm
+          </button>
+          <button class="px-2 py-1 cursor-pointer border border-1" [class.bg-black]="unit() === 'in'"
+            [class.text-white]="unit() === 'in'" (click)="unit.set('in')">
+            in
+          </button>
+        </div>
 
-      <tbody>
-        @for (item of sizeChart; track item.size) {
-        <tr class="bg-white">
-          <td class="border border-gray-300 px-4 py-2">{{ item.size }}</td>
-          <td class="border border-gray-300 px-4 py-2">
-            {{ item.bust[unit()] }}
-          </td>
-          <td class="border border-gray-300 px-4 py-2">
-            {{ item.waist[unit()] }}
-          </td>
-          <td class="border border-gray-300 px-4 py-2">
-            {{ item.hip[unit()] }}
-          </td>
-        </tr>
-        }
-      </tbody>
-    </table>
+        <table class="w-full max-w-4xl text-sm border-collapse">
+          <thead class="bg-[#f7f4ee]">
+            <tr>
+              <th class="border border-gray-300 px-4 py-2 text-left">Size</th>
+              <th class="border border-gray-300 px-4 py-2 text-left">Bust</th>
+              <th class="border border-gray-300 px-4 py-2 text-left">Waist</th>
+              <th class="border border-gray-300 px-4 py-2 text-left">Hip</th>
+            </tr>
+          </thead>
 
-    <div class="w-full max-w-4xl mt-5 mb-3 font-bold text-lg">
-      <h1 class="bg-[#faf8f1] p-4">How to measure ?</h1>
+          <tbody>
+            @for (item of sizeChart; track item.size) {
+            <tr class="bg-white">
+              <td class="border border-gray-300 px-4 py-2">{{ item.size }}</td>
+              <td class="border border-gray-300 px-4 py-2">
+                {{ item.bust[unit()] }}
+              </td>
+              <td class="border border-gray-300 px-4 py-2">
+                {{ item.waist[unit()] }}
+              </td>
+              <td class="border border-gray-300 px-4 py-2">
+                {{ item.hip[unit()] }}
+              </td>
+            </tr>
+            }
+          </tbody>
+        </table>
+
+        <div class="w-full max-w-4xl mt-5 mb-3 font-bold text-lg">
+          <h1 class="bg-[#faf8f1] p-4">How to measure ?</h1>
+          <div class="flex flex-wrap gap-2 justify-center">
+            <img src="assets/images/size_guide_1.png" alt="size_guide_1" class="flex-1 min-w-0 max-w-xs">
+            <img src="assets/images/size_guide_2.png" alt="size_guide_2" class="flex-1 min-w-0 max-w-xs">
+            <img src="assets/images/size_guide_3.png" alt="size_guide_3" class="flex-1 min-w-0 max-w-xs">
+          </div>
+        </div>
+      </div>
     </div>
   </div>
 </div>
+}

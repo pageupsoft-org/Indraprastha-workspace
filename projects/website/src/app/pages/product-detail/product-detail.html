@@ -14,9 +14,8 @@
       </div>
 
       <!-- Main Product Image and Magnified View Container -->
-      <div class="relative w-full rounded-lg magnify-container"
-           (mousemove)="magnify($event)"
-           (mouseleave)="hideMagnifier()">
+      <div class="relative w-full rounded-lg magnify-container" (mousemove)="magnify($event)"
+        (mouseleave)="hideMagnifier()">
         @if(isShowloader()){
         <ngx-skeleton-loader count="1" appearance="square" [theme]="{ height: '500px', width: '100%' }" />
         }@else {
@@ -63,10 +62,11 @@
           <div class="flex flex-wrap gap-2">
             @if(isShowloader()){ @for (item of dummyArr; track $index) {
             <ngx-skeleton-loader count="1" appearance="square" [theme]="{ height: '50px', width: '50' }" />
-            } }@else { @for (stockSize of stockSizeArrayWithIds(); let i = $index; track
+            } }@else {
+            <!-- @for (stockSize of stockSizeArrayWithIds(); let i = $index; track
             stockSize.stockId) { @let radioId = 'radio-' + stockSize.stockId;
 
-            <!-- @if(stockSize.quantity){ -->
+            
             <input type="radio" name="stockSizeSelection" [id]="radioId" [value]="stockSize.stockId" class="hidden peer"
               [formControl]="cartForm.controls.stockId" (change)="onSizeChange()" />
 
@@ -78,9 +78,39 @@
                 }">
               {{ stockSize.value }}
             </label>
-            <!-- } -->
 
-            } }
+            } -->
+            @for (stockSize of stockSizeArrayWithIds(); let i = $index; track stockSize.stockId) {
+            @let radioId = 'radio-' + stockSize.stockId;
+
+            <div [ngClass]="{
+      'inline-flex items-center gap-3 mt-3 w-full': stockSize.key === 'CustomSize',
+      'inline-block': stockSize.key !== 'CustomSize'
+    }">
+              <input type="radio" name="stockSizeSelection" [id]="radioId" [value]="stockSize.stockId"
+                class="hidden peer" [formControl]="cartForm.controls.stockId" (change)="onSizeChange()" />
+
+              <label [for]="radioId" class="cursor-pointer lg:px-4 lg:py-2 px-2 py-1 border rounded" [ngClass]="{
+        'peer-checked:bg-[#680C01] peer-checked:text-white':
+          stockSize.stockId == cartForm.controls.stockId.value,
+        'cursor-not-allowed bg-gray-200 line-through pointer-events-none':
+          !stockSize.quantity
+      }">
+                {{ stockSize.value }}
+              </label>
+
+              @if (stockSize.key === 'CustomSize') {
+              <span class="text-sm text-gray-500 cursor-pointer! whitespace-nowrap underline hover:text-gray-700"
+                (click)="updateSizeGuideVisibility(true)">
+                View Size Guide
+              </span>
+
+              }
+            </div>
+            }
+
+
+            }
           </div>
           @for (stockSize of stockSizeArrayWithIds(); track stockSize.value) {
           @let selectedStockQuantity = stockSize.stockId == cartForm.controls.stockId.value ? stockSize.quantity : 0;
@@ -89,11 +119,11 @@
           }
           }
           <!-- {{cartForm.value | json}} <br> -->
-
+          <!-- <p class="text-sm text-gray-500 mb-2">View Size Guide</p> -->
         </div>
 
         <!-- <div>
-          <p class="font-semibold text-gray-800 mb-2">COLOR</p>
+          <p class="font-semibold text-gray-800 mb-2">View Size Guide</p>
           <div class="flex flex-wrap gap-2">
               @for (item of productDetail().colorVariants; track $index; let colorVariantIndex=$index) {
               <button (click)="updateOnColorChange(colorVariantIndex)"
@@ -371,4 +401,8 @@
     </button>
   </div>
 </div>
+}
+
+@if(isSizeGuideVisible()){
+  <app-size-guide (unloadSizeGuide)="updateSizeGuideVisibility(false)"></app-size-guide>
 }

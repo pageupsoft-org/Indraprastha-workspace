@@ -22,6 +22,7 @@ import {
 } from '@website/core';
 import { RCustomTailoredCombo } from '../../core/interface/response/tailor.response';
 import { IsShowCustomTailorDDPipe } from "../../core/pipe/is-show-custom-tailor-dd-pipe";
+import { SizeGuide } from "../size-guide/size-guide";
 
 @Component({
   selector: 'app-product-detail',
@@ -32,8 +33,9 @@ import { IsShowCustomTailorDDPipe } from "../../core/pipe/is-show-custom-tailor-
     FormsModule,
     AppLoadingButton,
     NgxSkeletonLoaderModule,
-    IsShowCustomTailorDDPipe
-],
+    IsShowCustomTailorDDPipe,
+    SizeGuide
+  ],
   templateUrl: './product-detail.html',
   styleUrl: './product-detail.scss',
 })
@@ -44,6 +46,7 @@ export class ProductDetail extends ProductDetailBase implements OnInit, AfterVie
   public readonly DescriptionTypeStringEnum = DescriptionTypeStringEnum;
   public readonly EDescriptionType = EDescriptionType;
   public readonly CartAlterEnum = CartUpdateOperation;
+  public isSizeGuideVisible: WritableSignal<boolean> = signal(false);
 
   public toggleAccordion(i: number) {
     const list = this.productDetail().descriptions;
@@ -157,5 +160,15 @@ export class ProductDetail extends ProductDetailBase implements OnInit, AfterVie
       'isWishList',
       'id',
     );
+  }
+
+  public updateSizeGuideVisibility(visible: boolean) {
+    if(visible){
+      this.isSizeGuideVisible.update(() => visible);
+    }else{
+      setTimeout(() => {
+        this.isSizeGuideVisible.update(() => visible);
+      }, 400);
+    }
   }
 }
