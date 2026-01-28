@@ -115,6 +115,7 @@ export class DynamicCatalog implements AfterViewInit {
       this.payloadGenderMenu.update((payload) => {
         return {
           ...payload,
+          ordersBy: [{fieldName: 'Id', sort: 'Desc'}],
           maxPrice: this.maxLimit(),
           minPrice: this.minLimit(),
           newlyAdded: this.baseUrl() == appRoutes.WHATS_NEW,
