@@ -112,6 +112,7 @@ export class CartService {
         (item) => item.stockId === product.stockId,
       );
 
+      // debugger
       // 2. If the product is found (Index >= 0)
       if (existingProductIndex > -1) {
         // Get the current item

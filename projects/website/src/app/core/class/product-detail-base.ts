@@ -258,8 +258,8 @@ export class ProductDetailBase {
       productURL: detail._productURL,
       stockId: this.cartForm.controls.stockId.value ?? 0,
       size: size,
-      stockQuantity: stockQty ?? 0,
-      cartQuantity: 1,
+      stockQuantity: stockQty ?? 0, //actual stock quantity
+      cartQuantity: 1, //quantity present in cart
       cartId: 0,
       productId: detail.id,
       cartVariant: {
@@ -302,6 +302,9 @@ export class ProductDetailBase {
 
     const preQty: number = this.cartService.getProductQty(this.cartForm.value.stockId ?? 0);
 
+    product.stockId = newAdded.stockId;
+    product.cartQuantity = newAdded.cartQuantity + preQty;
+
     if (this.utilService.isUserLoggedIn()) {
       this.isBtnLoader.set(true);
       // user is logged in make api call to save in db
@@ -322,7 +325,8 @@ export class ProductDetailBase {
               duration: 3000,
             });
 
-            this.cartService.addProductInData(newAdded);
+            // this.cartService.addProductInData(newAdded);
+            this.cartService.addProductInData(product);
           } else {
             this.toastService.show({
               message: res.errorMessage,

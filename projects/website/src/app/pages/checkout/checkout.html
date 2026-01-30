@@ -17,18 +17,12 @@
 
       <div class="border border-gray-300 rounded-md p-4 space-y-4">
         <ngx-skeleton-loader appearance="line" [theme]="{ height: '16px', width: '40%' }" />
-        <ngx-skeleton-loader
-          appearance="square"
-          [theme]="{ height: '120px', width: '100%', borderRadius: '8px' }"
-        />
+        <ngx-skeleton-loader appearance="square" [theme]="{ height: '120px', width: '100%', borderRadius: '8px' }" />
       </div>
     </div>
 
     <!-- Pay Now Button -->
-    <ngx-skeleton-loader
-      appearance="square"
-      [theme]="{ height: '56px', width: '100%', borderRadius: '8px' }"
-    />
+    <ngx-skeleton-loader appearance="square" [theme]="{ height: '56px', width: '100%', borderRadius: '8px' }" />
   </div>
 
   <!-- RIGHT SIDE -->
@@ -36,10 +30,7 @@
     <!-- Product Skeleton -->
     @for (i of [1,2]; track i) {
     <div class="flex items-start gap-4">
-      <ngx-skeleton-loader
-        appearance="square"
-        [theme]="{ height: '96px', width: '80px', borderRadius: '8px' }"
-      />
+      <ngx-skeleton-loader appearance="square" [theme]="{ height: '96px', width: '80px', borderRadius: '8px' }" />
 
       <div class="flex-1 space-y-2">
         <ngx-skeleton-loader appearance="line" [theme]="{ height: '16px', width: '70%' }" />
@@ -52,24 +43,19 @@
     }
 
     <!-- Total -->
-    <ngx-skeleton-loader
-      appearance="square"
-      [theme]="{
+    <ngx-skeleton-loader appearance="square" [theme]="{
         height: '64px',
         width: '100%',
         borderRadius: '12px'
-      }"
-    />
+      }" />
   </div>
 </div>
 } @else if(isProductValid()){
 <div class="bg-[#f8f8f8] grid grid-cols-12 gap-6 p-8 pt-0">
   <div class="col-span-6 p-8">
     @if(utilService.AddressData().length){
-    <div
-      class="bg-white p-5 rounded-2xl border w-full border-gray-100"
-      [ngClass]="isViewAllAddress() ? 'border-b-0 rounded-b-none' : ''"
-    >
+    <div class="bg-white p-5 rounded-2xl border w-full border-gray-100"
+      [ngClass]="isViewAllAddress() ? 'border-b-0 rounded-b-none' : ''">
       @for (item of utilService.AddressData(); track $index) { @if($index == 0){
 
       <p class="text-lg font-semibold text-gray-900">
@@ -87,55 +73,30 @@
 
       <!-- Change Address -->
       @if(utilService.AddressData().length == 1){
-      <button
-        class="flex items-center gap-1 text-[#680C01] font-medium text-sm cursor-pointer"
-        (click)="upsertAddress(0)"
-      >
+      <button class="flex items-center gap-1 text-[#680C01] font-medium text-sm cursor-pointer"
+        (click)="upsertAddress(0)">
         Add a new delivery address
       </button>
       }@else {
-      <button
-        class="flex items-center gap-1 text-[#680C01] font-medium text-sm cursor-pointer"
-        (click)="toggleViewAllAddress()"
-      >
+      <button class="flex items-center gap-1 text-[#680C01] font-medium text-sm cursor-pointer"
+        (click)="toggleViewAllAddress()">
         Change Address
-        <svg
-          xmlns="http://www.w3.org/2000/svg"
-          class="w-4 h-4"
-          [ngClass]="isViewAllAddress() ? 'rotate-180' : 'rotate-0'"
-          fill="none"
-          viewBox="0 0 24 24"
-          stroke="currentColor"
-        >
-          <path
-            stroke-linecap="round"
-            stroke-linejoin="round"
-            stroke-width="2"
-            d="M19 9l-7 7-7-7"
-          />
+        <svg xmlns="http://www.w3.org/2000/svg" class="w-4 h-4"
+          [ngClass]="isViewAllAddress() ? 'rotate-180' : 'rotate-0'" fill="none" viewBox="0 0 24 24"
+          stroke="currentColor">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7" />
         </svg>
       </button>
       }
     </div>
     @if(isViewAllAddress()){
-    <div
-      class="space-y-6 p-6 pt-0 bg-white rounded-2xl rounded-t-none border border-gray-100 border-t-0"
-      animate.enter="address-enter"
-      animate.leave="address-leave"
-    >
+    <div class="space-y-6 p-6 pt-0 bg-white rounded-2xl rounded-t-none border border-gray-100 border-t-0"
+      animate.enter="address-enter" animate.leave="address-leave">
       @for (item of utilService.AddressData(); track $index) { @if($index > 0){
       <label class="flex items-start gap-3 cursor-pointer">
-        <input
-          type="radio"
-          name="address"
-          class="hidden peer"
-          [value]="item.id"
-          [formControl]="selectedAddress"
-          (click)="updatedSelectedAddress($index)"
-        />
-        <span
-          class="w-5 h-5 rounded-full border-5 border-gray-400 flex items-center justify-center mt-1"
-        >
+        <input type="radio" name="address" class="hidden peer" [value]="item.id" [formControl]="selectedAddress"
+          (click)="updatedSelectedAddress($index)" />
+        <span class="w-5 h-5 rounded-full border-5 border-gray-400 flex items-center justify-center mt-1">
           <span class="w-3 h-3 bg-red-800 rounded-full opacity-0 peer-checked:opacity-100"></span>
         </span>
 
@@ -147,10 +108,7 @@
             {{ item.address }}, {{ item.city }} - {{ item.pinCode }}
           </p>
           <p class="text-sm text-gray-500">Phone No. {{ item.contact }}</p>
-          <button
-            class="text-[#680C01] font-medium text-sm mt-1 cursor-pointer"
-            (click)="upsertAddress(item.id)"
-          >
+          <button class="text-[#680C01] font-medium text-sm mt-1 cursor-pointer" (click)="upsertAddress(item.id)">
             Edit Address
           </button>
         </div>
@@ -161,10 +119,8 @@
       <div class="border-t border-gray-200 my-4"></div>
 
       <!-- Change Address -->
-      <button
-        class="flex items-center gap-1 text-[#680C01] font-medium text-sm cursor-pointer"
-        (click)="upsertAddress(0)"
-      >
+      <button class="flex items-center gap-1 text-[#680C01] font-medium text-sm cursor-pointer"
+        (click)="upsertAddress(0)">
         Add a new delivery address
       </button>
     </div>
@@ -190,11 +146,7 @@
           </div>
         </div>
         <div class="bg-gray-50 p-6 text-center">
-          <img
-            src="https://i.imgur.com/gK2e3pL.png"
-            alt="Redirect illustration"
-            class="mx-auto mb-4 w-48"
-          />
+          <img src="https://i.imgur.com/gK2e3pL.png" alt="Redirect illustration" class="mx-auto mb-4 w-48" />
           <p class="text-sm text-gray-600">
             After clicking "Pay now", you will be redirected to CCAvenue to complete your purchase
             securely.
@@ -203,26 +155,20 @@
       </div>
     </div>
 
-    <div class="mt-8">
-      <lib-app-loading-button
-        [isLoading]="isBtnLoader()"
-        [type]="'submit'"
-        (clicked)="onPaymentSubmit()"
-        label="Pay Now"
-        [conditionalClass]="'cursor-not-allowed!'"
-        [btnClass]="
+    <!-- <div class="mt-8">
+      <lib-app-loading-button [isLoading]="isBtnLoader()" [type]="'submit'" (clicked)="onPaymentSubmit()"
+        label="Pay Now" [conditionalClass]="'cursor-not-allowed!'" [btnClass]="
           'w-full bg-[#5a1d1c] cursor-pointer text-white py-4 px-6 rounded-md font-semibold text-lg hover:bg-opacity-90 transition-colors'
-        "
-      >
+        ">
       </lib-app-loading-button>
-      <!-- <button
+      <button
         type="submit"
         (click)="onPaymentSubmit()"
         class="w-full bg-[#5a1d1c] cursor-pointer text-white py-4 px-6 rounded-md font-semibold text-lg hover:bg-opacity-90 transition-colors"
       >
         Pay Now
-      </button> -->
-    </div>
+      </button>
+    </div> -->
     <div class="mt-4">
       <a href="#" class="text-sm text-gray-600 hover:underline">Privacy policy</a>
     </div>
@@ -231,37 +177,34 @@
   <div class="col-span-6 bg-white mt-8 rounded-2xl border border-gray-100">
     <div class="p-4 lg:p-6">
       @for(prod of checkoutData().products; track $index){
-      <app-product-card-size-edit
-        [prod]="getDataForCard($index)"
-        (alterQty)="alterCheckoutQuantity($event, $index)"
-        (emitDelete)="removeItemFromCart(prod.cartId, $index)"
-      ></app-product-card-size-edit>
+      <app-product-card-size-edit [prod]="getDataForCard($index)" (alterQty)="alterCheckoutQuantity($event, $index)"
+        (emitDelete)="removeItemFromCart(prod.cartId, $index)"></app-product-card-size-edit>
       }
 
       <!-- discount hidden -->
 
       <div class="flex space-x-3 mb-6 hidden">
-        <input
-          type="text"
-          placeholder="Discount code"
-          class="w-full p-3 border border-gray-300 rounded-md focus:ring-2 focus:ring-gray-800 focus:border-gray-800 outline-none"
-        />
-        <button
-          class="bg-gray-200 text-gray-700 px-6 rounded-md hover:bg-gray-300 font-medium transition-colors"
-        >
+        <input type="text" placeholder="Discount code"
+          class="w-full p-3 border border-gray-300 rounded-md focus:ring-2 focus:ring-gray-800 focus:border-gray-800 outline-none" />
+        <button class="bg-gray-200 text-gray-700 px-6 rounded-md hover:bg-gray-300 font-medium transition-colors">
           Apply
         </button>
       </div>
 
       <!-- Total Button -->
       <div
-        class="flex justify-between items-center mt-4 border-t border-gray-200 pt-4 bg-[#5a1d1c] text-white px-6 py-4 rounded-lg"
-      >
+        class="flex justify-between items-center mt-4 border-t border-gray-200 pt-4 text-dark px-6 py-4 rounded-lg">
         <span class="text-lg font-semibold">Total</span>
         <span class="text-xl font-medium">{{
           total() | currency : 'INR' : 'symbol' : '1.0-0' : 'en-IN'
-        }}</span>
+          }}</span>
       </div>
+
+      <lib-app-loading-button [isLoading]="isBtnLoader()" [type]="'submit'" (clicked)="onPaymentSubmit()"
+        label="Pay Now" [conditionalClass]="'cursor-not-allowed!'" [btnClass]="
+          'w-full bg-[#5a1d1c] cursor-pointer text-white py-4 px-6 rounded-md font-semibold text-lg hover:bg-opacity-90 transition-colors mt-3'
+        ">
+      </lib-app-loading-button>
     </div>
   </div>
 </div>
@@ -276,10 +219,8 @@
       The product or variant you are trying to access is not available.
     </p>
 
-    <a
-      class="px-5 py-2 rounded-xl bg-red-600 text-white text-sm font-medium hover:bg-red-700 transition cursor-pointer"
-      routerLink="/home"
-    >
+    <a class="px-5 py-2 rounded-xl bg-red-600 text-white text-sm font-medium hover:bg-red-700 transition cursor-pointer"
+      routerLink="/home">
       Go to Home
     </a>
   </div>
